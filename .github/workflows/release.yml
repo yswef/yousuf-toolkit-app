@@ -1,0 +1,88 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: classify tag
+        id: kind
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-test\.[0-9]+$ ]]; then
+            echo "task=assembleTester" >> "$GITHUB_OUTPUT"
+            echo "pre=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
+            echo "task=assembleRelease" >> "$GITHUB_OUTPUT"
+            echo "pre=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "task=assembleRelease" >> "$GITHUB_OUTPUT"
+            echo "pre=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::unsupported tag format: $TAG"
+            exit 1
+          fi
+
+      - name: check android project
+        run: |
+          if [ ! -f gradlew ]; then
+            echo "::error::gradlew not found: the Android project has not been created yet"
+            exit 1
+          fi
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: restore signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::error::secret KEYSTORE_B64 is missing"
+            exit 1
+          fi
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: build
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          TASK: ${{ steps.kind.outputs.task }}
+        run: ./gradlew --no-daemon "$TASK"
+
+      - name: collect apk
+        run: |
+          mkdir out
+          find app/build/outputs/apk -name '*.apk' -exec cp {} out/ \;
+          if [ -z "$(ls -A out)" ]; then
+            echo "::error::no apk produced"
+            exit 1
+          fi
+
+      - name: publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          PRE: ${{ steps.kind.outputs.pre }}
+        run: |
+          flag=""
+          if [ "$PRE" = "true" ]; then flag="--prerelease"; fi
+          gh release create "$TAG" out/*.apk --title "$TAG" --generate-notes $flag
