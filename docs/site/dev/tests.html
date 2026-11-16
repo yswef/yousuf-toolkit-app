@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage tests</title>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+<nav><a href="index.html">الحالة</a><a href="tests.html">الاختبارات</a></nav>
+<h1>اختبارات المراحل</h1>
+<p class="mut">علّم ما اختبرته. العلامات تُحفظ في هذا المتصفح فقط.</p>
+<div id="root"></div>
+</main>
+<script src="tests-data.js"></script>
+<script>
+(function(){
+  var data=window.TESTS_DATA||[];
+  var root=document.getElementById('root');
+  function get(k){try{return localStorage.getItem(k)==='1'}catch(e){return false}}
+  function set(k,v){try{localStorage.setItem(k,v?'1':'0')}catch(e){}}
+  data.forEach(function(st){
+    var sec=document.createElement('section');sec.id=st.id;
+    var h=document.createElement('h2');h.textContent=st.title;sec.appendChild(h);
+    var info=document.createElement('p');info.className='mut';sec.appendChild(info);
+    function refresh(){
+      var n=0;st.items.forEach(function(i){if(get('test:'+i.id))n++});
+      info.textContent=(st.tag?'tag: '+st.tag+' | ':'')+n+' / '+st.items.length;
+    }
+    st.items.forEach(function(it){
+      var row=document.createElement('label');row.className='item';
+      var cb=document.createElement('input');cb.type='checkbox';cb.id=it.id;cb.checked=get('test:'+it.id);
+      cb.addEventListener('change',function(){set('test:'+it.id,cb.checked);refresh()});
+      var box=document.createElement('div');
+      var w=document.createElement('div');w.textContent=it.what;
+      var how=document.createElement('div');how.className='how';how.textContent=it.how;
+      box.appendChild(w);box.appendChild(how);
+      row.appendChild(cb);row.appendChild(box);sec.appendChild(row);
+    });
+    refresh();root.appendChild(sec);
+  });
+  if(!data.length){var p=document.createElement('p');p.textContent='لا توجد اختبارات بعد.';root.appendChild(p)}
+})();
+</script>
+</body>
+</html>
