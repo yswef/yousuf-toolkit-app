@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -50,7 +50,19 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - uses: android-actions/setup-android@v3
+      - name: prepare android sdk
+        run: |
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_HOME=$SDK"
+          SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SM" ]; then
+            echo "::warning::sdkmanager not found at $SM; relying on Gradle SDK auto-download"
+          else
+            yes | "$SM" --licenses > /dev/null || true
+            "$SM" --install "platforms;android-37" "platform-tools" || true
+          fi
+          mkdir -p "$HOME/.gradle"
+          echo "android.builder.sdkDownload=true" >> "$HOME/.gradle/gradle.properties"
 
       - uses: gradle/actions/setup-gradle@v4
 
