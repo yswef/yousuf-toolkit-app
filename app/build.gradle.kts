@@ -34,7 +34,7 @@ android {
             signingConfig = if (hasKey) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
             isMinifyEnabled = false
         }
-        create("tester") {
+        create("qa") {
             initWith(getByName("release"))
             isDebuggable = true
         }
@@ -74,4 +74,8 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+}
+
+tasks.register("assembleTester") {
+    dependsOn("assembleQa")
 }
