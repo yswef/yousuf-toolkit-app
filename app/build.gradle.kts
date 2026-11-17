@@ -36,7 +36,7 @@ android {
         }
         create("tester") {
             initWith(getByName("release"))
-            debuggable = true
+            isDebuggable = true
         }
         debug {
             applicationIdSuffix = ".debug"
