@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Y-Dimension</string>
+    <string name="team_black_bull">Black Bull</string>
+    <string name="team_golden_dawn">Golden Dawn</string>
+    <string name="team_silver_eagle">Silver Eagle</string>
+    <string name="team_crimson_lion">Crimson Lion</string>
+    <string name="team_blue_rose">Blue Rose</string>
+    <string name="team_green_mantis">Green Mantis</string>
+    <string name="team_coral_peacock">Coral Peacock</string>
+    <string name="team_purple_orca">Purple Orca</string>
+    <string name="team_aqua_deer">Aqua Deer</string>
+    <string name="team_royal_knights">Royal Knights</string>
+</resources>
