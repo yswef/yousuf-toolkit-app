@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Y-Dimension</string>
+    <string name="back">رجوع</string>
+    <string name="empty_state">لا توجد بيانات بعد</string>
+    <string name="welcome_title">مرحباً بك في Y-Dimension</string>
+    <string name="welcome_text">نظّم حياتك في لعبة سحرية</string>
+    <string name="start">ابدأ</string>
+    <string name="features">الميزات</string>
+    <string name="ui_mode">واجهة التطبيق</string>
+    <string name="ui_professional">احترافية (18+)</string>
+    <string name="ui_simple">بسيطة</string>
+    <string name="dark_theme">الوضع الداكن</string>
+    <string name="teams_title">فرق السحر</string>
+
+    <string name="feature_blocker">الحاجب</string>
+    <string name="feature_cleaner">المنظف</string>
+    <string name="feature_contacts">جهات الاتصال</string>
+    <string name="feature_device">الجهاز</string>
+    <string name="feature_devmode">وضع المطور</string>
+    <string name="feature_faith">الإيمان</string>
+    <string name="feature_firewall">الجدار الناري</string>
+    <string name="feature_forum">المنتدى</string>
+    <string name="feature_game">اللعبة</string>
+    <string name="feature_home">الرئيسية</string>
+    <string name="feature_journal">المذكرات</string>
+    <string name="feature_learn">التعلم</string>
+    <string name="feature_library">المكتبة</string>
+    <string name="feature_license">الترخيص</string>
+    <string name="feature_money">المال</string>
+    <string name="feature_notiflog">سجل الإشعارات</string>
+    <string name="feature_onboarding">البداية</string>
+    <string name="feature_profile">الملف الشخصي</string>
+    <string name="feature_raids">الغارات</string>
+    <string name="feature_settings">الإعدادات</string>
+    <string name="feature_shop">المتجر</string>
+    <string name="feature_skin">المظهر</string>
+    <string name="feature_sleep">النوم</string>
+    <string name="feature_tasks">المهام</string>
+    <string name="feature_tests">الاختبارات</string>
+    <string name="feature_updater">التحديثات</string>
+    <string name="feature_vault">الخزنة</string>
+    <string name="feature_wallets">المحافظ</string>
+    <string name="feature_water">الماء</string>
+    <string name="feature_workouts">التمارين</string>
+
+    <string name="team_black_bull">الثيران السوداء</string>
+    <string name="team_golden_dawn">الفجر الذهبي</string>
+    <string name="team_silver_eagle">النسور الفضية</string>
+    <string name="team_crimson_lion">الأسود القرمزية</string>
+    <string name="team_blue_rose">الوردة الزرقاء</string>
+    <string name="team_green_mantis">فرس النبي الأخضر</string>
+    <string name="team_coral_peacock">الطاووس المرجاني</string>
+    <string name="team_purple_orca">الحوت الأرجواني</string>
+    <string name="team_aqua_deer">الغزال اللازوردي</string>
+    <string name="team_royal_knights">الفرسان الملكيون</string>
+</resources>

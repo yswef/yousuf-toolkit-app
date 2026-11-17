@@ -1,0 +1,15 @@
+{
+  "energy": {
+    "max": 100,
+    "costPerTask": 10,
+    "restGain": 20
+  },
+  "points": {
+    "task": 10,
+    "workout": 15,
+    "water": 5
+  },
+  "levels": {
+    "xpPerLevel": 100
+  }
+}
