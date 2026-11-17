@@ -24,12 +24,15 @@ jobs:
           if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-test\.[0-9]+$ ]]; then
             echo "task=assembleTester" >> "$GITHUB_OUTPUT"
             echo "pre=true" >> "$GITHUB_OUTPUT"
+            echo "signed=false" >> "$GITHUB_OUTPUT"
           elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
             echo "task=assembleRelease" >> "$GITHUB_OUTPUT"
             echo "pre=true" >> "$GITHUB_OUTPUT"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
           elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "task=assembleRelease" >> "$GITHUB_OUTPUT"
             echo "pre=false" >> "$GITHUB_OUTPUT"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
           else
             echo "::error::unsupported tag format: $TAG"
             exit 1
@@ -52,6 +55,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
 
       - name: restore signing key
+        if: steps.kind.outputs.signed == 'true'
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
         run: |
