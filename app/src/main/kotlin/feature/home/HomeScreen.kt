@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ChevronRight
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -77,7 +76,6 @@ fun HomeScreen(onFeature: (String) -> Unit, onSettings: () -> Unit) {
             items(features) { (route, title) ->
                 ListItem(
                     headlineContent = { Text(stringResource(title)) },
-                    trailingContent = { Icon(Icons.AutoMirrored.Filled.ChevronRight, contentDescription = null) },
                     modifier = Modifier.clickable { onFeature(route) }
                 )
             }
