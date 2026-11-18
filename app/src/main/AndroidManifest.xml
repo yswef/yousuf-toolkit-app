@@ -8,7 +8,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.YDimension">
         <activity
-            android:name="MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.YDimension">
             <intent-filter>
