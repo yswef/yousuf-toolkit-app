@@ -10,8 +10,8 @@ window.PROJECT_STATUS={
     {id:'design',title:'المكتبة السحرية وتسجيل البيانات',tag:'v0.3.0-test.1',status:'wait',note:'التاج منشور وبُني app-qa.apk بنجاح، بانتظار تحققك على الجهاز'},
     {id:'device',title:'أدوات الجهاز',tag:'v0.5.0-test.1',status:'wait',note:'منشورة في v0.5.0-test.1 (app-qa.apk)، بانتظار تحققك على الجهاز'},
     {id:'server',title:'الخادم والمجتمع',tag:'v0.5.0-test.1',status:'wait',note:'منشورة في v0.5.0-test.1، ويلزم تهيئة config.php واستيراد المخطط قبل اختبار المزامنة'},
-    {id:'game',title:'اللعبة: الرتب والحملات',tag:'v0.8.0-test.1',status:'wait',note:'على dev، بانتظار البناء والتثبيت'},
-    {id:'style',title:'التخصيص والترخيص',tag:'v0.8.0-test.1',status:'wait',note:'ألوان ورموز وتفعيل ترخيص وتشخيص، بانتظار التحقق'},
-    {id:'insights',title:'الرسائل والفحص الذاتي',tag:'v0.8.0-test.1',status:'wait',note:'استيراد رسائل وفحص صلاحيات، اختياري ومحلي'}
+    {id:'game',title:'اللعبة: الرتب والحملات',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1 (app-qa.apk)، بانتظار تثبيتك'},
+    {id:'style',title:'التخصيص والترخيص',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1 مع ألوان ورموز وترخيص وتشخيص'},
+    {id:'insights',title:'الرسائل والفحص الذاتي',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1، استيراد اختياري ومحلي'}
   ]
 };
