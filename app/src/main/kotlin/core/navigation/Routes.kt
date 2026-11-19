@@ -2,6 +2,7 @@ package core.navigation
 
 object Routes {
     const val INTRO = "intro"
+    const val REGISTER = "register"
     const val ONBOARDING = "onboarding"
     const val HOME = "home"
     const val SETTINGS = "settings"

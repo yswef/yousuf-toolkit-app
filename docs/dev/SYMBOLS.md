@@ -39,3 +39,18 @@
 | LearnScreen | app/src/main/kotlin/feature/learn/LearnScreen.kt | مواضيع تعلم ودقائق وأهداف | AppNav |
 | LibraryScreen | app/src/main/kotlin/feature/library/LibraryScreen.kt | كتب وتقدم قراءة الصفحات | AppNav |
 | *Screen (17) | app/src/main/kotlin/feature/*/ | شاشة ميزة بحالة فارغة (عنوان من الموارد) | AppNav |
+| MagicBackground | app/src/main/kotlin/core/design/MagicBackground.kt | خلفية متدرجة بنفسجية فيروزية مع نجوم لكل الشاشات | ScreenScaffold وHomeScreen |
+| BookSymbol | app/src/main/kotlin/core/design/MagicSymbol.kt | رموز أغلفة الكتب: نجمة وقمر وقطرة وشعلة وورقة وكرة وماسة ورونة | Books وMagicBooks وOnboardingScreen |
+| drawBookSymbol | app/src/main/kotlin/core/design/MagicSymbol.kt | رسم رمز الكتاب داخل Canvas | MagicBookCard وMagicBookOpen وأغلفة الملف |
+| ProfileFields | app/src/main/kotlin/core/design/ProfileFields.kt | حقول الاسم والعمر والهدف والفريق | RegisterScreen وProfileScreen |
+| teamKeys وteamLabel | app/src/main/kotlin/core/design/Choices.kt | معرفات فرق السحر وتسمياتها | RegisterScreen وProfileScreen |
+| goalKeys وgoalLabel | app/src/main/kotlin/core/design/Choices.kt | أهداف البطل وتسمياتها | RegisterScreen وProfileScreen |
+| MagicBook | app/src/main/kotlin/feature/home/Books.kt | كتاب ميزة: المسار والعنوان والألوان والرمز | HomeScreen وMagicBookCard |
+| bookSections | app/src/main/kotlin/feature/home/Books.kt | أقسام الكتب الـ27 وألوانها | HomeScreen |
+| MagicBookCard | app/src/main/kotlin/feature/home/MagicBooks.kt | غلاف كتاب ثلاثي الأبعاد في الشبكة | HomeScreen |
+| MagicBookOpen | app/src/main/kotlin/feature/home/MagicBooks.kt | أنيميشن فتح الكتاب والبوابة قبل الانتقال | HomeScreen |
+| RegisterScreen | app/src/main/kotlin/feature/onboarding/RegisterScreen.kt | تسجيل بيانات البطل وحفظها | AppNav |
+| ProfileScreen | app/src/main/kotlin/feature/profile/ProfileScreen.kt | بطاقة البطل وتعديل البيانات | AppNav وSettingsScreen |
+| saveProfile | app/src/main/kotlin/data/local/Store.kt | حفظ الاسم والعمر والهدف والفريق وتاريخ الانضمام | RegisterScreen وProfileScreen |
+| hasProfile | app/src/main/kotlin/data/local/Store.kt | هل بيانات البطل موجودة | AppNav |
+| mentor.webp | app/src/main/res/drawable-nodpi/mentor.webp | صورة المعلمة نور | OnboardingScreen وRegisterScreen وProfileScreen |

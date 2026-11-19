@@ -28,7 +28,8 @@ import core.design.UiState
 fun SettingsScreen(
     ui: UiState,
     onBack: () -> Unit,
-    onReplayIntro: () -> Unit
+    onReplayIntro: () -> Unit,
+    onProfile: () -> Unit
 ) {
     ScreenScaffold(title = stringResource(R.string.feature_settings), onBack = onBack) { padding ->
         Column(
@@ -53,6 +54,9 @@ fun SettingsScreen(
                 stringResource(R.string.settings_visuals),
                 style = MaterialTheme.typography.titleSmall
             )
+            OutlinedButton(onClick = onProfile, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_profile))
+            }
             OutlinedButton(onClick = onReplayIntro, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.settings_replay_intro))
             }

@@ -9,6 +9,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,9 +71,11 @@ fun IntroScreen(onFinish: () -> Unit) {
         reveal.animateTo(1f, tween(durationMillis = 1400, delayMillis = 250))
     }
     LaunchedEffect(Unit) {
-        progress.animateTo(1f, tween(durationMillis = 5200, easing = LinearEasing))
+        progress.animateTo(1f, tween(durationMillis = 4600, easing = LinearEasing))
         finish()
     }
+
+    val exit = ((progress.value - 0.76f) / 0.24f).coerceIn(0f, 1f)
 
     val loop = rememberInfiniteTransition(label = "intro")
     val spin by loop.animateFloat(
@@ -104,7 +107,13 @@ fun IntroScreen(onFinish: () -> Unit) {
     )
 
     Box(Modifier.fillMaxSize()) {
-        Canvas(Modifier.fillMaxSize()) {
+        Canvas(
+            Modifier.fillMaxSize().graphicsLayer {
+                scaleX = 1f + exit * 1.5f
+                scaleY = 1f + exit * 1.5f
+                alpha = 1f - exit * 0.45f
+            }
+        ) {
             drawRect(Brush.verticalGradient(listOf(voidTop, voidBottom, voidTop)))
 
             for (i in 0 until 64) {
@@ -206,7 +215,11 @@ fun IntroScreen(onFinish: () -> Unit) {
         }
 
         Column(
-            Modifier.fillMaxSize().padding(32.dp),
+            Modifier.fillMaxSize().padding(32.dp).graphicsLayer {
+                scaleX = 1f + exit * 1.5f
+                scaleY = 1f + exit * 1.5f
+                alpha = 1f - exit * 0.45f
+            },
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -250,7 +263,9 @@ fun IntroScreen(onFinish: () -> Unit) {
         }
 
         Column(
-            Modifier.fillMaxSize().padding(horizontal = 32.dp, vertical = 40.dp),
+            Modifier.fillMaxSize().padding(horizontal = 32.dp, vertical = 40.dp).graphicsLayer {
+                alpha = 1f - exit
+            },
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Bottom
         ) {
@@ -264,6 +279,29 @@ fun IntroScreen(onFinish: () -> Unit) {
             TextButton(onClick = finish) {
                 Text(stringResource(R.string.intro_skip), color = Color.White.copy(alpha = 0.8f))
             }
+        }
+
+        Box(
+            Modifier.fillMaxSize()
+                .background(
+                    Brush.radialGradient(
+                        listOf(gold.copy(alpha = 0.9f), Color.Transparent)
+                    )
+                )
+                .graphicsLayer { alpha = exit }
+        )
+
+        Column(
+            Modifier.fillMaxSize().padding(bottom = 40.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Text(
+                stringResource(R.string.intro_portal),
+                color = Color.White.copy(alpha = 0.85f),
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.graphicsLayer { alpha = exit }
+            )
         }
     }
 }
