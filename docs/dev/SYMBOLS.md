@@ -14,7 +14,12 @@
 | simpleType | app/src/main/kotlin/core/design/Type.kt | خطوط الواجهة البسيطة (أكبر حجماً) | AppTheme |
 | Routes | app/src/main/kotlin/core/navigation/Routes.kt | ثوابت مسارات التنقل | NavGraph وHomeScreen |
 | AppNav | app/src/main/kotlin/core/navigation/NavGraph.kt | NavHost بين كل الشاشات | MainActivity |
-| HomeScreen | app/src/main/kotlin/feature/home/HomeScreen.kt | بطاقة المستوى والنقاط والطاقة وملخص اليوم وقائمة الميزات المجمّعة | AppNav |
+| HomeScreen | app/src/main/kotlin/feature/home/HomeScreen.kt | حاوية بأربعة أقسام وشريط سفلي وزر إضافة سريعة | AppNav |
+| PathTab | app/src/main/kotlin/feature/home/PathTab.kt | خريطة الرتب المتحركة وشخصية البطل والحملات | HomeScreen |
+| StatsTab | app/src/main/kotlin/feature/home/StatsTab.kt | حلقات وأشرطة ودوائر إحصائية لكل نشاط | HomeScreen |
+| ToolsTab | app/src/main/kotlin/feature/home/ToolsTab.kt | كل الكتب السحرية ونسخ البيانات واستيراد CSV | HomeScreen |
+| AccountTab | app/src/main/kotlin/feature/home/AccountTab.kt | الملف والرتبة وألوان الواجهة والرموز والإعدادات | HomeScreen |
+| QuickAddSheet | app/src/main/kotlin/feature/home/QuickAdd.kt | إضافة سريعة بمخططات ورموز وحقول مختصرة | HomeScreen |
 | OnboardingScreen | app/src/main/kotlin/feature/onboarding/OnboardingScreen.kt | شاشة البداية وزر ابدأ، ويثبت onboarded | AppNav |
 | SettingsScreen | app/src/main/kotlin/feature/settings/SettingsScreen.kt | تبديل الواجهة والوضع الداكن وإعادة مقدمة الأنمي | AppNav |
 | GameScreen | app/src/main/kotlin/feature/game/GameScreen.kt | الرتب والتقدم والحملات اليومية | AppNav |
@@ -36,7 +41,7 @@
 | prayerKeys | app/src/main/kotlin/domain/model/Daily.kt | معرفات الصلوات الخمس | Store وFaithScreen |
 | ScreenScaffold | app/src/main/kotlin/core/design/ScreenScaffold.kt | شريط عنوان وزر رجوع موحد لكل الشاشات | شاشات feature |
 | EmptyState | app/src/main/kotlin/core/design/ScreenScaffold.kt | نص حالة فارغة في الوسط | الشاشات |
-| FormDialog | app/src/main/kotlin/core/design/FormDialog.kt | نافذة نموذج بحقول وزر تأكيد معطّل عند النقص | شاشات الإضافة |
+| FormDialog | app/src/main/kotlin/core/design/FormDialog.kt | لوحة سفلية موحّدة للحقول وزر تأكيد معطّل عند النقص | شاشات الإضافة |
 | TasksScreen | app/src/main/kotlin/feature/tasks/TasksScreen.kt | إضافة المهام وإنجازها وحذفها مع طاقة ونقاط | AppNav |
 | MoneyScreen | app/src/main/kotlin/feature/money/MoneyScreen.kt | رصيد وحركات دخل ومصروف بتصنيفات | AppNav |
 | WorkoutsScreen | app/src/main/kotlin/feature/workouts/WorkoutsScreen.kt | تسجيل التمارين وإجمالي الدقائق | AppNav |

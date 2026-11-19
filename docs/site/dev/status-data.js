@@ -12,6 +12,7 @@ window.PROJECT_STATUS={
     {id:'server',title:'الخادم والمجتمع',tag:'v0.5.0-test.1',status:'wait',note:'منشورة في v0.5.0-test.1، ويلزم تهيئة config.php واستيراد المخطط قبل اختبار المزامنة'},
     {id:'game',title:'اللعبة: الرتب والحملات',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1 (app-qa.apk)، بانتظار تثبيتك'},
     {id:'style',title:'التخصيص والترخيص',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1 مع ألوان ورموز وترخيص وتشخيص'},
-    {id:'insights',title:'الرسائل والفحص الذاتي',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1، استيراد اختياري ومحلي'}
+    {id:'insights',title:'الرسائل والفحص الذاتي',tag:'v0.8.0-test.1',status:'wait',note:'منشورة في v0.8.0-test.1، استيراد اختياري ومحلي'},
+    {id:'hub',title:'الواجهة الموحّدة والأقسام الأربعة',tag:'v0.9.0-test.1',status:'wait',note:'المسار والإحصائيات والأدوات والحساب مع إضافة سريعة، بانتظار التحقق'}
   ]
 };

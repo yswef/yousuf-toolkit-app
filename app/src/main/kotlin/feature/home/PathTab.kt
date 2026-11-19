@@ -71,7 +71,7 @@ fun PathTab(store: Store, onFeature: (String) -> Unit, onAdd: () -> Unit, modifi
 
     LazyColumn(
         modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 24.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 92.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
