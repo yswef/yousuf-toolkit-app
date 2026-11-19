@@ -150,6 +150,14 @@ object Api {
             )
         }
 
+    suspend fun activateLicense(base: String, token: String, code: String): String =
+        withContext(Dispatchers.IO) {
+            val response = call(
+                base, "/api/license.php", "POST", JSONObject().put("code", code), token
+            )
+            response.optString("code", code)
+        }
+
     suspend fun vaultList(base: String, token: String): JSONArray = withContext(Dispatchers.IO) {
         call(base, "/api/vault.php", "GET", null, token).optJSONArray("items") ?: JSONArray()
     }
