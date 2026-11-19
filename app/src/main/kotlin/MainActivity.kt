@@ -1,4 +1,4 @@
-package com.yousuf.toolkit
+package com.yousefalhmzy.ydimension
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
