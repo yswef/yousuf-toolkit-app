@@ -1,39 +1,59 @@
 package feature.notiflog
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
+import core.design.InfoCard
+import core.design.LocalStore
+import core.design.RowItem
+import core.design.ScreenScaffold
+import java.text.DateFormat
+import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotiflogScreen(onBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.feature_notiflog)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-                    }
-                }
-            )
+    val store = LocalStore.current
+    val timeFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+    ScreenScaffold(
+        title = stringResource(R.string.feature_notiflog),
+        onBack = onBack,
+        actions = {
+            TextButton(
+                onClick = { store.clearNotifications() },
+                enabled = store.notifications.isNotEmpty()
+            ) { Text(stringResource(R.string.notif_clear)) }
         }
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.empty_state))
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .verticalScroll(rememberScrollState())
+        ) {
+            InfoCard(text = stringResource(R.string.notif_hint))
+            if (store.notifications.isEmpty()) {
+                Text(
+                    stringResource(R.string.notif_empty),
+                    modifier = Modifier.padding(16.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            store.notifications.forEach { entry ->
+                RowItem(
+                    title = entry.title.ifBlank { entry.pkg },
+                    subtitle = entry.text.ifBlank { timeFormat.format(Date(entry.at)) }
+                )
+            }
         }
     }
 }
