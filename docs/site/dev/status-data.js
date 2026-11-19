@@ -1,9 +1,9 @@
 window.PROJECT_STATUS={
-  updated:'2026-11-17',
-  updatedBy:'arena-agent',
+  updated:'2026-11-19',
+  updatedBy:'Claude Sonnet 5.5',
   stages:[
     {id:'repo',title:'المستودع والهيكل',tag:'',status:'wait',note:'بانتظار تحققك من صفحة الاختبارات'},
-    {id:'ui',title:'تطبيق الواجهات بلا منطق',tag:'v0.1.0-test.1',status:'wait',note:'التاج منشور والبناء نجح (app-qa.apk)، بانتظار التحقق اليدوي'},
+    {id:'ui',title:'تطبيق الواجهات بلا منطق',tag:'v0.1.0-test.2',status:'done',note:'أُصلح انهيار الفتح ووُضعت الأيقونة. التاج الجديد بانتظار بنائه وتجربتك'},
     {id:'core',title:'النواة: المهام والمال والتمارين والمذكرات',tag:'v0.2.0-test.1',status:'todo',note:''},
     {id:'daily',title:'الحياة اليومية',tag:'v0.3.0-test.1',status:'todo',note:''},
     {id:'device',title:'أدوات الجهاز',tag:'v0.4.0-test.1',status:'todo',note:''},
