@@ -60,6 +60,16 @@ class Store(context: Context) {
         private set
     var books by mutableStateOf<List<Book>>(emptyList())
         private set
+    var profileName by mutableStateOf("")
+        private set
+    var profileAge by mutableStateOf(0)
+        private set
+    var profileGoal by mutableStateOf("")
+        private set
+    var profileTeam by mutableStateOf("")
+        private set
+    var joinedAt by mutableStateOf(0L)
+        private set
     private var faithDays by mutableStateOf<Set<String>>(emptySet())
     private var sleepDays by mutableStateOf<Set<String>>(emptySet())
 
@@ -80,6 +90,9 @@ class Store(context: Context) {
     val balance: Double
         get() = ledger.sumOf { if (it.income) it.amount else -it.amount }
 
+    val hasProfile: Boolean
+        get() = profileName.isNotBlank()
+
     val openTasks: Int
         get() = tasks.count { !it.done }
 
@@ -95,6 +108,17 @@ class Store(context: Context) {
     fun sleepToday(): Double = sleep.filter { dayOf(it.at) == today }.sumOf { it.hours }
 
     fun start() {
+        onboarded = true
+        save()
+    }
+
+    fun saveProfile(name: String, age: Int, goal: String, team: String) {
+        if (name.isBlank()) return
+        profileName = name.trim()
+        profileAge = age
+        profileGoal = goal
+        profileTeam = team
+        if (joinedAt == 0L) joinedAt = System.currentTimeMillis()
         onboarded = true
         save()
     }
@@ -302,6 +326,11 @@ class Store(context: Context) {
         root.put("energy", energy)
         root.put("energyDay", energyDay)
         root.put("seq", seq)
+        root.put("profileName", profileName)
+        root.put("profileAge", profileAge)
+        root.put("profileGoal", profileGoal)
+        root.put("profileTeam", profileTeam)
+        root.put("joinedAt", joinedAt)
 
         root.put("tasks", JSONArray().apply {
             tasks.forEach { t ->
@@ -414,6 +443,11 @@ class Store(context: Context) {
             energy = root.optInt("energy", config.energyMax).coerceIn(0, config.energyMax)
             energyDay = root.optString("energyDay", energyDay)
             seq = root.optLong("seq", 1L).coerceAtLeast(1L)
+            profileName = root.optString("profileName", "")
+            profileAge = root.optInt("profileAge", 0)
+            profileGoal = root.optString("profileGoal", "")
+            profileTeam = root.optString("profileTeam", "")
+            joinedAt = root.optLong("joinedAt", 0L)
 
             tasks = root.optJSONArray("tasks").mapObjects {
                 Task(
