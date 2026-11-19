@@ -25,6 +25,7 @@ import feature.license.LicenseScreen
 import feature.money.MoneyScreen
 import feature.notiflog.NotiflogScreen
 import feature.onboarding.OnboardingScreen
+import feature.onboarding.RegisterScreen
 import feature.profile.ProfileScreen
 import feature.raids.RaidsScreen
 import feature.settings.SettingsScreen
@@ -45,18 +46,24 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
     NavHost(navController = nav, startDestination = Routes.INTRO) {
         composable(Routes.INTRO) {
             IntroScreen(onFinish = {
-                val target = if (store.onboarded) Routes.HOME else Routes.ONBOARDING
+                val target = if (store.onboarded && store.hasProfile) Routes.HOME else Routes.ONBOARDING
                 nav.navigate(target) {
                     popUpTo(Routes.INTRO) { inclusive = true }
                 }
             })
         }
         composable(Routes.ONBOARDING) {
-            OnboardingScreen(onStart = {
-                nav.navigate(Routes.HOME) {
-                    popUpTo(Routes.ONBOARDING) { inclusive = true }
+            OnboardingScreen(onRegister = { nav.navigate(Routes.REGISTER) })
+        }
+        composable(Routes.REGISTER) {
+            RegisterScreen(
+                onBack = { nav.popBackStack() },
+                onDone = {
+                    nav.navigate(Routes.HOME) {
+                        popUpTo(Routes.ONBOARDING) { inclusive = true }
+                    }
                 }
-            })
+            )
         }
         composable(Routes.HOME) {
             HomeScreen(
@@ -72,7 +79,8 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
                     nav.navigate(Routes.INTRO) {
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
-                }
+                },
+                onProfile = { nav.navigate(Routes.PROFILE) }
             )
         }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }
