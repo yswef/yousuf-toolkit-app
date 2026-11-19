@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.yousuf.toolkit"
+    namespace = "com.yousefalhmzy.ydimension"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.yousuf.toolkit"
+        applicationId = "com.yousefalhmzy.ydimension"
         minSdk = 34
         targetSdk = 36
         versionCode = 1
@@ -37,6 +37,7 @@ android {
         create("qa") {
             initWith(getByName("release"))
             isDebuggable = true
+            applicationIdSuffix = ".tester"
         }
         debug {
             applicationIdSuffix = ".debug"
