@@ -68,7 +68,8 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.HOME) {
             HomeScreen(
                 onFeature = { nav.navigate(it) },
-                onSettings = { nav.navigate(Routes.SETTINGS) }
+                onSettings = { nav.navigate(Routes.SETTINGS) },
+                ui = ui
             )
         }
         composable(Routes.SETTINGS) {
