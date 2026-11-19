@@ -11,8 +11,8 @@ android {
         applicationId = "com.yousuf.toolkit"
         minSdk = 34
         targetSdk = 36
-        versionCode = 5
-        versionName = "0.5.0"
+        versionCode = 8
+        versionName = "0.8.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -26,20 +26,29 @@ android {
                 keyPassword = System.getenv("KEY_PASSWORD")
             }
         }
+        create("test") {
+            storeFile = rootProject.file("ci/test-signing.p12")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+            storeType = "PKCS12"
+        }
     }
 
     buildTypes {
         release {
             val hasKey = !System.getenv("KEYSTORE_PATH").isNullOrBlank()
-            signingConfig = if (hasKey) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
+            signingConfig = if (hasKey) signingConfigs.getByName("release") else signingConfigs.getByName("test")
             isMinifyEnabled = false
         }
         create("qa") {
             initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("test")
             isDebuggable = true
         }
         debug {
             applicationIdSuffix = ".debug"
+            signingConfig = signingConfigs.getByName("test")
         }
     }
 
