@@ -28,7 +28,7 @@ import com.yousuf.toolkit.R
 import core.design.Accent
 import core.design.BookSymbol
 import core.design.InfoCard
-import core.design.LocalStore
+import data.local.LocalStore
 import core.design.ScreenScaffold
 import core.design.drawBookSymbol
 
