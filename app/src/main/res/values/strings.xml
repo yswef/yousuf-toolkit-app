@@ -53,4 +53,127 @@
     <string name="team_purple_orca">الحوت الأرجواني</string>
     <string name="team_aqua_deer">الغزال اللازوردي</string>
     <string name="team_royal_knights">الفرسان الملكيون</string>
+
+    <string name="add">إضافة</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="delete">حذف</string>
+    <string name="ok">حسناً</string>
+
+    <string name="intro_title">Y-DIMENSION</string>
+    <string name="intro_tagline">بُعدك السحري يبدأ من هنا</string>
+    <string name="intro_skip">تخطي</string>
+
+    <string name="section_core">الأساسيات</string>
+    <string name="section_daily">الحياة اليومية</string>
+    <string name="section_game">اللعبة</string>
+    <string name="section_device">أدوات الجهاز</string>
+    <string name="section_more">المزيد</string>
+
+    <string name="home_level">المستوى %1$d</string>
+    <string name="home_points">%1$d نقطة</string>
+    <string name="home_xp">%1$d%% إلى المستوى التالي</string>
+    <string name="home_energy">الطاقة %1$d / %2$d</string>
+    <string name="home_rest">استرح +%1$d</string>
+    <string name="home_today">ملخص اليوم</string>
+    <string name="home_tasks_left">مهام</string>
+    <string name="home_water">ماء</string>
+    <string name="home_water_value">%1$d/%2$d</string>
+    <string name="home_prayers">صلوات</string>
+    <string name="home_prayers_value">%1$d/5</string>
+    <string name="home_sleep">نوم</string>
+
+    <string name="task_new">مهمة جديدة</string>
+    <string name="task_title">العنوان</string>
+    <string name="task_note">ملاحظة</string>
+    <string name="task_priority">الأولوية</string>
+    <string name="task_none">لا توجد مهام بعد. أضف مهمتك الأولى.</string>
+    <string name="task_done_section">المكتملة</string>
+    <string name="task_energy_cost">كل مهمة تستهلك %1$d طاقة وتُضيف نقاطاً.</string>
+    <string name="priority_low">منخفضة</string>
+    <string name="priority_normal">عادية</string>
+    <string name="priority_high">عالية</string>
+    <string name="energy_title">الطاقة</string>
+    <string name="not_enough_energy">لا توجد طاقة كافية. استرح أولاً ثم أكمل المهمة.</string>
+
+    <string name="money_balance">الرصيد</string>
+    <string name="money_income">دخل</string>
+    <string name="money_expense">مصروف</string>
+    <string name="money_income_value">دخل %1$s</string>
+    <string name="money_expense_value">مصروف %1$s</string>
+    <string name="money_new">حركة جديدة</string>
+    <string name="money_title">الوصف</string>
+    <string name="money_amount">المبلغ</string>
+    <string name="money_kind">النوع</string>
+    <string name="money_category">التصنيف</string>
+    <string name="money_none">لا توجد حركات مالية بعد.</string>
+    <string name="money_row_meta">%1$s · %2$s</string>
+    <string name="cat_salary">راتب</string>
+    <string name="cat_food">طعام</string>
+    <string name="cat_transport">مواصلات</string>
+    <string name="cat_bills">فواتير</string>
+    <string name="cat_shopping">تسوق</string>
+    <string name="cat_other">أخرى</string>
+
+    <string name="workout_new">تمرين جديد</string>
+    <string name="workout_kind">النوع</string>
+    <string name="workout_minutes">المدة بالدقائق</string>
+    <string name="workout_minutes_value">%1$d دقيقة</string>
+    <string name="workout_total">إجمالي الدقائق</string>
+    <string name="workout_count">عدد التمارين</string>
+    <string name="workout_none">لا توجد تمارين مسجلة بعد.</string>
+    <string name="workout_strength">قوة</string>
+    <string name="workout_cardio">كارديو</string>
+    <string name="workout_stretch">تمدد</string>
+    <string name="workout_walk">مشي</string>
+
+    <string name="journal_new">مذكرة جديدة</string>
+    <string name="journal_title">العنوان</string>
+    <string name="journal_body">النص</string>
+    <string name="journal_none">لا توجد مذكرات بعد.</string>
+    <string name="journal_untitled">بلا عنوان</string>
+
+    <string name="water_today">أكواب اليوم</string>
+    <string name="water_cups">كوب</string>
+    <string name="water_goal">الهدف اليومي: %1$d أكواب</string>
+    <string name="water_add">أضف كوباً</string>
+    <string name="water_remove">أنقص كوباً</string>
+    <string name="water_week">آخر 7 أيام</string>
+
+    <string name="sleep_new">تسجيل نوم</string>
+    <string name="sleep_hours">عدد الساعات</string>
+    <string name="sleep_hours_value">%1$s ساعة</string>
+    <string name="sleep_today">نوم اليوم</string>
+    <string name="sleep_goal">الهدف: %1$d ساعات</string>
+    <string name="sleep_average">المعدل: %1$s ساعة</string>
+    <string name="sleep_none">لا توجد تسجيلات نوم بعد.</string>
+
+    <string name="faith_today">صلوات اليوم</string>
+    <string name="faith_progress">%1$d من %2$d</string>
+    <string name="faith_full_days">أيام أكملت فيها الصلوات الخمس: %1$d</string>
+    <string name="faith_fajr">الفجر</string>
+    <string name="faith_dhuhr">الظهر</string>
+    <string name="faith_asr">العصر</string>
+    <string name="faith_maghrib">المغرب</string>
+    <string name="faith_isha">العشاء</string>
+
+    <string name="learn_new">موضوع جديد</string>
+    <string name="learn_topic">الموضوع</string>
+    <string name="learn_target">الدقائق المستهدفة</string>
+    <string name="learn_total">إجمالي دقائق التعلم: %1$d</string>
+    <string name="learn_progress">%1$d / %2$d دقيقة</string>
+    <string name="learn_done">مكتمل</string>
+    <string name="learn_more">+15 دقيقة</string>
+    <string name="learn_none">لا توجد مواضيع تعلم بعد.</string>
+
+    <string name="library_new">كتاب جديد</string>
+    <string name="library_book">عنوان الكتاب</string>
+    <string name="library_pages">عدد الصفحات</string>
+    <string name="library_progress">%1$d / %2$d صفحة</string>
+    <string name="library_done">مكتمل</string>
+    <string name="library_more">+10 صفحات</string>
+    <string name="library_none">لا توجد كتب بعد.</string>
+
+    <string name="settings_visuals">المؤثرات</string>
+    <string name="settings_replay_intro">إعادة مقدمة الأنمي</string>
 </resources>

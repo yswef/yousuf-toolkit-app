@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import core.design.UiState
+import data.local.LocalStore
 import feature.blocker.BlockerScreen
 import feature.cleaner.CleanerScreen
 import feature.contacts.ContactsScreen
@@ -16,6 +17,7 @@ import feature.firewall.FirewallScreen
 import feature.forum.ForumScreen
 import feature.game.GameScreen
 import feature.home.HomeScreen
+import feature.intro.IntroScreen
 import feature.journal.JournalScreen
 import feature.learn.LearnScreen
 import feature.library.LibraryScreen
@@ -39,9 +41,22 @@ import feature.workouts.WorkoutsScreen
 
 @Composable
 fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
-    NavHost(navController = nav, startDestination = Routes.ONBOARDING) {
+    val store = LocalStore.current
+    NavHost(navController = nav, startDestination = Routes.INTRO) {
+        composable(Routes.INTRO) {
+            IntroScreen(onFinish = {
+                val target = if (store.onboarded) Routes.HOME else Routes.ONBOARDING
+                nav.navigate(target) {
+                    popUpTo(Routes.INTRO) { inclusive = true }
+                }
+            })
+        }
         composable(Routes.ONBOARDING) {
-            OnboardingScreen(onStart = { nav.navigate(Routes.HOME) })
+            OnboardingScreen(onStart = {
+                nav.navigate(Routes.HOME) {
+                    popUpTo(Routes.ONBOARDING) { inclusive = true }
+                }
+            })
         }
         composable(Routes.HOME) {
             HomeScreen(
@@ -50,7 +65,15 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
             )
         }
         composable(Routes.SETTINGS) {
-            SettingsScreen(ui = ui, onBack = { nav.popBackStack() })
+            SettingsScreen(
+                ui = ui,
+                onBack = { nav.popBackStack() },
+                onReplayIntro = {
+                    nav.navigate(Routes.INTRO) {
+                        popUpTo(Routes.HOME) { inclusive = true }
+                    }
+                }
+            )
         }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CLEANER) { CleanerScreen(onBack = { nav.popBackStack() }) }

@@ -7,9 +7,17 @@
   "points": {
     "task": 10,
     "workout": 15,
-    "water": 5
+    "water": 5,
+    "faith": 20,
+    "learn": 10,
+    "reading": 5,
+    "sleep": 5
   },
   "levels": {
     "xpPerLevel": 100
+  },
+  "daily": {
+    "waterGoal": 8,
+    "sleepGoalHours": 8
   }
 }
