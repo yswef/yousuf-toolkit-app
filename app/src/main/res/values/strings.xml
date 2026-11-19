@@ -443,4 +443,116 @@
     <string name="settings_skin">المظهر والرمز</string>
     <string name="settings_license">الترخيص</string>
     <string name="settings_tests">فحص التطبيق</string>
+
+    <string name="tab_path">المسار</string>
+    <string name="tab_stats">الإحصائيات</string>
+    <string name="tab_tools">الأدوات</string>
+    <string name="tab_account">حسابي</string>
+
+    <string name="path_title">مسار البطل</string>
+    <string name="path_subtitle">خريطة تطورك من مبتدئ إلى إمبراطور</string>
+    <string name="path_rank">رتبتك الحالية</string>
+    <string name="path_next">الرتبة التالية</string>
+    <string name="path_to_next">متبقي %1$d مستوى</string>
+    <string name="path_completed">مكتمل</string>
+    <string name="path_current">الآن</string>
+    <string name="path_locked">مغلق</string>
+    <string name="path_campaigns">حملاتك</string>
+    <string name="path_no_campaigns">لا حملة نشطة، ابدأ حملة جديدة.</string>
+    <string name="path_all_campaigns">كل الحملات</string>
+    <string name="path_checkin">تسجيل اليوم</string>
+    <string name="path_checked">سُجّل اليوم</string>
+    <string name="path_map_hint">خريطتك تتقدم مع كل مستوى تصل إليه</string>
+
+    <string name="stats_title">الإحصائيات</string>
+    <string name="stats_subtitle">نبضك اليومي في مكان واحد</string>
+    <string name="stats_today">نبض اليوم</string>
+    <string name="stats_completion">إنجاز اليوم</string>
+    <string name="stats_open_tasks">مهام مفتوحة</string>
+    <string name="stats_done_tasks">مهام منجزة</string>
+    <string name="stats_balance">الرصيد</string>
+    <string name="stats_water">ماء اليوم</string>
+    <string name="stats_prayers">صلوات اليوم</string>
+    <string name="stats_sleep">نوم اليوم</string>
+    <string name="stats_week">نشاط الأسبوع</string>
+    <string name="stats_money">المال</string>
+    <string name="stats_income">دخل</string>
+    <string name="stats_expense">مصروف</string>
+    <string name="stats_streak">سلسلة النشاط</string>
+    <string name="stats_streak_days">%1$d يوم متتابع</string>
+    <string name="stats_best">أفضل إنجاز</string>
+    <string name="stats_best_tasks">أنجزت %1$d مهمة</string>
+    <string name="stats_best_water">شربت %1$d كوب</string>
+    <string name="stats_best_points">جمعت %1$d نقطة</string>
+    <string name="stats_empty">ابدأ بتسجيل نشاطك اليوم.</string>
+    <string name="stats_energy">الطاقة</string>
+    <string name="stats_points">النقاط</string>
+    <string name="stats_workouts">تمارين</string>
+    <string name="stats_journal">مذكرات</string>
+    <string name="stats_books">كتب</string>
+    <string name="stats_week_empty">لا نشاط هذا الأسبوع بعد.</string>
+
+    <string name="form_hint">املأ الحقول ثم احفظ.</string>
+    <string name="quick_add">إضافة سريعة</string>
+    <string name="quick_add_hint">اختر نوعاً وسجّل في ثوان.</string>
+    <string name="quick_task">مهمة</string>
+    <string name="quick_money">مال</string>
+    <string name="quick_water">ماء</string>
+    <string name="quick_workout">تمرين</string>
+    <string name="quick_journal">مذكرة</string>
+    <string name="quick_campaign">حملة</string>
+    <string name="quick_title">العنوان</string>
+    <string name="quick_note">ملاحظة</string>
+    <string name="quick_amount">المبلغ</string>
+    <string name="quick_minutes">الدقائق</string>
+    <string name="quick_kind">النوع</string>
+    <string name="quick_cups">أكواب</string>
+    <string name="quick_days">الأيام</string>
+    <string name="quick_save">حفظ</string>
+    <string name="quick_water_done">أُضيف كوب ماء</string>
+    <string name="quick_failed">أكمل الحقول أولاً</string>
+    <string name="quick_income">دخل</string>
+    <string name="quick_expense">مصروف</string>
+    <string name="quick_priority">الأولوية</string>
+    <string name="quick_body">النص</string>
+    <string name="quick_money_default">حركة سريعة</string>
+    <string name="quick_custom">مخصص</string>
+
+    <string name="tools_title">الأدوات</string>
+    <string name="tools_subtitle">كل الكتب السحرية في مكان واحد</string>
+    <string name="tools_data">نسخ البيانات واستعادتها</string>
+    <string name="tools_data_hint">انسخ نسخة احتياطية أو استورد من تطبيق آخر.</string>
+    <string name="tools_backup">نسخة احتياطية</string>
+    <string name="tools_restore">استعادة نسخة</string>
+    <string name="tools_csv_money">استيراد مالية CSV</string>
+    <string name="tools_csv_tasks">استيراد مهام CSV</string>
+    <string name="tools_backup_done">تم إنشاء النسخة.</string>
+    <string name="tools_backup_failed">تعذّر إنشاء النسخة.</string>
+    <string name="tools_restore_done">تمت الاستعادة.</string>
+    <string name="tools_restore_failed">الملف غير صالح.</string>
+    <string name="tools_csv_done">أُضيف %1$d عنصراً.</string>
+    <string name="tools_csv_none">لا عناصر صالحة في الملف.</string>
+    <string name="tools_csv_hint">المالية: النوع,العنوان,المبلغ. المهام: العنوان,الملاحظة,الأولوية.</string>
+
+    <string name="account_title">حسابي</string>
+    <string name="account_guest">بطل بلا اسم</string>
+    <string name="account_edit">الملف الشخصي</string>
+    <string name="account_appearance">المظهر</string>
+    <string name="account_app">التطبيق</string>
+    <string name="account_dark">الوضع الداكن</string>
+    <string name="account_mode">الواجهة</string>
+    <string name="account_full_settings">الإعدادات الكاملة</string>
+    <string name="account_license">الترخيص</string>
+    <string name="account_tests">فحص التطبيق</string>
+    <string name="account_joined">انضم في %1$s</string>
+
+    <string-array name="week_days_short">
+        <item>س</item>
+        <item>ح</item>
+        <item>ن</item>
+        <item>ث</item>
+        <item>ر</item>
+        <item>خ</item>
+        <item>ج</item>
+    </string-array>
 </resources>

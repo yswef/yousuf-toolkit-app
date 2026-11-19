@@ -368,6 +368,61 @@ class Store(context: Context) {
         save()
     }
 
+    fun backupText(): String = runCatching {
+        save()
+        file.readText()
+    }.getOrDefault("{}")
+
+    fun restoreBackup(text: String): Boolean {
+        return try {
+            val root = JSONObject(text)
+            if (!root.has("points") && !root.has("tasks")) {
+                false
+            } else {
+                file.writeText(text)
+                read()
+                save()
+                true
+            }
+        } catch (t: Throwable) {
+            false
+        }
+    }
+
+    fun importMoneyCsv(text: String): Int {
+        var added = 0
+        text.lineSequence().forEach { line ->
+            val cols = line.split(',').map { it.trim().trim('"') }
+            if (cols.size < 3) return@forEach
+            val amount = cols[2].replace(",", "").toDoubleOrNull() ?: return@forEach
+            if (amount <= 0.0) return@forEach
+            if (cols[0].contains("type", true) || cols[1].contains("title", true)) return@forEach
+            val income = cols[0].contains("دخل") || cols[0].equals("income", true)
+            addLedger(cols[1], amount, income, "other")
+            added++
+        }
+        return added
+    }
+
+    fun importTaskCsv(text: String): Int {
+        var added = 0
+        text.lineSequence().forEach { line ->
+            val cols = line.split(',').map { it.trim().trim('"') }
+            val title = cols.firstOrNull().orEmpty()
+            if (title.isBlank()) return@forEach
+            if (title.contains("title", true) || title.contains("اسم", false)) return@forEach
+            val note = cols.getOrElse(1) { "" }
+            val priority = when {
+                cols.getOrElse(2) { "" }.contains("high", true) -> Priority.HIGH
+                cols.getOrElse(2) { "" }.contains("low", true) -> Priority.LOW
+                else -> Priority.NORMAL
+            }
+            addTask(title, note, priority)
+            added++
+        }
+        return added
+    }
+
     fun importSms(items: List<SmsMoney>): Int {
         var added = 0
         items.forEach { item ->
