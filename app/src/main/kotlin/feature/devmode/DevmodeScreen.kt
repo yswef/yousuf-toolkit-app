@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.InfoCard
-import core.design.LocalStore
+import data.local.LocalStore
 import core.design.RowItem
 import core.design.ScreenScaffold
 
