@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.yousuf.toolkit.R
+import com.yousefalhmzy.ydimension.R
 import core.navigation.Routes
 
 private val features = listOf(
