@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -39,7 +41,7 @@ import com.yousuf.toolkit.R
 import core.design.FormDialog
 import core.design.InfoCard
 import core.design.InfoTone
-import core.design.LocalStore
+import data.local.LocalStore
 import core.design.MagicTabs
 import core.design.RowItem
 import core.design.SectionTitle
@@ -56,6 +58,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
@@ -337,7 +340,7 @@ private fun DomainsTab(store: Store) {
                 subtitle = "",
                 trailing = {
                     IconButton(onClick = { store.deleteDomain(domain) }) {
-                        Icon(androidx.compose.material.icons.Icons.Default.Delete, contentDescription = stringResource(R.string.common_delete))
+                        Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.common_delete))
                     }
                 }
             )
@@ -400,7 +403,7 @@ private fun NotificationsTab(store: Store) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        val timeFormat = DateFormat.getTimeFormat(context)
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         store.notifications.forEach { entry ->
             RowItem(
                 title = entry.title.ifBlank { entry.pkg },
@@ -482,7 +485,7 @@ private fun VaultTab(store: Store) {
                 },
                 trailing = {
                     IconButton(onClick = { store.deleteVault(note.id) }) {
-                        Icon(androidx.compose.material.icons.Icons.Default.Delete, contentDescription = stringResource(R.string.common_delete))
+                        Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.common_delete))
                     }
                 }
             )
