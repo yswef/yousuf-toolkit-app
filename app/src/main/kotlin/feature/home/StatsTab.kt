@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.BookSymbol
+import core.design.drawBookSymbol
 import data.local.Store
 import domain.model.prayerKeys
 import java.time.Instant
@@ -316,7 +317,7 @@ private fun StatCard(symbol: BookSymbol, value: String, label: String, color: Co
                 contentAlignment = Alignment.Center
             ) {
                 Canvas(Modifier.size(18.dp)) {
-                    core.design.drawBookSymbol(symbol, color, Offset(size.width / 2, size.height / 2), size.minDimension * 0.42f)
+                    drawBookSymbol(symbol, color, Offset(size.width / 2, size.height / 2), size.minDimension * 0.42f)
                 }
             }
             Text(
