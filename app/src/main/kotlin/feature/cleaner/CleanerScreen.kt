@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.yousuf.toolkit.R
+import com.yousefalhmzy.ydimension.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
