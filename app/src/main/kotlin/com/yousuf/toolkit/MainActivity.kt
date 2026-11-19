@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val store = remember { Store(applicationContext) }
+            val store = remember { Store.of(applicationContext) }
             val ui = remember { UiState() }
             CompositionLocalProvider(LocalStore provides store) {
                 AppTheme(mode = ui.mode, dark = ui.dark) {
