@@ -63,8 +63,18 @@ private val DarkScheme = darkColorScheme(
 )
 
 @Composable
-fun AppTheme(mode: UiMode, dark: Boolean, content: @Composable () -> Unit) {
-    val colors = if (dark) DarkScheme else LightScheme
+fun AppTheme(
+    mode: UiMode,
+    dark: Boolean,
+    accent: String = Accent.VIOLET.key,
+    content: @Composable () -> Unit
+) {
+    val base = if (dark) DarkScheme else LightScheme
+    val skin = accentOf(accent)
+    val colors = base.copy(
+        primary = if (dark) skin.dark else skin.light,
+        inversePrimary = if (dark) skin.light else skin.dark
+    )
     val type = if (mode == UiMode.SIMPLE) simpleType() else professionalType()
     MaterialTheme(colorScheme = colors, typography = type, content = content)
 }

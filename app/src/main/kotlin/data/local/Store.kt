@@ -9,12 +9,14 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import core.config.AppConfig
 import core.security.VaultCrypto
 import domain.model.Book
+import domain.model.Campaign
 import domain.model.JournalEntry
 import domain.model.LearnItem
 import domain.model.Ledger
 import domain.model.NotifEntry
 import domain.model.Priority
 import domain.model.SleepLog
+import domain.model.SmsMoney
 import domain.model.Task
 import domain.model.VaultNote
 import domain.model.Wallet
@@ -101,6 +103,18 @@ class Store(context: Context) {
         private set
     var accountEmail by mutableStateOf("")
         private set
+    var accent by mutableStateOf("violet")
+        private set
+    var avatar by mutableStateOf(0)
+        private set
+    var premium by mutableStateOf(false)
+        private set
+    var licenseCode by mutableStateOf("")
+        private set
+    var campaigns by mutableStateOf<List<Campaign>>(emptyList())
+        private set
+    var smsSeen by mutableStateOf<Set<String>>(emptySet())
+        private set
     private var faithDays by mutableStateOf<Set<String>>(emptySet())
     private var sleepDays by mutableStateOf<Set<String>>(emptySet())
 
@@ -117,6 +131,24 @@ class Store(context: Context) {
 
     val levelProgress: Float
         get() = if (config.xpPerLevel <= 0) 0f else (xp % config.xpPerLevel) / config.xpPerLevel.toFloat()
+
+    val rankKey: String
+        get() {
+            val ranks = config.ranks.ifEmpty { listOf("novice" to 1) }
+            return ranks.lastOrNull { level >= it.second }?.first ?: ranks.first().first
+        }
+
+    val nextRank: Pair<String, Int>?
+        get() = config.ranks.firstOrNull { level < it.second }
+
+    val rankProgress: Float
+        get() {
+            val ranks = config.ranks.ifEmpty { listOf("novice" to 1) }
+            val next = ranks.firstOrNull { level < it.second } ?: return 1f
+            val previous = ranks.lastOrNull { level >= it.second }?.second ?: 1
+            val span = (next.second - previous).coerceAtLeast(1)
+            return ((level - previous) / span.toFloat()).coerceIn(0f, 1f)
+        }
 
     val balance: Double
         get() = ledger.sumOf { if (it.income) it.amount else -it.amount }
@@ -288,6 +320,128 @@ class Store(context: Context) {
         accountName = ""
         accountEmail = ""
         save()
+    }
+
+    fun addCampaign(title: String, target: Int): Boolean {
+        if (title.isBlank() || target <= 0) return false
+        campaigns = campaigns + Campaign(
+            id = nextId(),
+            title = title.trim().take(80),
+            target = target.coerceIn(1, 365),
+            checkins = 0,
+            startedAt = System.currentTimeMillis(),
+            lastCheckin = 0L
+        )
+        save()
+        return true
+    }
+
+    fun checkinCampaign(id: Long): Boolean {
+        val campaign = campaigns.firstOrNull { it.id == id } ?: return false
+        val now = System.currentTimeMillis()
+        if (campaign.lastCheckin > 0L && dayOf(campaign.lastCheckin) == dayOf(now)) return false
+        campaigns = campaigns.map {
+            if (it.id == id) it.copy(checkins = it.checkins + 1, lastCheckin = now) else it
+        }
+        save()
+        return true
+    }
+
+    fun deleteCampaign(id: Long) {
+        campaigns = campaigns.filterNot { it.id == id }
+        save()
+    }
+
+    fun saveSkin(value: String) {
+        accent = value
+        save()
+    }
+
+    fun saveAvatar(index: Int) {
+        avatar = index.coerceIn(0, 7)
+        save()
+    }
+
+    fun saveLicense(code: String) {
+        licenseCode = code.trim()
+        premium = licenseCode.isNotBlank()
+        save()
+    }
+
+    fun backupText(): String = runCatching {
+        save()
+        file.readText()
+    }.getOrDefault("{}")
+
+    fun restoreBackup(text: String): Boolean {
+        return try {
+            val root = JSONObject(text)
+            if (!root.has("points") && !root.has("tasks")) {
+                false
+            } else {
+                file.writeText(text)
+                read()
+                save()
+                true
+            }
+        } catch (t: Throwable) {
+            false
+        }
+    }
+
+    fun importMoneyCsv(text: String): Int {
+        var added = 0
+        text.lineSequence().forEach { line ->
+            val cols = line.split(',').map { it.trim().trim('"') }
+            if (cols.size < 3) return@forEach
+            val amount = cols[2].replace(",", "").toDoubleOrNull() ?: return@forEach
+            if (amount <= 0.0) return@forEach
+            if (cols[0].contains("type", true) || cols[1].contains("title", true)) return@forEach
+            val income = cols[0].contains("دخل") || cols[0].equals("income", true)
+            addLedger(cols[1], amount, income, "other")
+            added++
+        }
+        return added
+    }
+
+    fun importTaskCsv(text: String): Int {
+        var added = 0
+        text.lineSequence().forEach { line ->
+            val cols = line.split(',').map { it.trim().trim('"') }
+            val title = cols.firstOrNull().orEmpty()
+            if (title.isBlank()) return@forEach
+            if (title.contains("title", true) || title.contains("اسم", false)) return@forEach
+            val note = cols.getOrElse(1) { "" }
+            val priority = when {
+                cols.getOrElse(2) { "" }.contains("high", true) -> Priority.HIGH
+                cols.getOrElse(2) { "" }.contains("low", true) -> Priority.LOW
+                else -> Priority.NORMAL
+            }
+            addTask(title, note, priority)
+            added++
+        }
+        return added
+    }
+
+    fun importSms(items: List<SmsMoney>): Int {
+        var added = 0
+        items.forEach { item ->
+            if (item.key in smsSeen) return@forEach
+            smsSeen = smsSeen + item.key
+            ledger = listOf(
+                Ledger(
+                    id = nextId(),
+                    title = item.sender.ifBlank { item.body.take(60) },
+                    amount = item.amount,
+                    income = item.income,
+                    category = "other",
+                    at = if (item.at > 0L) item.at else System.currentTimeMillis()
+                )
+            ) + ledger
+            added++
+        }
+        if (added > 0) save()
+        return added
     }
 
     fun addTask(title: String, note: String, priority: Priority) {
@@ -497,6 +651,23 @@ class Store(context: Context) {
         root.put("accountId", accountId)
         root.put("accountName", accountName)
         root.put("accountEmail", accountEmail)
+        root.put("accent", accent)
+        root.put("avatar", avatar)
+        root.put("premium", premium)
+        root.put("licenseCode", licenseCode)
+        root.put("campaigns", JSONArray().apply {
+            campaigns.forEach { c ->
+                put(JSONObject().apply {
+                    put("id", c.id)
+                    put("title", c.title)
+                    put("target", c.target)
+                    put("checkins", c.checkins)
+                    put("startedAt", c.startedAt)
+                    put("lastCheckin", c.lastCheckin)
+                })
+            }
+        })
+        root.put("smsSeen", JSONArray().apply { smsSeen.forEach { put(it) } })
         root.put("blockerOn", blockerOn)
         root.put("blockStart", blockStart)
         root.put("blockEnd", blockEnd)
@@ -665,6 +836,21 @@ class Store(context: Context) {
             accountId = root.optLong("accountId", 0L)
             accountName = root.optString("accountName", "")
             accountEmail = root.optString("accountEmail", "")
+            accent = root.optString("accent", "violet")
+            avatar = root.optInt("avatar", 0).coerceIn(0, 7)
+            premium = root.optBoolean("premium", false)
+            licenseCode = root.optString("licenseCode", "")
+            campaigns = root.optJSONArray("campaigns").mapObjects {
+                Campaign(
+                    id = it.optLong("id"),
+                    title = it.optString("title"),
+                    target = it.optInt("target", 1),
+                    checkins = it.optInt("checkins", 0),
+                    startedAt = it.optLong("startedAt"),
+                    lastCheckin = it.optLong("lastCheckin")
+                )
+            }
+            smsSeen = root.stringSet("smsSeen")
             blockerOn = root.optBoolean("blockerOn", false)
             blockStart = root.optInt("blockStart", 22 * 60).coerceIn(0, 1439)
             blockEnd = root.optInt("blockEnd", 6 * 60).coerceIn(0, 1439)

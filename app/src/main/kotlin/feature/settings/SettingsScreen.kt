@@ -29,7 +29,10 @@ fun SettingsScreen(
     ui: UiState,
     onBack: () -> Unit,
     onReplayIntro: () -> Unit,
-    onProfile: () -> Unit
+    onProfile: () -> Unit,
+    onSkin: () -> Unit = {},
+    onLicense: () -> Unit = {},
+    onTests: () -> Unit = {}
 ) {
     ScreenScaffold(title = stringResource(R.string.feature_settings), onBack = onBack) { padding ->
         Column(
@@ -56,6 +59,15 @@ fun SettingsScreen(
             )
             OutlinedButton(onClick = onProfile, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.settings_profile))
+            }
+            OutlinedButton(onClick = onSkin, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_skin))
+            }
+            OutlinedButton(onClick = onLicense, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_license))
+            }
+            OutlinedButton(onClick = onTests, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_tests))
             }
             OutlinedButton(onClick = onReplayIntro, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.settings_replay_intro))

@@ -19,5 +19,8 @@
 - `GET|POST /api/shop.php?action=list|buy`.
 - `GET|POST /api/raids.php?action=info|checkin`.
 - `GET|POST|DELETE /api/vault.php`.
+- `GET|POST /api/license.php`.
+
+نشر هوستنجر: `HOSTINGER.md`.
 
 الحقول الزمنية كلها Unix UTC بالثواني. الخزنة تستقبل حمولة مشفّرة من الجهاز كما هي ولا يفكّه الخادم.

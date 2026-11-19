@@ -68,7 +68,8 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.HOME) {
             HomeScreen(
                 onFeature = { nav.navigate(it) },
-                onSettings = { nav.navigate(Routes.SETTINGS) }
+                onSettings = { nav.navigate(Routes.SETTINGS) },
+                ui = ui
             )
         }
         composable(Routes.SETTINGS) {
@@ -80,7 +81,10 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
                 },
-                onProfile = { nav.navigate(Routes.PROFILE) }
+                onProfile = { nav.navigate(Routes.PROFILE) },
+                onSkin = { nav.navigate(Routes.SKIN) },
+                onLicense = { nav.navigate(Routes.LICENSE) },
+                onTests = { nav.navigate(Routes.TESTS) }
             )
         }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }
