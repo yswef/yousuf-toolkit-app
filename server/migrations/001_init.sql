@@ -144,6 +144,14 @@ CREATE TABLE raid_members (
     CONSTRAINT fk_raid_members_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE licenses (
+    user_id INT UNSIGNED NOT NULL,
+    code_hash CHAR(64) NOT NULL,
+    activated_at BIGINT NOT NULL,
+    PRIMARY KEY (user_id),
+    CONSTRAINT fk_licenses_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE vault_items (
     user_id INT UNSIGNED NOT NULL,
     client_id BIGINT NOT NULL,

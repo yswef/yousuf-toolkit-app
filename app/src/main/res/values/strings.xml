@@ -368,4 +368,79 @@
     <string name="account_created">تم إنشاء الحساب.</string>
     <string name="account_forgot_sent">إذا كان البريد مسجلاً فستصلك رسالة.</string>
     <string name="account_forgot">نسيت كلمة المرور</string>
+
+    <string name="rank_title">رتبتك</string>
+    <string name="rank_novice">مبتدئ</string>
+    <string name="rank_apprentice">متدرّب</string>
+    <string name="rank_knight">فارس</string>
+    <string name="rank_captain">قائد</string>
+    <string name="rank_mage">ساحر</string>
+    <string name="rank_sage">حكيم</string>
+    <string name="rank_emperor">إمبراطور</string>
+    <string name="rank_next">التالي: %1$s عند المستوى %2$d</string>
+    <string name="rank_max">وصلت أعلى رتبة.</string>
+    <string name="game_level_points">المستوى %1$d · %2$d نقطة</string>
+    <string name="campaigns_desc">حملة يومية بعدد أيام تحدده أنت، وتسجيل واحد كل يوم.</string>
+    <string name="campaign_new">حملة جديدة</string>
+    <string name="campaign_empty">لا توجد حملات بعد.</string>
+    <string name="campaign_title">اسم الحملة</string>
+    <string name="campaign_target">عدد الأيام</string>
+    <string name="campaign_checkin">تسجيل اليوم</string>
+    <string name="campaign_checked">سُجّل اليوم</string>
+    <string name="campaign_done">اكتملت الحملة</string>
+
+    <string name="skin_desc">اختر لون الواجهة ورمز البطل. تُحفظ محلياً.</string>
+    <string name="skin_accent">لون الواجهة</string>
+    <string name="skin_avatar">رمز البطل</string>
+    <string name="skin_hint">اللون الافتراضي هو بنفسجي أيقونة التطبيق مع الذهبي.</string>
+    <string name="accent_violet">بنفسجي</string>
+    <string name="accent_gold">ذهبي</string>
+    <string name="accent_teal">فيروزي</string>
+    <string name="accent_rose">وردي</string>
+
+    <string name="license_desc">أدخل كود التفعيل الذي يصدره المالك لحسابك.</string>
+    <string name="license_active">الترخيص مفعّل</string>
+    <string name="license_remove">إلغاء التفعيل من هذا الجهاز</string>
+    <string name="license_login">سجّل الدخول من صفحة الجهاز ← المزامنة أولاً.</string>
+    <string name="license_code">كود التفعيل</string>
+    <string name="license_activate">تفعيل</string>
+    <string name="license_ok">تم تفعيل الترخيص.</string>
+    <string name="license_failed">تعذّر تفعيل الكود.</string>
+    <string name="license_hint">الكود مرتبط بحسابك على الخادم ولا يعمل على حساب آخر.</string>
+
+    <string name="devmode_desc">بيانات تشخيص محلية فقط.</string>
+    <string name="devmode_version">الإصدار</string>
+    <string name="devmode_server">الخادم</string>
+    <string name="devmode_account">الحساب</string>
+    <string name="devmode_progress">التقدم</string>
+    <string name="devmode_data">المهام/المال/المذكرات/الحملات</string>
+    <string name="devmode_theme">اللون/الرمز</string>
+    <string name="devmode_copy">نسخ التشخيص</string>
+    <string name="devmode_hint">لا تُرسل هذه البيانات تلقائياً.</string>
+
+    <string name="money_sms_import">من الرسائل</string>
+    <string name="money_sms_added">أُضيفت %1$d حركة من الرسائل.</string>
+    <string name="money_sms_none">لا توجد حركات جديدة في الرسائل.</string>
+    <string name="money_sms_denied">لم تُمنح صلاحية قراءة الرسائل.</string>
+    <string name="money_sms_hint">قراءة الرسائل اختيارية، وتُحفظ الحركات محلياً فقط.</string>
+
+    <string name="test_config">قراءة الإعدادات</string>
+    <string name="test_storage">التخزين قابل للكتابة</string>
+    <string name="test_profile">بيانات البطل</string>
+    <string name="test_server">عنوان الخادم</string>
+    <string name="test_account">حساب مسجّل</string>
+    <string name="test_notifications">وصول الإشعارات</string>
+    <string name="test_usage">صلاحية الاستخدام</string>
+    <string name="test_accessibility">خدمة الحاجب</string>
+    <string name="test_sms">صلاحية الرسائل</string>
+    <string name="test_premium">ترخيص مفعّل</string>
+    <string name="test_summary">نجح %1$d من %2$d فحوص.</string>
+    <string name="test_refresh">تحديث</string>
+    <string name="test_ok">جاهز</string>
+    <string name="test_missing">ناقص</string>
+    <string name="test_hint">الفحوص محلية ولا تتصل بالخادم.</string>
+
+    <string name="settings_skin">المظهر والرمز</string>
+    <string name="settings_license">الترخيص</string>
+    <string name="settings_tests">فحص التطبيق</string>
 </resources>

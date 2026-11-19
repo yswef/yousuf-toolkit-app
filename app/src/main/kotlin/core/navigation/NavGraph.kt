@@ -80,7 +80,10 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
                 },
-                onProfile = { nav.navigate(Routes.PROFILE) }
+                onProfile = { nav.navigate(Routes.PROFILE) },
+                onSkin = { nav.navigate(Routes.SKIN) },
+                onLicense = { nav.navigate(Routes.LICENSE) },
+                onTests = { nav.navigate(Routes.TESTS) }
             )
         }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }

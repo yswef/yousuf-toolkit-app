@@ -22,5 +22,37 @@
   },
   "updater": {
     "latestReleaseUrl": "https://api.github.com/repos/yswef/yousuf-toolkit-app/releases/latest"
+  },
+  "game": {
+    "ranks": [
+      {
+        "key": "novice",
+        "level": 1
+      },
+      {
+        "key": "apprentice",
+        "level": 3
+      },
+      {
+        "key": "knight",
+        "level": 5
+      },
+      {
+        "key": "captain",
+        "level": 8
+      },
+      {
+        "key": "mage",
+        "level": 12
+      },
+      {
+        "key": "sage",
+        "level": 16
+      },
+      {
+        "key": "emperor",
+        "level": 20
+      }
+    ]
   }
 }

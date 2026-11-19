@@ -20,7 +20,7 @@ fun MagicBackground(
 ) {
     val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val colors = if (dark) {
-        listOf(Color(0xFF07030F), Color(0xFF1B0A3A), Color(0xFF062028))
+        listOf(Color(0xFF121025), Color(0xFF1E1238), Color(0xFF0E1B2A))
     } else {
         listOf(Color(0xFFF9F3FF), Color(0xFFEDE0FF), Color(0xFFDDF7F3))
     }

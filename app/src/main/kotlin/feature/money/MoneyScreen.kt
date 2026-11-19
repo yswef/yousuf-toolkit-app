@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -23,31 +24,62 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.FormDialog
+import core.design.InfoCard
 import core.design.ScreenScaffold
 import data.local.LocalStore
 import domain.model.Ledger
 import domain.model.categoryKeys
+import core.device.SmsReader
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
+import android.Manifest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoneyScreen(onBack: () -> Unit) {
     val store = LocalStore.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var adding by remember { mutableStateOf(false) }
+    var status by remember { mutableStateOf("") }
+
+    fun importMessages() {
+        scope.launch {
+            val messages = withContext(Dispatchers.IO) { SmsReader.read(context) }
+            val added = store.importSms(messages)
+            status = if (added > 0) {
+                context.getString(R.string.money_sms_added, added)
+            } else {
+                context.getString(R.string.money_sms_none)
+            }
+        }
+    }
+
+    val smsPermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) importMessages() else status = context.getString(R.string.money_sms_denied)
+    }
 
     val entries = store.ledger.sortedByDescending { it.at }
     val income = store.ledger.filter { it.income }.sumOf { it.amount }
@@ -57,6 +89,15 @@ fun MoneyScreen(onBack: () -> Unit) {
         title = stringResource(R.string.feature_money),
         onBack = onBack,
         actions = {
+            TextButton(onClick = {
+                if (SmsReader.hasPermission(context)) {
+                    importMessages()
+                } else {
+                    smsPermission.launch(Manifest.permission.READ_SMS)
+                }
+            }) {
+                Text(stringResource(R.string.money_sms_import))
+            }
             IconButton(onClick = { adding = true }) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
             }
@@ -67,6 +108,9 @@ fun MoneyScreen(onBack: () -> Unit) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            if (status.isNotBlank()) {
+                item { InfoCard(text = status) }
+            }
             item {
                 Card(Modifier.fillMaxWidth()) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
