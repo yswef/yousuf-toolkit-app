@@ -1,0 +1,1088 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>خطة كل ما يحتاجه يوسف</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: sticky tab bar over one scrolling reading column; cards in a 2-col grid that stacks on phones. */
+:root{
+  --bg:#EEF0F6; --surface:#FFFFFF; --surface2:#E3E6F0; --fg:#1B1B2B; --muted:#565972; --line:#CBD0E0;
+  --gold:#8F6410; --gold-soft:#F2E5C4; --green:#1D7551; --green-soft:#D5EDE2; --warn:#A23829; --warn-soft:#F5DCD6;
+  --font-display:'Reem Kufi','IBM Plex Sans Arabic',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans Arabic',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12121C; --surface:#1B1B29; --surface2:#252538; --fg:#ECEBF3; --muted:#A5A7BF; --line:#34354C;
+    --gold:#E6B450; --gold-soft:#3A2F17; --green:#5CC59A; --green-soft:#16332A; --warn:#F08A78; --warn-soft:#3A1E1A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12121C; --surface:#1B1B29; --surface2:#252538; --fg:#ECEBF3; --muted:#A5A7BF; --line:#34354C;
+  --gold:#E6B450; --gold-soft:#3A2F17; --green:#5CC59A; --green-soft:#16332A; --warn:#F08A78; --warn-soft:#3A1E1A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--fg); font-family:var(--font-body); font-size:16px; line-height:1.75;
+  padding-block:0 48px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:30; background:var(--bg)}
+#app{max-width:980px; margin-inline:auto}
+a{color:var(--green)}
+h1,h2,h3{font-family:var(--font-display); line-height:1.35; margin:0; text-wrap:balance}
+h2{font-size:1.65rem; font-weight:700}
+h3{font-size:1.1rem; font-weight:700}
+p{margin:0}
+:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+
+/* header */
+.top{padding-block:22px 6px; display:flex; flex-wrap:wrap; gap:10px 24px; align-items:flex-end; justify-content:space-between}
+.brand h1{font-size:2rem; font-weight:700; color:var(--gold)}
+.brand p{color:var(--muted); font-size:.95rem}
+.meter{min-width:0; display:flex; flex-direction:column; gap:4px; font-size:.9rem; color:var(--muted); flex:0 1 260px}
+.meter .bar{height:8px; border-radius:99px; background:var(--surface2); overflow:hidden}
+.meter .bar i{display:block; height:100%; width:0; background:var(--green); transition:width .3s}
+nav.tabs{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--bg);
+  border-bottom:1px solid var(--line); margin-top:10px; overflow-x:auto; display:flex; gap:4px; padding-block:8px;
+  scrollbar-width:thin;
+}
+nav.tabs a{
+  flex:0 0 auto; text-decoration:none; color:var(--muted); padding:8px 16px; border-radius:8px; font-weight:500; font-size:.97rem;
+}
+nav.tabs a[aria-current="page"]{background:var(--gold-soft); color:var(--gold); font-weight:600}
+main{padding-top:26px; display:flex; flex-direction:column; gap:30px}
+section[hidden]{display:none!important}
+.sec{display:flex; flex-direction:column; gap:22px}
+.lead{color:var(--muted); max-width:68ch}
+
+/* blocks */
+.box{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:12px; min-width:0}
+.box.note{background:var(--gold-soft); border-color:transparent}
+.box.note h3{color:var(--gold)}
+.grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media (max-width:700px){.grid{grid-template-columns:minmax(0,1fr)}}
+.scroll{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:520px; font-size:.95rem}
+th,td{text-align:right; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:var(--font-display); font-weight:700; background:var(--surface2); white-space:nowrap}
+tr:last-child td{border-bottom:0}
+ul.plain{margin:0; padding-inline-start:20px; display:flex; flex-direction:column; gap:6px}
+
+.pill{display:inline-block; padding:1px 10px; border-radius:99px; font-size:.78rem; font-weight:600; white-space:nowrap}
+.p-core,.p-done{background:var(--green-soft); color:var(--green)}
+.p-extra{background:var(--surface2); color:var(--muted)}
+.p-later,.p-open{background:var(--gold-soft); color:var(--gold)}
+.p-risk{background:var(--warn-soft); color:var(--warn)}
+
+/* decisions */
+.dec{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; padding-block:10px; border-bottom:1px solid var(--line)}
+.dec:last-child{border-bottom:0}
+.dec b{font-weight:600}
+.dec span.v{color:var(--muted); display:block; font-size:.92rem}
+
+/* features */
+.tools{display:flex; flex-direction:column; gap:12px}
+input[type=search],textarea{
+  width:100%; font:inherit; color:var(--fg); background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+}
+textarea{min-height:92px; resize:vertical}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{
+  font:inherit; font-size:.9rem; cursor:pointer; color:var(--fg); background:var(--surface); border:1px solid var(--line);
+  border-radius:99px; padding:4px 14px; line-height:1.6;
+}
+.chip[aria-pressed="true"]{background:var(--green-soft); border-color:var(--green); color:var(--green); font-weight:600}
+.count{color:var(--muted); font-size:.9rem}
+.feat{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:8px; min-width:0}
+.feat header{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+.feat h3{font-size:1.02rem}
+.feat .pills{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+.feat p{color:var(--muted); font-size:.95rem}
+.feat .src{font-size:.82rem; color:var(--muted)}
+details summary{cursor:pointer; color:var(--gold); font-weight:600; font-size:.92rem}
+details p{margin-top:6px; color:var(--fg)}
+.empty{padding:30px; text-align:center; color:var(--muted)}
+
+/* sources */
+.src-group h3{margin-bottom:8px}
+.src-list{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+@media (max-width:700px){.src-list{grid-template-columns:minmax(0,1fr)}}
+.src-item{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; min-width:0}
+.src-item a{font-weight:600; overflow-wrap:anywhere}
+.src-item p{font-size:.9rem; color:var(--muted)}
+
+/* plan */
+ol.road{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; counter-reset:s}
+ol.road li{counter-increment:s; display:grid; grid-template-columns:44px minmax(0,1fr); gap:14px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px}
+ol.road li::before{
+  content:counter(s); font-family:var(--font-display); font-weight:700; font-size:1.2rem; width:40px; height:40px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; background:var(--surface2); color:var(--muted)
+}
+ol.road li.done::before{background:var(--green-soft); color:var(--green)}
+ol.road li.next::before{background:var(--gold-soft); color:var(--gold)}
+ol.road h3{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+ol.road p{color:var(--muted); font-size:.95rem}
+
+/* questions */
+.qgroup{display:flex; flex-direction:column; gap:14px}
+.qgroup>h3{font-size:1.25rem; color:var(--gold)}
+.q{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:10px; min-width:0}
+.q.answered{border-color:var(--green)}
+.q h3{display:flex; gap:10px; align-items:baseline}
+.q h3 small{font-family:var(--font-body); color:var(--muted); font-weight:500; font-size:.85rem}
+.q .hint{color:var(--muted); font-size:.93rem}
+.actions{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.btn{font:inherit; font-weight:600; cursor:pointer; border:0; border-radius:10px; padding:9px 18px; background:var(--gold); color:var(--bg)}
+.status{font-size:.88rem; color:var(--muted)}
+#exportBox{display:none}
+#exportBox.on{display:block}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div id="app" dir="rtl" lang="ar">
+<div style="margin:18px 0;padding:14px 16px;border:1px solid var(--gold);background:var(--gold-soft);border-radius:14px">
+<b>تحديث 2026-11-19:</b> سُلّمت المراحل 5 و6 و7 في الإصدار <b>v0.8.0-test.1</b>، وبقي صفر مراحل أساسية. المتبقي بنود ما بعد التمويل.
+</div>
+  <div class="top">
+    <div class="brand">
+      <h1>كل ما يحتاجه يوسف</h1>
+      <p>خطة التطبيق، الخطوة الأولى: تنظيم الفكرة للمراجعة</p>
+    </div>
+    <div class="meter" aria-live="polite">
+      <span id="meterTxt">الأسئلة المجاب عنها: 0</span>
+      <div class="bar"><i id="meterBar"></i></div>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="أقسام الصفحة" id="tabs">
+    <a href="#idea">الفكرة</a>
+    <a href="#features">المميزات</a>
+    <a href="#refs">التطبيقات المرجعية</a>
+    <a href="#tech">التقنية</a>
+    <a href="#sources">المصادر</a>
+    <a href="#questions">الأسئلة</a>
+    <a href="#prompts">البرومتات</a>
+    <a href="#reqs">المتطلبات منك</a>
+    <a href="#plan">الخطوات</a>
+  </nav>
+
+  <main>
+    <!-- IDEA -->
+    <section id="v-idea" class="sec" hidden>
+      <h2>الفكرة</h2>
+      <p class="lead">تطبيق واحد يجمع التطبيقات التي تستخدمها في تنظيم حياتك، على هيئة لعبة بطابع أنمي بلاك كلوفر. كل مهمة وعادة وتمرين يمنحك تقدماً، فتنتقل من حياة عشوائية إلى حياة منظمة بطريقة ممتعة.</p>
+
+      <div class="box">
+        <h3>ما استقر عليه الكلام حتى الآن</h3>
+        <div id="decisions"></div>
+      </div>
+
+      <div class="box">
+        <h3>كيف تتحول الحياة إلى لعبة</h3>
+        <div class="scroll"><table>
+          <thead><tr><th>في اللعبة</th><th>في حياتك</th></tr></thead>
+          <tbody id="gameTable"></tbody>
+        </table></div>
+        <p class="count">الأسماء والرسومات تُصاغ بطابع مستوحى وليست منسوخة، حتى لا يتعرض التطبيق للحذف بسبب حقوق الملكية.</p>
+      </div>
+
+      <div class="grid">
+        <div class="box">
+          <h3>مبادئ ثابتة في كل الميزات</h3>
+          <ul class="plain">
+            <li>الواجهات بلا جمل تخاطب المستخدم، أيقونات وأرقام وحالات فقط.</li>
+            <li>يعمل دون اتصال ثم يزامن ويقارن البيانات.</li>
+            <li>خفيف على الجهاز، ولا مكتبة كبيرة لأجل دالة واحدة.</li>
+            <li>الواجهة أهم من الأداء عند التعارض.</li>
+            <li>يدعم الرجال والنساء بميزات خاصة بكل منهما.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>التخزين والمستخدمون</h3>
+          <ul class="plain">
+            <li>كل مستخدم يربط حسابه بجوجل درايف لحفظ ملفاته، فلا ترفع أنت كل شيء.</li>
+            <li>استضافتك تخدم الأشياء المشتركة: الكتب، الإعدادات، المنتدى، التحديثات.</li>
+            <li>التحديث يثبت فوق النسخة القديمة دون حذف البيانات.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="v-features" class="sec" hidden>
+      <h2>المميزات</h2>
+      <p class="lead">كل ما ذكرته مرتباً حسب المجال. اضغط على «رأي المحلل» في أي بطاقة لترى ما يلزم الانتباه له قبل البناء.</p>
+      <div class="tools">
+        <input type="search" id="fSearch" placeholder="ابحث في المميزات" aria-label="بحث في المميزات">
+        <div class="chips" id="fChips"></div>
+        <div class="chips">
+          <button class="chip" id="fRisk" aria-pressed="false">التحديات التقنية فقط</button>
+          <span class="count" id="fCount"></span>
+        </div>
+      </div>
+      <div class="grid" id="fGrid"></div>
+    </section>
+
+    <!-- TECH -->
+    <section id="v-tech" class="sec" hidden>
+      <h2>التقنية</h2>
+      <div class="box note">
+        <h3>رأي المحلل أولاً</h3>
+        <p>الفكرة تحوي أكثر من ستين ميزة، وبعضها يلمس صلاحيات حساسة في أندرويد. لو بدأنا بكل شيء معاً فلن تصل إلى نسخة تستخدمها يومياً. الحل أن نبني نواة صغيرة تعمل وتستخدمها فعلاً، ثم نضيف طبقة بعد طبقة. الاقتراحات أدناه مبدئية وتنتظر قرارك.</p>
+      </div>
+      <div class="box">
+        <h3>ماذا يعني اختيار أندرويد 14 كأقل إصدار</h3>
+        <ul class="plain" id="a14List"></ul>
+        <p class="count">راجع هذه النقاط مع وثائق أندرويد وقت البناء، فتفاصيل الصلاحيات تتغير.</p>
+      </div>
+      <div class="grid" id="archGrid"></div>
+      <h3>الصلاحيات الحساسة وما يقابلها في جوجل بلاي</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>الصلاحية</th><th>الميزة</th><th>الوضع في بلاي</th></tr></thead>
+        <tbody id="permTable"></tbody>
+      </table></div>
+      <p class="count">سياسات بلاي تتغير، فتراجع قبل أي نشر. لذلك أقترح نسختين من نفس المشروع: كاملة للتحميل المباشر، وخفيفة لبلاي إن قررت النشر هناك.</p>
+    </section>
+
+    <!-- SOURCES -->
+    <section id="v-sources" class="sec" hidden>
+      <h2>مصادر الصوتيات والصور وغيرها</h2>
+      <p class="lead">أماكن تجلب منها ما يحتاجه التطبيق. كل ملف له ترخيصه، فاحفظ اسم المصدر والترخيص في ملف داخل المستودع قبل استخدامه. بعض التراخيص تطلب ذكر صاحب العمل.</p>
+      <div id="srcWrap" class="sec"></div>
+    </section>
+
+    <!-- QUESTIONS -->
+    <section id="v-questions" class="sec" hidden>
+      <h2>أسئلة لتحديد رؤيتك</h2>
+      <p class="lead">اختر ما يناسبك من الخيارات واكتب تحتها بحرية. إجاباتك تُحفظ تلقائياً، ويمكنك الرجوع وتعديلها في أي وقت. بدأتُ بالسؤال الذي طلبته: أسلوب الكود والنشر والألوان وتخيلك للتطبيق.</p>
+      <div class="actions">
+        <button class="btn" id="copyAll">نسخ كل إجاباتي</button>
+        <span class="status" id="saveStatus">الحفظ في هذا المتصفح</span>
+      </div>
+      <textarea id="exportBox" aria-label="نص الإجابات" readonly></textarea>
+      <div id="qWrap" class="sec"></div>
+    </section>
+
+    <!-- REFS -->
+    <section id="v-refs" class="sec" hidden>
+      <h2>التطبيقات المرجعية</h2>
+      <p class="lead">لكل تطبيق ذكرته: ما نأخذه منه، وما يشتكي منه الناس فنتجنبه، وكيف نغطي ذلك في تطبيقك. المعلومات من مراجعات منشورة، وبعض المصادر تجارية أو قديمة، وقد نبهت إلى ذلك عند كل بطاقة. الأسماء بين قوسين روابط المصادر.</p>
+      <div id="refsWrap" class="sec"></div>
+    </section>
+
+    <!-- PROMPTS -->
+    <section id="v-prompts" class="sec" hidden>
+      <h2>البرومتات</h2>
+      <p class="lead">برومت مشترك تلصقه أول كل محادثة، ثم برومت لكل مرحلة وكل ميزة على حدة. كل برومت مستقل، فتستطيع تشغيل أكثر من محادثة وحساب. وملف حالة المشروع (PROJECT_STATE.md) هو الذي يعرّف أي محادثة جديدة بما تم.</p>
+      <div class="box note">
+        <h3>كيف تستعملها</h3>
+        <ul class="plain">
+          <li>ابدأ المحادثة بالبرومت المشترك، ثم الصق برومت الميزة التي تعمل عليها.</li>
+          <li>ميزة واحدة في كل محادثة. عند الانتهاء ارفع ما تغير بالتعليمات المذكورة في الرد، ثم حدّث ملف الحالة.</li>
+          <li>إن غيرت قراراً، أخبرني فأحدّث البرومتات هنا، فهي لا تتبدل وحدها.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>البرومت المشترك</h3>
+        <textarea id="baseBox" readonly style="min-height:260px" aria-label="البرومت المشترك"></textarea>
+        <div class="actions"><button class="btn" data-copy="base">نسخ البرومت المشترك</button><span class="status" id="pStatus"></span></div>
+      </div>
+      <div class="tools">
+        <div class="chips" id="pChips"></div>
+      </div>
+      <div id="pWrap" class="sec"></div>
+    </section>
+
+    <!-- REQS -->
+    <section id="v-reqs" class="sec" hidden>
+      <h2>المتطلبات منك</h2>
+      <p class="lead">كل ما أحتاجه منك حتى نبني التطبيق ببيانات حقيقية، لا قيم مخترعة ولا أسماء من عندي. علّم كل بند حين يجهز. ما لم يجهز لا أخمّنه، بل أتوقف عنده وأسألك.</p>
+      <div class="box">
+        <div class="meter" style="flex:1 1 auto" aria-live="polite"><span id="reqTxt"></span><div class="bar"><i id="reqBar"></i></div></div>
+      </div>
+      <div id="reqWrap" class="sec"></div>
+    </section>
+
+    <!-- PLAN -->
+    <section id="v-plan" class="sec" hidden>
+      <h2>الخطوات القادمة</h2>
+      <p class="lead">الترتيب هنا حقيقي، فكل خطوة تعتمد على التي قبلها. قل لي «ابدأ الخطوة 2» حين تنتهي من مراجعة الصفحة.</p>
+      <ol class="road" id="road"></ol>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ---------- data ---------- */
+var DECISIONS=[
+ ['اسم التطبيق','كل ما يحتاجه يوسف، ويبقى قابلاً للتغيير لاحقاً','done','محسوم'],
+ ['المنصة','أندرويد 14 (API 34) كأقل إصدار','done','محسوم'],
+ ['لغة البرمجة','Kotlin مع Jetpack Compose','done','محسوم'],
+ ['النواة الأولى','المهام وإدارة المال والتمارين والمذكرات، ثم تُضاف الميزات واحدة بعد واحدة','done','محسوم'],
+ ['البناء','GitHub مع Actions','done','محسوم'],
+ ['النشر','GitHub Releases: إصدار تجريبي قبل المستقر، تنبيه داخل التطبيق، ونسختان: كاملة وفروق','done','محسوم'],
+ ['العمل دون اتصال','الأساس يعمل بلا نت. ما يحتاج نتاً: تحميل الكتب وإضافتها، رفع الاختبارات الجديدة، التحديثات','done','محسوم'],
+ ['اللغة','عربي أولاً، وإنجليزي لاحقاً (النصوص كلها في ملفات موارد من اليوم الأول)','done','محسوم'],
+ ['تخزين المستخدم','جوجل درايف الخاص بكل مستخدم','done','محسوم'],
+ ['الخادم','PHP على استضافة مجانية الآن، ثم VPS','done','محسوم'],
+ ['الربح','التطبيق ليس مجانياً بالكامل: ميزات مجانية وأخرى مدفوعة، ومفتاح شراء مدى الحياة، وكلها تتحكم بها من اللوحة','done','محسوم'],
+ ['أسلوب الكود','هيكل نظيف بلا تعليقات في الكود، وتوثيق مطور منفصل تبحث فيه عن أي دالة أو متغير','done','محسوم'],
+ ['أسلوب Git','commit لكل ملف، وtag بإصدار جديد مع كل ميزة','done','محسوم'],
+ ['طريقة العمل مع الذكاء','أكثر من محادثة وحساب، فكل ميزة تُبنى ببرومت مستقل وملف حالة مشترك','done','محسوم'],
+ ['طريقة الدفع للمفتاح','المستخدم يتواصل معك (محفظة أو تحويل محلي)، وتعطيه كود تفعيل من لوحتك','done','محسوم'],
+ ['سحر الجليد','يُشترى بالنقاط ويأتي من الغارات، بلا حد أقصى','done','محسوم'],
+ ['فشل الغارة الأسبوعية','حرمان المكافأة فقط، دون خسارة نقاط أو رتبة','done','محسوم'],
+ ['الواجهة بحسب العمر','حد العمر 18 سنة، ويمكن تغييرها من الإعدادات','done','محسوم'],
+ ['الصورة الشخصية','تُفتح عند المستوى 3 (قابل للتعديل من اللوحة)، وقبله بنر','done','محسوم'],
+ ['أسماء الفرق','تريد أسماء فرق الأنمي الأصلي. أنبهك للمخاطر في قسم الأسئلة، والأسماء ستُخزن في ملف يسهل تبديله','open','يحتاج قراراً']
+];
+var GAME=[
+ ['كتاب السحر','ملفك الشخصي وسجل تقدمك'],
+ ['المانا','نقاط الخبرة التي تكسبها من كل إنجاز'],
+ ['الرتب','مستويات الشخصية، وتعتمد على الاستمرار لا على الكمّ فقط'],
+ ['الفرق','مجالات الحياة: المال، الصحة، التعلم، العبادة، العادات'],
+ ['المهمات','المهام اليومية والتذكيرات'],
+ ['الغارات','تحديات أسبوعية كبيرة تجمع أكثر من مجال'],
+ ['الحملات','خطط طويلة بمراحل ومعركة نهائية في آخرها'],
+ ['عنصر السحر','يحدد ثيم الألوان وبعض المكافآت'],
+ ['الأوسمة','إنجازات تُفتح عند أرقام معينة أو سلاسل استمرار']
+];
+var MODS=[
+ ['game','نظام اللعبة'],['money','المال'],['tasks','المهام والتخطيط'],['health','الصحة والعناية'],
+ ['habits','العادات والعقل'],['privacy','الخصوصية والحماية'],['device','أدوات الجهاز'],['learn','التعلم'],
+ ['faith','الروحانيات'],['books','الكتب'],['social','المجتمع والتقارير'],['admin','الإدارة والتقنية'],['later','عند توفر المال']
+];
+/* [module, title, desc, status(core/extra/later), inspiration, analyst note, risk] */
+var F=[
+ ['game','كتاب السحر','بطاقة شخصية فيها المستوى والرتبة والعنصر وإحصاءات كل مجالات حياتك.','core','',''],
+ ['game','المانا ونقاط الإنجاز','كل مهمة أو عادة أو تمرين يمنح مانا ترفع مستواك.','core','',''],
+ ['game','الرتب','مراحل ترقية واضحة من مبتدئ إلى رتبة عليا.','core','','اجعل الترقية مرتبطة بالاستمرار الأسبوعي حتى لا تُنال بيوم واحد مزدحم.'],
+ ['game','الحملات','خطط متعددة الأيام، مثل حملة لياقة أو حملة تعلم، لها مراحل ومعركة أخيرة.','core','',''],
+ ['game','الغارات','تحدي أسبوعي كبير يجمع المال والصحة والتعلم في هدف واحد.','core','',''],
+ ['game','الفرق والأوسمة','كل مجال حياة له فريق بتقدم مستقل، وأوسمة عند الإنجازات الكبرى.','extra','',''],
+ ['game','سحر الجليد (تجميد يوم)','إن نسيت يوماً أو لم تفتح التطبيق تجمد اليوم فلا تخسر سلسلة التقدم ولا نقاطك. يُشترى بالنقاط ويأتي من الغارات، بلا حد أقصى.','core','Streaks، Habitica','Streaks تصفّر السلسلة عند يوم فائت ولا تملك تخطياً، وهذه من أبرز مآخذ التطبيق. حلك أفضل. وبما أنك أردته بلا حد، فسعره بالنقاط هو الذي يحفظ قيمته، فاجعله يغلو كلما استعملته.'],
+ ['game','الدروع السحرية','عنصر يحميك من عقوبة محددة مرة واحدة، يُشترى بالنقاط ويُكسب من الغارات.','core','',''],
+ ['game','الطاقة والاستراحات','تنفيذ كل مهمة يستهلك طاقة، ولا بد من استراحة بين مهمة وأخرى.','core','Habitica','صححتُ فهمي بعد ردك: هذه طاقة تُستهلك وليست عقوبة تأخر. الفكرة تشبه تقنية بومودورو، وتحمي المستخدم من الإرهاق. أحتاج منك قيماً: كم تكلف كل مهمة، وكم تدوم الاستراحة.'],
+ ['game','الغارات الأسبوعية والتحدي الشهري','غارة أسبوعية صارمة من مهمات موزعة على الأسبوع، وتحدٍّ شهري صارم يختم بأدوات ومهارات ونقاط سحرية في أيام محددة.','core','',''],
+ ['game','اختبار قبول الفرسان','أول تشغيل: مقدمة حماسية بحركة وكلام بلسان شخصية أنمي، ثم استمارة: الاسم والميلاد والفرقة والشخصية المفضلة وسبب التغيير والبنر والدولة والموقع والوزن والطول (مؤكد أو تقديري).','core','','المقدمة تُكتب بصياغة أصلية وليست نصاً منسوخاً من العمل. الموقع يُطلب بعد توضيحه، ويكفي اختيار الدولة والمدينة لو رفض الإذن.'],
+ ['game','فرق السحر والثيمات','لون التطبيق الأول يتبع فرقتك. تشتري ثيمات بالنقاط. وعند رتبة قائد الفرسان تنشئ فرقتك وتصمم ثيمك.','core','','طلبتَ أسماء فرق الأنمي الأصلي. الأسماء والشعارات ملك لأصحاب العمل، واستعمالها قد يعرّض التطبيق للحذف أو الشكوى، خصوصاً لو بعته. أنصح بأسماء مستوحاة، وسأخزن الأسماء في ملف واحد يسهل تبديله دون إعادة بناء. لن أصمم شعارات أو شخصيات من العمل نفسه. ثيم القائد يحتاج محرراً بسيطاً بألوان محددة.'],
+ ['game','صفحة الملف وصورته','تبدأ ببنر، وتفتح الصورة الشخصية بعد مستوى معين.','extra','',''],
+ ['game','متجر المهارات والأدوات','تشتري بالنقاط صفحات تعلم مهارات جديدة، ودروعاً، وسحر جليد.','core','',''],
+ ['tasks','وقت إنجاز لكل مهمة','كل مهمة لها موعد ومدة، وتظهر في الخريطة والتقويم.','core','TickTick',''],
+ ['money','قائمة المشتريات المرغوبة','أشياء تفكر بشرائها مع سعرها، وتتحول إلى هدف ادخار.','core','',''],
+ ['books','قراءة الكتاب كمهمة','مهمة «اقرأ صفحة كذا» تتصل بالمكتبة وتحدّث تقدم القراءة وحدها.','core','',''],
+ ['admin','نظام الميزات المجانية والمدفوعة','كل ميزة تُعلَّم مجانية أو مدفوعة من اللوحة، ومفتاح شراء مدى الحياة يفتح كل المدفوع.','core','','ستعطي المستخدم كود تفعيل يدوياً بعد الدفع. اللوحة تولّد أكواداً لمرة واحدة، والتطبيق يتحقق منها على الخادم ثم يحفظ الترخيص مشفراً مع مهلة سماح دون نت، وإلا سهل كسره. أضف حقلاً لربط الكود بحساب المستخدم حتى لا يتناقله الناس.',1],
+ ['admin','قناتا الإصدار والتنبيه','قناة تجريبية وأخرى مستقرة، وتنبيه بوجود إصدار مع رابطين: كامل وفروق.','core','',''],
+ ['game','المتجر الداخلي','عملة تكسبها وتصرفها على ثيمات وأصوات ومكافآت حقيقية تحددها لنفسك.','extra','Habitica',''],
+
+ ['money','تتبع النفقات والدخل','حسابات متعددة وفئات وميزانيات وتقارير بيانية.','core','My Finance',''],
+ ['money','مزامنة المحافظ الإلكترونية','يقرأ إشعارات الخصم والإيداع من محافظك ويعدل الرصيد تلقائياً.','core','','يعمل عبر إذن قراءة الإشعارات. لكل محفظة نمط رسالة، لذا أحتاج نماذج حقيقية من إشعاراتها. أنصح بقائمة مراجعة قبل الحفظ النهائي لتفادي الأخطاء.',1],
+ ['money','قواعد قراءة الرسائل من لوحة التحكم','أنماط الإشعارات تُخزن على الخادم، فتضيف محفظة جديدة دون تحديث التطبيق.','extra','','فكرة تريحك لاحقاً: أي محفظة تغير صيغة رسائلها تعدلها من اللوحة في دقيقة.'],
+ ['money','مصارفة العملة','أسعار الصرف تُدار من لوحة الأدمن، يدوياً أو تلقائياً.','core','',''],
+ ['money','الديون وأهداف الادخار','متابعة ما لك وما عليك، وهدف ادخار يتحول إلى حملة في اللعبة.','extra','',''],
+
+ ['tasks','المهام الذكية','قوائم وأولويات وتكرار وتذكيرات وعرض تقويم ومؤقت تركيز.','core','TickTick',''],
+ ['tasks','المنبه القوي','منبه لا يُطفأ بسهولة: مسألة أو هز الهاتف أو كتابة جملة.','core','','أندرويد الحديث يقيّد التنبيهات الدقيقة وتوفير البطارية يقتل الخدمات في بعض الأجهزة. يحتاج إعداداً دقيقاً مع تنبيه المستخدم لاستثناء التطبيق.',1],
+ ['tasks','ملاحظات مترابطة','ملاحظات بصيغة Markdown وروابط بينها ووسوم.','extra','Obsidian',''],
+ ['tasks','المذكرات السرية','مذكرات مقفلة ببصمة أو رمز ومشفرة.','core','',''],
+
+ ['health','تذكير شرب الماء','حاجتك اليومية وتذكير يتكيف مع يومك.','core','',''],
+ ['health','تتبع النوم','سجل نوم وجودته وتوقيت استيقاظ مناسب.','extra','Sleep Cycle','التحليل بالصوت والحركة يستهلك البطارية. أبدأ بتسجيل يدوي وبسيط ثم أطوره إن احتجت.'],
+ ['health','تمارين منزلية بلا معدات','تمارين لكل أجزاء الجسم مع حركة توضح الأداء ومؤقت.','core','','الحركات الجاهزة موجودة في قواعد بيانات مفتوحة (انظر قسم المصادر)، وتحتاج مراجعة ترخيص كل مجموعة.'],
+ ['health','العناية بالبشرة','روتين صباحي ومسائي وتذكيرات وسجل.','extra','',''],
+ ['health','ميزات خاصة بالجنسين','للنساء تنظيم الدورة الشهرية. للرجال متابعة عادة سيئة بسرية.','core','','بيانات شديدة الحساسية: أحفظها مشفرة على الجهاز فقط، ولا تذهب إلى درايف إلا بموافقة صريحة من المستخدم.'],
+
+ ['habits','العادات الصغيرة','سلاسل استمرار وتحديات يومية سريعة.','core','Streaks، Habitica',''],
+ ['habits','تقوية الذاكرة','ألعاب ذاكرة وبطاقات مراجعة بتكرار متباعد.','extra','',''],
+
+ ['privacy','مراقب الإنترنت والجدار الناري','استهلاك كل تطبيق من الإنترنت مع منعه عند الحاجة.','extra','GlassWire','يعتمد على VPN محلي، ولا يعمل مع VPN آخر في نفس الوقت. يستهلك بطارية أكثر قليلاً.',1],
+ ['privacy','وقت الشاشة وحجب التطبيقات','إحصاءات الاستخدام وحدود يومية وحجب في أوقات محددة.','core','StayFree','الحجب القوي يحتاج خدمة إمكانية الوصول، وهي من أكثر الصلاحيات تقييداً في بلاي.',1],
+ ['privacy','إخفاء الصور والفيديو','خزنة مشفرة بقفل مستقل وإمكانية تمويه التطبيق.','core','','التشفير بمفاتيح أندرويد وAES-GCM، مع تشفير الفيديو على أجزاء كي لا ينفد الذاكرة. تلزم نسخة احتياطية مشفرة حتى لا تضيع الخزنة.'],
+
+ ['device','سجل الإشعارات واسترجاع الرسائل المحذوفة','يحفظ الإشعارات ويفلترها لتسترجع رسائل واتساب المحذوفة.','core','','يحفظ ما وصل كإشعار قبل الحذف فقط. الصور والوسائط المحذوفة لا تُسترجع بهذه الطريقة.',1],
+ ['device','ترتيب الهاتف','حذف المجلدات الفارغة وحذف كل ملفات امتداد محدد، كـ ico، خارج مجلد النظام.','core','','يحتاج صلاحية إدارة كل الملفات. أنصح بمعاينة ما سيُحذف قبل التنفيذ وسلة محذوفات قصيرة العمر لتتفادى خطأً لا رجعة فيه.',1],
+ ['device','استخراج كاش التطبيقات','يصل لملفات كاش مثل تيليجرام وينقلها، رغم قيود أندرويد الحديث.','core','','أندرويد 11 فما فوق يمنع مجلدات Android/data، وأندرويد 13 يغلق الباب أكثر. الطريقة الواقعية هي Shizuku أو التصحيح اللاسلكي. أخبرك بالتفاصيل حين نصل لهذه الميزة.',1],
+ ['device','فحص الجهاز','اختبارات يدوية وتلقائية للأعطال، وعرض مواصفات الجهاز والشريحة والقطع.','core','',''],
+ ['device','فحص بطاقة الذاكرة','هل هي أصلية أم مقلدة، جديدة أم مستعملة، وما نظام ملفاتها.','core','','يتم باختبار كتابة وقراءة للسعة كاملة وقياس السرعة. يأخذ وقتاً لكنه الطريقة الوحيدة الموثوقة.'],
+ ['device','تحسين الأداء ومراقبته','متابعة المعالج والذاكرة وما يستهلكهما.','extra','','أندرويد 8 فما فوق يخفي استهلاك المعالج لكل تطبيق. سنعرض ما يسمح به النظام فقط ولن نضع زر «تسريع» وهمياً.'],
+ ['device','إصلاح جهات الاتصال','دمج المكرر وحذف وتعديل الأسماء وفصل الجهات حسب حساب المزامنة.','core','','نسخة احتياطية تلقائية قبل كل تعديل، وزر تراجع.'],
+ ['device','تحميل من السوشيال والمواقع','صور وفيديو من السوشيال، وحفظ صفحات كاملة وتحويلها إلى PDF.','extra','','يخالف شروط بعض المنصات وسياسات بلاي، فيبقى في النسخة الكاملة فقط. تحويل صفحة إلى PDF سهل، أما نسخ موقع كامل فثقيل.',1],
+
+ ['learn','مولد برومت التعلم','تكتب ما تريد تعلمه فيجهز التطبيق نصاً جاهزاً تنسخه لأي نموذج ذكاء.','core','',''],
+ ['learn','استيراد خطة الذكاء الاصطناعي','تلصق الخطة فتتحول إلى مهام وتذكيرات وخريطة هدف واختبارات ومصادر.','core','','التطبيق نفسه يبني البرومت ويضيف إليه صيغة المخرجات: عدة ملفات md للخطة والمهام والاختبارات، ثم يتحقق منها قبل الاستيراد. الاختبار الجديد يُرفع لاستضافتك وتُسجل المهارة، والمسجل سابقاً يُجلب جاهزاً.'],
+ ['learn','دفتر ملاحظات نصي وصوتي','لكل مادة دفتر ملاحظات عادي وآخر صوتي.','core','',''],
+ ['learn','الموازنة بين عدة مواد','توزيع وقتك بين أكثر من مادة بحسب أولويتها.','extra','',''],
+ ['learn','مسارات جاهزة واختبار مستوى','مسارات محفوظة وتحديد مستوى في العربي والإنجليزي ولغات أخرى.','core','',''],
+ ['learn','مهارات سابقة باختبار صعب الغش','تضيف مهارة تعلمتها ويختبرك التطبيق ليتحقق منها.','extra','','لا يوجد منع غش كامل. نقترب منه بأسئلة متغيرة ووقت محدد واختبار تكيفي وجزء عملي، وأشرحه لك لاحقاً.'],
+ ['learn','ترشيح كورسات وبودكاسات','اقتراحات تناسب أهدافك ومستواك.','extra','',''],
+
+ ['faith','أذكار منبثقة','تذكير كل فترة بالصلاة على النبي، وعبارة دينية مميزة عند فتح الشاشة.','core','','تريدها عند كل فتح للشاشة. حدث فتح الشاشة لا يُسجل في ملف التطبيق بل داخل خدمة تعمل في الخلفية، فيلزم إشعار دائم صغير. وفتح نافذة فوق التطبيقات مقيد، فالأنسب إشعار مميز. أقترح وضع هدوء وقت النوم والعمل حتى لا تزعجك.'],
+ ['faith','تحديد القبلة','اتجاه القبلة بالبوصلة وموقعك.','core','',''],
+
+ ['books','قارئ PDF مرتبط بالاستضافة','مكتبة من استضافتك، تنزيل للقراءة دون نت، ومتابعة موضع القراءة.','core','','الكتب المجانية يجب أن تكون قانونية النشر، وكتب «مكتبتي» لكل كتاب حكمه.'],
+ ['books','الكتب المدفوعة','روابط خارجية للمواقع التي يشتري منها المستخدم الكتاب.','extra','',''],
+
+ ['social','المنتدى','آراء واقتراحات وتقييم الكورسات.','extra','','يحتاج إشراف وإبلاغاً عن المحتوى، وإلا امتلأ بالإزعاج بسرعة.'],
+ ['social','تقارير تفصيلية','تقرير لكل مجال، أسبوعي وشهري.','core','',''],
+ ['social','تحليل الحالة النفسية','نموذج ذكاء اصطناعي يستخرج مؤشرات عن حالتك من بياناتك.','later','','يُسمى «مؤشرات» وليس تشخيصاً، ويحتاج موافقة صريحة، ومعالجة البيانات تتم بخصوصية كاملة.',1],
+ ['social','إشعارات ذكية','قليلة ومناسبة للوقت، مع ساعات هدوء وتجميع.','core','',''],
+
+ ['admin','لوحة تحكم PHP','مستخدمون وكتب وأسعار صرف وقواعد المحافظ وتحديثات وإعدادات.','core','',''],
+ ['admin','العمل دون اتصال','يعمل بلا نت ثم يزامن ويقارن النسخ.','core','','أصعب جزء هو حل التعارض بين جهازين. سأصمم له قواعد واضحة.'],
+ ['admin','تحديث فوق القديم','تثبيت الإصدار الجديد دون حذف البيانات.','core','','يشترط ثبات معرف التطبيق ومفتاح التوقيع في كل إصدار.'],
+ ['admin','تحديث الفروق فقط','تنزيل الفرق بين النسختين بدل التطبيق كاملاً.','extra','','ممكن عبر ملفات فروق بين الإصدارات، ولا يعمل عبر بلاي لأنه يدير التحديث بنفسه.',1],
+ ['admin','واجهتان: احترافية وبسيطة','تُحدد أول مرة بحسب عمر المستخدم.','core','',''],
+ ['admin','ربط درايف لكل مستخدم','يحفظ المستخدم ملفاته في درايفه ولا تتحمل أنت المساحة.','core','',''],
+ ['admin','معلومات المطور والدعم','صفحة تعريف بك وقسم لدعمك.','extra','',''],
+ ['admin','موقعا التوثيق','موقع للمستخدمين، وملف HTML منفصل لك كمطور.','core','',''],
+ ['admin','حماية الكود والمستودع','تشفير الكود قبل الرفع وحقوق صارمة على المستودع.','core','','تشفير المصدر قبل رفعه يمنع GitHub Actions من بنائه. البديل في قسم التقنية.',1],
+ ['admin','قابلية النقل والتغيير','انتقال من استضافة إلى أخرى، وتغيير الاسم بسهولة، وبلا مخلفات بناء.','core','','تغيير معرف التطبيق يجعله تطبيقاً جديداً عند جوجل والمستخدمين، فنثبت المعرف النهائي مبكراً.'],
+ ['admin','واجهات بلا شرح','لا عبارات تخاطب المستخدم كي لا يبدو التطبيق مولداً بالذكاء الاصطناعي.','core','',''],
+
+ ['later','الانتقال إلى VPS','نقل الخادم من الاستضافة المجانية إلى خادم خاص.','later','',''],
+ ['later','نماذج ذكاء مدفوعة','ربط التطبيق بنماذج مدفوعة داخل التطبيق.','later','',''],
+ ['later','مزودون مدفوعون','خدمات إضافية مثل الإشعارات المتقدمة وغيرها.','later','',''],
+ ['later','تغيير الاسم والنشر أو البيع','تغيير الهوية بسهولة إن نشرته في جوجل أو بعته.','later','','']
+];
+var A14=[
+ 'الخدمات التي تعمل في الخلفية (الإشعارات، الجدار، الأذكار) يجب أن تعلن نوعها في الملف، ولكل نوع صلاحيته.',
+ 'المنبهات الدقيقة لا تُمنح تلقائياً لأي تطبيق. تطبيقات المنبه والتقويم لها صلاحية خاصة، وهذا مناسب لمنبهك.',
+ 'الصور والفيديو قد يمنح المستخدم صلاحيتها لبعض الملفات فقط، وهذا يؤثر على الخزنة والتنظيف.',
+ 'ميزة جيدة: لا حاجة لكود التوافق مع إصدارات قديمة، فالكود أخف وأنظف.',
+ 'قيود أندرويد على مجلدات التطبيقات الأخرى تبقى، وهي التي تجعل استخراج الكاش صعباً.'
+];
+var ARCH=[
+ ['الإطار','Kotlin مع Jetpack Compose','نصف الميزات تحتاج واجهات نظام: الإشعارات، VPN، الاستخدام، الملفات. وCompose تعطيك أفضل واجهات وحركة، وهذا هدفك الأول.','البديل: Flutter، واجهاته ممتازة لكن كل ميزة نظام تمر بجسر Kotlin. مقبول إن كنت تفضل Dart.'],
+ ['قاعدة البيانات المحلية','Room، وتشفير الحساس بـ SQLCipher','تعمل بلا نت، وبيانات المذكرات والدورة والعادة السرية تبقى مشفرة.',''],
+ ['المزامنة','طابور تغييرات محلي مع WorkManager','لكل سجل معرف ووقت تعديل. آخر تعديل يفوز، وللمال والمهام دمج على مستوى الحقل. درايف للملفات الخاصة، وخادمك للمشترك فقط.',''],
+ ['الخادم','PHP 8 مع MySQL','واجهة REST بإصدارات، وتحقق عبر حساب جوجل، ولوحة تحكم منفصلة.','الاستضافة المجانية لها حدود في المهام المجدولة والاتصال. نكتب الكود بحيث لا يعتمد على مزايا استضافة واحدة.'],
+ ['البناء والنشر','GitHub Actions','يبني التطبيق ويوقعه بمفتاح محفوظ في Secrets وينشر الإصدار على Releases.','المفتاح نفسه في كل إصدار وإلا لن يتحدث التطبيق فوق القديم.'],
+ ['حماية الكود','مستودع خاص مع تشويش وR8','التشفير قبل الرفع لا يتوافق مع البناء الآلي. نحمي بمستودع خاص ومصادقة ثنائية وحماية الفروع وترخيص «جميع الحقوق محفوظة»، ونضع أي منطق حساس على الخادم.',''],
+ ['حجم التطبيق ونظافته','تقليص R8 ومراجعة كل مكتبة','لا نضيف مكتبة إلا بعد التأكد أن أخف منها لا يكفي، ونقيس الحجم في كل بناء.',''],
+ ['الاسم والمعرف','ملف إعداد واحد للهوية','الاسم والأيقونة والألوان في مكان واحد، لتغييرها بسرعة.','معرف التطبيق يُثبت مبكراً لأن تغييره يُنشئ تطبيقاً جديداً.'],
+ ['نسختان من المشروع','كاملة ومخففة','الكاملة بكل الصلاحيات للتحميل المباشر، والمخففة لبلاي إن نُشر هناك، بإعدادات بناء مختلفة.','']
+];
+var PERMS=[
+ ['قراءة الإشعارات','سجل الإشعارات، المحافظ','مقبولة لو كانت ميزة أساسية وموضحة'],
+ ['إدارة كل الملفات','ترتيب الهاتف، الكاش','مقيدة بشدة وتحتاج مبرراً'],
+ ['خدمة VPN محلية','الجدار الناري','مقبولة لتطبيقات VPN وحدها غالباً'],
+ ['خدمة إمكانية الوصول','حجب التطبيقات','مقيدة بشدة'],
+ ['إحصاءات الاستخدام','وقت الشاشة','مقبولة'],
+ ['التنبيهات الدقيقة','المنبه والمهام','مقبولة للمنبهات'],
+ ['جهات الاتصال','إصلاح الجهات','مقبولة لو كانت الميزة الرئيسية'],
+ ['تثبيت الحزم','تحديث التطبيق ذاتياً','مقيدة، ولا تُستخدم في نسخة بلاي']
+];
+var SRC=[
+ ['صوتيات إسلامية',[
+  ['mp3quran.net','https://mp3quran.net','تلاوات لعشرات القراء مع واجهة برمجية، تصلح للتلاوة والتذكير.'],
+  ['everyayah.com','https://everyayah.com','تلاوات آية آية، مناسبة لتنبيهات قصيرة.'],
+  ['أذان وتسجيلات في Internet Archive','https://archive.org','تسجيلات أذان كثيرة. تحقق من ترخيص كل ملف قبل تضمينه.'],
+  ['AlAdhan','https://aladhan.com','مواقيت الصلاة واتجاه القبلة عبر واجهة برمجية.'],
+  ['نص القرآن من Tanzil','https://tanzil.net','نصوص القرآن بصيغ مختلفة للاستعمال البرمجي.'],
+  ['أذكار حصن المسلم على GitHub','https://github.com/search?q=hisn+al+muslim+json','بيانات أذكار جاهزة بصيغة JSON. اختر مستودعاً بترخيص واضح.']
+ ]],
+ ['أصوات ونغمات عامة',[
+  ['Freesound','https://freesound.org','مؤثرات صوتية بتراخيص متنوعة، بعضها يشترط ذكر الصاحب.'],
+  ['Pixabay للمؤثرات','https://pixabay.com/sound-effects/','مؤثرات مجانية بترخيص Pixabay.'],
+  ['Mixkit','https://mixkit.co/free-sound-effects/','مؤثرات ونغمات بترخيص مجاني واضح.'],
+  ['Kenney','https://kenney.nl/assets','أصوات وأيقونات وعناصر ألعاب بترخيص CC0، لا تحتاج ذكر المصدر.'],
+  ['OpenGameArt','https://opengameart.org','موسيقى ومؤثرات ورسوم لألعاب، تراخيصها متنوعة.'],
+  ['Incompetech','https://incompetech.com','موسيقى خلفية بترخيص CC مع ذكر المؤلف.'],
+  ['Free Music Archive','https://freemusicarchive.org','موسيقى مرخصة للاستخدام، تحقق من نوع الترخيص.']
+ ]],
+ ['صور ورسوم وأيقونات',[
+  ['Unsplash','https://unsplash.com','صور فوتوغرافية عالية الجودة.'],
+  ['Pexels','https://www.pexels.com','صور وفيديو مجانية.'],
+  ['unDraw','https://undraw.co','رسوم توضيحية قابلة لتغيير اللون.'],
+  ['SVG Repo','https://www.svgrepo.com','أيقونات ورسوم SVG، تحقق من ترخيص كل رسمة.'],
+  ['Game-icons.net','https://game-icons.net','آلاف الأيقونات بطابع الألعاب، بترخيص CC BY.'],
+  ['LottieFiles','https://lottiefiles.com','حركات جاهزة خفيفة الحجم.'],
+  ['Rive Community','https://rive.app/community','حركات تفاعلية يمكن ربطها بالحالة داخل التطبيق.'],
+  ['Material Symbols','https://fonts.google.com/icons','أيقونات نظامية موحدة.'],
+  ['خطوط Google Fonts','https://fonts.google.com','خطوط عربية مجانية للتطبيق وللموقع.']
+ ]],
+ ['التمارين المنزلية',[
+  ['wger','https://wger.de','قاعدة تمارين مفتوحة مع واجهة برمجية، الرخصة مفتوحة.'],
+  ['free-exercise-db','https://github.com/yuhonas/free-exercise-db','مئات التمارين مع صور، مرخصة للعموم.']
+ ]]
+];
+var ROAD=[
+ ['صفحة التخطيط','كل ما ذكرته منظماً مع الأسئلة والمصادر.','done','تمت'],
+ ['البحث في التطبيقات المرجعية','مميزات وعيوب كل تطبيق ذكرته، وما أضفناه وما تجنبناه.','done','تمت'],
+ ['تعديل الموقع وإضافة البرومتات','قراراتك الجديدة، والبرومت المشترك، وبرومت لكل مرحلة ولكل ميزة.','done','تمت'],
+ ['مراجعتك وجمع المتطلبات','وصلت قواعدك ومهمتي الأولى. بقية المتطلبات تعلّمها في قسم المتطلبات.','done','تمت'],
+ ['المستودع والهيكل الكامل','حزمة المستودع وهيكل المجلدات وخط البناء عند الـtag وصفحة الاختبارات.','done','تمت'],
+ ['تطبيق الواجهات','كل الشاشات والتنقل والثيمات والواجهتين والمقدمة.','done','v0.1.0-test.1'],
+ ['اختبارك للواجهات','جرّبتها وأرسلت ملاحظاتك.','done','تمت'],
+ ['المرحلة الأولى: النواة','المهام والمال والتمارين والمذكرات مع اللعبة والمزامنة.','done','v0.3.0-test.1'],
+ ['المرحلة الثانية: الحياة اليومية','النوم والماء والتعلم والأذكار وقارئ الكتب.','done','v0.3.0-test.1'],
+ ['المرحلة الثالثة: أدوات الجهاز','الإشعارات والمحافظ والجدار والحجب والخزنة والتنظيف.','done','v0.5.0-test.1'],
+ ['المرحلة الرابعة: الخادم والمجتمع','لوحة التحكم والمنتدى وتحديث الفروق وموقعا التوثيق.','done','v0.5.0-test.1'],
+ ['المرحلة الخامسة: اللعبة','الرتب والتقدم والحملات اليومية.','done','v0.8.0-test.1'],
+ ['المرحلة السادسة: التخصيص والترخيص','ألوان الواجهة ورموز البطل وكود التفعيل وصفحة التشخيص.','done','v0.8.0-test.1'],
+ ['المرحلة السابعة: الرسائل والفحص الذاتي','استيراد حركات المال من الرسائل وفحص الصلاحيات محلياً.','done','v0.8.0-test.1'],
+ ['ما بعد التمويل','VPS ونماذج ذكاء مدفوعة ومزودون إضافيون.','','']
+];
+/* [app, takeaway list, avoid list, ours, source label, source url, note] */
+var REFS=[
+ ['My Finance (مدير المال)',
+  ['إدخال سريع للدخل والمصروف','رسوم بيانية وتقارير حسب الفترة والفئة','فئات بألوان وقوالب جاهزة','عملات متعددة بأسعار صرف','دفعات متكررة وتذكيرات','قفل بالرمز'],
+  ['الإعلانات الموجودة في نسخته المجانية'],
+  'نفس الأساس، ثم نضيف مزامنة المحافظ من الإشعارات، وقائمة المشتريات المرغوبة، وأسعار الصرف من لوحتك، وربط الادخار بالحملات.',
+  'صفحة التطبيق في متجر جوجل','https://play.google.com/store/apps/details?id=ru.innim.my_finance','لم أجد شكاوى موثقة عنه، فاقتصرت على ما تقوله صفحته.'],
+ ['TickTick',
+  ['قوائم وأولويات وتكرار','عرض تقويم','مؤقت تركيز','مهام فرعية ووسوم'],
+  ['الدفع لفتح مزايا أساسية','واجهة أقرب لبرنامج مكتبي'],
+  'كل ذلك بدون تذكير دائم بالترقية: مفتاح مدى الحياة يفتح كل شيء، ومهامك تُحسب نقاطاً في اللعبة.',
+  'مراجعة منشورة','https://www.cloudwards.net/ticktick-review/','قراءة المراجعة لم تُرجع نصاً كاملاً، فالنقاط هنا من معرفتي العامة بالتطبيق وقد تحتاج تأكيداً.'],
+ ['Sleep Cycle',
+  ['نافذة استيقاظ ذكية','تتبع النوم بجهد قليل','تقارير جودة النوم'],
+  ['الاشتراك السنوي','الحاجة لوضع الهاتف بجوار السرير','وقت تعلم الواجهة'],
+  'نبدأ بتسجيل نوم يدوي وحساب أوقات استيقاظ بحسب دورات النوم، ثم نضيف التتبع بالحساسات لاحقاً إن أردت.',
+  'مراجعة منشورة','https://www.techradar.com/reviews/sleep-cycle','نقاط العيوب من معرفتي بالتطبيق، وقراءة المراجعة نفسها لم تكتمل.'],
+ ['Streaks',
+  ['جدولة أيام محددة','إحصاءات السلسلة','تصميم متقن','شراء مرة واحدة'],
+  ['السلسلة تعود للصفر عند يوم فائت','لا خيار لتخطي يوم','حد 24 عادة','Apple فقط'],
+  'سحر الجليد يحل مشكلة الصفر، ولا حد لعدد العادات، ويعمل على أندرويد.',
+  'مراجعة Streaks','https://makeheadway.com/blog/streaks-app-review/',''],
+ ['Habitica',
+  ['تحويل المهام إلى لعبة','مكافآت وعقوبات','تخصيص شخصية'],
+  ['منحنى تعلم صعب','تعقيد الواجهة','حدود في النسخة المجانية'],
+  'نظام اللعبة عندك أبسط في أول استخدام، والعقوبات خفيفة وتخففها الدروع. والاستمارة الأولى تجعل البداية قصة وليست إعدادات.',
+  'مراجعة Habitica','https://www.techradar.com/reviews/habitica','المصدر لم يُقرأ كاملاً، فالنقاط من معرفتي بالتطبيق.'],
+ ['Obsidian',
+  ['ملاحظات بصيغة md','روابط بين الملاحظات','وسوم'],
+  ['المزامنة المدفوعة','يحتاج تعلماً وإعداداً'],
+  'ملاحظات md داخل التطبيق مع روابط ووسوم، والمزامنة عبر درايف مجاناً. دفتر المادة يقبل صوتاً أيضاً.',
+  'مراجعة Obsidian','https://www.techradar.com/reviews/obsidian','المصدر لم يُقرأ كاملاً.'],
+ ['GlassWire',
+  ['رسوم لاستهلاك الإنترنت لكل تطبيق','تنبيهات','سجل تاريخي'],
+  ['تنبيهات خاطئة','قلة التخصيص'],
+  'مراقبة عبر VPN محلي مع حظر لكل تطبيق، وتصدير السجل. تنبه أنه لا يعمل مع VPN آخر في نفس الوقت.',
+  'مراجعة GlassWire','https://thectoclub.com/tools/glasswire-review/','المصدر يخص النسخة المكتبية غالباً، فلا أعتمد عليه للجوال، وسنختبر عملياً.'],
+ ['StayFree',
+  ['حدود يومية وجداول','حجب المقاطع القصيرة','رمز أو تحدٍّ لتغيير الحد'],
+  ['أخطاء في تتبع بعض التطبيقات','قفل كلمة المرور قد يحبسك خارج التطبيق'],
+  'وقت الشاشة مع حجب، وفتح طارئ بكلمة سر مستقلة حتى لا تُحبس، ونقاط على الالتزام.',
+  'مقارنة تطبيقات التتبع','https://www.airdroid.com/screen-time/phone-usage-tracker/',''],
+ ['التمارين المنزلية',
+  ['حركة توضح الأداء','مؤقت لكل تمرين','خطط جاهزة بحسب العضلة'],
+  ['الإعلانات','الاشتراك لفتح الخطط'],
+  'تمارين من قواعد مفتوحة (wger وfree-exercise-db) مع مؤقت وجدول، وتُحسب نقاطاً وغارات أسبوعية.',
+  'قاعدة wger','https://wger.de','حاولت قراءة مراجعة عن تطبيق تمارين محدد ففشلت، فلا أنسب له عيوباً بعينها. النقاط أعلاه تصميم مقترح.'],
+ ['تذكير شرب الماء',
+  ['حساب الحاجة اليومية من الوزن والنشاط والمناخ','ساعات هدوء','تسجيل أنواع المشروبات'],
+  ['تنبيهات مزعجة','إعلانات','واجهات مزدحمة','ميزات محجوبة'],
+  'هدفك يُحسب من وزنك وطولك المسجلين أول مرة، والتنبيه ذكي يتوقف حين تسجل.',
+  'مقارنة تطبيقات شرب الماء','https://www.healthline.com/health/hydration-top-iphone-android-apps-drinking-water',''],
+ ['سجل الإشعارات',
+  ['حفظ نص الإشعار قبل حذف الرسالة','اختيار التطبيقات'],
+  ['لا يحفظ ما وصل قبل التثبيت','المحادثات الصامتة لا تُلتقط','الوسائط لا تُسترجع إلا مع التنزيل التلقائي','صلاحية حساسة'],
+  'اختيار التطبيقات كما طلبت، وتخزين مشفر محلي فقط، مع مدة حفظ قابلة للضبط، وشرح بالأيقونات لما يُحفظ وما لا يُحفظ.',
+  'شرح آلية استرجاع الرسائل','https://www.xda-developers.com/how-to-read-deleted-whatsapp-messages/',''],
+ ['تتبع الدورة',
+  ['تنبؤ بالدورة وتسجيل الأعراض'],
+  ['مشاركة بيانات مع أطراف ثالثة (دعوى ضد Flo)','تخزين سحابي غير مشفر','تتبع الموقع','طلب بيانات هوية'],
+  'التخزين على الجهاز فقط ومشفر، ولا يُرفع لدرايف إلا بإذنها الصريح، ولا موقع ولا هوية.',
+  'مقال عن الخصوصية','https://tuta.com/blog/best-period-apps',''],
+ ['المذكرات السرية',
+  ['قفل برمز وبصمة','تشفير','بحث وقوالب','نسخ احتياطي'],
+  ['التخزين المحلي وحده يحتاج نسخاً يدوياً','الاشتراك لفتح الأفضل'],
+  'تشفير محلي ونسخة مشفرة تلقائية على درايف، وقفل بالرمز والبصمة والوجه.',
+  'مقال عن تطبيقات اليوميات','https://blog.journey.cloud/best-diary-app-2026/','المصدر مدونة تروّج لتطبيق منافس، فخذه بحذر.'],
+ ['تقوية الذاكرة',
+  ['التكرار المتباعد','يعمل دون نت','صور وصوت في البطاقات'],
+  ['واجهة معقدة ومنحنى تعلم','التأخر يعطل الأسلوب كله'],
+  'بطاقات بسيطة بسقف يومي لا يتراكم، وتتصل بمادتك ومهاراتك في قسم التعلم.',
+  'مقال عن Anki','https://www.brainscape.com/academy/does-anki-work/','المصدر تابع لتطبيق منافس.']
+];
+/* shared rules */
+var BASE=[
+ 'أنت مطور أندرويد محترف في فريق نماذج ذكاء (مخطط ومطور ومراجع) يعمل على تطبيق اسمه «كل ما يحتاجه يوسف»: تنظيم الحياة في لعبة بطابع أنمي سحري بنقاط ومستويات ورتب.',
+ '',
+ 'ابدأ بالقراءة:',
+ '- اقرأ handover_state.md ثم docs/dev/RULES.md. يمنع قراءة كامل الكود المصدري.',
+ '- يمنع التخمين. أي متغير حرج ناقص (اسم أو قيمة أو مفتاح أو رابط أو سلوك) فاسأل المالك فوراً وتوقف.',
+ '',
+ 'التقنية:',
+ '- Kotlin وJetpack Compose، وأقل إصدار أندرويد 14 (API 34).',
+ '- طبقات: core وdata وdomain وfeature، وكل ميزة في حزمتها.',
+ '- Room وWorkManager، والتطبيق يعمل دون اتصال ثم يزامن ويقارن.',
+ '- ملفات المستخدم على جوجل درايف الخاص به، والمشترك على خادم PHP.',
+ '- لا مكتبة إلا لضرورة، ولا مكتبة كبيرة لأجل دالة أو اثنتين.',
+ '- لا رابط ولا مفتاح داخل الكود: الإعداد من config. الأرقام (نقاط، أسعار، طاقة) في ملف إعدادات، والقيمة غير المحددة تُسأل ولا تُخترع.',
+ '',
+ 'قواعد الكود:',
+ '- لا تعليقات. إن لزم تعليق فبالإنجليزية. السجلات ورسائل الأخطاء بالإنجليزية فقط.',
+ '- أسماء قصيرة طبيعية كما يكتبها مطور بشري، لا أسماء طويلة تشرح نفسها.',
+ '- لا نص يخاطب المستخدم في الواجهة. كل نص في ملف موارد. العربية أولاً وRTL، والإنجليزية لاحقاً.',
+ '- واجهتان: احترافية من 18 سنة وبسيطة قبلها، وتتبدلان من الإعدادات. الألوان من نظام ثيمات.',
+ '',
+ 'يمنع في الواجهات:',
+ '- تدرجات نيون مفرطة، وتأثير الزجاج على كل عنصر.',
+ '- أيقونة عشوائية بجانب كل نص أو زر بلا تسلسل هرمي.',
+ '- بطاقات شبكية متطابقة بظلال ناعمة، ونصوص أو بيانات وهمية. بيانات العينة في مصدر debug فقط وموسومة، ولا تدخل release.',
+ '',
+ 'Git:',
+ '- ميزة واحدة في الجلسة، وتقسيم المهمة الكبيرة إلى وحدات قصيرة.',
+ '- commit مستقل لكل ملف برسالة قصيرة. العمل على dev فقط.',
+ '- البناء والنشر عند tag فقط: اختبار v0.<مرحلة>.0-test.<رقم>، تجريبي vX.Y.Z-beta.<رقم>، مستقر vX.Y.Z.',
+ '- لا أسرار في المستودع.',
+ '',
+ 'التوثيق في نهاية العمل:',
+ '- ملف تعديل docs/dev/changes/YYYY-MM-DD_model_feature.md وفي أوله اسم الموديل والميزة والتاريخ والملفات، وسطر في CHANGELOG.md (السكربت tools/scripts/new-change.bat).',
+ '- ملف Markdown للوحدة في docs/dev/modules، وتحديث SYMBOLS.md.',
+ '- إضافة اختبارات المرحلة في docs/site/dev/tests-data.js وتحديث status-data.js.',
+ '- تحديث handover_state.md: هيكلة المجلدات، حالة المكونات، المسارات والروابط، التبعيات والإصدارات، المشاكل المفتوحة.',
+ '',
+ 'الرد: موجز وتقني ومباشر بلا مقدمات ولا خاتمة. اذكر الملفات بالترتيب مع رسالة commit لكل ملف، واسم الـtag المقترح، وما يحتاج اختباراً يدوياً. وفي آخره سطر Verification: ما فُحص فعلاً وما لم يُفحص.'
+].join('\n');
+/* [id, phase, title, goal, points, done] */
+var PF=[
+ ['repo',9,'المستودع والهيكل الكامل (سُلّم كحزمة)','هذه المرحلة سُلّمت في حزمة المستودع. البرومت هنا للرجوع ولتعديل الهيكل لاحقاً.',
+  ['مستودع خاص، والترخيص لم يُحدد بعد فلا تضع ملف LICENSE.','مشروع Kotlin وCompose بحزم الطبقات وكل حزم الميزات فارغة، وسأعطيك قائمة الحزم لتوافق عليها.','ملف واحد للهوية: الاسم والمعرف والأيقونة.','البناء والنشر عند دفع tag فقط، وليس مع كل رفع. نوعا بناء: release وtester، والتوقيع من متغيرات البيئة.','R8 وتقليص الموارد.','README وhandover_state.md وdocs/dev/RULES.md وSYMBOLS.md وCHANGELOG.md وملفات التعديل.','مجلد server لـPHP بهيكله الفارغ، ومجلد docs لموقعي التوثيق.','لا منطق ولا بيانات في أي مكان.'],
+  ['يبنى المشروع الفارغ ويثبت على أندرويد 14.','الإصدار الأول يظهر في Releases بالنسختين.','commit مستقل لكل ملف، وtag للإصدار.']],
+ ['shell',9,'تطبيق الواجهات بلا منطق','كل الشاشات تعمل ويمكنك تجربتها، دون منطق خلفها.',
+  ['كل الشاشات في Compose: مقدمة اختبار القبول والاستمارة، خريطة الحملات، المهام، المال، التمارين، المذكرات (شاشة القفل)، الملف، المتجر، الغارات، المكتبة، الإعدادات.','التنقل بين الشاشات حقيقي، وكذلك الثيمات والواجهتان وRTL.','الحركات والمؤثرات الصوتية للمقدمة وغيرها بملفاتك أنت.','لا بيانات وهمية في الإصدار: كل شاشة تعرض حالة فارغة مصممة.','بيانات عينة للمعاينة فقط داخل مصدر debug، موسومة بوضوح كعينة، ولا تدخل نسخة الإصدار أبداً.','لا قاعدة بيانات ولا شبكة ولا منطق لعبة.','إصدار بـtag خاص بالواجهات ولاحقة beta على Releases لتثبته.'],
+  ['يثبت على هاتفك ويفتح بلا أعطال.','تستطيع المرور على كل الشاشات.','فحص بحث نصي: لا توجد في الإصدار بيانات عينة.']],
+ ['theme',1,'نظام الهوية والثيمات','أساس الواجهة: ألوان وخطوط وثيمات تتبدل.',
+  ['رموز ألوان وخطوط ومسافات في مكان واحد.','ثيم لكل فرقة سحر، والمبدئي يتبع الفرقة.','قابلية شراء ثيمات بالنقاط (واجهة المتجر لاحقاً).','RTL كامل.','وضع الواجهة البسيطة والاحترافية.'],
+  ['تغيير الثيم يغير كل الشاشات فوراً.','لا لون ثابت داخل أي شاشة.']],
+ ['onboard',1,'مقدمة اختبار القبول والاستمارة','أول تشغيل: مقدمة حماسية بحركة ثم استمارة تسجيل.',
+  ['نص مقدمة بصياغة أصلية بلسان شخصية أنمي: ترحيب في ساحة اختبار قبول فرسان السحر، وأسئلة استعداد.','حقول: الاسم، الميلاد، الجنس، الفرقة، الشخصية المفضلة، سبب التغيير، البنر، الدولة، تفعيل الموقع (اختياري) لمواقيت الصلاة، الوزن، الطول مع خيار مؤكد أو تقديري.','الصورة الشخصية مقفلة حتى المستوى 3 (قيمة في الإعدادات)، وقبله بنر.','العمر يحدد الواجهة: احترافية من 18 سنة، وبسيطة قبل ذلك.','مهمات جاهزة تُنشأ عند الإنهاء.'],
+  ['الاستمارة تُحفظ محلياً وتعمل دون نت.','رفض إذن الموقع لا يوقف الاستمارة.']],
+ ['engine',1,'محرك اللعبة','النقاط والمستويات والرتب والطاقة والتجميد والدروع.',
+  ['مانا لكل إنجاز، ومستويات ورتب.','سلسلة أيام، وسحر الجليد يجمد يوماً بلا خسارة، يُشترى بالنقاط ويأتي من الغارات بلا حد أقصى، وسعره يتصاعد.','دروع تمنع عقوبة واحدة.','طاقة تستهلكها كل مهمة، وتعيدها استراحة إلزامية بين المهام. القيم في ملف الإعدادات.','غارات أسبوعية صارمة، وفشلها يحرم المكافأة فقط دون خسارة نقاط أو رتبة. وتحدٍّ شهري صارم بجوائز في أيام محددة.','كل الأرقام في ملف إعدادات يمكن تغييره من لوحة التحكم لاحقاً.'],
+  ['اختبارات وحدة على حسابات النقاط والتجميد.','لا تغيير في النقاط بدون سجل يمكن مراجعته.']],
+ ['tasks',1,'المهام','مهام بوقت إنجاز وأولوية وتكرار وتذكير.',
+  ['قوائم وأولويات ومهام فرعية.','وقت إنجاز لكل مهمة.','تكرار وتذكير.','منبه بقوة: يُطفأ بهز الهاتف أو بكتابة جملة طويلة تحفيزية.','كل إنجاز يمنح مانا.','مهمة «اقرأ صفحة» تتصل بالمكتبة لاحقاً.'],
+  ['المنبه يعمل مع توفير البطارية.','التذكير يصل بعد إعادة تشغيل الجهاز.']],
+ ['money',1,'إدارة المال','دخل ومصروف وحسابات وعملات وقائمة مشتريات.',
+  ['حسابات متعددة وعملات متعددة.','دخل ومصروف وتحويل بين الحسابات.','فئات وميزانيات وتقارير بيانية.','قائمة مشتريات مرغوبة تتحول إلى هدف ادخار.','دفعات متكررة.','أسعار الصرف تأتي من الخادم وتُخزن للعمل دون نت.','بنية تسمح لاحقاً بمزامنة المحافظ من الإشعارات تلقائياً.'],
+  ['كل العمليات تعمل دون نت.','الحسابات بالأرقام العشرية صحيحة بلا خطأ تقريب.']],
+ ['workout',1,'التمارين','تمارين منزلية بلا معدات مع مؤقت وحركة توضح الأداء.',
+  ['قاعدة تمارين مفتوحة الترخيص (wger أو free-exercise-db) مع ملف الترخيص.','خطط بحسب العضلة.','مؤقت لكل تمرين وراحة.','حركة بسيطة توضح الأداء.','تسجيل الجلسات ويُحسب نقاطاً.','وزنك وطولك من الاستمارة تدخل الحسابات.'],
+  ['التمرين يستمر والشاشة مغلقة.','الترخيص موثق لكل مصدر.']],
+ ['journal',1,'المذكرات السرية','مذكرات مشفرة بقفل رمز وبصمة وجه.',
+  ['قفل بالرمز والبصمة وبصمة الوجه إن وجدت.','تشفير محلي بمفتاح من Keystore.','بحث ووسوم.','نسخة احتياطية مشفرة على درايف.','لا يظهر المحتوى في لقطات الشاشة ولا قائمة التطبيقات الأخيرة.'],
+  ['فقد القفل لا يكشف المحتوى.','استعادة النسخة الاحتياطية تعمل.']],
+ ['map',1,'الشاشة الرئيسية وخريطة الحملات','خريطة الحملات هي الواجهة الرئيسية.',
+  ['حملات بمراحل ومعركة أخيرة.','ربط الحملة بالمهام والمال والتمارين.','حالة اليوم: التجميد والطاقة والغارة.','بدون نصوص شرح.'],
+  ['الخريطة تتحمل عشرات الحملات دون بطء.']],
+ ['drive',1,'المزامنة مع جوجل درايف','حفظ بيانات المستخدم في درايفه ودمج النسخ.',
+  ['تسجيل الدخول بحساب جوجل وصلاحية مجلد التطبيق فقط.','طابور تغييرات محلي، ولكل سجل معرف ووقت تعديل.','حل التعارض: آخر تعديل يفوز، وللمال والمهام دمج بحسب الحقل.','لا رفع لبيانات الدورة والعادات الحساسة إلا بموافقة صريحة.'],
+  ['جهازان يعدلان نفس السجل دون ضياع.','عمل كامل دون نت ثم مزامنة.']],
+ ['updater',1,'محدّث التطبيق','تحديث من داخل التطبيق من GitHub Releases.',
+  ['فحص آخر إصدار مستقر أو تجريبي بحسب اختيار المستخدم.','تنبيه برابطين: كامل وفروق.','تطبيق الفروق دون حذف البيانات.','التحقق من التوقيع وبصمة الملف قبل التثبيت.'],
+  ['التحديث يحافظ على كل البيانات.','ملف تالف لا يُثبَّت.']],
+ ['admin1',1,'لوحة التحكم الأساسية','لوحة PHP لإدارة الميزات والتسعير.',
+  ['تسجيل دخول آمن للأدمن.','جدول ميزات: مجانية أو مدفوعة.','أكواد تفعيل مدى الحياة: اللوحة تولّدها لمرة واحدة وتربطها بحساب، والتطبيق يتحقق منها على الخادم ويحفظ الترخيص مشفراً مع مهلة سماح دون نت.','أسعار الصرف.','هيكل يسهل نقله من استضافة لأخرى.'],
+  ['كل نقطة API لها تحقق من الدخول.','نقل الموقع يحتاج تغيير ملف إعداد واحد.']],
+
+ ['sleep',2,'النوم','تسجيل النوم يدوياً وحساب أوقات الاستيقاظ بحسب الدورات.',['تسجيل النوم والاستيقاظ.','اقتراح أوقات نوم واستيقاظ بحسب دورات النوم.','تقرير أسبوعي.'],['يعمل دون نت.']],
+ ['water',2,'الماء','تذكير ذكي بالماء وهدف من الوزن والنشاط.',['هدف يومي من الوزن والطول.','تذكير يتوقف حين تسجل.','ساعات هدوء.'],['لا إزعاج أثناء النوم.']],
+ ['skin',2,'العناية بالبشرة','روتين صباحي ومسائي مع تذكير.',['روتين قابل للتعديل.','سجل يومي.','نقاط للالتزام.'],['يعمل دون نت.']],
+ ['gender',2,'ميزات الجنسين','تتبع الدورة للنساء، ومتابعة عادة سيئة بسرية للرجال، بحسب الاختيار الأول.',['التخزين محلي ومشفر.','لا رفع إلى درايف بدون موافقة صريحة.','قفل مستقل وإخفاء من لقطات الشاشة.'],['لا بيانات حساسة في الخادم.']],
+ ['learn',2,'مولد برومت التعلم واستيراد الخطة','التطبيق يبني برومت للتعلم، وتلصق نتيجة النموذج فيتحول إلى مهام.',['بناء البرومت مع وصف صيغة المخرجات: ملفات md للخطة والمهام والاختبارات.','استيراد الملفات والتحقق من بنيتها.','إنشاء مهام وتذكيرات وخريطة هدف.','دفتر ملاحظات نصي وصوتي لكل مادة.'],['مخرجات خاطئة تُرفض برسالة أيقونية.']],
+ ['tests',2,'الاختبارات والمهارات','اختبار تحديد مستوى للمهارات المسجلة وغير المسجلة.',['مهارة مسجلة: يجلب اختبارها من الخادم.','غير مسجلة: يبني برومت اختبار، ثم يُرفع الاختبار الجديد للخادم وتُسجل المهارة.','تقليل الغش: أسئلة متغيرة ووقت محدد.'],['الرفع يحتاج نتاً ولا يعطل العمل دونه.']],
+ ['faith',2,'الأذكار والقبلة ومواقيت الصلاة','إشعار ديني مميز عند فتح الشاشة، والقبلة ومواقيت الصلاة.',['خدمة صغيرة تلتقط فتح الشاشة وتعرض إشعاراً.','وضع هدوء وقت النوم والعمل.','القبلة بالبوصلة.','مواقيت من الموقع المختار.'],['لا يزعج ولا يستنزف البطارية.']],
+ ['books',2,'قارئ الكتب','مكتبة من الاستضافة، تنزيل وقراءة دون نت.',['قارئ PDF.','تنزيل الكتب وحفظ موضع القراءة.','مهمة «اقرأ صفحة» تتصل بالتقدم.','روابط شراء للكتب المدفوعة.'],['القراءة تعمل دون نت.']],
+
+ ['notiflog',3,'سجل الإشعارات','حفظ إشعارات تطبيقات تختارها لاسترجاع الرسائل المحذوفة.',['اختيار التطبيقات.','تخزين مشفر محلي.','فلترة وبحث.','مدة حفظ.'],['لا يحفظ المحادثات الصامتة ولا ما قبل التفعيل.']],
+ ['wallets',3,'مزامنة المحافظ','قراءة إشعارات المحافظ وتعديل الأرصدة تلقائياً.',['قواعد أنماط الرسائل تأتي من الخادم.','تعديل تلقائي للرصيد.','سجل بكل عملية تلقائية ليراجعها.'],['محفظة جديدة تُضاف من اللوحة دون تحديث التطبيق.']],
+ ['vault',3,'خزنة الصور والفيديو','إخفاء قوي بتشفير ملفات.',['تشفير بمفتاح من Keystore.','قفل مستقل.','نسخة احتياطية مشفرة.','تمويه التطبيق.'],['لا يظهر الملف في المعرض بعد الإخفاء.']],
+ ['firewall',3,'مراقب الإنترنت والجدار','استهلاك كل تطبيق مع إمكانية الحظر.',['VPN محلي.','رسوم الاستهلاك.','حظر لكل تطبيق.'],['لا يمنع الإنترنت عن الجهاز عند الخطأ.']],
+ ['blocker',3,'وقت الشاشة والحجب','إحصاءات الاستخدام وحدود وحجب.',['إحصاءات.','حدود يومية.','حجب بخدمة إمكانية الوصول.','فتح طارئ بكلمة سر مستقلة.'],['لا يحبس المستخدم خارج هاتفه.']],
+ ['cleaner',3,'ترتيب الهاتف والكاش','حذف المجلدات الفارغة وامتدادات محددة واستخراج الكاش.',['معاينة ثم تأكيد قبل أي حذف.','استثناء مجلدات النظام.','استخراج الكاش عبر Shizuku.'],['لا حذف قبل التأكيد.']],
+ ['contacts',3,'إصلاح جهات الاتصال','دمج وحذف وتعديل وفصل حسب الحساب.',['نسخة احتياطية قبل كل تعديل.','دمج المكرر.','زر تراجع.'],['لا تُفقد جهة بالخطأ.']],
+ ['device',3,'فحص الجهاز والذاكرة','اختبارات الشاشة والصوت والحساسات والبطارية وفحص بطاقة الذاكرة.',['اختبارات يدوية وتلقائية.','مواصفات الجهاز.','فحص بطاقة الذاكرة بكتابة وقراءة السعة.'],['الفحص لا يتلف بيانات.']],
+
+ ['admin2',4,'لوحة التحكم الكاملة','مستخدمون وكتب وإشعارات وتشغيل ميزات عن بعد وإحصاءات.',['إدارة الكتب.','إرسال إشعارات.','تشغيل ميزة أو إيقافها عن بعد.','إحصاءات.'],['صلاحيات الأدمن مفصلة.']],
+ ['forum',4,'المنتدى','منتدى آراء واقتراحات وتقييم الكورسات.',['موضوعات وردود.','تقييم الكورسات.','إبلاغ وإشراف.'],['لا ينشر دون مراجعة.']],
+ ['delta',4,'تحديث الفروق','توليد ملفات فروق بين الإصدارات.',['توليد ملف الفروق في خط البناء.','تطبيقه في التطبيق.','تحقق وسلامة.'],['التطبيق بعد الفروق مطابق للنسخة الكاملة.']],
+ ['docs',4,'موقعا التوثيق','موقع للمستخدمين، وملف HTML منفصل للمطور.',['موقع المستخدم.','ملف المطور فيه فهرس الرموز.','بحث.'],['يعمل دون نت.']]
+];
+var PHASES={9:'المرحلة صفر: المستودع والواجهات',1:'المرحلة الأولى: النواة',2:'المرحلة الثانية: الحياة اليومية',3:'المرحلة الثالثة: أدوات الجهاز',4:'المرحلة الرابعة: الخادم والمجتمع'};
+function buildPrompt(f){
+  var o=['اقرأ docs/dev/PROJECT_STATE.md قبل أي شيء.','','الميزة: '+f[2],'الهدف: '+f[3],'','المطلوب:'];
+  f[4].forEach(function(p){o.push('- '+p)});
+  o.push('','معايير القبول:');
+  f[5].forEach(function(p){o.push('- '+p)});
+  o.push('','التزم بكل قواعد البرومت المشترك. نفذ هذه الميزة فقط ولا تلمس غيرها.');
+  return o.join('\n');
+}
+function buildPhase(n){
+  var list=PF.filter(function(f){return f[1]===n});
+  var o=['هذه خطة '+PHASES[n]+'. لا تنفذ شيئاً الآن.','','المطلوب منك: ترتيب الميزات التالية بحسب الاعتماد بينها، وتحديد ما يحتاجه كل منها مما قبله، وتقدير الجلسات اللازمة، واقتراح tag لكل ميزة.','','الميزات:'];
+  list.forEach(function(f){o.push('- '+f[2]+': '+f[3])});
+  o.push('','لا تكتب كوداً. أعطني خطة مرتبة، ثم أطلب منك ميزة ميزة.');
+  return o.join('\n');
+}
+var QG=[
+ ['أسئلة جديدة من إجاباتك الأخيرة',[
+  ['q-freeze','سحر الجليد','كم تجميداً في الشهر؟ وكيف يُكتسب: شراء بالنقاط أم مكافأة غارة أم الاثنان؟',['يُشترى بالنقاط','يأتي من الغارات','حد شهري ثابت','لا حد']],
+  ['q-hp','الطاقة والاستراحات','فهمت أن المهمة تستهلك طاقة وبين المهام استراحة إلزامية. كم طاقة لكل مهمة؟ وكم مدة الاستراحة؟ وماذا لو لم يرتح؟',['استراحة 5 دقائق','استراحة 10 دقائق','تُعطل المهمة التالية','تقل المانا بلا استراحة']],
+  ['q-license','كود التفعيل','هل يرتبط الكود بحساب واحد أم بجهاز واحد؟ وهل يمكن نقله لهاتف جديد؟',['حساب جوجل واحد','جهاز واحد','نقل مرتين','نقل بطلب منه']],
+  ['q-raidfail','الغارة الأسبوعية الصارمة','ماذا يحدث عند فشلها؟',['فقدان نقاط','نزول رتبة','حرمان مكافأة فقط','يحميني درع']],
+  ['q-squads','فرق السحر','كم فرقة تبدأ بها؟ ما أسماؤها وألوانها (أسماء أصلية أو مستوحاة)؟',[]],
+  ['q-age','حد العمر للواجهتين','من أي عمر تظهر الواجهة الاحترافية؟',['16','18','20','يختار هو']],
+  ['q-photolvl','فتح الصورة الشخصية','عند أي مستوى تفتح؟',[]],
+  ['q-pay','الدفع للمفتاح مدى الحياة','كيف يشتريه المستخدم خارج جوجل بلاي؟ وما أسعارك المقدرة؟ وما الميزات المجانية الدائمة؟',['تحويل محلي','محفظة إلكترونية','رمز يُرسل بعد الدفع','لا أعرف بعد']]
+ ]],
+ ['الأساس: كيف نبني ونظهر',[
+  ['q-code','أسلوب كتابة الكود','التنظيم والتسمية وحجم التعقيد الذي ترتاح له.',['بطبقات واضحة (Clean Architecture)','بسيط ومباشر','وحدة مستقلة لكل ميزة','أترك القرار لك']],
+  ['q-comments','التعليقات في الكود','أي لغة ومستوى تفصيل.',['عربية','إنجليزية','عربية وإنجليزية','على الأجزاء المعقدة فقط','مفصلة على كل دالة']],
+  ['q-publish','النشر','كيف يصل التطبيق إليك وإلى المستخدمين.',['GitHub Releases','رابط تحميل من استضافتي','Google Play لاحقاً','إصدار تجريبي ثم مستقر','يتحدث من داخل التطبيق']],
+  ['q-colors','الألوان والإحساس العام','اللون والجو الذي تتخيله حين تفتح التطبيق.',['داكن مع ذهبي','داكن مع أخضر البرسيم','فاتح هادئ','يتغير بعنصر السحر','داكن وفاتح معاً']],
+  ['q-vision','تخيلك من الصفر حتى الاكتمال','ماذا ترى حين تفتحه أول مرة؟ وبعد شهر؟ وبعد سنة؟ اكتب كل ما في خيالك.',[]]
+ ]],
+ ['اللعبة والواجهة',[
+  ['q-game','نظام اللعبة','كيف تكسب المانا؟ وهل يوجد عقاب عند التقصير؟',['مكافآت فقط','مكافآت وعقوبات خفيفة','صارم وتنزل الرتبة','منافسة مع أصدقاء']],
+  ['q-home','الشاشة الرئيسية','ما أول ما تراه كل يوم؟',['كتاب السحر','مهام اليوم','خريطة الحملات','تتغير بحسب الوقت']],
+  ['q-modes','الواجهتان','متى تظهر كل واحدة وما الفرق بينهما؟',['تُحدد من العمر أول مرة','يمكن التبديل لاحقاً','الاحترافية تفتح ميزات أكثر','البسيطة تخفي ميزات']],
+  ['q-lang','لغة الواجهة','',['عربي مختصر','عربي وإنجليزي','عبارات قصيرة جداً']],
+  ['q-sound','الأصوات','أي أصوات تريدها داخل التطبيق؟',['مؤثرات ألعاب','تلاوات','نغمات منبه','أناشيد بلا موسيقى','صامت افتراضياً']],
+  ['q-android','أقل إصدار أندرويد','كلما قل الإصدار زادت الأجهزة المدعومة وقلت الميزات الحديثة.',['أندرويد 8 وما فوق','أندرويد 10 وما فوق','أقدم ما أمكن']]
+ ]],
+ ['المال والمهام والصحة',[
+  ['q-money','المال','ما تحتاجه من المتابعة؟ وما المحافظ التي تملكها؟ ويفضل إرفاق شكل إشعار كل محفظة.',['أكثر من عملة','ديون','ميزانية شهرية','تقارير بيانية']],
+  ['q-wallet','مزامنة المحافظ','كيف تتخيل الحفظ من الإشعارات؟',['تلقائي','قائمة مراجعة أولاً','إشعار فقط']],
+  ['q-tasks','المهام والمنبه','كيف تريد أن يوقظك المنبه؟',['مسألة حسابية','هز الهاتف','كتابة جملة','مسح رمز']],
+  ['q-health','الصحة','ما أهم ما تريده أولاً، ومستوى لياقتك الآن؟',['ماء','نوم','تمارين','بشرة']],
+  ['q-gender','ميزات الجنسين','كيف يختار المستخدم وكيف تُعرض هذه الميزات؟',['اختيار عند أول تشغيل','أسماء محايدة في الواجهة','قفل خاص لها','بدون ربط سحابي']]
+ ]],
+ ['الخصوصية وأدوات الجهاز',[
+  ['q-privacy','الحماية العامة','',['قفل ببصمة','إخفاء التطبيق','رمز مزيف','بدون ربط سحابي']],
+  ['q-vault','إخفاء الصور والفيديو','',['حذف الأصل بعد الإخفاء','نسخة مشفرة','قفل منفصل','تمويه كآلة حاسبة']],
+  ['q-notif','سجل الإشعارات','أي تطبيقات ولكم من المدة؟',['واتساب فقط','كل التطبيقات','حذف بعد 30 يوماً','دائم']],
+  ['q-clean','ترتيب الهاتف والكاش','ما مدى الحذر الذي تريده؟ واذكر التطبيقات التي تريد استخراج كاشها.',['معاينة ثم تأكيد','سلة محذوفات لأيام','حذف مباشر']],
+  ['q-device','فحص الجهاز والذاكرة','ما أهم الاختبارات عندك؟',['شاشة اللمس','الصوت','الحساسات','البطارية','بطاقة الذاكرة']]
+ ]],
+ ['التعلم والذكاء والمجتمع',[
+  ['q-learn','خطة التعلم','كيف يدخل التطبيق الخطة التي كتبها نموذج الذكاء؟ واذكر مادة تتعلمها الآن.',['نص منظم','نص عادي يفهمه التطبيق','رمز مسح']],
+  ['q-test','الاختبارات ومنع الغش','',['وقت محدد','أسئلة تتغير','اختبار تكيفي','جزء عملي']],
+  ['q-ai','الذكاء الاصطناعي والتقارير','',['تقرير أسبوعي','مؤشرات مزاج','لا ذكاء الآن','مفتاح API خاص بي']],
+  ['q-forum','المنتدى','',['تقييم كورسات','اقتراحات','دردشة','إشراف يدوي']],
+  ['q-faith','الأذكار والتنبيهات','',['كل ساعة','عند فتح الشاشة','أوقات محددة','هدوء وقت النوم والعمل']],
+  ['q-books','مكتبة الكتب','',['قراءة دون نت','متابعة القراءة','اقتباسات','روابط شراء']]
+ ]],
+ ['الإدارة والأولويات',[
+  ['q-admin','لوحة التحكم','ما الذي تريد التحكم فيه من اللوحة؟',['المستخدمون','الكتب','أسعار الصرف','إرسال إشعارات','الإحصاءات','تشغيل الميزات عن بعد']],
+  ['q-first','أهم خمس ميزات تعمل أولاً','لو لم يتبق من التطبيق إلا خمس ميزات، فما هي؟',[]],
+  ['q-extra','أشياء لم تذكرها','ذكرت أن في بالك الكثير. اكتب ما تذكره.',[]]
+ ]]
+];
+
+/* ---------- helpers ---------- */
+function $(s,r){return (r||document).querySelector(s)}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var STATUS={core:['أساسي','p-core'],extra:['إضافي','p-extra'],later:['لاحقاً','p-later']};
+
+/* ---------- static sections ---------- */
+$('#decisions').innerHTML=DECISIONS.map(function(d){
+  return '<div class="dec"><div><b>'+esc(d[0])+'</b><span class="v">'+esc(d[1])+'</span></div><span class="pill p-'+d[2]+'">'+esc(d[3])+'</span></div>';
+}).join('');
+$('#gameTable').innerHTML=GAME.map(function(g){return '<tr><td><b>'+esc(g[0])+'</b></td><td>'+esc(g[1])+'</td></tr>'}).join('');
+$('#archGrid').innerHTML=ARCH.map(function(a){
+  return '<div class="box"><h3>'+esc(a[0])+'</h3><p><b>'+esc(a[1])+'</b></p><p class="count" style="font-size:.95rem">'+esc(a[2])+'</p>'+(a[3]?'<details><summary>ملاحظة</summary><p>'+esc(a[3])+'</p></details>':'')+'</div>';
+}).join('');
+$('#permTable').innerHTML=PERMS.map(function(p){return '<tr><td><b>'+esc(p[0])+'</b></td><td>'+esc(p[1])+'</td><td>'+esc(p[2])+'</td></tr>'}).join('');
+$('#srcWrap').innerHTML=SRC.map(function(g){
+  return '<div class="src-group"><h3>'+esc(g[0])+'</h3><div class="src-list">'+g[1].map(function(s){
+    return '<div class="src-item"><a href="'+esc(s[1])+'" target="_blank" rel="noopener">'+esc(s[0])+'</a><p>'+esc(s[2])+'</p></div>';
+  }).join('')+'</div></div>';
+}).join('');
+$('#road').innerHTML=ROAD.map(function(r){
+  return '<li class="'+r[2]+'"><div><h3>'+esc(r[0])+(r[3]?' <span class="pill p-'+(r[2]==='done'?'done':'open')+'">'+esc(r[3])+'</span>':'')+'</h3><p>'+esc(r[1])+'</p></div></li>';
+}).join('');
+
+/* ---------- features ---------- */
+var fState={m:'all',q:'',risk:false};
+function renderChips(){
+  var counts={all:F.length};
+  F.forEach(function(f){counts[f[0]]=(counts[f[0]]||0)+1});
+  var items=[['all','الكل']].concat(MODS);
+  $('#fChips').innerHTML=items.map(function(m){
+    return '<button class="chip" data-m="'+m[0]+'" aria-pressed="'+(fState.m===m[0])+'">'+esc(m[1])+' '+(counts[m[0]]||0)+'</button>';
+  }).join('');
+}
+function renderFeatures(){
+  var q=fState.q.trim();
+  var list=F.filter(function(f){
+    if(fState.m!=='all'&&f[0]!==fState.m) return false;
+    if(fState.risk&&!f[6]) return false;
+    if(q&&(f[1]+' '+f[2]+' '+f[4]+' '+f[5]).indexOf(q)<0) return false;
+    return true;
+  });
+  $('#fCount').textContent=list.length+' ميزة';
+  $('#fGrid').innerHTML=list.length?list.map(function(f){
+    var st=STATUS[f[3]];
+    return '<article class="feat"><header><h3>'+esc(f[1])+'</h3><div class="pills">'+(f[6]?'<span class="pill p-risk">تحدٍّ تقني</span>':'')+'<span class="pill '+st[1]+'">'+st[0]+'</span></div></header>'+
+      '<p>'+esc(f[2])+'</p>'+(f[4]?'<div class="src">مستوحى من: '+esc(f[4])+'</div>':'')+
+      (f[5]?'<details><summary>رأي المحلل</summary><p>'+esc(f[5])+'</p></details>':'')+'</article>';
+  }).join(''):'<div class="empty" style="grid-column:1/-1">لا توجد ميزة بهذا الوصف</div>';
+}
+$('#fChips').addEventListener('click',function(e){
+  var b=e.target.closest('.chip'); if(!b) return;
+  fState.m=b.getAttribute('data-m'); renderChips(); renderFeatures();
+});
+$('#fRisk').addEventListener('click',function(){
+  fState.risk=!fState.risk; this.setAttribute('aria-pressed',String(fState.risk)); renderFeatures();
+});
+$('#fSearch').addEventListener('input',function(){fState.q=this.value; renderFeatures()});
+renderChips(); renderFeatures();
+
+/* ---------- questions ---------- */
+var LS='yousef-plan-answers-v1';
+var answers={}, touched={}, db=null, timers={}, inflight={}, TITLES={};
+try{answers=JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){answers={}}
+var total=0;
+QG.forEach(function(g){g[1].forEach(function(q){total++; TITLES[q[0]]=q[1]})});
+
+function isAnswered(id){var a=answers[id]; return !!(a&&((a.c&&a.c.length)||(a.t&&a.t.trim())))}
+function updateMeter(){
+  var n=0; Object.keys(TITLES).forEach(function(id){if(isAnswered(id)) n++});
+  $('#meterTxt').textContent='الأسئلة المجاب عنها: '+n+' من '+total;
+  $('#meterBar').style.width=Math.round(n/total*100)+'%';
+  document.querySelectorAll('.q').forEach(function(c){c.classList.toggle('answered',isAnswered(c.getAttribute('data-id')))});
+}
+function setStatus(t){$('#saveStatus').textContent=t}
+
+var idx=0;
+$('#qWrap').innerHTML=QG.map(function(g){
+  return '<div class="qgroup"><h3>'+esc(g[0])+'</h3>'+g[1].map(function(q){
+    idx++;
+    return '<div class="q" data-id="'+q[0]+'"><h3><small>'+idx+'</small>'+esc(q[1])+'</h3>'+
+      (q[2]?'<p class="hint">'+esc(q[2])+'</p>':'')+
+      (q[3].length?'<div class="chips">'+q[3].map(function(o){return '<button class="chip" data-o="'+esc(o)+'" aria-pressed="false">'+esc(o)+'</button>'}).join('')+'</div>':'')+
+      '<textarea id="t-'+q[0]+'" placeholder="اكتب تصورك بحرية" aria-label="'+esc(q[1])+'"></textarea></div>';
+  }).join('')+'</div>';
+}).join('');
+
+function applyAnswers(){
+  Object.keys(TITLES).forEach(function(id){
+    if(touched[id]) return;
+    var a=answers[id]||{c:[],t:''}, card=$('.q[data-id="'+id+'"]');
+    $('#t-'+id).value=a.t||'';
+    card.querySelectorAll('.chip').forEach(function(c){c.setAttribute('aria-pressed',String((a.c||[]).indexOf(c.getAttribute('data-o'))>=0))});
+  });
+  updateMeter();
+}
+function persist(id){
+  try{localStorage.setItem(LS,JSON.stringify(answers))}catch(e){}
+  updateMeter();
+  if(!db) return;
+  clearTimeout(timers[id]);
+  timers[id]=setTimeout(function(){flush(id)},700);
+}
+function flush(id){
+  if(inflight[id]){timers[id]=setTimeout(function(){flush(id)},400); return}
+  inflight[id]=true;
+  var a=answers[id]||{c:[],t:''};
+  db.doc('answers/'+id).set({q:TITLES[id],chips:a.c||[],text:a.t||'',updatedAt:Date.now()}).then(function(){
+    setStatus('محفوظ على الخادم');
+  }).catch(function(){
+    setStatus('الحفظ في هذا المتصفح فقط');
+  }).then(function(){inflight[id]=false});
+}
+$('#qWrap').addEventListener('click',function(e){
+  var b=e.target.closest('.chip'); if(!b) return;
+  var id=b.closest('.q').getAttribute('data-id'), o=b.getAttribute('data-o');
+  var a=answers[id]=answers[id]||{c:[],t:''};
+  var i=a.c.indexOf(o); if(i>=0) a.c.splice(i,1); else a.c.push(o);
+  b.setAttribute('aria-pressed',String(i<0)); touched[id]=1; persist(id);
+});
+$('#qWrap').addEventListener('input',function(e){
+  var t=e.target; if(t.tagName!=='TEXTAREA') return;
+  var id=t.closest('.q').getAttribute('data-id');
+  var a=answers[id]=answers[id]||{c:[],t:''};
+  a.t=t.value; touched[id]=1; persist(id);
+});
+$('#copyAll').addEventListener('click',function(){
+  var out=[];
+  QG.forEach(function(g){g[1].forEach(function(q){
+    var a=answers[q[0]]; if(!isAnswered(q[0])) return;
+    out.push('## '+q[1]+'\n'+(a.c&&a.c.length?'الخيارات: '+a.c.join('، ')+'\n':'')+(a.t&&a.t.trim()?a.t.trim()+'\n':''));
+  })});
+  var text=out.length?out.join('\n'):'لا توجد إجابات بعد';
+  var box=$('#exportBox'); box.value=text; box.classList.add('on'); box.style.minHeight='180px';
+  function fallback(){box.focus(); box.select(); setStatus('حدد النص وانسخه يدوياً')}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){setStatus('تم النسخ')}).catch(fallback);
+  } else fallback();
+});
+applyAnswers();
+
+/* load from db when available */
+if(window.claude&&window.claude.use){
+  window.claude.use('db').then(function(d){
+    if(!d) return;
+    db=d;
+    var timer=setTimeout(function(){setStatus('تعذر الوصول للخادم الآن، الحفظ في المتصفح')},10000);
+    d.collection('answers').get().then(function(snap){
+      clearTimeout(timer);
+      snap.docs.forEach(function(doc){
+        var v=doc.data(); if(!v||!TITLES[doc.id]||touched[doc.id]) return;
+        answers[doc.id]={c:v.chips||[],t:v.text||''};
+      });
+      applyAnswers(); setStatus('محفوظ على الخادم');
+    }).catch(function(){clearTimeout(timer); setStatus('الحفظ في هذا المتصفح فقط')});
+  }).catch(function(){});
+}
+
+/* ---------- refs, tech list, prompts ---------- */
+$('#a14List').innerHTML=A14.map(function(t){return '<li>'+esc(t)+'</li>'}).join('');
+$('#refsWrap').innerHTML='<div class="grid">'+REFS.map(function(r){
+  return '<article class="feat"><h3>'+esc(r[0])+'</h3>'+
+   '<div><span class="pill p-core">نأخذ</span><ul class="plain">'+r[1].map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
+   '<div><span class="pill p-risk">نتجنب</span><ul class="plain">'+r[2].map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
+   '<p><b>عندنا:</b> '+esc(r[3])+'</p>'+
+   '<div class="src">المصدر: <a href="'+esc(r[5])+'" target="_blank" rel="noopener">'+esc(r[4])+'</a></div>'+
+   (r[6]?'<p class="count">'+esc(r[6])+'</p>':'')+'</article>';
+}).join('')+'</div>';
+
+var pPhase=0;
+function copyText(text,statusEl,fallbackEl){
+  function fb(){ if(fallbackEl){fallbackEl.focus(); fallbackEl.select();} statusEl.textContent='حدد النص وانسخه يدوياً'; }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){statusEl.textContent='تم النسخ'}).catch(fb);
+  } else fb();
+}
+$('#baseBox').value=BASE;
+function renderPrompts(){
+  var phases=[0,9,1,2,3,4];
+  $('#pChips').innerHTML=phases.map(function(n){
+    return '<button class="chip" data-p="'+n+'" aria-pressed="'+(pPhase===n)+'">'+(n?PHASES[n]:'الكل')+'</button>';
+  }).join('');
+  var html='';
+  [9,1,2,3,4].forEach(function(n){
+    if(pPhase&&pPhase!==n) return;
+    html+='<div class="qgroup"><h3>'+esc(PHASES[n])+'</h3>'+
+      '<div class="q"><h3>برومت المرحلة كلها</h3><p class="hint">يطلب ترتيب الميزات وخطة الجلسات دون كتابة كود.</p><textarea readonly style="min-height:110px" id="ph-'+n+'">'+esc(buildPhase(n))+'</textarea><div class="actions"><button class="btn" data-copy="ph-'+n+'">نسخ</button></div></div>';
+    PF.filter(function(f){return f[1]===n}).forEach(function(f){
+      html+='<details class="q"><summary>'+esc(f[2])+'</summary><p class="hint" style="margin-top:6px">'+esc(f[3])+'</p><textarea readonly style="min-height:200px;margin-top:8px" id="pf-'+f[0]+'">'+esc(buildPrompt(f))+'</textarea><div class="actions" style="margin-top:8px"><button class="btn" data-copy="pf-'+f[0]+'">نسخ</button></div></details>';
+    });
+    html+='</div>';
+  });
+  $('#pWrap').innerHTML=html;
+}
+$('#pChips').addEventListener('click',function(e){
+  var b=e.target.closest('.chip'); if(!b) return;
+  pPhase=Number(b.getAttribute('data-p')); renderPrompts();
+});
+$('#v-prompts').addEventListener('click',function(e){
+  var b=e.target.closest('[data-copy]'); if(!b) return;
+  var id=b.getAttribute('data-copy'), el=id==='base'?$('#baseBox'):document.getElementById(id);
+  copyText(el.value,$('#pStatus'),el);
+});
+renderPrompts();
+
+/* ---------- requirements ---------- */
+/* [group, [[id, item, why]]] */
+var REQS=[
+ ['المستودع والحسابات',[
+  ['r-git','Git مثبت على ويندوز، وأمر user.name وuser.email مضبوطان، وتسجيل الدخول إلى GitHub جاهز','setup-repo.bat يتوقف برسالة واضحة إن نقص أحدها'],
+ ['r-empty','مستودع GitHub خاص وفارغ تماماً: بلا README ولا ترخيص ولا .gitignore','السكربت يرفض مستودعاً فيه محتوى حتى لا يتعارض مع أول رفع'],
+ ['r-2fa','تفعيل المصادقة الثنائية على حساب GitHub','قاعدة حماية المستودع التي طلبتها'],
+ ['r-actions','تفعيل Actions في المستودع، وإعطاء GITHUB_TOKEN صلاحية القراءة والكتابة','لازم لنشر الإصدارات عند الـtag'],
+ ['r-protect','تفعيل حماية فرع main بعد أول تشغيل للسكربت وليس قبله','الحماية قبل السكربت تمنع دمج dev في main'],
+ ['r-secrets4','أسرار المستودع الأربعة: KEYSTORE_B64 وKEYSTORE_PASSWORD وKEY_ALIAS وKEY_PASSWORD','بدونها يفشل البناء برسالة واضحة'],
+ ['r-gh','اسم حساب GitHub واسم المستودع المطلوب (خاص)','لأنشئ الهيكل والروابط والـActions بالأسماء الصحيحة'],
+  ['r-appid','معرّف التطبيق النهائي (مثل com.اسمك.اسم)','لا يمكن تغييره لاحقاً دون أن يصبح تطبيقاً جديداً'],
+  ['r-appname','اسم التطبيق بالعربية والإنجليزية كما سيظهر على الهاتف','يدخل ملف الهوية'],
+  ['r-license','نص الترخيص المطلوب لمستودعك','أضعه في الجذر كما تريد، وأقترح «جميع الحقوق محفوظة»'],
+  ['r-keystore','إنشاء ملف التوقيع (keystore) وحفظه نسخاً احتياطية، ووضعه في Secrets','فقدانه يعني ألا يتحدث التطبيق فوق القديم. لا ترسله لي أبداً. سأشرح لك الخطوات'],
+  ['r-rules','قواعدك ومهمتي الأولى','وصلت. القواعد في docs/dev/RULES.md وفي البرومت المشترك، والمهمة سُلّمت في حزمة المستودع'],
+  ['r-run','تشغيل setup-repo.bat ثم تجربة اختبارات المستودع في docs/site/dev/tests.html','هي التي تقول لي هل الهيكل صحيح قبل واجهات التطبيق']
+ ]],
+ ['الهوية والواجهات',[
+  ['r-icon','أيقونة التطبيق والشعار (ملفات)','لن أرسم شعاراً أو شخصية من عمل محمي'],
+  ['r-sfx','ملفات المؤثرات والأوست الحماسي للمقدمة','أنت من يحدد الذوق، وسأجهز لك قائمة بأسماء الملفات المطلوبة ومدتها'],
+  ['r-anim','ملفات الحركة (Lottie أو غيرها) إن وجدت، وإلا أصمم حركة بسيطة بالكود','يحدد حجم عمل الواجهات'],
+  ['r-intro','نص المقدمة كما تريده (أو تفوضني بصياغة أصلية)','حتى لا أخترع كلاماً لا يعجبك'],
+  ['r-squads','أسماء فرق السحر النهائية وألوانها (أصلية أو مستوحاة)','محسوم من يدك لأن الأسماء تدخل الثيمات والاستمارة'],
+  ['r-ranks','ترتيب الرتب والألقاب وعدد المستويات','أحتاجها للشاشات حتى لا أضع أرقاماً وهمية'],
+  ['r-device','طراز هاتفك الذي ستختبر عليه وإصدار أندرويد','أبني بحسب شاشته']
+ ]],
+ ['اللعبة',[
+  ['r-points','جدول المانا: كم لكل نوع مهمة وتمرين وعملية مالية','قيم الإعدادات، وسأضع «غير محدد» حتى تعطيني'],
+  ['r-energy','قيم الطاقة والاستراحة: كم تكلف المهمة وكم تدوم الاستراحة','سؤال مفتوح في قسم الأسئلة'],
+  ['r-prices','أسعار الجليد والدروع والثيمات والمهارات بالنقاط','أضعها في الإعدادات والمتجر'],
+  ['r-raids','قائمة مهمات الغارة الأسبوعية والتحدي الشهري وجوائزهما','تُكتب بيدك أو أقترحها فتوافق'],
+  ['r-starter','المهمات الجاهزة عند البدء','تظهر بعد الاستمارة'],
+  ['r-skills','قائمة المهارات المسجلة أولاً وصفحات تعلمها','تحدد المتجر واختباراته']
+ ]],
+ ['المال والتمارين',[
+  ['r-currency','العملات التي تريد دعمها أولاً','تحدد جدول أسعار الصرف'],
+  ['r-wallets','المحافظ الإلكترونية التي تملكها ونصوص إشعاراتها الحقيقية (قبل الحجب)','لا أخمن صيغ الرسائل أبداً'],
+  ['r-cats','فئات المال التي تريدها','أو أقترح قائمة وتعدلها'],
+  ['r-wrk','موافقتك على مصدر التمارين (wger أو free-exercise-db) وترخيصه','يتحدد منه شكل بياناتها']
+ ]],
+ ['الخادم والحسابات السحابية',[
+  ['r-host','نوع الاستضافة: إصدار PHP وقاعدة البيانات والدومين','أكتب الكود بحسبها'],
+  ['r-google','مشروع في Google Cloud مع تفعيل Drive وتسجيل الدخول (Client ID)','التطبيق لا يتصل بدرايف دونه. سأشرح كل خطوة'],
+  ['r-secrets','أي أسرار (مفاتيح، كلمات سر) توضع في Secrets وملف إعداد خارج المستودع','لا ترسلها في أي محادثة']
+ ]],
+ ['المحتوى',[
+  ['r-books','أول كتب مجانية للمكتبة وروابطها، وروابط الشراء للمدفوعة','بلا كتب لا يمكن اختبار القارئ'],
+  ['r-tests','الاختبارات المسجلة مسبقاً (إن وجدت) وصيغتها','تحدد جدول الاختبارات في الخادم'],
+  ['r-azkar','نصوص الأذكار المعتمدة وقائمتها','أنت من يختار الصيغة، ولا أكتب نصاً دينياً من عندي']
+ ]],
+ ['قرارات معلقة',[
+  ['r-d1','هل توافق على بيانات عينة موسومة داخل نسخة debug فقط لمعاينة الواجهات؟ (وإلا تظهر الشاشات فارغة)','بدونها يصعب الحكم على الشكل. هي لا تدخل نسخة الإصدار أبداً'],
+  ['r-d2','قائمة حزم الميزات في المستودع (أرسلها لك لتوافق)','لتثبيت الهيكل قبل أي كود'],
+  ['r-d3','ربط كود التفعيل بحساب أم جهاز','سؤال مفتوح في قسم الأسئلة']
+ ]]
+];
+var RLS='yousef-plan-reqs-v1', reqs={}, reqDb=null;
+try{reqs=JSON.parse(localStorage.getItem(RLS)||'{}')||{}}catch(e){reqs={}}
+var reqTotal=0; REQS.forEach(function(g){reqTotal+=g[1].length});
+function updReq(){
+  var n=0; REQS.forEach(function(g){g[1].forEach(function(r){if(reqs[r[0]]) n++})});
+  $('#reqTxt').textContent='البنود الجاهزة: '+n+' من '+reqTotal;
+  $('#reqBar').style.width=Math.round(n/reqTotal*100)+'%';
+}
+$('#reqWrap').innerHTML=REQS.map(function(g){
+  return '<div class="box"><h3>'+esc(g[0])+'</h3>'+g[1].map(function(r){
+    return '<label class="dec" style="cursor:pointer"><span><b>'+esc(r[1])+'</b><span class="v">'+esc(r[2])+'</span></span><input type="checkbox" id="'+r[0]+'" style="width:22px;height:22px;flex:0 0 auto;margin-top:4px"'+(reqs[r[0]]?' checked':'')+'></label>';
+  }).join('')+'</div>';
+}).join('');
+$('#reqWrap').addEventListener('change',function(e){
+  var c=e.target; if(c.type!=='checkbox') return;
+  reqs[c.id]=c.checked; updReq();
+  try{localStorage.setItem(RLS,JSON.stringify(reqs))}catch(x){}
+  if(reqDb) reqDb.doc('reqs/'+c.id).set({done:c.checked,updatedAt:Date.now()}).catch(function(){});
+});
+updReq();
+if(window.claude&&window.claude.use){
+  window.claude.use('db').then(function(d){
+    if(!d) return;
+    reqDb=d;
+    d.collection('reqs').get().then(function(snap){
+      snap.docs.forEach(function(doc){
+        var v=doc.data(), el=document.getElementById(doc.id);
+        if(v&&el){reqs[doc.id]=!!v.done; el.checked=!!v.done}
+      });
+      updReq();
+    }).catch(function(){});
+  }).catch(function(){});
+}
+
+/* ---------- routing ---------- */
+var VIEWS=['idea','features','refs','tech','sources','questions','prompts','reqs','plan'];
+function route(){
+  var h=location.hash.slice(1); if(VIEWS.indexOf(h)<0) h='idea';
+  VIEWS.forEach(function(v){$('#v-'+v).hidden=(v!==h)});
+  document.querySelectorAll('#tabs a').forEach(function(a){
+    if(a.getAttribute('href')==='#'+h) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+  });
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+route();
+</script>
+
+</body></html>
