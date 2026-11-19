@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.yousuf.toolkit.R
+import com.yousefalhmzy.ydimension.R
 
 private val teams = listOf(
     R.string.team_black_bull,
