@@ -7,13 +7,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import core.config.AppConfig
+import core.security.VaultCrypto
 import domain.model.Book
 import domain.model.JournalEntry
 import domain.model.LearnItem
 import domain.model.Ledger
+import domain.model.NotifEntry
 import domain.model.Priority
 import domain.model.SleepLog
 import domain.model.Task
+import domain.model.VaultNote
+import domain.model.Wallet
 import domain.model.Workout
 import domain.model.prayerKeys
 import org.json.JSONArray
@@ -21,6 +25,7 @@ import org.json.JSONObject
 import java.io.File
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.util.concurrent.Executors
 
@@ -69,6 +74,32 @@ class Store(context: Context) {
     var profileTeam by mutableStateOf("")
         private set
     var joinedAt by mutableStateOf(0L)
+        private set
+    var wallets by mutableStateOf<List<Wallet>>(emptyList())
+        private set
+    var notifications by mutableStateOf<List<NotifEntry>>(emptyList())
+        private set
+    var vault by mutableStateOf<List<VaultNote>>(emptyList())
+        private set
+    var blockedApps by mutableStateOf<Set<String>>(emptySet())
+        private set
+    var blockerOn by mutableStateOf(false)
+        private set
+    var blockStart by mutableStateOf(22 * 60)
+        private set
+    var blockEnd by mutableStateOf(6 * 60)
+        private set
+    var blockedDomains by mutableStateOf<List<String>>(emptyList())
+        private set
+    var serverUrl by mutableStateOf(config.apiBase)
+        private set
+    var authToken by mutableStateOf("")
+        private set
+    var accountId by mutableStateOf(0L)
+        private set
+    var accountName by mutableStateOf("")
+        private set
+    var accountEmail by mutableStateOf("")
         private set
     private var faithDays by mutableStateOf<Set<String>>(emptySet())
     private var sleepDays by mutableStateOf<Set<String>>(emptySet())
@@ -126,6 +157,136 @@ class Store(context: Context) {
     fun rest() {
         ensureDay()
         energy = (energy + config.restGain).coerceAtMost(config.energyMax)
+        save()
+    }
+
+    fun addWallet(name: String, initial: Double = 0.0) {
+        if (name.isBlank() || initial < 0.0) return
+        wallets = wallets + Wallet(nextId(), name.trim(), initial)
+        save()
+    }
+
+    fun deleteWallet(id: Long) {
+        wallets = wallets.filterNot { it.id == id }
+        save()
+    }
+
+    fun deposit(id: Long, amount: Double) {
+        if (amount <= 0.0) return
+        wallets = wallets.map { if (it.id == id) it.copy(balance = it.balance + amount) else it }
+        save()
+    }
+
+    fun withdraw(id: Long, amount: Double): Boolean {
+        if (amount <= 0.0) return false
+        val wallet = wallets.firstOrNull { it.id == id } ?: return false
+        if (wallet.balance < amount) return false
+        wallets = wallets.map { if (it.id == id) it.copy(balance = it.balance - amount) else it }
+        save()
+        return true
+    }
+
+    fun addNotification(pkg: String, title: String, text: String) {
+        if (title.isBlank() && text.isBlank()) return
+        notifications = (
+            listOf(
+                NotifEntry(
+                    nextId(),
+                    pkg,
+                    title.take(160),
+                    text.take(400),
+                    System.currentTimeMillis()
+                )
+            ) + notifications
+            ).take(200)
+        save()
+    }
+
+    fun clearNotifications() {
+        notifications = emptyList()
+        save()
+    }
+
+    fun addVault(title: String, body: String): Boolean {
+        if (title.isBlank() && body.isBlank()) return false
+        val plain = JSONObject().put("t", title).put("b", body).toString()
+        val payload = VaultCrypto.encrypt(plain) ?: return false
+        vault = listOf(VaultNote(nextId(), payload, System.currentTimeMillis())) + vault
+        save()
+        return true
+    }
+
+    fun deleteVault(id: Long) {
+        vault = vault.filterNot { it.id == id }
+        save()
+    }
+
+    fun vaultText(note: VaultNote): Pair<String, String>? {
+        val plain = VaultCrypto.decrypt(note.payload) ?: return null
+        val obj = runCatching { JSONObject(plain) }.getOrNull() ?: return null
+        return obj.optString("t") to obj.optString("b")
+    }
+
+    fun setBlocker(on: Boolean) {
+        blockerOn = on
+        save()
+    }
+
+    fun setBlockWindow(startMinutes: Int, endMinutes: Int) {
+        blockStart = startMinutes.coerceIn(0, 1439)
+        blockEnd = endMinutes.coerceIn(0, 1439)
+        save()
+    }
+
+    fun toggleBlockedApp(pkg: String) {
+        if (pkg.isBlank()) return
+        blockedApps = if (pkg in blockedApps) blockedApps - pkg else blockedApps + pkg
+        save()
+    }
+
+    fun isBlockingNow(): Boolean {
+        if (!blockerOn || blockedApps.isEmpty()) return false
+        val minute = LocalTime.now().let { it.hour * 60 + it.minute }
+        return when {
+            blockStart == blockEnd -> true
+            blockStart < blockEnd -> minute in blockStart until blockEnd
+            else -> minute >= blockStart || minute < blockEnd
+        }
+    }
+
+    fun addDomain(value: String) {
+        val domain = value.trim().lowercase()
+            .removePrefix("https://")
+            .removePrefix("http://")
+            .substringBefore('/')
+        if (domain.isBlank() || domain in blockedDomains) return
+        blockedDomains = blockedDomains + domain
+        save()
+    }
+
+    fun deleteDomain(value: String) {
+        blockedDomains = blockedDomains - value
+        save()
+    }
+
+    fun saveServerUrl(value: String) {
+        serverUrl = value.trim().trimEnd('/')
+        save()
+    }
+
+    fun saveAccount(token: String, id: Long, name: String, email: String) {
+        authToken = token
+        accountId = id
+        accountName = name
+        accountEmail = email
+        save()
+    }
+
+    fun logout() {
+        authToken = ""
+        accountId = 0L
+        accountName = ""
+        accountEmail = ""
         save()
     }
 
@@ -331,6 +492,45 @@ class Store(context: Context) {
         root.put("profileGoal", profileGoal)
         root.put("profileTeam", profileTeam)
         root.put("joinedAt", joinedAt)
+        root.put("serverUrl", serverUrl)
+        root.put("authToken", authToken)
+        root.put("accountId", accountId)
+        root.put("accountName", accountName)
+        root.put("accountEmail", accountEmail)
+        root.put("blockerOn", blockerOn)
+        root.put("blockStart", blockStart)
+        root.put("blockEnd", blockEnd)
+        root.put("wallets", JSONArray().apply {
+            wallets.forEach { w ->
+                put(JSONObject().apply {
+                    put("id", w.id)
+                    put("name", w.name)
+                    put("balance", w.balance)
+                })
+            }
+        })
+        root.put("notifications", JSONArray().apply {
+            notifications.forEach { n ->
+                put(JSONObject().apply {
+                    put("id", n.id)
+                    put("pkg", n.pkg)
+                    put("title", n.title)
+                    put("text", n.text)
+                    put("at", n.at)
+                })
+            }
+        })
+        root.put("vault", JSONArray().apply {
+            vault.forEach { v ->
+                put(JSONObject().apply {
+                    put("id", v.id)
+                    put("payload", v.payload)
+                    put("at", v.at)
+                })
+            }
+        })
+        root.put("blockedApps", JSONArray().apply { blockedApps.forEach { put(it) } })
+        root.put("blockedDomains", JSONArray().apply { blockedDomains.forEach { put(it) } })
 
         root.put("tasks", JSONArray().apply {
             tasks.forEach { t ->
@@ -433,6 +633,18 @@ class Store(context: Context) {
         }
     }
 
+    companion object {
+        @Volatile
+        private var shared: Store? = null
+
+        fun of(context: Context): Store {
+            shared?.let { return it }
+            return synchronized(this) {
+                shared ?: Store(context.applicationContext).also { shared = it }
+            }
+        }
+    }
+
     private fun read() {
         if (!file.exists()) return
         try {
@@ -448,6 +660,39 @@ class Store(context: Context) {
             profileGoal = root.optString("profileGoal", "")
             profileTeam = root.optString("profileTeam", "")
             joinedAt = root.optLong("joinedAt", 0L)
+            serverUrl = root.optString("serverUrl", config.apiBase)
+            authToken = root.optString("authToken", "")
+            accountId = root.optLong("accountId", 0L)
+            accountName = root.optString("accountName", "")
+            accountEmail = root.optString("accountEmail", "")
+            blockerOn = root.optBoolean("blockerOn", false)
+            blockStart = root.optInt("blockStart", 22 * 60).coerceIn(0, 1439)
+            blockEnd = root.optInt("blockEnd", 6 * 60).coerceIn(0, 1439)
+            wallets = root.optJSONArray("wallets").mapObjects {
+                Wallet(
+                    id = it.optLong("id"),
+                    name = it.optString("name"),
+                    balance = it.optDouble("balance", 0.0)
+                )
+            }
+            notifications = root.optJSONArray("notifications").mapObjects {
+                NotifEntry(
+                    id = it.optLong("id"),
+                    pkg = it.optString("pkg"),
+                    title = it.optString("title"),
+                    text = it.optString("text"),
+                    at = it.optLong("at")
+                )
+            }
+            vault = root.optJSONArray("vault").mapObjects {
+                VaultNote(
+                    id = it.optLong("id"),
+                    payload = it.optString("payload"),
+                    at = it.optLong("at")
+                )
+            }
+            blockedApps = root.stringSet("blockedApps")
+            blockedDomains = root.optJSONArray("blockedDomains").strings()
 
             tasks = root.optJSONArray("tasks").mapObjects {
                 Task(
@@ -552,6 +797,13 @@ private fun JSONObject?.toSetMap(): Map<String, Set<String>> {
         for (i in 0 until arr.length()) set.add(arr.optString(i))
         out[key] = set
     }
+    return out
+}
+
+private fun JSONArray?.strings(): List<String> {
+    if (this == null) return emptyList()
+    val out = ArrayList<String>(length())
+    for (i in 0 until length()) out.add(optString(i))
     return out
 }
 
