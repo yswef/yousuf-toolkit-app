@@ -140,20 +140,60 @@ ol.road p{color:var(--muted); font-size:.95rem}
 .status{font-size:.88rem; color:var(--muted)}
 #exportBox{display:none}
 #exportBox.on{display:block}
+
+/* review workspace */
+.review-head{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.check-app{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.check-app h3{font-size:1.08rem;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.check-app .app-links{display:flex;gap:10px;flex-wrap:wrap;font-size:.86rem}
+.check-app .app-links a{font-weight:600}
+.check-line{display:flex;gap:9px;align-items:flex-start;padding:5px 0;line-height:1.6;cursor:pointer}
+.check-line input{width:19px;height:19px;flex:0 0 auto;margin-top:3px;accent-color:var(--green)}
+.check-line small{color:var(--muted)}
+.check-line.done span{text-decoration:line-through;color:var(--muted)}
+.badge-paid{background:var(--warn-soft);color:var(--warn);border-radius:99px;padding:1px 8px;font-size:.72rem;font-weight:600;white-space:nowrap}
+.badge-own{background:var(--surface2);color:var(--muted);border-radius:99px;padding:1px 8px;font-size:.72rem;white-space:nowrap}
+.check-group{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:12px 14px;margin-bottom:10px}
+.check-group>summary{cursor:pointer;font-weight:600;color:var(--gold)}
+.check-group .grid{padding-top:10px}
+.note-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:700px){.note-form{grid-template-columns:1fr}}
+.field{width:100%;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+select.field{min-height:44px}
+.note-card{background:var(--surface);border:1px solid var(--line);border-right:4px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:7px}
+.note-card[data-type="ui"]{border-right-color:var(--warn)}
+.note-card[data-type="func"]{border-right-color:var(--gold)}
+.note-card[data-type="missing"]{border-right-color:var(--green)}
+.note-card[data-type="paid"]{border-right-color:#9a741f}
+.note-card[data-type="suggest"]{border-right-color:#2f6f9a}
+.note-card .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.82rem;color:var(--muted)}
+.note-card p{white-space:pre-wrap;overflow-wrap:anywhere}
+.note-card .row-actions{display:flex;justify-content:flex-end}
+.mini{font-size:.85rem;padding:5px 12px}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.note-group{margin-top:14px}
+.note-group>h3{color:var(--gold);margin-bottom:8px;font-size:1.12rem}
+.fallback{display:none;margin-top:8px}
+.fallback.on{display:block}
+.grow{flex:1 1 220px}
+.pill.p-paid{background:var(--warn-soft);color:var(--warn)}
+.strike-note{font-size:.86rem;color:var(--muted)}
+ol.road li.done h3,ol.road li.done p{text-decoration:line-through;text-decoration-thickness:2px;opacity:.58}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div id="app" dir="rtl" lang="ar">
 <div style="margin:18px 0;padding:14px 16px;border:1px solid var(--gold);background:var(--gold-soft);border-radius:14px">
-<b>تحديث 2026-11-19:</b> سُلّمت المراحل 5 و6 و7 ثم الواجهة الموحّدة في <b>v0.9.0-test.1</b>. بقي صفر مراحل أساسية، والمتبقي بنود ما بعد التمويل.
+<b>تحديث 2026-11-19:</b> سُلّمت المراحل 5–7 ثم الواجهة الموحّدة في <b>v0.9.0-test.1</b>. بقي صفر مراحل أساسية. استخدم <b>قائمة التحقق</b> لمقارنة التطبيقات، و<b>ملاحظاتي</b> لتسجيل كل ملاحظة ونسخها.
 </div>
   <div class="top">
     <div class="brand">
       <h1>كل ما يحتاجه يوسف</h1>
-      <p>خطة التطبيق، الخطوة الأولى: تنظيم الفكرة للمراجعة</p>
+      <p>خطة التطبيق كاملة: مراجعة، مقارنة، اقتراحات، وملاحظات</p>
     </div>
     <div class="meter" aria-live="polite">
-      <span id="meterTxt">الأسئلة المجاب عنها: 0</span>
+      <span id="meterTxt">قائمة التحقق: 0 من 0</span>
       <div class="bar"><i id="meterBar"></i></div>
     </div>
   </div>
@@ -161,11 +201,13 @@ ol.road p{color:var(--muted); font-size:.95rem}
     <a href="#idea">الفكرة</a>
     <a href="#features">المميزات</a>
     <a href="#refs">التطبيقات المرجعية</a>
+    <a href="#checklist">قائمة التحقق</a>
+    <a href="#paid">المدفوعة</a>
     <a href="#tech">التقنية</a>
     <a href="#sources">المصادر</a>
-    <a href="#questions">الأسئلة</a>
     <a href="#prompts">البرومتات</a>
-    <a href="#reqs">المتطلبات منك</a>
+    <a href="#suggestions">الاقتراحات</a>
+    <a href="#notes">ملاحظاتي</a>
     <a href="#plan">الخطوات</a>
   </nav>
 
@@ -306,10 +348,99 @@ ol.road p{color:var(--muted); font-size:.95rem}
       <div id="reqWrap" class="sec"></div>
     </section>
 
+    <!-- CHECKLIST -->
+    <section id="v-checklist" class="sec" hidden>
+      <h2>قائمة التحقق</h2>
+      <p class="lead">هذه هي مساحة المراجعة. حمّل كل تطبيق مرجعي، جرّب مميزاته، وعلّم ما تحققت منه بنفسك. تحت كل تطبيق المميزات التي استوحيناها منه، وبعدها مميزات تطبيقك الأخرى. كل التعليمات تُحفظ في هذا المتصفح.</p>
+      <div class="box">
+        <div class="review-head">
+          <b id="checkProgress">0 من 0</b>
+          <span class="count" id="checkHint">ابدأ من التطبيقات المرجعية</span>
+        </div>
+        <div class="chips" id="checkFilters">
+          <button class="chip" data-cf="all" aria-pressed="true">الكل</button>
+          <button class="chip" data-cf="open" aria-pressed="false">غير المحدد</button>
+          <button class="chip" data-cf="done" aria-pressed="false">ما تحقق</button>
+        </div>
+        <div class="actions">
+          <button class="btn ghost mini" id="checkReset">مسح كل التحديد</button>
+          <span class="status" id="checkStatus"></span>
+        </div>
+      </div>
+      <h3>التطبيقات المرجعية</h3>
+      <p class="count">كل بطاقة: زر «حمّلت وجرّبت»، ثم قائمة المميزات التي أخذناها منه.</p>
+      <div id="checkApps" class="grid"></div>
+      <h3>مميزات التطبيق الأخرى</h3>
+      <p class="count">هذه مميزاتنا التي لم تُنسب لتطبيق واحد. علّم ما تراه موجوداً فعلاً أو ما تريد إبقاءه.</p>
+      <div id="checkOwn"></div>
+    </section>
+
+    <!-- PAID -->
+    <section id="v-paid" class="sec" hidden>
+      <h2>المميزات المدفوعة</h2>
+      <p class="lead">هنا كل ما يرتبط بالدفع أو الشراء: الميزات التي تُشترى بالنقاط، والكتب المدفوعة، والمتجر، ومفتاح الشراء مدى الحياة. الشراء بالنقاط ليس دفعاً نقدياً، فوضّح في ملاحظاتك أي ميزة تريدها بمفتاح مدى الحياة.</p>
+      <div class="box note">
+        <h3>قرارك الحالي</h3>
+        <p>ميزات مجانية وأخرى مدفوعة، ومفتاح شراء مدى الحياة يفتح كل المدفوع، والتحكم من اللوحة.</p>
+      </div>
+      <div id="paidWrap" class="grid"></div>
+      <div class="box">
+        <h3>ملاحظة شراء</h3>
+        <textarea id="paidNote" class="field" placeholder="ما رأيك في الأسعار أو ما الذي يجب أن يبقى مجانياً؟"></textarea>
+        <div class="actions"><button class="btn" id="savePaidNote">حفظ الملاحظة</button><span class="status" id="paidStatus"></span></div>
+      </div>
+    </section>
+
+    <!-- SUGGESTIONS -->
+    <section id="v-suggestions" class="sec" hidden>
+      <h2>اقتراحات لمميزات جديدة</h2>
+      <p class="lead">أضف أي فكرة جديدة تريدها في التطبيق، حتى لو لم تكن في التطبيقات المرجعية. كل اقتراح يُحفظ هنا ويمكن نسخه كله.</p>
+      <div class="box">
+        <div class="note-form">
+          <input type="text" id="sugTitle" class="field" placeholder="اسم الميزة المقترحة">
+          <select id="sugSection" class="field" aria-label="قسم الاقتراح"></select>
+        </div>
+        <textarea id="sugText" class="field" placeholder="اشرح الفكرة: ماذا تفعل؟ ولماذا تحتاجها؟"></textarea>
+        <div class="actions">
+          <button class="btn" id="addSug">إضافة الاقتراح</button>
+          <button class="btn ghost" id="copySug">نسخ كل الاقتراحات</button>
+          <span class="status" id="sugStatus"></span>
+        </div>
+        <textarea id="sugFallback" class="field fallback" readonly aria-label="الاقتراحات المنسوخة"></textarea>
+      </div>
+      <h3 id="sugCount">لا اقتراحات بعد</h3>
+      <div id="sugList"></div>
+    </section>
+
+    <!-- NOTES -->
+    <section id="v-notes" class="sec" hidden>
+      <h2>ملاحظاتي</h2>
+      <p class="lead">سجّل كل ملاحظة لحالها: اختر التصنيف والقسم، اكتب ملاحظتك، ثم أضفها. الترتيب تلقائي: مشاكل الواجهة أولاً، ثم مشاكل التطبيق، ثم المميزات الناقصة، ثم الباقي. عند الانتهاء انسخ كل الملاحظات بضغطة واحدة.</p>
+      <div class="box">
+        <div class="note-form">
+          <select id="noteType" class="field" aria-label="تصنيف الملاحظة"></select>
+          <select id="noteSection" class="field" aria-label="قسم الملاحظة"></select>
+        </div>
+        <textarea id="noteText" class="field" placeholder="اكتب الملاحظة بالتفصيل: ما المشكلة؟ وأين ظهرت؟"></textarea>
+        <div class="actions">
+          <button class="btn" id="addNote">إضافة الملاحظة</button>
+          <button class="btn ghost" id="copyNotes">نسخ كل الملاحظات</button>
+          <span class="status" id="noteStatus"></span>
+        </div>
+        <textarea id="notesFallback" class="field fallback" readonly aria-label="الملاحظات المنسوخة"></textarea>
+      </div>
+      <div class="review-head">
+        <h3 id="notesCount">لا ملاحظات بعد</h3>
+        <span class="count">الترتيب: واجهة ← مشاكل ← ناقص ← مدفوع ← اقتراح ← أخرى</span>
+      </div>
+      <div id="notesList"></div>
+    </section>
+
     <!-- PLAN -->
+
     <section id="v-plan" class="sec" hidden>
-      <h2>الخطوات القادمة</h2>
-      <p class="lead">الترتيب هنا حقيقي، فكل خطوة تعتمد على التي قبلها. قل لي «ابدأ الخطوة 2» حين تنتهي من مراجعة الصفحة.</p>
+      <h2>الخطوات</h2>
+      <p class="lead">المكتمل مشطوب. راجع ما بقي ثم انتقل إلى المراجعة والملاحظات.</p>
       <ol class="road" id="road"></ol>
     </section>
   </main>
@@ -1073,7 +1204,7 @@ if(window.claude&&window.claude.use){
 }
 
 /* ---------- routing ---------- */
-var VIEWS=['idea','features','refs','tech','sources','questions','prompts','reqs','plan'];
+var VIEWS=['idea','features','refs','checklist','paid','tech','sources','prompts','suggestions','notes','plan'];
 function route(){
   var h=location.hash.slice(1); if(VIEWS.indexOf(h)<0) h='idea';
   VIEWS.forEach(function(v){$('#v-'+v).hidden=(v!==h)});
@@ -1084,6 +1215,372 @@ function route(){
 }
 window.addEventListener('hashchange',route);
 route();
+document.getElementById('v-questions').style.display='none';
+document.getElementById('v-reqs').style.display='none';
+document.getElementById('v-questions').setAttribute('aria-hidden','true');
+document.getElementById('v-reqs').setAttribute('aria-hidden','true');
+</script>
+
+<script>
+/* ---------- review workspace: checklist, paid, suggestions, notes ---------- */
+var CHECK_KEY='yousef-plan-checklist-v1';
+var PAY_KEY='yousef-plan-paid-v1';
+var NOTE_KEY='yousef-plan-notes-v1';
+var SUG_KEY='yousef-plan-suggestions-v1';
+var PAID_NOTE_KEY='yousef-plan-paid-note-v1';
+
+function lsGet(key,fallback){
+  try{var v=JSON.parse(localStorage.getItem(key)); return v===null||v===undefined?fallback:v}catch(e){return fallback}
+}
+function lsSet(key,value){try{localStorage.setItem(key,JSON.stringify(value))}catch(e){}}
+
+var checkState=lsGet(CHECK_KEY,{})||{};
+var payState=lsGet(PAY_KEY,{})||{};
+var planNotes=lsGet(NOTE_KEY,[])||[];
+var planSuggestions=lsGet(SUG_KEY,[])||[];
+if(!Array.isArray(planNotes)) planNotes=[];
+if(!Array.isArray(planSuggestions)) planSuggestions=[];
+var checkFilter='all';
+
+var PLAN_SECTIONS=[
+  ['path','المسار'],['stats','الإحصائيات'],['tools','الأدوات'],['account','حسابي'],
+  ['tasks','المهام'],['money','المال'],['workouts','التمارين'],['journal','المذكرات'],
+  ['water','الماء'],['sleep','النوم'],['faith','الروحانيات'],['learn','التعلم'],
+  ['library','الكتب'],['game','اللعبة'],['raids','الغارات'],['shop','المتجر'],
+  ['wallets','المحافظ'],['device','أدوات الجهاز'],['server','الخادم'],['updates','التحديثات'],['general','عام']
+];
+var NOTE_TYPES=[
+  ['ui','مشكلة واجهة'],['func','مشكلة في التطبيق'],['missing','ميزة ناقصة'],
+  ['paid','ميزة مدفوعة/سعر'],['suggest','اقتراح تحسين'],['other','ملاحظات أخرى']
+];
+
+function secLabel(key){
+  for(var i=0;i<PLAN_SECTIONS.length;i++){if(PLAN_SECTIONS[i][0]===key) return PLAN_SECTIONS[i][1]}
+  return 'عام';
+}
+function secRank(key){
+  for(var i=0;i<PLAN_SECTIONS.length;i++){if(PLAN_SECTIONS[i][0]===key) return i}
+  return 999;
+}
+function typeLabel(key){
+  for(var i=0;i<NOTE_TYPES.length;i++){if(NOTE_TYPES[i][0]===key) return NOTE_TYPES[i][1]}
+  return 'ملاحظة';
+}
+function fillSections(el){
+  if(!el) return;
+  el.innerHTML=PLAN_SECTIONS.map(function(s){return '<option value="'+esc(s[0])+'">'+esc(s[1])+'</option>'}).join('');
+}
+fillSections(document.getElementById('noteSection'));
+fillSections(document.getElementById('sugSection'));
+
+var noteTypeEl=document.getElementById('noteType');
+if(noteTypeEl) noteTypeEl.innerHTML=NOTE_TYPES.map(function(t){return '<option value="'+esc(t[0])+'">'+esc(t[1])+'</option>'}).join('');
+
+function isPaidFeature(f){
+  if(f[3]==='later') return false;
+  if(/المشتريات المرغوبة|تحديث فوق القديم/.test(f[1])) return false;
+  var text=(f[1]+' '+f[2]+' '+f[5]).toLowerCase();
+  return /مدفوع|مدفوعة|شراء|تشتري|يُشترى|اشتراك|سعر|دفع|مفتاح|المتجر|سحر الجليد|الكتب المدفوعة|ثيمات|تكسبها وتصرفها/.test(text);
+}
+
+function allCheckIds(){
+  var ids=[];
+  REFS.forEach(function(r,i){
+    ids.push('app:'+i+':installed'); ids.push('app:'+i+':compared');
+    r[1].forEach(function(x,j){ids.push('app:'+i+':f:'+j)});
+  });
+  F.forEach(function(f,i){ids.push('own:'+i)});
+  return ids;
+}
+function updateCheckProgress(){
+  var ids=allCheckIds(), done=0;
+  ids.forEach(function(id){if(checkState[id]) done++});
+  var txt=document.getElementById('checkProgress');
+  if(txt) txt.textContent=done+' من '+ids.length;
+  var hint=document.getElementById('checkHint');
+  if(hint) hint.textContent=ids.length?Math.round(done/ids.length*100)+'% مكتمل':'';
+  var meter=document.getElementById('meterTxt');
+  if(meter) meter.textContent='قائمة التحقق: '+done+' من '+ids.length;
+  var bar=document.getElementById('meterBar');
+  if(bar) bar.style.width=(ids.length?Math.round(done/ids.length*100):0)+'%';
+}
+function passFilter(checked,paid){
+  if(checkFilter==='open') return !checked;
+  if(checkFilter==='done') return !!checked;
+  return true;
+}
+function featureLine(id,text,paid,extra){
+  var checked=!!checkState[id];
+  if(!passFilter(checked,paid)) return '';
+  return '<label class="check-line'+(checked?' done':'')+'" data-check-line data-checked="'+(checked?'1':'0')+'" data-paid="'+(paid?'1':'0')+'">'+
+    '<input type="checkbox" data-check="'+esc(id)+'"'+(checked?' checked':'')+'>'+
+    '<span>'+esc(text)+(paid?' <span class="badge-paid">مدفوع/شراء</span>':'')+(extra?' <small>'+extra+'</small>':'')+'</span></label>';
+}
+function ownLine(i){
+  var f=F[i], id='own:'+i, checked=!!checkState[id], paid=isPaidFeature(f);
+  if(!passFilter(checked,paid)) return '';
+  return '<label class="check-line'+(checked?' done':'')+'" data-check-line data-checked="'+(checked?'1':'0')+'" data-paid="'+(paid?'1':'0')+'">'+
+    '<input type="checkbox" data-check="'+esc(id)+'"'+(checked?' checked':'')+'>'+
+    '<span><b>'+esc(f[1])+'</b>'+(paid?' <span class="badge-paid">مدفوع/شراء</span>':'')+'<br><small>'+esc(f[2])+'</small></span></label>';
+}
+function renderCheckApps(){
+  var wrap=document.getElementById('checkApps');
+  if(!wrap) return;
+  var html='';
+  REFS.forEach(function(r,i){
+    var lines='';
+    lines+=featureLine('app:'+i+':installed','حمّلت التطبيق وجرّبته',false,'');
+    lines+=featureLine('app:'+i+':compared','قارنت المميزات وحددت الفرق',false,'');
+    r[1].forEach(function(x,j){lines+=featureLine('app:'+i+':f:'+j,x,false,'')});
+    if(!lines) return;
+    var q=encodeURIComponent(r[0].replace(/\([^)]*\)/g,'').trim());
+    html+='<article class="check-app">'+
+      '<h3><span>'+esc(r[0])+'</span><span class="badge-own">'+esc(r[1].length)+' ميزة</span></h3>'+
+      '<div class="app-links">'+
+        '<a href="https://play.google.com/store/search?q='+q+'&c=apps" target="_blank" rel="noopener">ابحث عنه في المتجر</a>'+
+        (r[5]?'<a href="'+esc(r[5])+'" target="_blank" rel="noopener">المصدر: '+esc(r[4])+'</a>':'')+
+      '</div>'+
+      lines+
+      '<details><summary>ما نتجنبه وكيف غطيناه</summary>'+
+        '<p><b>نتجنب:</b> '+esc(r[2].join('، '))+'</p>'+
+        '<p><b>عندنا:</b> '+esc(r[3])+'</p>'+
+        (r[6]?'<p class="count">'+esc(r[6])+'</p>':'')+
+      '</details>'+
+    '</article>';
+  });
+  wrap.innerHTML=html||'<div class="empty" style="grid-column:1/-1">لا تطبيقات بهذا الفلتر</div>';
+}
+function renderCheckOwn(){
+  var wrap=document.getElementById('checkOwn');
+  if(!wrap) return;
+  var html='';
+  MODS.forEach(function(m){
+    var rows='';
+    F.forEach(function(f,i){if(f[0]===m[0]) rows+=ownLine(i)});
+    if(!rows) return;
+    html+='<details class="check-group"><summary>'+esc(m[1])+'</summary><div>'+rows+'</div></details>';
+  });
+  wrap.innerHTML=html||'<div class="empty">لا مميزات بهذا الفلتر</div>';
+}
+function renderChecklist(){
+  renderCheckApps();
+  renderCheckOwn();
+  updateCheckProgress();
+}
+
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t && t.getAttribute && t.getAttribute('data-check')){
+    var id=t.getAttribute('data-check');
+    checkState[id]=!!t.checked;
+    lsSet(CHECK_KEY,checkState);
+    var line=t.closest('.check-line');
+    if(line){line.classList.toggle('done',!!t.checked);line.setAttribute('data-checked',t.checked?'1':'0')}
+    updateCheckProgress();
+  }
+  if(t && t.getAttribute && t.getAttribute('data-pay')){
+    payState[t.getAttribute('data-pay')]=!!t.checked;
+    lsSet(PAY_KEY,payState);
+    var status=document.getElementById('paidStatus');
+    if(status) status.textContent='حُفظ الاختيار';
+  }
+});
+var checkFilters=document.getElementById('checkFilters');
+if(checkFilters){
+  checkFilters.addEventListener('click',function(e){
+    var b=e.target.closest('[data-cf]'); if(!b) return;
+    checkFilter=b.getAttribute('data-cf');
+    checkFilters.querySelectorAll('[data-cf]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+    renderChecklist();
+  });
+}
+var checkReset=document.getElementById('checkReset');
+if(checkReset){
+  checkReset.addEventListener('click',function(){
+    if(!confirm('مسح كل علامات قائمة التحقق؟')) return;
+    checkState={}; lsSet(CHECK_KEY,checkState);
+    var st=document.getElementById('checkStatus'); if(st) st.textContent='مُسح التحديد';
+    renderChecklist();
+  });
+}
+
+/* paid tab */
+function renderPaid(){
+  var wrap=document.getElementById('paidWrap');
+  if(!wrap) return;
+  var html='';
+  F.forEach(function(f,i){
+    if(!isPaidFeature(f)) return;
+    var id='pay:'+i, checked=!!payState[id];
+    html+='<article class="check-app"><h3><span>'+esc(f[1])+'</span><span class="badge-paid">مدفوع/شراء</span></h3>'+
+      '<p class="count">'+esc(secLabel(f[0]))+' · '+esc(f[2])+'</p>'+
+      '<label class="check-line'+(checked?' done':'')+'"><input type="checkbox" data-pay="'+esc(id)+'"'+(checked?' checked':'')+'><span>أريده مدفوعاً أو بمفتاح مدى الحياة</span></label>'+
+    '</article>';
+  });
+  wrap.innerHTML=html||'<div class="empty">لا مميزات مدفوعة في القائمة</div>';
+}
+var paidNote=document.getElementById('paidNote');
+if(paidNote) paidNote.value=lsGet(PAID_NOTE_KEY,'')||'';
+var savePaidNote=document.getElementById('savePaidNote');
+if(savePaidNote){
+  savePaidNote.addEventListener('click',function(){
+    lsSet(PAID_NOTE_KEY,paidNote.value.trim());
+    var st=document.getElementById('paidStatus'); if(st) st.textContent='حُفظت الملاحظة';
+  });
+}
+
+/* notes */
+function noteCard(n){
+  return '<article class="note-card" data-type="'+esc(n.type)+'">'+
+    '<div class="meta"><span class="pill p-core">'+esc(typeLabel(n.type))+'</span><span>'+esc(secLabel(n.section))+'</span><time>'+esc(new Date(n.at).toLocaleString('ar'))+'</time></div>'+
+    '<p>'+esc(n.text)+'</p>'+
+    '<div class="row-actions"><button class="btn ghost mini" data-del-note="'+esc(n.id)+'">حذف</button></div>'+
+  '</article>';
+}
+function renderNotes(){
+  var wrap=document.getElementById('notesList');
+  var count=document.getElementById('notesCount');
+  if(!wrap) return;
+  if(count) count.textContent=planNotes.length?planNotes.length+' ملاحظة':'لا ملاحظات بعد';
+  var html='';
+  NOTE_TYPES.forEach(function(t){
+    var items=planNotes.filter(function(n){return n.type===t[0]}).sort(function(a,b){
+      return (secRank(a.section)-secRank(b.section))||(a.at-b.at);
+    });
+    if(!items.length) return;
+    html+='<div class="note-group"><h3>'+esc(t[1])+' ('+items.length+')</h3>'+items.map(noteCard).join('')+'</div>';
+  });
+  wrap.innerHTML=html||'<div class="empty">ابدأ بإضافة أول ملاحظة بالأعلى.</div>';
+}
+function buildNotesText(){
+  var out=['ملاحظات التطبيق — '+new Date().toLocaleDateString('ar'),''];
+  NOTE_TYPES.forEach(function(t){
+    var items=planNotes.filter(function(n){return n.type===t[0]}).sort(function(a,b){
+      return (secRank(a.section)-secRank(b.section))||(a.at-b.at);
+    });
+    if(!items.length) return;
+    out.push('== '+t[1]+' ==');
+    items.forEach(function(n){out.push('['+secLabel(n.section)+'] '+n.text)});
+    out.push('');
+  });
+  return out.join('\n');
+}
+function copyBlock(text,statusEl,fallbackEl){
+  function fallback(){
+    if(fallbackEl){fallbackEl.value=text;fallbackEl.classList.add('on');fallbackEl.focus();fallbackEl.select()}
+    if(statusEl) statusEl.textContent='حدد النص وانسخه يدوياً';
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){if(statusEl) statusEl.textContent='تم النسخ'}).catch(fallback);
+  } else fallback();
+}
+var addNote=document.getElementById('addNote');
+if(addNote){
+  addNote.addEventListener('click',function(){
+    var text=document.getElementById('noteText').value.trim();
+    var st=document.getElementById('noteStatus');
+    if(!text){if(st) st.textContent='اكتب الملاحظة أولاً'; return}
+    planNotes.push({
+      id:String(Date.now())+Math.random().toString(16).slice(2,7),
+      type:document.getElementById('noteType').value,
+      section:document.getElementById('noteSection').value,
+      text:text,
+      at:Date.now()
+    });
+    lsSet(NOTE_KEY,planNotes);
+    document.getElementById('noteText').value='';
+    if(st) st.textContent='أُضيفت الملاحظة';
+    renderNotes();
+  });
+}
+var copyNotes=document.getElementById('copyNotes');
+if(copyNotes){
+  copyNotes.addEventListener('click',function(){
+    if(!planNotes.length){var st=document.getElementById('noteStatus'); if(st) st.textContent='لا ملاحظات بعد'; return}
+    copyBlock(buildNotesText(),document.getElementById('noteStatus'),document.getElementById('notesFallback'));
+  });
+}
+var notesList=document.getElementById('notesList');
+if(notesList){
+  notesList.addEventListener('click',function(e){
+    var b=e.target.closest('[data-del-note]'); if(!b) return;
+    var id=b.getAttribute('data-del-note');
+    planNotes=planNotes.filter(function(n){return String(n.id)!==String(id)});
+    lsSet(NOTE_KEY,planNotes);
+    renderNotes();
+  });
+}
+
+/* suggestions */
+function suggestionCard(s){
+  return '<article class="note-card" data-type="suggest">'+
+    '<div class="meta"><span class="pill p-core">'+esc(secLabel(s.section))+'</span><time>'+esc(new Date(s.at).toLocaleString('ar'))+'</time></div>'+
+    '<h3>'+esc(s.title)+'</h3>'+
+    (s.text?'<p>'+esc(s.text)+'</p>':'')+
+    '<div class="row-actions"><button class="btn ghost mini" data-del-sug="'+esc(s.id)+'">حذف</button></div>'+
+  '</article>';
+}
+function renderSuggestions(){
+  var wrap=document.getElementById('sugList');
+  var count=document.getElementById('sugCount');
+  if(!wrap) return;
+  if(count) count.textContent=planSuggestions.length?planSuggestions.length+' اقتراح':'لا اقتراحات بعد';
+  wrap.innerHTML=planSuggestions.length?planSuggestions.slice().sort(function(a,b){return b.at-a.at}).map(suggestionCard).join(''):'<div class="empty">أضف أول اقتراح بالأعلى.</div>';
+}
+function buildSuggestionsText(){
+  var out=['اقتراحات لمميزات جديدة — '+new Date().toLocaleDateString('ar'),''];
+  planSuggestions.slice().sort(function(a,b){return b.at-a.at}).forEach(function(s){
+    out.push('['+secLabel(s.section)+'] '+s.title);
+    if(s.text) out.push(s.text);
+    out.push('');
+  });
+  return out.join('\n');
+}
+var addSug=document.getElementById('addSug');
+if(addSug){
+  addSug.addEventListener('click',function(){
+    var title=document.getElementById('sugTitle').value.trim();
+    var text=document.getElementById('sugText').value.trim();
+    var st=document.getElementById('sugStatus');
+    if(!title&&!text){if(st) st.textContent='اكتب الاسم أو الوصف أولاً'; return}
+    planSuggestions.push({
+      id:String(Date.now())+Math.random().toString(16).slice(2,7),
+      title:title||'بدون اسم',
+      text:text,
+      section:document.getElementById('sugSection').value,
+      at:Date.now()
+    });
+    lsSet(SUG_KEY,planSuggestions);
+    document.getElementById('sugTitle').value='';
+    document.getElementById('sugText').value='';
+    if(st) st.textContent='أُضيف الاقتراح';
+    renderSuggestions();
+  });
+}
+var copySug=document.getElementById('copySug');
+if(copySug){
+  copySug.addEventListener('click',function(){
+    if(!planSuggestions.length){var st=document.getElementById('sugStatus'); if(st) st.textContent='لا اقتراحات بعد'; return}
+    copyBlock(buildSuggestionsText(),document.getElementById('sugStatus'),document.getElementById('sugFallback'));
+  });
+}
+var sugList=document.getElementById('sugList');
+if(sugList){
+  sugList.addEventListener('click',function(e){
+    var b=e.target.closest('[data-del-sug]'); if(!b) return;
+    var id=b.getAttribute('data-del-sug');
+    planSuggestions=planSuggestions.filter(function(s){return String(s.id)!==String(id)});
+    lsSet(SUG_KEY,planSuggestions);
+    renderSuggestions();
+  });
+}
+
+renderChecklist();
+renderPaid();
+renderNotes();
+renderSuggestions();
+updateCheckProgress();
+
 </script>
 
 </body></html>
