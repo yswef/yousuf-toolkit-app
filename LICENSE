@@ -1,0 +1,91 @@
+Y-Dimension Proprietary License
+
+Copyright (c) 2026 Yousef alhmzy <yswefalhmzy@gmail.com>
+All rights reserved.
+
+If the English text and any translation differ, the English text controls.
+
+1. DEFINITIONS
+
+"Work" means everything in this repository and every release built from it: source code, encrypted source (the vault), build scripts, configuration, server code, documentation, text, designs, logos, icons, animations, sounds, data files, character names and descriptions, game rules and balance values, and every copy, part, translation, adaptation or derivative of any of these, in any form or medium.
+
+"Owner" means Yousef alhmzy, the sole author and rights holder of the Work.
+
+"You" means any person or entity that views, downloads, clones, copies, builds, runs, or otherwise handles the Work.
+
+"Protection Marks" means the Owner's name, signature lines, digital signatures, signed manifests, encrypted containers, integrity checks and any other mechanism placed in the Work to identify the Owner or to detect changes.
+
+2. OWNERSHIP
+
+The Work is the original creation of the Owner and is protected by copyright, trade secret and related laws of the Republic of Yemen and by international treaties, including the Berne Convention for the Protection of Literary and Artistic Works, the WIPO Copyright Treaty, and the TRIPS Agreement, to the extent applicable. No right, title or interest in the Work passes to You except as written in Section 3. Nothing in this License is a sale.
+
+3. WHAT YOU MAY DO
+
+3.1 Viewing on the hosting platform. If the Work is published on a code-hosting platform, You may view it there, and You hold only the rights that the platform's own terms of service give to every user of that platform for that act. Nothing here extends those rights beyond the platform.
+
+3.2 Official binaries. If the Owner gives You an official build of the application together with a valid activation code, You may install and use that build on devices You own or control, for Your own personal use, under the application's own terms and for as long as the activation code is valid. This right is personal, non-exclusive, non-transferable, revocable and does not include the source code.
+
+3.3 Written permission. Any other use requires a separate written agreement signed by the Owner. Silence, delay, publication, tolerance of past use, or the absence of a technical block is not permission.
+
+Everything not expressly allowed in this Section is forbidden.
+
+4. WHAT YOU MAY NOT DO
+
+Without the Owner's prior written permission, You may not, and may not let anyone else:
+
+a) copy, reproduce, mirror, fork outside the hosting platform, archive, republish or redistribute any part of the Work;
+b) modify, adapt, translate, port, or create derivative works, including works that copy structure, design, game rules, text or behavior;
+c) use any part of the Work, or any idea expressed in its non-public form, to build, train, tune, evaluate or improve any product, service, model, dataset or system, including machine-learning and artificial-intelligence systems, and including by scraping or bulk collection;
+d) decrypt, decompile, disassemble, reverse engineer, deobfuscate, or attempt to derive source code, keys, algorithms, protocols or data formats from any build, vault file or network traffic;
+e) remove, alter, hide, forge, move, bypass, disable or work around any Protection Mark, or build or distribute a tool that does so; this includes deleting or editing the Owner's name or signature lines in any file, and replacing or re-signing the integrity manifest;
+f) sell, rent, lease, lend, sublicense, host as a service, or otherwise commercialize the Work or access to it;
+g) use the Owner's name, the name Y-Dimension, its logo, icon, character names or visual identity as Your own or in a way that suggests affiliation or endorsement;
+h) build, publish or distribute any clone, fork, re-skin, repack, patched, cracked or "mod" version of the application, or any license-activation bypass, key generator or similar tool;
+i) publish benchmarks, security findings or reverse-engineering results about the Work without the Owner's written consent, except where a law that cannot be waived allows it;
+j) use the Work to violate any law or the rights of any person.
+
+5. PROTECTION MARKS AND INTEGRITY
+
+The Work contains Protection Marks. They are part of the Work. Removing or altering them, or causing the Work or an application built from it to stop working because they were altered, is a material breach of this License and is also done knowingly in violation of laws that protect rights-management information and technical protection measures. The Owner may design the Work so that a build fails or the application refuses to run when a Protection Mark is missing or altered. You accept that such behavior is intended and is not a defect.
+
+6. THIRD-PARTY COMPONENTS
+
+Third-party libraries, fonts and assets used by the Work remain under their own licenses, which are listed in the project documentation and which apply only to those components. This License does not limit Your rights under those licenses and gives You no rights in the Work beyond Section 3.
+
+7. FEEDBACK
+
+If You send the Owner suggestions or fixes, You grant the Owner a perpetual, worldwide, irrevocable, royalty-free right to use them without obligation or credit, and You do not acquire any right in the Work.
+
+8. TERMINATION
+
+Your rights under Section 3 end automatically and immediately if You breach this License. Ending does not release You from liability for past acts. The Owner may also end Section 3.2 rights by revoking an activation code. On termination You must stop all use and delete every copy of the Work in Your possession or control.
+
+9. REMEDIES
+
+You agree that breach of Sections 4 or 5 causes harm to the Owner that money alone cannot repair. The Owner may therefore seek injunctions, seizure, destruction of infringing copies, an accounting of profits, damages, costs and attorney's fees, and any other remedy available under applicable law, in addition to other rights. The Owner may report infringement to hosting platforms, app stores and authorities and request removal.
+
+10. NO WARRANTY
+
+The Work is provided "as is" and "as available", without any warranty of any kind, express or implied, including merchantability, fitness for a particular purpose, non-infringement, accuracy, availability or security. The Work is under development and may contain errors or lose data. You are responsible for backing up Your own data.
+
+11. LIMITATION OF LIABILITY
+
+To the fullest extent the law allows, the Owner is not liable for any indirect, incidental, special, consequential or punitive damages, or for loss of data, profits, accounts, credentials, or goodwill, arising from the Work or its use, even if told of the possibility. Where liability cannot be excluded, it is limited to the amount You paid the Owner for the activation of the build concerned, or zero if You paid nothing.
+
+12. GOVERNING LAW AND DISPUTES
+
+This License is governed by the laws of the Republic of Yemen and, to the extent applicable and not in conflict with them, by the international treaties and rules of international intellectual-property law named in Section 2. The courts of the Republic of Yemen have jurisdiction over disputes. This does not stop the Owner from seeking urgent relief, or enforcing rights, in any court or authority anywhere that has jurisdiction over You or over the infringing activity.
+
+13. GENERAL
+
+If a part of this License is held unenforceable, the rest stays in force and the part is replaced by the closest enforceable term. The Owner's failure to enforce a right is not a waiver. You may not assign this License. The Owner may assign it. This License is the whole agreement about the Work between You and the Owner, except for a separate signed agreement under Section 3.3.
+
+14. CONTACT
+
+Permission requests and reports: yswefalhmzy@gmail.com
+
+------------------------------------------------------------------------
+
+ملخص بالعربية (للتسهيل فقط، والنص الإنجليزي أعلاه هو المعتمد)
+
+هذا العمل ملك حصري للمهندس يوسف الحمزي (Yousef alhmzy). جميع الحقوق محفوظة. يُمنع نسخه أو تعديله أو إعادة نشره أو بيعه أو استضافته أو بناء نسخة منه أو من أفكاره غير المنشورة، ويُمنع تدريب أي نموذج ذكاء اصطناعي أو أي نظام عليه، ويُمنع فك التشفير والهندسة العكسية وتجاوز التفعيل. يمنع حذف أو تعديل اسم المالك أو توقيعه الرقمي أو أي بصمة حماية، وقد صُمم العمل ليفشل بناؤه أو تشغيله عند حدوث ذلك، وهذا مقصود وليس عيباً. الاستخدام الوحيد المسموح: عرض الكود على منصة الاستضافة بحدود شروطها، أو استخدام النسخة الرسمية بكود تفعيل صالح للاستخدام الشخصي. كل ما عدا ذلك يحتاج إذناً كتابياً موقعاً. القانون الحاكم هو قانون الجمهورية اليمنية، مع تطبيق المعاهدات الدولية للملكية الفكرية بالقدر المنطبق، ولا يمنع هذا المالك من طلب الحماية العاجلة في أي جهة مختصة. للتواصل: yswefalhmzy@gmail.com
