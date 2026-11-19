@@ -220,4 +220,152 @@
     <string name="home_greeting_guest">أهلاً بك في الأبعاد</string>
     <string name="home_books">مكتبة الأبعاد</string>
     <string name="home_books_hint">المس كتاباً سحرياً ليفتح لك عالمه.</string>
+
+    <string name="common_add">إضافة</string>
+    <string name="common_save">حفظ</string>
+    <string name="common_delete">حذف</string>
+    <string name="common_close">إغلاق</string>
+
+    <string name="device_tab_usage">الاستخدام</string>
+    <string name="device_tab_blocker">الحاجب</string>
+    <string name="device_tab_domains">المواقع</string>
+    <string name="device_tab_notifications">التنبيهات</string>
+    <string name="device_tab_vault">الخزنة</string>
+    <string name="device_tab_sync">المزامنة</string>
+
+    <string name="usage_access_desc">لقراءة وقت الاستخدام نحتاج صلاحية الوصول إلى بيانات الاستخدام من إعدادات النظام.</string>
+    <string name="usage_access_open">فتح إعدادات الاستخدام</string>
+    <string name="usage_refresh">تحديث</string>
+    <string name="usage_today">استخدام اليوم</string>
+    <string name="usage_empty">لا توجد بيانات استخدام كافية بعد.</string>
+    <string name="usage_hint">تُقرأ البيانات من نظام أندرويد محلياً ولا تُرسل تلقائياً.</string>
+    <string name="usage_minutes">%1$d دقيقة</string>
+
+    <string name="blocker_title">حاجب التطبيقات</string>
+    <string name="blocker_desc">إعادة التطبيقات المختارة إلى الشاشة الرئيسية خلال فترة الحجب.</string>
+    <string name="blocker_window">فترة الحجب</string>
+    <string name="blocker_window_desc">الفترة التي يعمل فيها الحاجب يومياً.</string>
+    <string name="blocker_start">البداية</string>
+    <string name="blocker_end">النهاية</string>
+    <string name="blocker_apps">التطبيقات المحجوبة</string>
+    <string name="blocker_accessibility">خدمة إمكانية الوصول</string>
+    <string name="blocker_accessibility_desc">يلزم تشغيل خدمة الحاجب من إعدادات إمكانية الوصول.</string>
+    <string name="blocker_now_active">الحاجب يعمل الآن.</string>
+    <string name="blocker_now_idle">الحاجب غير نشط الآن.</string>
+    <string name="blocker_loading">جارٍ تحميل التطبيقات…</string>
+    <string name="blocker_hide_apps">إخفاء التطبيقات</string>
+    <string name="blocker_show_apps">عرض التطبيقات</string>
+    <string name="blocker_hint">فعّل التطبيقات التي تريد حجبها، وابدأ خدمة إمكانية الوصول.</string>
+    <string name="blocker_blocked_toast">هذا التطبيق محجوب الآن.</string>
+
+    <string name="domains_desc">أضف النطاقات التي تريد حجبها على مستوى الجهاز.</string>
+    <string name="domain_hint">مثال: example.com</string>
+    <string name="domain_empty">لا توجد نطاقات محجوبة.</string>
+    <string name="domains_limited">قائمة النطاقات محفوظة محلياً، وتُطبّق عبر تكامل الجهاز عند توفره.</string>
+
+    <string name="notif_permission_desc">نحتاج صلاحية الوصول إلى الإشعارات لتسجيلها في السجل المحلي.</string>
+    <string name="notif_permission_open">فتح إعدادات الإشعارات</string>
+    <string name="notif_listener">تسجيل الإشعارات</string>
+    <string name="notif_listener_desc">حفظ الإشعارات الواردة في سجل محلي.</string>
+    <string name="notif_list">الإشعارات المسجلة</string>
+    <string name="notif_empty">لا توجد إشعارات مسجلة بعد.</string>
+    <string name="notif_clear">مسح السجل</string>
+    <string name="notif_hint">تُحفظ آخر 200 إشعار محلياً فقط.</string>
+
+    <string name="vault_desc">ملاحظات مشفّرة بمفتاح الجهاز، ولا تُقرأ خارج التطبيق.</string>
+    <string name="vault_add">ملاحظة جديدة</string>
+    <string name="vault_title_hint">العنوان</string>
+    <string name="vault_body_hint">المحتوى</string>
+    <string name="vault_saved">تم حفظ الملاحظة مشفّرة.</string>
+    <string name="vault_failed">تعذّر حفظ الملاحظة المشفّرة على هذا الجهاز.</string>
+    <string name="vault_empty">الخزنة فارغة.</string>
+    <string name="vault_untitled">بدون عنوان</string>
+    <string name="vault_locked">ملاحظة غير قابلة للفتح</string>
+    <string name="vault_hint">المفاتيح محفوظة في Android Keystore ولا تترك الجهاز.</string>
+
+    <string name="sync_desc">سجّل الدخول إلى خادمك لمزامنة المذكرات والمحافظ والمنتدى والمتجر.</string>
+    <string name="sync_server_hint">عنوان الخادم</string>
+    <string name="sync_saved">تم حفظ عنوان الخادم.</string>
+    <string name="sync_login">دخول الحساب</string>
+    <string name="sync_email">البريد</string>
+    <string name="sync_password">كلمة المرور</string>
+    <string name="sync_login_btn">دخول</string>
+    <string name="sync_logout">خروج</string>
+    <string name="sync_now">مزامنة الآن</string>
+    <string name="sync_ok">تمت العملية بنجاح.</string>
+    <string name="sync_failed">فشلت العملية.</string>
+    <string name="sync_no_server">أدخل عنوان خادم صحيحاً يبدأ بـ https:// أو http://.</string>
+    <string name="sync_logged_as">مسجّل الدخول باسم</string>
+    <string name="sync_hint">إذا لم يكن الخادم مهيأً، تبقى البيانات محلية بالكامل.</string>
+
+    <string name="wallets_title">المحافظ</string>
+    <string name="wallets_desc">أرصدة منفصلة للأهداف اليومية.</string>
+    <string name="wallet_new">محفظة جديدة</string>
+    <string name="wallet_name">الاسم</string>
+    <string name="wallet_initial">الرصيد الابتدائي</string>
+    <string name="wallet_empty">لا توجد محافظ بعد.</string>
+    <string name="wallet_balance">الرصيد</string>
+    <string name="wallet_deposit">إيداع</string>
+    <string name="wallet_withdraw">سحب</string>
+    <string name="wallet_amount">المبلغ</string>
+    <string name="wallet_insufficient">الرصيد غير كافٍ.</string>
+    <string name="wallets_hint">السحب والإيداع محليان، ويمكن مزامنة المحافظ مع الخادم.</string>
+
+    <string name="cleaner_desc">مسح الملفات المؤقتة والذاكرة المخبئية للتطبيقات.</string>
+    <string name="cleaner_scan">فحص</string>
+    <string name="cleaner_scanning">جارٍ الفحص…</string>
+    <string name="cleaner_found">%1$d ملفاً مؤقتاً</string>
+    <string name="cleaner_freed">%1$s ميجابايت قابلة للتحرير</string>
+    <string name="cleaner_empty">لا توجد ملفات مؤقتة.</string>
+    <string name="cleaner_done">تم الفحص.</string>
+    <string name="cleaner_clean">تنظيف</string>
+    <string name="cleaner_hint">التنظيف يشمل ذاكرة التطبيق المؤقتة فقط، ولا يمس بيانات التطبيقات الأخرى.</string>
+
+    <string name="updater_check">تحقق من التحديثات</string>
+    <string name="updater_checking">جارٍ التحقق…</string>
+    <string name="updater_available">يتوفر إصدار أحدث.</string>
+    <string name="updater_latest">أنت على أحدث إصدار.</string>
+    <string name="updater_open">فتح صفحة الإصدار</string>
+    <string name="updater_none">لا توجد إصدارات منشورة.</string>
+    <string name="updater_error">تعذّر الاتصال بخدمة الإصدارات.</string>
+    <string name="updater_tag">الإصدار %1$s</string>
+
+    <string name="forum_new">موضوع جديد</string>
+    <string name="forum_title_hint">العنوان</string>
+    <string name="forum_body_hint">المحتوى</string>
+    <string name="forum_posts">الردود</string>
+    <string name="forum_send">إرسال</string>
+    <string name="forum_empty">لا توجد مواضيع بعد.</string>
+    <string name="forum_login_needed">سجّل الدخول من صفحة الجهاز ← المزامنة أولاً.</string>
+
+    <string name="shop_buy">شراء</string>
+    <string name="shop_empty">لا توجد عناصر في المتجر.</string>
+    <string name="shop_login_needed">سجّل الدخول لعرض المتجر.</string>
+    <string name="shop_balance">رصيدك %1$d</string>
+    <string name="shop_done">تم الشراء: %1$s</string>
+    <string name="shop_insufficient">الرصيد غير كافٍ.</string>
+
+    <string name="raid_join">انضمام إلى الغارة</string>
+    <string name="raid_info">معلومات الغارة</string>
+    <string name="raid_progress">التقدم</string>
+    <string name="raid_rank">الترتيب</string>
+    <string name="raid_members">الأعضاء</string>
+    <string name="raid_next">التحقق التالي بعد %1$s</string>
+    <string name="raid_day">اليوم %1$d</string>
+    <string name="raid_login_needed">سجّل الدخول للانضمام إلى الغارة.</string>
+    <string name="raid_refresh">تحديث</string>
+    <string name="raid_joined">تم تسجيل الحضور.</string>
+    <string name="raid_failed">تعذّر تسجيل الحضور.</string>
+    <string name="raid_tag">الموسم %1$d</string>
+    <string name="raid_minutes">%1$d دقيقة</string>
+
+    <string name="account_register">إنشاء حساب</string>
+    <string name="account_name">الاسم</string>
+    <string name="account_email">البريد</string>
+    <string name="account_password">كلمة المرور</string>
+    <string name="account_confirm">تأكيد</string>
+    <string name="account_hint">الحساب اختياري؛ كل الميزات المحلية تعمل بدونه.</string>
+    <string name="account_created">تم إنشاء الحساب.</string>
+    <string name="account_forgot_sent">إذا كان البريد مسجلاً فستصلك رسالة.</string>
+    <string name="account_forgot">نسيت كلمة المرور</string>
 </resources>
