@@ -17,23 +17,25 @@
 | هيكل المستودع | تم | بانتظار تحققك من صفحة الاختبارات |
 | خط البناء release.yml | تم | ubuntu-24.04 وSDK المثبت، وتخطي التوقيع في بناء الاختبار |
 | مشروع Gradle | تم | Kotlin المدمج (AGP 9)، AGP 9.1.1، Gradle 9.3.1، ونوع qa مع مهمة assembleTester |
-| التاج v0.3.0-test.1 | تم | بُني ونُشر app-qa.apk (31.6MB) وكل خطوات Actions نجحت، بانتظار التحقق اليدوي |
+| التاج v0.3.0-test.1 | تم | بُني ونُشر app-qa.apk (31.6MB) وكل خطوات Actions نجحت |
+| التاج v0.5.0-test.1 | تم | بُني ونُشر app-qa.apk (32.2MB) بعد إصلاح أخطاء الترجمة، بانتظار التحقق اليدوي |
 | الواجهات | تم | ثيم زاهٍ وخلفيات متدرجة لكل الشاشات |
 | مقدمة الأنمي | تم ومنشور | بوابة تتسع ووميض ذهبي ثم حوار المعلمة نور، وتُعاد من الإعدادات |
 | المكتبة السحرية | تم ومنشور | 27 كتاباً في شبكة، ولكل كتاب لون ورمز، وفتح ثلاثي الأبعاد |
 | تسجيل البيانات | تم ومنشور | الاسم والعمر والهدف والفريق في Store، وتعديل من الملف الشخصي والإعدادات |
 | النواة (مهام، مال، تمارين، مذكرات) | تم ومنشور | حفظ JSON محلي، طاقة ونقاط، بلا مزامنة |
 | الحياة اليومية | تم ومنشور | ماء ونوم وصلوات وتعليم ومكتبة |
-| أدوات الجهاز | تم | استخدام وحاجب ونطاقات وإشعارات وخزنة مشفرة ومزامنة، بانتظار البناء |
-| الخادم PHP | تم | خادم JSON ومخطط MySQL وعميل Api، بانتظار config.php من المالك |
+| أدوات الجهاز | تم ومنشور | استخدام وحاجب ونطاقات وإشعارات وخزنة مشفرة ومزامنة في v0.5.0-test.1 |
+| الخادم PHP | تم ومنشور | خادم JSON ومخطط MySQL وعميل Api، بانتظار config.php من المالك |
 | لوحة التحكم | لم يبدأ | تحتاج قرار المالك وقاعدة البيانات |
 
 ## المسارات والروابط
 
 - المستودع: https://github.com/yswef/yousuf-toolkit-app
-- Release الاختبار الحالي: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.3.0-test.1
-- تاج المرحلتين 4 و5 المطلوب: v0.5.0-test.1
-- Release السابق: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.1.0-test.1
+- Release الاختبار الحالي: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.5.0-test.1
+- Release السابق: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.3.0-test.1
+- Release أقدم: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.1.0-test.1
+- تاج المرحلتين 4 و5: v0.5.0-test.1 (app-qa.apk 32.2MB، وتشغيل 44495189225 ناجح)
 - حالة المشروع: docs/site/dev/index.html
 - الاختبارات: docs/site/dev/tests.html
 - سجل التعديلات: docs/dev/changes/ ومؤشره docs/dev/CHANGELOG.md
