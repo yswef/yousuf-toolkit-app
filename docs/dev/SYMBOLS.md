@@ -54,3 +54,27 @@
 | saveProfile | app/src/main/kotlin/data/local/Store.kt | حفظ الاسم والعمر والهدف والفريق وتاريخ الانضمام | RegisterScreen وProfileScreen |
 | hasProfile | app/src/main/kotlin/data/local/Store.kt | هل بيانات البطل موجودة | AppNav |
 | mentor.webp | app/src/main/res/drawable-nodpi/mentor.webp | صورة المعلمة نور | OnboardingScreen وRegisterScreen وProfileScreen |
+| Wallet | app/src/main/kotlin/domain/model/Wallet.kt | محفظة باسم ورصيد | Store وWalletsScreen |
+| NotifEntry | app/src/main/kotlin/domain/model/NotifEntry.kt | إشعار محفوظ بعنوان ونص وتاريخ | Store وNotiflogScreen |
+| VaultNote | app/src/main/kotlin/domain/model/VaultNote.kt | ملاحظة مشفّرة بحمولة وتاريخ | Store وVaultScreen |
+| VaultCrypto | app/src/main/kotlin/core/security/VaultCrypto.kt | تشفير AES-GCM بمفتاح Keystore | Store |
+| AppUsage | app/src/main/kotlin/core/device/AppUsage.kt | صلاحية الاستخدام وملخص وقت اليوم | DeviceScreen |
+| Access | app/src/main/kotlin/core/device/Access.kt | فحص خدمات الوصول والإشعارات وقائمة التطبيقات | DeviceScreen |
+| BlockingAccessibilityService | app/src/main/kotlin/core/device/BlockingAccessibilityService.kt | إعادة التطبيقات المحجوبة للرئيسية | البيان |
+| NotificationCollectorService | app/src/main/kotlin/core/device/NotificationCollectorService.kt | حفظ الإشعارات في Store | البيان |
+| Api | app/src/main/kotlin/core/net/Api.kt | عميل HTTP لكل نقاط الخادم | DeviceScreen وForum وShop وRaids |
+| Platform | app/src/main/kotlin/core/net/Platform.kt | قراءة آخر إصدار من GitHub | UpdaterScreen |
+| DeviceScreen | app/src/main/kotlin/feature/device/DeviceScreen.kt | ستة تبويبات أدوات الجهاز والمزامنة | AppNav |
+| WalletsScreen | app/src/main/kotlin/feature/wallets/WalletsScreen.kt | محافظ وإيداع وسحب | AppNav |
+| CleanerScreen | app/src/main/kotlin/feature/cleaner/CleanerScreen.kt | فحص وتنظيف ذاكرة التطبيق | AppNav |
+| ForumScreen | app/src/main/kotlin/feature/forum/ForumScreen.kt | مواضيع وردود المنتدى | AppNav |
+| ShopScreen | app/src/main/kotlin/feature/shop/ShopScreen.kt | متجر يخصم رصيد الخادم | AppNav |
+| RaidsScreen | app/src/main/kotlin/feature/raids/RaidsScreen.kt | تقدم الغارة وتسجيل الحضور | AppNav |
+| NotiflogScreen | app/src/main/kotlin/feature/notiflog/NotiflogScreen.kt | سجل الإشعارات | AppNav |
+| UpdaterScreen | app/src/main/kotlin/feature/updater/UpdaterScreen.kt | التحقق من إصدار GitHub | AppNav |
+| MagicTabs | app/src/main/kotlin/core/design/Sections.kt | تبويبات موحدة | DeviceScreen |
+| InfoCard | app/src/main/kotlin/core/design/Sections.kt | بطاقة تنبيه بمستويات | الشاشات |
+| ToggleRow | app/src/main/kotlin/core/design/Sections.kt | صف مفتاح تشغيل | DeviceScreen |
+| RowItem | app/src/main/kotlin/core/design/Sections.kt | صف عنوان ووصف وإجراء | DeviceScreen وNotiflog |
+| sync_rows | server/src/sync_rows.php | إدخال صفوف العميل دفعة واحدة | sync.php |
+| current_user | server/src/auth.php | التحقق من Bearer وإرجاع المستخدم | كل نقاط API المحمية |

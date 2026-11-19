@@ -19,5 +19,8 @@
   "daily": {
     "waterGoal": 8,
     "sleepGoalHours": 8
+  },
+  "updater": {
+    "latestReleaseUrl": "https://api.github.com/repos/yswef/yousuf-toolkit-app/releases/latest"
   }
 }

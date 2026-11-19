@@ -8,7 +8,7 @@ window.PROJECT_STATUS={
     {id:'daily',title:'الحياة اليومية',tag:'v0.3.0-test.1',status:'wait',note:'منشورة في v0.3.0-test.1 مع النواة، بانتظار تحققك'},
     {id:'intro',title:'مقدمة الأنمي والبوابة',tag:'v0.3.0-test.1',status:'wait',note:'منشور في v0.3.0-test.1، بانتظار تحققك'},
     {id:'design',title:'المكتبة السحرية وتسجيل البيانات',tag:'v0.3.0-test.1',status:'wait',note:'التاج منشور وبُني app-qa.apk بنجاح، بانتظار تحققك على الجهاز'},
-    {id:'device',title:'أدوات الجهاز',tag:'v0.4.0-test.1',status:'todo',note:''},
-    {id:'server',title:'الخادم والمجتمع',tag:'v0.5.0-test.1',status:'todo',note:''}
+    {id:'device',title:'أدوات الجهاز',tag:'v0.5.0-test.1',status:'wait',note:'الاستخدام والحاجب والنطاقات والإشعارات والخزنة والمزامنة على dev، بانتظار البناء والتثبيت'},
+    {id:'server',title:'الخادم والمجتمع',tag:'v0.5.0-test.1',status:'wait',note:'خادم PHP ومخطط MySQL وعميل HTTP، بانتظار تهيئة config.php والاستيراد'}
   ]
 };

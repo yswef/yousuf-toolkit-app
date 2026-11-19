@@ -2,7 +2,7 @@
 
 - آخر تحديث: 2026-11-19
 - حدّثه: arena-agent
-- المهمة: المكتبة السحرية + الدخولية بالحوار + تسجيل بيانات البطل + تاج v0.3.0-test.1
+- المهمة: المرحلة 4 أدوات الجهاز + المرحلة 5 الخادم والمجتمع + تاج v0.5.0-test.1
 
 كل موديل يقرأ هذا الملف أولاً ولا يقرأ كامل الكود. وفي نهاية عمله يحدّثه هو الملف الوحيد للتسليم.
 
@@ -24,29 +24,32 @@
 | تسجيل البيانات | تم ومنشور | الاسم والعمر والهدف والفريق في Store، وتعديل من الملف الشخصي والإعدادات |
 | النواة (مهام، مال، تمارين، مذكرات) | تم ومنشور | حفظ JSON محلي، طاقة ونقاط، بلا مزامنة |
 | الحياة اليومية | تم ومنشور | ماء ونوم وصلوات وتعليم ومكتبة |
-| الخادم PHP | لم يبدأ | المرحلة 5 |
-| لوحة التحكم | لم يبدأ | المرحلة 5 |
+| أدوات الجهاز | تم | استخدام وحاجب ونطاقات وإشعارات وخزنة مشفرة ومزامنة، بانتظار البناء |
+| الخادم PHP | تم | خادم JSON ومخطط MySQL وعميل Api، بانتظار config.php من المالك |
+| لوحة التحكم | لم يبدأ | تحتاج قرار المالك وقاعدة البيانات |
 
 ## المسارات والروابط
 
 - المستودع: https://github.com/yswef/yousuf-toolkit-app
 - Release الاختبار الحالي: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.3.0-test.1
+- تاج المرحلتين 4 و5 المطلوب: v0.5.0-test.1
 - Release السابق: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.1.0-test.1
 - حالة المشروع: docs/site/dev/index.html
 - الاختبارات: docs/site/dev/tests.html
 - سجل التعديلات: docs/dev/changes/ ومؤشره docs/dev/CHANGELOG.md
 - قواعد الفريق: docs/dev/RULES.md
 - فهرس الرموز: docs/dev/SYMBOLS.md
-- توثيق الوحدات: docs/dev/modules/ui-phase1.md وcore-phase2.md وdaily-phase3.md وintro.md وmagic-home.md وregistration.md
+- توثيق الوحدات: docs/dev/modules/ui-phase1.md وcore-phase2.md وdaily-phase3.md وintro.md وmagic-home.md وregistration.md وdevice-tools.md وserver.md
 
 ## التبعيات والإصدارات
 
-- Android 14 (API 34) كأقل إصدار، compileSdk/targetSdk 36، applicationId com.yousuf.toolkit، versionName 0.3.0
+- Android 14 (API 34) كأقل إصدار، compileSdk/targetSdk 36، applicationId com.yousuf.toolkit، versionName 0.5.0
 - AGP 9.1.1، Gradle 9.3.1، Java 17، Kotlin المدمج مع compose compiler plugin 2.4.10
 - Compose BOM 2026.06.01، Navigation 2.8.0، activity-compose 1.13.0، material-icons-core 1.7.8
 - لا مكتبات جديدة: التخزين بـorg.json من أندرويد وكتابة ذرية على Executor واحد، والحركة بـCompose Canvas
 - صورة المعلمة نور أصلية مولدة وموجودة في drawable-nodpi/mentor.webp بحجم 182KB
-- إعداد القيم يُقرأ من `assets/app.json` (نسخة config/app.json عبر sourceSets)
+- إعداد القيم يُقرأ من `assets/app.json` و`assets/environments.json` عبر sourceSets
+- الخادم PHP 8.1+ وMySQL 8، اتصال PDO، ورموز Bearer مخزنة كـSHA-256
 
 ## المشاكل المفتوحة
 
@@ -54,8 +57,10 @@
 - ملف التوقيع وأسرار GitHub لم تُضف (مطلوبة فقط لبناء beta/release)
 - قيم جديدة في config/app.json بانتظار موافقة المالك: نقاط faith وlearn وreading وsleep، وwaterGoal وsleepGoalHours
 - مقدمة الأنمي بلا صوت أو فيديو، وتظهر في كل إقلاع (مع تخطي)؛ القرار للمالك
-- تسجيل البيانات محلي فقط بلا حساب أو كلمة مرور حتى مرحلة الخادم
+- تسجيل البيانات محلي، والحساب اختياري عبر الخادم من تبويب المزامنة
 - صورة المعلمة نور تحتاج موافقة المالك على الأسلوب قبل النشر
-- التخزين ملف JSON واحد بلا Room؛ يكفي للاستخدام الفردي ولا يصلح لمزامنة أو استعلامات كبيرة
+- التخزين المحلي ملف JSON واحد بلا Room؛ المزامنة تمر عبر Api وتُخزّن الصفوف في MySQL
 - لا اختبارات آلية جديدة؛ التحقق يدوي عبر docs/site/dev/tests-data.js. بناء v0.3.0-test.1 نجح عبر GitHub Actions ولم يُفحص على جهاز
-- شاشات المرحلة 4 والخادم ما زالت فارغة
+- `config/environments.json` apiBaseUrl فارغ، و`server/config/config.php` غير موجود؛ المزامنة لا تعمل حتى يملأهما المالك
+- خدمة الحاجب تحتاج تشغيلاً يدوياً من إعدادات إمكانية الوصول، وحجب النطاقات يحتاج VpnService لم يُنفذ
+- `main` متأخر عن `dev` بـ169 commit؛ الإصدار v0.3.0-test.1 بُني من dev، ويحتاج main دمج dev فيه من GitHub
