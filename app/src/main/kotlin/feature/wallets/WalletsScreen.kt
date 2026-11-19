@@ -33,7 +33,7 @@ import android.widget.Toast
 import com.yousuf.toolkit.R
 import core.design.FormDialog
 import core.design.InfoCard
-import core.design.LocalStore
+import data.local.LocalStore
 import core.design.ScreenScaffold
 import domain.model.Wallet
 import java.util.Locale
@@ -89,7 +89,7 @@ fun WalletsScreen(onBack: () -> Unit) {
                             )
                             IconButton(onClick = { store.deleteWallet(wallet.id) }) {
                                 Icon(
-                                    Icons.Default.Delete,
+                                    Icons.Filled.Delete,
                                     contentDescription = stringResource(R.string.common_delete)
                                 )
                             }

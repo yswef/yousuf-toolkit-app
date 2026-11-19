@@ -33,7 +33,7 @@ import com.yousuf.toolkit.R
 import core.design.FormDialog
 import core.design.InfoCard
 import core.design.InfoTone
-import core.design.LocalStore
+import data.local.LocalStore
 import core.design.ScreenScaffold
 import core.net.Api
 import core.net.BoardPost
