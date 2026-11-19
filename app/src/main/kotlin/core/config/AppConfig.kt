@@ -19,7 +19,8 @@ data class AppConfig(
     val waterGoal: Int,
     val sleepGoal: Int,
     val apiBase: String,
-    val latestReleaseUrl: String
+    val latestReleaseUrl: String,
+    val ranks: List<Pair<String, Int>> = emptyList()
 ) {
     companion object {
         fun load(context: Context): AppConfig = try {
@@ -30,6 +31,16 @@ data class AppConfig(
             val levels = root.getJSONObject("levels")
             val daily = root.optJSONObject("daily") ?: JSONObject()
             val updater = root.optJSONObject("updater") ?: JSONObject()
+            val game = root.optJSONObject("game") ?: JSONObject()
+            val ranks = ArrayList<Pair<String, Int>>()
+            val rankArray = game.optJSONArray("ranks")
+            if (rankArray != null) {
+                for (i in 0 until rankArray.length()) {
+                    val item = rankArray.optJSONObject(i) ?: continue
+                    val key = item.optString("key")
+                    if (key.isNotBlank()) ranks.add(key to item.optInt("level", 1))
+                }
+            }
             val env = runCatching {
                 JSONObject(context.assets.open("environments.json").bufferedReader().use { it.readText() })
             }.getOrNull() ?: JSONObject()
@@ -48,7 +59,8 @@ data class AppConfig(
                 waterGoal = daily.optInt("waterGoal", 0),
                 sleepGoal = daily.optInt("sleepGoalHours", 0),
                 apiBase = env.optString("apiBaseUrl", ""),
-                latestReleaseUrl = updater.optString("latestReleaseUrl", "")
+                latestReleaseUrl = updater.optString("latestReleaseUrl", ""),
+                ranks = ranks.sortedBy { it.second }
             )
         } catch (t: Throwable) {
             Log.e("AppConfig", "Failed to load app.json", t)
