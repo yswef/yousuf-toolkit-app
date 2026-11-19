@@ -5,7 +5,11 @@
 | MainActivity | app/src/main/kotlin/com/yousuf/toolkit/MainActivity.kt | نقطة الدخول، ينشئ Store وUiState ويوفر LocalStore ثم يعرض AppNav داخل AppTheme | النظام |
 | UiState | app/src/main/kotlin/core/design/UiState.kt | حالة الواجهة في الذاكرة: mode وdark | MainActivity وSettingsScreen وAppTheme |
 | UiMode | app/src/main/kotlin/core/design/Theme.kt | نوع الواجهة: PROFESSIONAL أو SIMPLE | UiState وSettingsScreen وAppTheme |
-| AppTheme | app/src/main/kotlin/core/design/Theme.kt | ثيم Material الافتراضي (فاتح وداكن) حسب mode | MainActivity |
+| AppTheme | app/src/main/kotlin/core/design/Theme.kt | ثيم Material فاتح وداكن حسب mode مع لون accent | MainActivity |
+| Accent وaccentOf | app/src/main/kotlin/core/design/Skin.kt | ألوان الواجهة الأربعة الفاتحة والداكنة | AppTheme وSkinScreen |
+| SmsReader | app/src/main/kotlin/core/device/SmsReader.kt | قراءة رسائل المال بعد الصلاحية واستخراج المبلغ | MoneyScreen |
+| Campaign | app/src/main/kotlin/domain/model/Campaign.kt | حملة باسم وهدف أيام وآخر تسجيل | Store وGameScreen |
+| SmsMoney | app/src/main/kotlin/domain/model/SmsMoney.kt | حركة مستخرجة من رسالة بمفتاح فريد | SmsReader وStore |
 | professionalType | app/src/main/kotlin/core/design/Type.kt | خطوط الواجهة الاحترافية (Material الافتراضية) | AppTheme |
 | simpleType | app/src/main/kotlin/core/design/Type.kt | خطوط الواجهة البسيطة (أكبر حجماً) | AppTheme |
 | Routes | app/src/main/kotlin/core/navigation/Routes.kt | ثوابت مسارات التنقل | NavGraph وHomeScreen |
@@ -13,7 +17,11 @@
 | HomeScreen | app/src/main/kotlin/feature/home/HomeScreen.kt | بطاقة المستوى والنقاط والطاقة وملخص اليوم وقائمة الميزات المجمّعة | AppNav |
 | OnboardingScreen | app/src/main/kotlin/feature/onboarding/OnboardingScreen.kt | شاشة البداية وزر ابدأ، ويثبت onboarded | AppNav |
 | SettingsScreen | app/src/main/kotlin/feature/settings/SettingsScreen.kt | تبديل الواجهة والوضع الداكن وإعادة مقدمة الأنمي | AppNav |
-| GameScreen | app/src/main/kotlin/feature/game/GameScreen.kt | عرض فرق السحر العشرة | AppNav |
+| GameScreen | app/src/main/kotlin/feature/game/GameScreen.kt | الرتب والتقدم والحملات اليومية | AppNav |
+| SkinScreen | app/src/main/kotlin/feature/skin/SkinScreen.kt | اختيار لون الواجهة ورمز البطل | AppNav |
+| LicenseScreen | app/src/main/kotlin/feature/license/LicenseScreen.kt | تفعيل كود الترخيص وإزالته | AppNav |
+| DevmodeScreen | app/src/main/kotlin/feature/devmode/DevmodeScreen.kt | تشخيص محلي ونسخ النص | AppNav |
+| TestsScreen | app/src/main/kotlin/feature/tests/TestsScreen.kt | فحص الإعدادات والصلاحيات محلياً | AppNav |
 | IntroScreen | app/src/main/kotlin/feature/intro/IntroScreen.kt | مقدمة أنمي مرسومة بالكود مع انتقال تلقائي وتخطي | AppNav |
 | Store | app/src/main/kotlin/data/local/Store.kt | حالة التطبيق كاملة مع حفظ JSON محلي ونقاط وطاقة وسجلات | كل شاشات feature |
 | LocalStore | app/src/main/kotlin/data/local/Store.kt | CompositionLocal لتوفير Store | MainActivity وAppNav والشاشات |
