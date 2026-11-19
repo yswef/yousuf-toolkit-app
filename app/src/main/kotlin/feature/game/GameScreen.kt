@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.FormDialog
 import core.design.InfoCard
-import core.design.LocalStore
+import data.local.LocalStore
 import core.design.ScreenScaffold
 import java.time.Instant
 import java.time.LocalDate
