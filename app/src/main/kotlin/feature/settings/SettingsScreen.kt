@@ -1,0 +1,65 @@
+package feature.settings
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.yousuf.toolkit.R
+import core.design.ScreenScaffold
+import core.design.UiMode
+import core.design.UiState
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    ui: UiState,
+    onBack: () -> Unit,
+    onReplayIntro: () -> Unit,
+    onProfile: () -> Unit
+) {
+    ScreenScaffold(title = stringResource(R.string.feature_settings), onBack = onBack) { padding ->
+        Column(
+            Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(stringResource(R.string.ui_mode))
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(selected = ui.mode == UiMode.PROFESSIONAL, onClick = { ui.mode = UiMode.PROFESSIONAL })
+                Text(stringResource(R.string.ui_professional))
+            }
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(selected = ui.mode == UiMode.SIMPLE, onClick = { ui.mode = UiMode.SIMPLE })
+                Text(stringResource(R.string.ui_simple))
+            }
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.dark_theme), modifier = Modifier.weight(1f))
+                Switch(checked = ui.dark, onCheckedChange = { ui.dark = it })
+            }
+            HorizontalDivider(Modifier.padding(vertical = 12.dp))
+            Text(
+                stringResource(R.string.settings_visuals),
+                style = MaterialTheme.typography.titleSmall
+            )
+            OutlinedButton(onClick = onProfile, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_profile))
+            }
+            OutlinedButton(onClick = onReplayIntro, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.settings_replay_intro))
+            }
+        }
+    }
+}

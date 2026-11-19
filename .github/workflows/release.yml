@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,12 +24,15 @@ jobs:
           if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-test\.[0-9]+$ ]]; then
             echo "task=assembleTester" >> "$GITHUB_OUTPUT"
             echo "pre=true" >> "$GITHUB_OUTPUT"
+            echo "signed=false" >> "$GITHUB_OUTPUT"
           elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+$ ]]; then
             echo "task=assembleRelease" >> "$GITHUB_OUTPUT"
             echo "pre=true" >> "$GITHUB_OUTPUT"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
           elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "task=assembleRelease" >> "$GITHUB_OUTPUT"
             echo "pre=false" >> "$GITHUB_OUTPUT"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
           else
             echo "::error::unsupported tag format: $TAG"
             exit 1
@@ -47,9 +50,24 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: prepare android sdk
+        run: |
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_HOME=$SDK"
+          SM="$SDK/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SM" ]; then
+            echo "::warning::sdkmanager not found at $SM; relying on Gradle SDK auto-download"
+          else
+            yes | "$SM" --licenses > /dev/null || true
+            "$SM" --install "platforms;android-36" "platform-tools" || true
+          fi
+          mkdir -p "$HOME/.gradle"
+          echo "android.builder.sdkDownload=true" >> "$HOME/.gradle/gradle.properties"
+
       - uses: gradle/actions/setup-gradle@v4
 
       - name: restore signing key
+        if: steps.kind.outputs.signed == 'true'
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
         run: |
@@ -66,7 +84,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           TASK: ${{ steps.kind.outputs.task }}
-        run: ./gradlew --no-daemon "$TASK"
+        run: ./gradlew --no-daemon --stacktrace "$TASK"
 
       - name: collect apk
         run: |

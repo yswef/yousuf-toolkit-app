@@ -1,0 +1,371 @@
+<resources>
+    <string name="app_name">Y-Dimension</string>
+    <string name="back">رجوع</string>
+    <string name="empty_state">لا توجد بيانات بعد</string>
+    <string name="welcome_title">مرحباً بك في Y-Dimension</string>
+    <string name="welcome_text">نظّم حياتك في لعبة سحرية</string>
+    <string name="start">ابدأ</string>
+    <string name="features">الميزات</string>
+    <string name="ui_mode">واجهة التطبيق</string>
+    <string name="ui_professional">احترافية (18+)</string>
+    <string name="ui_simple">بسيطة</string>
+    <string name="dark_theme">الوضع الداكن</string>
+    <string name="teams_title">فرق السحر</string>
+
+    <string name="feature_blocker">الحاجب</string>
+    <string name="feature_cleaner">المنظف</string>
+    <string name="feature_contacts">جهات الاتصال</string>
+    <string name="feature_device">الجهاز</string>
+    <string name="feature_devmode">وضع المطور</string>
+    <string name="feature_faith">الإيمان</string>
+    <string name="feature_firewall">الجدار الناري</string>
+    <string name="feature_forum">المنتدى</string>
+    <string name="feature_game">اللعبة</string>
+    <string name="feature_home">الرئيسية</string>
+    <string name="feature_journal">المذكرات</string>
+    <string name="feature_learn">التعلم</string>
+    <string name="feature_library">المكتبة</string>
+    <string name="feature_license">الترخيص</string>
+    <string name="feature_money">المال</string>
+    <string name="feature_notiflog">سجل الإشعارات</string>
+    <string name="feature_onboarding">البداية</string>
+    <string name="feature_profile">الملف الشخصي</string>
+    <string name="feature_raids">الغارات</string>
+    <string name="feature_settings">الإعدادات</string>
+    <string name="feature_shop">المتجر</string>
+    <string name="feature_skin">المظهر</string>
+    <string name="feature_sleep">النوم</string>
+    <string name="feature_tasks">المهام</string>
+    <string name="feature_tests">الاختبارات</string>
+    <string name="feature_updater">التحديثات</string>
+    <string name="feature_vault">الخزنة</string>
+    <string name="feature_wallets">المحافظ</string>
+    <string name="feature_water">الماء</string>
+    <string name="feature_workouts">التمارين</string>
+
+    <string name="team_black_bull">الثيران السوداء</string>
+    <string name="team_golden_dawn">الفجر الذهبي</string>
+    <string name="team_silver_eagle">النسور الفضية</string>
+    <string name="team_crimson_lion">الأسود القرمزية</string>
+    <string name="team_blue_rose">الوردة الزرقاء</string>
+    <string name="team_green_mantis">فرس النبي الأخضر</string>
+    <string name="team_coral_peacock">الطاووس المرجاني</string>
+    <string name="team_purple_orca">الحوت الأرجواني</string>
+    <string name="team_aqua_deer">الغزال اللازوردي</string>
+    <string name="team_royal_knights">الفرسان الملكيون</string>
+
+    <string name="add">إضافة</string>
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="delete">حذف</string>
+    <string name="ok">حسناً</string>
+
+    <string name="intro_title">Y-DIMENSION</string>
+    <string name="intro_tagline">بُعدك السحري يبدأ من هنا</string>
+    <string name="intro_skip">تخطي</string>
+
+    <string name="section_core">الأساسيات</string>
+    <string name="section_daily">الحياة اليومية</string>
+    <string name="section_game">اللعبة</string>
+    <string name="section_device">أدوات الجهاز</string>
+    <string name="section_more">المزيد</string>
+
+    <string name="home_level">المستوى %1$d</string>
+    <string name="home_points">%1$d نقطة</string>
+    <string name="home_xp">%1$d%% إلى المستوى التالي</string>
+    <string name="home_energy">الطاقة %1$d / %2$d</string>
+    <string name="home_rest">استرح +%1$d</string>
+    <string name="home_today">ملخص اليوم</string>
+    <string name="home_tasks_left">مهام</string>
+    <string name="home_water">ماء</string>
+    <string name="home_water_value">%1$d/%2$d</string>
+    <string name="home_prayers">صلوات</string>
+    <string name="home_prayers_value">%1$d/5</string>
+    <string name="home_sleep">نوم</string>
+
+    <string name="task_new">مهمة جديدة</string>
+    <string name="task_title">العنوان</string>
+    <string name="task_note">ملاحظة</string>
+    <string name="task_priority">الأولوية</string>
+    <string name="task_none">لا توجد مهام بعد. أضف مهمتك الأولى.</string>
+    <string name="task_done_section">المكتملة</string>
+    <string name="task_energy_cost">كل مهمة تستهلك %1$d طاقة وتُضيف نقاطاً.</string>
+    <string name="priority_low">منخفضة</string>
+    <string name="priority_normal">عادية</string>
+    <string name="priority_high">عالية</string>
+    <string name="energy_title">الطاقة</string>
+    <string name="not_enough_energy">لا توجد طاقة كافية. استرح أولاً ثم أكمل المهمة.</string>
+
+    <string name="money_balance">الرصيد</string>
+    <string name="money_income">دخل</string>
+    <string name="money_expense">مصروف</string>
+    <string name="money_income_value">دخل %1$s</string>
+    <string name="money_expense_value">مصروف %1$s</string>
+    <string name="money_new">حركة جديدة</string>
+    <string name="money_title">الوصف</string>
+    <string name="money_amount">المبلغ</string>
+    <string name="money_kind">النوع</string>
+    <string name="money_category">التصنيف</string>
+    <string name="money_none">لا توجد حركات مالية بعد.</string>
+    <string name="money_row_meta">%1$s · %2$s</string>
+    <string name="cat_salary">راتب</string>
+    <string name="cat_food">طعام</string>
+    <string name="cat_transport">مواصلات</string>
+    <string name="cat_bills">فواتير</string>
+    <string name="cat_shopping">تسوق</string>
+    <string name="cat_other">أخرى</string>
+
+    <string name="workout_new">تمرين جديد</string>
+    <string name="workout_kind">النوع</string>
+    <string name="workout_minutes">المدة بالدقائق</string>
+    <string name="workout_minutes_value">%1$d دقيقة</string>
+    <string name="workout_total">إجمالي الدقائق</string>
+    <string name="workout_count">عدد التمارين</string>
+    <string name="workout_none">لا توجد تمارين مسجلة بعد.</string>
+    <string name="workout_strength">قوة</string>
+    <string name="workout_cardio">كارديو</string>
+    <string name="workout_stretch">تمدد</string>
+    <string name="workout_walk">مشي</string>
+
+    <string name="journal_new">مذكرة جديدة</string>
+    <string name="journal_title">العنوان</string>
+    <string name="journal_body">النص</string>
+    <string name="journal_none">لا توجد مذكرات بعد.</string>
+    <string name="journal_untitled">بلا عنوان</string>
+
+    <string name="water_today">أكواب اليوم</string>
+    <string name="water_cups">كوب</string>
+    <string name="water_goal">الهدف اليومي: %1$d أكواب</string>
+    <string name="water_add">أضف كوباً</string>
+    <string name="water_remove">أنقص كوباً</string>
+    <string name="water_week">آخر 7 أيام</string>
+
+    <string name="sleep_new">تسجيل نوم</string>
+    <string name="sleep_hours">عدد الساعات</string>
+    <string name="sleep_hours_value">%1$s ساعة</string>
+    <string name="sleep_today">نوم اليوم</string>
+    <string name="sleep_goal">الهدف: %1$d ساعات</string>
+    <string name="sleep_average">المعدل: %1$s ساعة</string>
+    <string name="sleep_none">لا توجد تسجيلات نوم بعد.</string>
+
+    <string name="faith_today">صلوات اليوم</string>
+    <string name="faith_progress">%1$d من %2$d</string>
+    <string name="faith_full_days">أيام أكملت فيها الصلوات الخمس: %1$d</string>
+    <string name="faith_fajr">الفجر</string>
+    <string name="faith_dhuhr">الظهر</string>
+    <string name="faith_asr">العصر</string>
+    <string name="faith_maghrib">المغرب</string>
+    <string name="faith_isha">العشاء</string>
+
+    <string name="learn_new">موضوع جديد</string>
+    <string name="learn_topic">الموضوع</string>
+    <string name="learn_target">الدقائق المستهدفة</string>
+    <string name="learn_total">إجمالي دقائق التعلم: %1$d</string>
+    <string name="learn_progress">%1$d / %2$d دقيقة</string>
+    <string name="learn_done">مكتمل</string>
+    <string name="learn_more">+15 دقيقة</string>
+    <string name="learn_none">لا توجد مواضيع تعلم بعد.</string>
+
+    <string name="library_new">كتاب جديد</string>
+    <string name="library_book">عنوان الكتاب</string>
+    <string name="library_pages">عدد الصفحات</string>
+    <string name="library_progress">%1$d / %2$d صفحة</string>
+    <string name="library_done">مكتمل</string>
+    <string name="library_more">+10 صفحات</string>
+    <string name="library_none">لا توجد كتب بعد.</string>
+
+    <string name="settings_visuals">المؤثرات</string>
+    <string name="settings_profile">بيانات البطل</string>
+    <string name="settings_replay_intro">إعادة مقدمة الأنمي</string>
+
+    <string name="mentor_name">المعلمة نور</string>
+    <string name="mentor_line_1">أهلاً بك في Y-Dimension. أنا نور، معلّمتك في هذا العالم.</string>
+    <string name="mentor_line_2">هنا يتحوّل كل عمل صغير تقوم به إلى سحر يزيد قوّتك.</string>
+    <string name="mentor_line_3">ستتعلم تنظيم وقتك ومالك وصحتك، خطوة بخطوة وبلا ضغط.</string>
+    <string name="mentor_line_4">أخبرني عنك الآن، وسأفتح لك بوابتك الأولى.</string>
+    <string name="onboarding_skip">تخطي الحوار</string>
+    <string name="onboarding_next">التالي</string>
+    <string name="onboarding_finish">سجّل بياناتك</string>
+    <string name="intro_portal">البوابة تُفتح…</string>
+
+    <string name="register_title">تسجيل البيانات</string>
+    <string name="register_mentor">بطاقة البطل</string>
+    <string name="register_subtitle">عرّفنا بنفسك لنبدأ الرحلة</string>
+    <string name="register_name">الاسم</string>
+    <string name="register_age">العمر</string>
+    <string name="register_goal">هدفك الأول</string>
+    <string name="register_team">فريقك السحري</string>
+    <string name="register_save">احفظ وابدأ</string>
+    <string name="register_local_note">بياناتك محفوظة على جهازك فقط، ويمكنك تعديلها لاحقاً من الملف الشخصي.</string>
+    <string name="register_invalid">اكتب اسماً صحيحاً وعمراً بين 10 و99.</string>
+    <string name="goal_time">تنظيم الوقت</string>
+    <string name="goal_health">الصحة</string>
+    <string name="goal_money">المال</string>
+    <string name="goal_learning">التعلم</string>
+    <string name="goal_faith">الإيمان</string>
+
+    <string name="profile_hero">بطل الأبعاد</string>
+    <string name="profile_edit">تعديل البيانات</string>
+    <string name="profile_none">لا توجد بيانات بعد.</string>
+    <string name="profile_age_label">العمر</string>
+    <string name="profile_age_value">%1$d سنة</string>
+    <string name="profile_goal_label">الهدف</string>
+    <string name="profile_team_label">الفريق</string>
+    <string name="profile_joined">تاريخ الانضمام</string>
+    <string name="profile_energy_label">الطاقة</string>
+
+    <string name="book_kind">كتاب سحر</string>
+    <string name="book_opening">جارٍ فتح البوابة…</string>
+    <string name="home_greeting">أهلاً %1$s</string>
+    <string name="home_greeting_guest">أهلاً بك في الأبعاد</string>
+    <string name="home_books">مكتبة الأبعاد</string>
+    <string name="home_books_hint">المس كتاباً سحرياً ليفتح لك عالمه.</string>
+
+    <string name="common_add">إضافة</string>
+    <string name="common_save">حفظ</string>
+    <string name="common_delete">حذف</string>
+    <string name="common_close">إغلاق</string>
+
+    <string name="device_tab_usage">الاستخدام</string>
+    <string name="device_tab_blocker">الحاجب</string>
+    <string name="device_tab_domains">المواقع</string>
+    <string name="device_tab_notifications">التنبيهات</string>
+    <string name="device_tab_vault">الخزنة</string>
+    <string name="device_tab_sync">المزامنة</string>
+
+    <string name="usage_access_desc">لقراءة وقت الاستخدام نحتاج صلاحية الوصول إلى بيانات الاستخدام من إعدادات النظام.</string>
+    <string name="usage_access_open">فتح إعدادات الاستخدام</string>
+    <string name="usage_refresh">تحديث</string>
+    <string name="usage_today">استخدام اليوم</string>
+    <string name="usage_empty">لا توجد بيانات استخدام كافية بعد.</string>
+    <string name="usage_hint">تُقرأ البيانات من نظام أندرويد محلياً ولا تُرسل تلقائياً.</string>
+    <string name="usage_minutes">%1$d دقيقة</string>
+
+    <string name="blocker_title">حاجب التطبيقات</string>
+    <string name="blocker_desc">إعادة التطبيقات المختارة إلى الشاشة الرئيسية خلال فترة الحجب.</string>
+    <string name="blocker_window">فترة الحجب</string>
+    <string name="blocker_window_desc">الفترة التي يعمل فيها الحاجب يومياً.</string>
+    <string name="blocker_start">البداية</string>
+    <string name="blocker_end">النهاية</string>
+    <string name="blocker_apps">التطبيقات المحجوبة</string>
+    <string name="blocker_accessibility">خدمة إمكانية الوصول</string>
+    <string name="blocker_accessibility_desc">يلزم تشغيل خدمة الحاجب من إعدادات إمكانية الوصول.</string>
+    <string name="blocker_now_active">الحاجب يعمل الآن.</string>
+    <string name="blocker_now_idle">الحاجب غير نشط الآن.</string>
+    <string name="blocker_loading">جارٍ تحميل التطبيقات…</string>
+    <string name="blocker_hide_apps">إخفاء التطبيقات</string>
+    <string name="blocker_show_apps">عرض التطبيقات</string>
+    <string name="blocker_hint">فعّل التطبيقات التي تريد حجبها، وابدأ خدمة إمكانية الوصول.</string>
+    <string name="blocker_blocked_toast">هذا التطبيق محجوب الآن.</string>
+
+    <string name="domains_desc">أضف النطاقات التي تريد حجبها على مستوى الجهاز.</string>
+    <string name="domain_hint">مثال: example.com</string>
+    <string name="domain_empty">لا توجد نطاقات محجوبة.</string>
+    <string name="domains_limited">قائمة النطاقات محفوظة محلياً، وتُطبّق عبر تكامل الجهاز عند توفره.</string>
+
+    <string name="notif_permission_desc">نحتاج صلاحية الوصول إلى الإشعارات لتسجيلها في السجل المحلي.</string>
+    <string name="notif_permission_open">فتح إعدادات الإشعارات</string>
+    <string name="notif_listener">تسجيل الإشعارات</string>
+    <string name="notif_listener_desc">حفظ الإشعارات الواردة في سجل محلي.</string>
+    <string name="notif_list">الإشعارات المسجلة</string>
+    <string name="notif_empty">لا توجد إشعارات مسجلة بعد.</string>
+    <string name="notif_clear">مسح السجل</string>
+    <string name="notif_hint">تُحفظ آخر 200 إشعار محلياً فقط.</string>
+
+    <string name="vault_desc">ملاحظات مشفّرة بمفتاح الجهاز، ولا تُقرأ خارج التطبيق.</string>
+    <string name="vault_add">ملاحظة جديدة</string>
+    <string name="vault_title_hint">العنوان</string>
+    <string name="vault_body_hint">المحتوى</string>
+    <string name="vault_saved">تم حفظ الملاحظة مشفّرة.</string>
+    <string name="vault_failed">تعذّر حفظ الملاحظة المشفّرة على هذا الجهاز.</string>
+    <string name="vault_empty">الخزنة فارغة.</string>
+    <string name="vault_untitled">بدون عنوان</string>
+    <string name="vault_locked">ملاحظة غير قابلة للفتح</string>
+    <string name="vault_hint">المفاتيح محفوظة في Android Keystore ولا تترك الجهاز.</string>
+
+    <string name="sync_desc">سجّل الدخول إلى خادمك لمزامنة المذكرات والمحافظ والمنتدى والمتجر.</string>
+    <string name="sync_server_hint">عنوان الخادم</string>
+    <string name="sync_saved">تم حفظ عنوان الخادم.</string>
+    <string name="sync_login">دخول الحساب</string>
+    <string name="sync_email">البريد</string>
+    <string name="sync_password">كلمة المرور</string>
+    <string name="sync_login_btn">دخول</string>
+    <string name="sync_logout">خروج</string>
+    <string name="sync_now">مزامنة الآن</string>
+    <string name="sync_ok">تمت العملية بنجاح.</string>
+    <string name="sync_failed">فشلت العملية.</string>
+    <string name="sync_no_server">أدخل عنوان خادم صحيحاً يبدأ بـ https:// أو http://.</string>
+    <string name="sync_logged_as">مسجّل الدخول باسم</string>
+    <string name="sync_hint">إذا لم يكن الخادم مهيأً، تبقى البيانات محلية بالكامل.</string>
+
+    <string name="wallets_title">المحافظ</string>
+    <string name="wallets_desc">أرصدة منفصلة للأهداف اليومية.</string>
+    <string name="wallet_new">محفظة جديدة</string>
+    <string name="wallet_name">الاسم</string>
+    <string name="wallet_initial">الرصيد الابتدائي</string>
+    <string name="wallet_empty">لا توجد محافظ بعد.</string>
+    <string name="wallet_balance">الرصيد</string>
+    <string name="wallet_deposit">إيداع</string>
+    <string name="wallet_withdraw">سحب</string>
+    <string name="wallet_amount">المبلغ</string>
+    <string name="wallet_insufficient">الرصيد غير كافٍ.</string>
+    <string name="wallets_hint">السحب والإيداع محليان، ويمكن مزامنة المحافظ مع الخادم.</string>
+
+    <string name="cleaner_desc">مسح الملفات المؤقتة والذاكرة المخبئية للتطبيقات.</string>
+    <string name="cleaner_scan">فحص</string>
+    <string name="cleaner_scanning">جارٍ الفحص…</string>
+    <string name="cleaner_found">%1$d ملفاً مؤقتاً</string>
+    <string name="cleaner_freed">%1$s ميجابايت قابلة للتحرير</string>
+    <string name="cleaner_empty">لا توجد ملفات مؤقتة.</string>
+    <string name="cleaner_done">تم الفحص.</string>
+    <string name="cleaner_clean">تنظيف</string>
+    <string name="cleaner_hint">التنظيف يشمل ذاكرة التطبيق المؤقتة فقط، ولا يمس بيانات التطبيقات الأخرى.</string>
+
+    <string name="updater_check">تحقق من التحديثات</string>
+    <string name="updater_checking">جارٍ التحقق…</string>
+    <string name="updater_available">يتوفر إصدار أحدث.</string>
+    <string name="updater_latest">أنت على أحدث إصدار.</string>
+    <string name="updater_open">فتح صفحة الإصدار</string>
+    <string name="updater_none">لا توجد إصدارات منشورة.</string>
+    <string name="updater_error">تعذّر الاتصال بخدمة الإصدارات.</string>
+    <string name="updater_tag">الإصدار %1$s</string>
+
+    <string name="forum_new">موضوع جديد</string>
+    <string name="forum_title_hint">العنوان</string>
+    <string name="forum_body_hint">المحتوى</string>
+    <string name="forum_posts">الردود</string>
+    <string name="forum_send">إرسال</string>
+    <string name="forum_empty">لا توجد مواضيع بعد.</string>
+    <string name="forum_login_needed">سجّل الدخول من صفحة الجهاز ← المزامنة أولاً.</string>
+
+    <string name="shop_buy">شراء</string>
+    <string name="shop_empty">لا توجد عناصر في المتجر.</string>
+    <string name="shop_login_needed">سجّل الدخول لعرض المتجر.</string>
+    <string name="shop_balance">رصيدك %1$d</string>
+    <string name="shop_done">تم الشراء: %1$s</string>
+    <string name="shop_insufficient">الرصيد غير كافٍ.</string>
+
+    <string name="raid_join">انضمام إلى الغارة</string>
+    <string name="raid_info">معلومات الغارة</string>
+    <string name="raid_progress">التقدم</string>
+    <string name="raid_rank">الترتيب</string>
+    <string name="raid_members">الأعضاء</string>
+    <string name="raid_next">التحقق التالي بعد %1$s</string>
+    <string name="raid_day">اليوم %1$d</string>
+    <string name="raid_login_needed">سجّل الدخول للانضمام إلى الغارة.</string>
+    <string name="raid_refresh">تحديث</string>
+    <string name="raid_joined">تم تسجيل الحضور.</string>
+    <string name="raid_failed">تعذّر تسجيل الحضور.</string>
+    <string name="raid_tag">الموسم %1$d</string>
+    <string name="raid_minutes">%1$d دقيقة</string>
+
+    <string name="account_register">إنشاء حساب</string>
+    <string name="account_name">الاسم</string>
+    <string name="account_email">البريد</string>
+    <string name="account_password">كلمة المرور</string>
+    <string name="account_confirm">تأكيد</string>
+    <string name="account_hint">الحساب اختياري؛ كل الميزات المحلية تعمل بدونه.</string>
+    <string name="account_created">تم إنشاء الحساب.</string>
+    <string name="account_forgot_sent">إذا كان البريد مسجلاً فستصلك رسالة.</string>
+    <string name="account_forgot">نسيت كلمة المرور</string>
+</resources>

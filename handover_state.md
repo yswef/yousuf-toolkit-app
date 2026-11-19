@@ -1,48 +1,68 @@
 # handover_state
 
-- آخر تحديث: 2026-11-16
-- حدّثه: Claude Sonnet 5.5
-- المهمة: تجهيز هيكل المستودع
+- آخر تحديث: 2026-11-19
+- حدّثه: arena-agent
+- المهمة: المرحلة 4 أدوات الجهاز + المرحلة 5 الخادم والمجتمع + تاج v0.5.0-test.1
 
 كل موديل يقرأ هذا الملف أولاً ولا يقرأ كامل الكود. وفي نهاية عمله يحدّثه هو الملف الوحيد للتسليم.
 
 ## هيكلة المجلدات
 
-انظر README.md. المجلدات كلها فارغة (.gitkeep) ما عدا الوثائق والسكربتات والـworkflow والأمثلة.
+انظر README.md. التطبيق في app/src/main/kotlin: `core` (config وdesign وnavigation وstorage الفارغ) و`data/local` (التخزين) و`domain/model` (النماذج) و`feature` (الشاشات). الموارد في app/src/main/res (عربية وvalues-en للفرق فقط)، والقيم في config/app.json وتُحزم في assets عبر app/build.gradle.kts.
 
 ## حالة المكونات
 
 | المكون | الحالة | ملاحظة |
 |---|---|---|
 | هيكل المستودع | تم | بانتظار تحققك من صفحة الاختبارات |
-| خط البناء release.yml | تم | يفشل عمداً حتى ينشأ gradlew |
-| مشروع Gradle | لم يبدأ | |
-| الواجهات | لم يبدأ | المرحلة 1 |
-| النواة (مهام، مال، تمارين، مذكرات) | لم يبدأ | |
-| الخادم PHP | لم يبدأ | |
-| لوحة التحكم | لم يبدأ | |
+| خط البناء release.yml | تم | ubuntu-24.04 وSDK المثبت، وتخطي التوقيع في بناء الاختبار |
+| مشروع Gradle | تم | Kotlin المدمج (AGP 9)، AGP 9.1.1، Gradle 9.3.1، ونوع qa مع مهمة assembleTester |
+| التاج v0.3.0-test.1 | تم | بُني ونُشر app-qa.apk (31.6MB) وكل خطوات Actions نجحت |
+| التاج v0.5.0-test.1 | تم | بُني ونُشر app-qa.apk (32.2MB) بعد إصلاح أخطاء الترجمة، بانتظار التحقق اليدوي |
+| الواجهات | تم | ثيم زاهٍ وخلفيات متدرجة لكل الشاشات |
+| مقدمة الأنمي | تم ومنشور | بوابة تتسع ووميض ذهبي ثم حوار المعلمة نور، وتُعاد من الإعدادات |
+| المكتبة السحرية | تم ومنشور | 27 كتاباً في شبكة، ولكل كتاب لون ورمز، وفتح ثلاثي الأبعاد |
+| تسجيل البيانات | تم ومنشور | الاسم والعمر والهدف والفريق في Store، وتعديل من الملف الشخصي والإعدادات |
+| النواة (مهام، مال، تمارين، مذكرات) | تم ومنشور | حفظ JSON محلي، طاقة ونقاط، بلا مزامنة |
+| الحياة اليومية | تم ومنشور | ماء ونوم وصلوات وتعليم ومكتبة |
+| أدوات الجهاز | تم ومنشور | استخدام وحاجب ونطاقات وإشعارات وخزنة مشفرة ومزامنة في v0.5.0-test.1 |
+| الخادم PHP | تم ومنشور | خادم JSON ومخطط MySQL وعميل Api، بانتظار config.php من المالك |
+| لوحة التحكم | لم يبدأ | تحتاج قرار المالك وقاعدة البيانات |
 
 ## المسارات والروابط
 
-- المستودع: origin (يُحدد عند تشغيل setup-repo.bat)
+- المستودع: https://github.com/yswef/yousuf-toolkit-app
+- Release الاختبار الحالي: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.5.0-test.1
+- Release السابق: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.3.0-test.1
+- Release أقدم: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.1.0-test.1
+- تاج المرحلتين 4 و5: v0.5.0-test.1 (app-qa.apk 32.2MB، وتشغيل 44495189225 ناجح)
 - حالة المشروع: docs/site/dev/index.html
 - الاختبارات: docs/site/dev/tests.html
 - سجل التعديلات: docs/dev/changes/ ومؤشره docs/dev/CHANGELOG.md
 - قواعد الفريق: docs/dev/RULES.md
 - فهرس الرموز: docs/dev/SYMBOLS.md
+- توثيق الوحدات: docs/dev/modules/ui-phase1.md وcore-phase2.md وdaily-phase3.md وintro.md وmagic-home.md وregistration.md وdevice-tools.md وserver.md
 
 ## التبعيات والإصدارات
 
-- قرر: أندرويد 14 (API 34) كأقل إصدار، Kotlin، Jetpack Compose
-- لم يُقرر: إصدارات Kotlin وAGP وCompose وبقية المكتبات
+- Android 14 (API 34) كأقل إصدار، compileSdk/targetSdk 36، applicationId com.yousuf.toolkit، versionName 0.5.0
+- AGP 9.1.1، Gradle 9.3.1، Java 17، Kotlin المدمج مع compose compiler plugin 2.4.10
+- Compose BOM 2026.06.01، Navigation 2.8.0، activity-compose 1.13.0، material-icons-core 1.7.8
+- لا مكتبات جديدة: التخزين بـorg.json من أندرويد وكتابة ذرية على Executor واحد، والحركة بـCompose Canvas
+- صورة المعلمة نور أصلية مولدة وموجودة في drawable-nodpi/mentor.webp بحجم 182KB
+- إعداد القيم يُقرأ من `assets/app.json` و`assets/environments.json` عبر sourceSets
+- الخادم PHP 8.1+ وMySQL 8، اتصال PDO، ورموز Bearer مخزنة كـSHA-256
 
 ## المشاكل المفتوحة
 
-- applicationId لم يُحدد
 - نص الترخيص لم يُحدد، ولا ملف LICENSE بعد
-- ملف التوقيع لم يُنشأ، وأسرار GitHub لم تُضف
-- أسماء فرق السحر: قرارك معلق
-- قيم الطاقة والاستراحة لم تُحدد
-- ربط كود التفعيل بحساب أم جهاز لم يُحدد
-- release.yml يفشل برسالة واضحة حتى ينشأ مشروع Gradle
-- مشروع Gradle يجب أن يعرّف نوع البناء tester
+- ملف التوقيع وأسرار GitHub لم تُضف (مطلوبة فقط لبناء beta/release)
+- قيم جديدة في config/app.json بانتظار موافقة المالك: نقاط faith وlearn وreading وsleep، وwaterGoal وsleepGoalHours
+- مقدمة الأنمي بلا صوت أو فيديو، وتظهر في كل إقلاع (مع تخطي)؛ القرار للمالك
+- تسجيل البيانات محلي، والحساب اختياري عبر الخادم من تبويب المزامنة
+- صورة المعلمة نور تحتاج موافقة المالك على الأسلوب قبل النشر
+- التخزين المحلي ملف JSON واحد بلا Room؛ المزامنة تمر عبر Api وتُخزّن الصفوف في MySQL
+- لا اختبارات آلية جديدة؛ التحقق يدوي عبر docs/site/dev/tests-data.js. بناء v0.3.0-test.1 نجح عبر GitHub Actions ولم يُفحص على جهاز
+- `config/environments.json` apiBaseUrl فارغ، و`server/config/config.php` غير موجود؛ المزامنة لا تعمل حتى يملأهما المالك
+- خدمة الحاجب تحتاج تشغيلاً يدوياً من إعدادات إمكانية الوصول، وحجب النطاقات يحتاج VpnService لم يُنفذ
+- `main` متأخر عن `dev` بـ169 commit؛ الإصدار v0.3.0-test.1 بُني من dev، ويحتاج main دمج dev فيه من GitHub

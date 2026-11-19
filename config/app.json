@@ -1,0 +1,26 @@
+{
+  "energy": {
+    "max": 100,
+    "costPerTask": 10,
+    "restGain": 20
+  },
+  "points": {
+    "task": 10,
+    "workout": 15,
+    "water": 5,
+    "faith": 20,
+    "learn": 10,
+    "reading": 5,
+    "sleep": 5
+  },
+  "levels": {
+    "xpPerLevel": 100
+  },
+  "daily": {
+    "waterGoal": 8,
+    "sleepGoalHours": 8
+  },
+  "updater": {
+    "latestReleaseUrl": "https://api.github.com/repos/yswef/yousuf-toolkit-app/releases/latest"
+  }
+}
