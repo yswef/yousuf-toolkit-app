@@ -38,7 +38,7 @@
 ## المسارات والروابط
 
 - المستودع: https://github.com/yswef/yousuf-toolkit-app
-- Release الاختبار الحالي: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.10.1-test.1
+- Release الاختبار الحالي: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.10.2-test.1
 - Release السابق: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.3.0-test.1
 - Release أقدم: https://github.com/yswef/yousuf-toolkit-app/releases/tag/v0.1.0-test.1
 - تاج المرحلتين 4 و5: v0.5.0-test.1 (app-qa.apk 32.2MB، وتشغيل 44495189225 ناجح)
