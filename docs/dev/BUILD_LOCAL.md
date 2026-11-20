@@ -258,7 +258,7 @@ termux-setup-storage
 تثبيت نسخة جاهزة:
 
 ```bash
-curl -L -o app-qa.apk https://github.com/yswef/yousuf-toolkit-app/releases/download/v0.11.0-test.1/app-qa.apk
+curl -L -o app-qa.apk https://github.com/yswef/yousuf-toolkit-app/releases/download/v0.11.1-test.1/app-qa.apk
 adb pair 127.0.0.1:37123    # رمز الإقران من التصحيح اللاسلكي
 adb connect 127.0.0.1:5555
 adb install -r app-qa.apk
