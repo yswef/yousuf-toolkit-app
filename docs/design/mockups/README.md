@@ -21,7 +21,7 @@ python3 -m http.server 8080
 | `today.html` | التبويب الأول: تحية + XP + مهام + عادات |
 | `tasks.html` | المهام والفلاتر والتجميع |
 | `money.html` | الرصيد والرسم والسجل |
-| `tools.html` | بحث + الأخيرة + شبكة موحدة |
+| `tools.html` | مكتبة كتب سحرية + فتح فصول |
 | `achievements.html` | الرتب والأوسمة والحملات |
 | `stats.html` | حلقات وسلسلة وتوزيع |
 | `account.html` | الملف والإعدادات والبيانات |
@@ -30,6 +30,7 @@ python3 -m http.server 8080
 | `store.html` | المتجر |
 | `forum.html` | المنتدى |
 | `states.html` | فارغ/تحميل/خطأ/بدون إنترنت |
+| `assets/nour.webp` | صورة المعلمة نور الجديدة |
 | `REVIEW.md` | ما فُحص وأُصلح والقيود |
 
 ## ملاحظات
