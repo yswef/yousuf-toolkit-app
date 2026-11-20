@@ -10,6 +10,7 @@ import core.config.AppConfig
 import core.security.VaultCrypto
 import domain.model.Book
 import domain.model.Campaign
+import domain.model.Debt
 import domain.model.JournalEntry
 import domain.model.LearnItem
 import domain.model.Ledger
@@ -52,6 +53,8 @@ class Store(context: Context) {
     var tasks by mutableStateOf<List<Task>>(emptyList())
         private set
     var ledger by mutableStateOf<List<Ledger>>(emptyList())
+        private set
+    var debts by mutableStateOf<List<Debt>>(emptyList())
         private set
     var workouts by mutableStateOf<List<Workout>>(emptyList())
         private set
@@ -368,10 +371,7 @@ class Store(context: Context) {
         save()
     }
 
-    fun backupText(): String = runCatching {
-        save()
-        file.readText()
-    }.getOrDefault("{}")
+    fun backupText(): String = snapshot()
 
     fun restoreBackup(text: String): Boolean {
         return try {
@@ -379,8 +379,7 @@ class Store(context: Context) {
             if (!root.has("points") && !root.has("tasks")) {
                 false
             } else {
-                file.writeText(text)
-                read()
+                read(root)
                 save()
                 true
             }
@@ -475,6 +474,22 @@ class Store(context: Context) {
     fun addLedger(title: String, amount: Double, income: Boolean, category: String, at: Long = System.currentTimeMillis()) {
         if (title.isBlank() || !amount.isFinite() || amount <= 0.0) return
         ledger = ledger + Ledger(nextId(), title.trim(), amount, income, category, at)
+        save()
+    }
+
+    fun addDebt(person: String, amount: Double, owedByMe: Boolean, note: String) {
+        if (person.isBlank() || !amount.isFinite() || amount <= 0.0) return
+        debts = debts + Debt(nextId(), person.trim(), amount, owedByMe, note.trim(), false, System.currentTimeMillis())
+        save()
+    }
+
+    fun setDebtSettled(id: Long, settled: Boolean) {
+        debts = debts.map { if (it.id == id) it.copy(settled = settled) else it }
+        save()
+    }
+
+    fun deleteDebt(id: Long) {
+        debts = debts.filterNot { it.id == id }
         save()
     }
 
@@ -633,7 +648,7 @@ class Store(context: Context) {
     private fun dayOf(at: Long): String =
         Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).toLocalDate().toString()
 
-    private fun save() {
+    private fun snapshot(): String {
         val root = JSONObject()
         root.put("onboarded", onboarded)
         root.put("points", points)
@@ -715,6 +730,19 @@ class Store(context: Context) {
                 })
             }
         })
+        root.put("debts", JSONArray().apply {
+            debts.forEach { debt ->
+                put(JSONObject().apply {
+                    put("id", debt.id)
+                    put("person", debt.person)
+                    put("amount", debt.amount)
+                    put("owedByMe", debt.owedByMe)
+                    put("note", debt.note)
+                    put("settled", debt.settled)
+                    put("at", debt.at)
+                })
+            }
+        })
         root.put("ledger", JSONArray().apply {
             ledger.forEach { t ->
                 put(JSONObject().apply {
@@ -789,7 +817,11 @@ class Store(context: Context) {
         root.put("faithDays", JSONArray().apply { faithDays.forEach { put(it) } })
         root.put("sleepDays", JSONArray().apply { sleepDays.forEach { put(it) } })
 
-        val text = root.toString()
+        return root.toString()
+    }
+
+    private fun save() {
+        val text = snapshot()
         io.execute {
             try {
                 val temp = File(file.parentFile, "state.tmp")
@@ -816,10 +848,10 @@ class Store(context: Context) {
         }
     }
 
-    private fun read() {
-        if (!file.exists()) return
+    private fun read(restored: JSONObject? = null) {
+        if (restored == null && !file.exists()) return
         try {
-            val root = JSONObject(file.readText())
+            val root = restored ?: JSONObject(file.readText())
             onboarded = root.optBoolean("onboarded", false)
             points = root.optInt("points", 0)
             xp = root.optInt("xp", 0)
@@ -888,6 +920,17 @@ class Store(context: Context) {
                     priority = priorityOf(it.optString("priority")),
                     done = it.optBoolean("done"),
                     createdAt = it.optLong("createdAt")
+                )
+            }
+            debts = root.optJSONArray("debts").mapObjects {
+                Debt(
+                    id = it.optLong("id"),
+                    person = it.optString("person"),
+                    amount = it.optDouble("amount", 0.0),
+                    owedByMe = it.optBoolean("owedByMe"),
+                    note = it.optString("note"),
+                    settled = it.optBoolean("settled"),
+                    at = it.optLong("at")
                 )
             }
             ledger = root.optJSONArray("ledger").mapObjects {

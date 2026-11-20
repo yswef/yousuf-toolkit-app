@@ -100,7 +100,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.LEARN) { LearnScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LICENSE) { LicenseScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.MONEY) { MoneyScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.MONEY) { MoneyScreen(onBack = { nav.popBackStack() }, onWallets = { nav.navigate(Routes.WALLETS) }) }
         composable(Routes.NOTIFLOG) { NotiflogScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.PROFILE) { ProfileScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.RAIDS) { RaidsScreen(onBack = { nav.popBackStack() }) }
