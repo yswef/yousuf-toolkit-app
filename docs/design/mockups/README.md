@@ -31,6 +31,8 @@ python3 -m http.server 8080
 | `forum.html` | المنتدى |
 | `states.html` | فارغ/تحميل/خطأ/بدون إنترنت |
 | `assets/nour.webp` | صورة المعلمة نور الجديدة |
+| `audio/nour-intro.mp3` | صوت نور في المقدمة |
+| `audio/nour-rank.mp3` | تهنئة نور عند الرتبة |
 | `REVIEW.md` | ما فُحص وأُصلح والقيود |
 
 ## ملاحظات
