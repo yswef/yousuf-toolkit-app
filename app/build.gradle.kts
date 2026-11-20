@@ -11,8 +11,8 @@ android {
         applicationId = "com.yousuf.toolkit"
         minSdk = 34
         targetSdk = 36
-        versionCode = 9
-        versionName = "0.9.0"
+        versionCode = 11
+        versionName = "0.10.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

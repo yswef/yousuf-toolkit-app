@@ -45,7 +45,7 @@ import domain.model.Task
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TasksScreen(onBack: () -> Unit) {
+fun TasksScreen(onBack: () -> Unit, onMore: () -> Unit = {}) {
     val store = LocalStore.current
     var adding by remember { mutableStateOf(false) }
     var denied by remember { mutableStateOf(false) }
@@ -57,6 +57,9 @@ fun TasksScreen(onBack: () -> Unit) {
         title = stringResource(R.string.feature_tasks),
         onBack = onBack,
         actions = {
+            TextButton(onClick = onMore) {
+                Text(stringResource(R.string.taskspro_calendar))
+            }
             IconButton(onClick = { adding = true }) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
             }

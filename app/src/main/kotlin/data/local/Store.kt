@@ -8,14 +8,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import core.config.AppConfig
 import core.security.VaultCrypto
+import domain.model.AccountDevice
+import domain.model.AccountDraft
+import domain.model.AccountItem
+import domain.model.AccountRelation
 import domain.model.Book
 import domain.model.Campaign
 import domain.model.Debt
+import domain.model.ExtraRecord
+import domain.model.Habit
 import domain.model.JournalEntry
+import domain.model.LinkedNote
 import domain.model.LearnItem
 import domain.model.Ledger
 import domain.model.NotifEntry
 import domain.model.Priority
+import domain.model.ScreenshotItem
 import domain.model.SleepLog
 import domain.model.SmsMoney
 import domain.model.Task
@@ -115,6 +123,24 @@ class Store(context: Context) {
     var licenseCode by mutableStateOf("")
         private set
     var campaigns by mutableStateOf<List<Campaign>>(emptyList())
+        private set
+    var accounts by mutableStateOf<List<AccountItem>>(emptyList())
+        private set
+    var accountDevices by mutableStateOf<List<AccountDevice>>(emptyList())
+        private set
+    var accountRelations by mutableStateOf<List<AccountRelation>>(emptyList())
+        private set
+    var screenshots by mutableStateOf<List<ScreenshotItem>>(emptyList())
+        private set
+    var linkedNotes by mutableStateOf<List<LinkedNote>>(emptyList())
+        private set
+    var extras by mutableStateOf<List<ExtraRecord>>(emptyList())
+        private set
+    var habits by mutableStateOf<List<Habit>>(emptyList())
+        private set
+    var shields by mutableStateOf(0)
+        private set
+    var frozenDay by mutableStateOf("")
         private set
     var smsSeen by mutableStateOf<Set<String>>(emptySet())
         private set
@@ -443,9 +469,49 @@ class Store(context: Context) {
         return added
     }
 
-    fun addTask(title: String, note: String, priority: Priority) {
+    fun addTask(title: String, note: String, priority: Priority, dueAt: Long = 0L, repeat: String = "", list: String = "") {
         if (title.isBlank()) return
-        tasks = tasks + Task(nextId(), title.trim(), note.trim(), priority, false, System.currentTimeMillis())
+        tasks = tasks + Task(nextId(), title.trim(), note.trim(), priority, false, System.currentTimeMillis(), dueAt, repeat, list.trim())
+        save()
+    }
+
+    fun buyShield(): Boolean {
+        if (points < config.shieldCost) return false
+        takePoints(config.shieldCost)
+        shields += 1
+        save()
+        return true
+    }
+
+    fun freezeToday(): Boolean {
+        if (frozenDay == today || points < config.freezeCost) return false
+        takePoints(config.freezeCost)
+        frozenDay = today
+        save()
+        return true
+    }
+
+    fun addHabit(title: String) {
+        if (title.isBlank()) return
+        habits = habits + Habit(nextId(), title.trim(), 0, 0, "")
+        save()
+    }
+
+    fun checkHabit(id: Long) {
+        ensureDay()
+        val day = today
+        val habit = habits.firstOrNull { it.id == id } ?: return
+        if (habit.lastDay == day) return
+        val streak = if (habit.lastDay == LocalDate.now().minusDays(1).toString()) habit.streak + 1 else 1
+        habits = habits.map {
+            if (it.id == id) it.copy(streak = streak, best = maxOf(it.best, streak), lastDay = day) else it
+        }
+        addPoints(config.pointsTask / 2)
+        save()
+    }
+
+    fun deleteHabit(id: Long) {
+        habits = habits.filterNot { it.id == id }
         save()
     }
 
@@ -457,6 +523,18 @@ class Store(context: Context) {
             energy -= config.energyCost
             addPoints(config.pointsTask)
             tasks = tasks.map { if (it.id == id) it.copy(done = true) else it }
+            if (task.repeat.isNotBlank()) {
+                val next = when (task.repeat) {
+                    "daily" -> LocalDate.now().plusDays(1)
+                    "weekly" -> LocalDate.now().plusWeeks(1)
+                    "monthly" -> LocalDate.now().plusMonths(1)
+                    else -> null
+                }
+                if (next != null) {
+                    val due = next.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                    tasks = tasks + Task(nextId(), task.title, task.note, task.priority, false, System.currentTimeMillis(), due, task.repeat, task.list)
+                }
+            }
         } else {
             energy = (energy + config.energyCost).coerceAtMost(config.energyMax)
             takePoints(config.pointsTask)
@@ -486,6 +564,17 @@ class Store(context: Context) {
     fun setDebtSettled(id: Long, settled: Boolean) {
         debts = debts.map { if (it.id == id) it.copy(settled = settled) else it }
         save()
+    }
+
+    fun payDebt(id: Long, amount: Double): Boolean {
+        if (amount <= 0.0) return false
+        val debt = debts.firstOrNull { it.id == id } ?: return false
+        val paid = amount.coerceAtMost(debt.amount)
+        val left = debt.amount - paid
+        debts = debts.map { if (it.id == id) it.copy(amount = left, settled = left <= 0.0001) else it }
+        addLedger(debt.person, paid, !debt.owedByMe, "other")
+        save()
+        return true
     }
 
     fun deleteDebt(id: Long) {
@@ -622,6 +711,160 @@ class Store(context: Context) {
         save()
     }
 
+    fun saveAccount(id: Long, draft: AccountDraft): Boolean {
+        if (draft.title.isBlank() && draft.email.isBlank() && draft.username.isBlank()) return false
+        val item = AccountItem(
+            id = if (id > 0L) id else nextId(),
+            title = draft.title.trim(),
+            username = draft.username.trim(),
+            email = draft.email.trim(),
+            password = enc(draft.password),
+            totp = enc(draft.totp),
+            layer = draft.layer,
+            category = draft.category,
+            recoveryEmail = draft.recoveryEmail.trim(),
+            recoveryPhone = draft.recoveryPhone.trim(),
+            codes = enc(draft.codes),
+            notes = enc(draft.notes),
+            updatedAt = System.currentTimeMillis()
+        )
+        accounts = if (id > 0L) accounts.map { if (it.id == id) item else it } else listOf(item) + accounts
+        save()
+        return true
+    }
+
+    fun touchAccount(id: Long) {
+        accounts = accounts.map { if (it.id == id) it.copy(updatedAt = System.currentTimeMillis()) else it }
+        save()
+    }
+
+    fun deleteAccount(id: Long) {
+        accounts = accounts.filterNot { it.id == id }
+        accountRelations = accountRelations.filterNot { it.fromId == id || it.toId == id }
+        save()
+    }
+
+    fun accountPassword(item: AccountItem): String = dec(item.password)
+    fun accountTotp(item: AccountItem): String = dec(item.totp).replace(" ", "")
+    fun accountCodes(item: AccountItem): String = dec(item.codes)
+    fun accountNotes(item: AccountItem): String = dec(item.notes)
+
+    fun addAccountDevice(name: String, platform: String) {
+        if (name.isBlank()) return
+        accountDevices = listOf(AccountDevice(nextId(), name.trim(), platform.ifBlank { "android" }, System.currentTimeMillis(), false)) + accountDevices
+        save()
+    }
+
+    fun ensureCurrentDevice(name: String) {
+        if (accountDevices.any { it.current }) return
+        accountDevices = listOf(AccountDevice(nextId(), name, "android", System.currentTimeMillis(), true)) + accountDevices
+        save()
+    }
+
+    fun removeAccountDevice(id: Long) {
+        accountDevices = accountDevices.filterNot { it.id == id }
+        save()
+    }
+
+    fun addAccountRelation(fromId: Long, toId: Long, kind: String) {
+        if (fromId == toId || fromId <= 0L || toId <= 0L) return
+        if (accountRelations.any { it.fromId == fromId && it.toId == toId && it.kind == kind }) return
+        accountRelations = accountRelations + AccountRelation(nextId(), fromId, toId, kind)
+        save()
+    }
+
+    fun deleteAccountRelation(id: Long) {
+        accountRelations = accountRelations.filterNot { it.id == id }
+        save()
+    }
+
+    fun addScreenshot(label: String, mime: String, bytes: ByteArray): Boolean {
+        if (bytes.isEmpty()) return false
+        val plain = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
+        val payload = VaultCrypto.encrypt(plain) ?: return false
+        screenshots = listOf(ScreenshotItem(nextId(), label.ifBlank { "screenshot" }, mime, payload, System.currentTimeMillis())) + screenshots
+        save()
+        return true
+    }
+
+    fun screenshotBytes(item: ScreenshotItem): ByteArray? {
+        val plain = VaultCrypto.decrypt(item.payload) ?: return null
+        return runCatching { android.util.Base64.decode(plain, android.util.Base64.NO_WRAP) }.getOrNull()
+    }
+
+    fun deleteScreenshot(id: Long) {
+        screenshots = screenshots.filterNot { it.id == id }
+        save()
+    }
+
+    fun addLinkedNote(title: String, body: String, tags: String): Boolean {
+        if (title.isBlank() && body.isBlank()) return false
+        linkedNotes = listOf(LinkedNote(nextId(), title.trim(), body, tags.trim(), System.currentTimeMillis())) + linkedNotes
+        save()
+        return true
+    }
+
+    fun deleteLinkedNote(id: Long) {
+        linkedNotes = linkedNotes.filterNot { it.id == id }
+        save()
+    }
+
+    fun addExtra(kind: String, title: String, detail: String, amount: Double, dueAt: Long): Boolean {
+        if (kind.isBlank() || title.isBlank()) return false
+        extras = listOf(ExtraRecord(nextId(), kind, title.trim(), detail.trim(), amount, "open", dueAt, System.currentTimeMillis())) + extras
+        save()
+        return true
+    }
+
+    fun addAlarm(title: String, text: String, at: Long): Long {
+        val id = nextId()
+        extras = listOf(ExtraRecord(id, "alarm", title.trim(), text.trim(), 0.0, "open", at, System.currentTimeMillis())) + extras
+        save()
+        return id
+    }
+
+    fun updateExtra(id: Long, status: String, amount: Double? = null) {
+        extras = extras.map {
+            if (it.id == id) it.copy(status = status, amount = amount ?: it.amount) else it
+        }
+        save()
+    }
+
+    fun addExtraAmount(id: Long, delta: Double) {
+        extras = extras.map {
+            if (it.id == id) it.copy(amount = (it.amount + delta).coerceAtLeast(0.0)) else it
+        }
+        save()
+    }
+
+    fun deleteExtra(id: Long) {
+        extras = extras.filterNot { it.id == id }
+        save()
+    }
+
+    fun transferBetweenWallets(fromId: Long, toId: Long, amount: Double): Boolean {
+        if (amount <= 0.0 || fromId == toId) return false
+        val from = wallets.firstOrNull { it.id == fromId } ?: return false
+        val to = wallets.firstOrNull { it.id == toId } ?: return false
+        if (from.balance < amount) return false
+        wallets = wallets.map {
+            when (it.id) {
+                fromId -> it.copy(balance = it.balance - amount)
+                toId -> it.copy(balance = it.balance + amount)
+                else -> it
+            }
+        }
+        extras = listOf(ExtraRecord(nextId(), "transfer", from.name + " > " + to.name, "", amount, "done", 0L, System.currentTimeMillis())) + extras
+        save()
+        return true
+    }
+
+    private fun enc(value: String): String? =
+        value.takeIf { it.isNotBlank() }?.let { VaultCrypto.encrypt(it) }
+
+    private fun dec(value: String?): String =
+        value?.takeIf { it.isNotBlank() }?.let { VaultCrypto.decrypt(it) }.orEmpty()
+
     private fun addPoints(value: Int) {
         if (value <= 0) return
         points += value
@@ -682,6 +925,25 @@ class Store(context: Context) {
                 })
             }
         })
+        root.put("accounts", JSONArray().apply { accounts.forEach { put(it.toJson()) } })
+        root.put("accountDevices", JSONArray().apply { accountDevices.forEach { put(it.toJson()) } })
+        root.put("accountRelations", JSONArray().apply { accountRelations.forEach { put(it.toJson()) } })
+        root.put("screenshots", JSONArray().apply { screenshots.forEach { put(it.toJson()) } })
+        root.put("linkedNotes", JSONArray().apply { linkedNotes.forEach { put(it.toJson()) } })
+        root.put("extras", JSONArray().apply { extras.forEach { put(it.toJson()) } })
+        root.put("shields", shields)
+        root.put("frozenDay", frozenDay)
+        root.put("habits", JSONArray().apply {
+            habits.forEach { h ->
+                put(JSONObject().apply {
+                    put("id", h.id)
+                    put("title", h.title)
+                    put("streak", h.streak)
+                    put("best", h.best)
+                    put("lastDay", h.lastDay)
+                })
+            }
+        })
         root.put("smsSeen", JSONArray().apply { smsSeen.forEach { put(it) } })
         root.put("blockerOn", blockerOn)
         root.put("blockStart", blockStart)
@@ -727,6 +989,9 @@ class Store(context: Context) {
                     put("priority", t.priority.name)
                     put("done", t.done)
                     put("createdAt", t.createdAt)
+                    put("dueAt", t.dueAt)
+                    put("repeat", t.repeat)
+                    put("list", t.list)
                 })
             }
         })
@@ -919,7 +1184,10 @@ class Store(context: Context) {
                     note = it.optString("note"),
                     priority = priorityOf(it.optString("priority")),
                     done = it.optBoolean("done"),
-                    createdAt = it.optLong("createdAt")
+                    createdAt = it.optLong("createdAt"),
+                    dueAt = it.optLong("dueAt"),
+                    repeat = it.optString("repeat"),
+                    list = it.optString("list")
                 )
             }
             debts = root.optJSONArray("debts").mapObjects {
@@ -986,6 +1254,17 @@ class Store(context: Context) {
                     rewarded = it.optBoolean("rewarded")
                 )
             }
+            accounts = root.optJSONArray("accounts").mapObjects { it.toAccount() }
+            accountDevices = root.optJSONArray("accountDevices").mapObjects { it.toAccountDevice() }
+            accountRelations = root.optJSONArray("accountRelations").mapObjects { it.toAccountRelation() }
+            screenshots = root.optJSONArray("screenshots").mapObjects { it.toScreenshot() }
+            linkedNotes = root.optJSONArray("linkedNotes").mapObjects { it.toLinkedNote() }
+            extras = root.optJSONArray("extras").mapObjects { it.toExtra() }
+            shields = root.optInt("shields", 0)
+            frozenDay = root.optString("frozenDay", "")
+            habits = root.optJSONArray("habits").mapObjects {
+                Habit(it.optLong("id"), it.optString("title"), it.optInt("streak"), it.optInt("best"), it.optString("lastDay"))
+            }
             faithDays = root.stringSet("faithDays")
             sleepDays = root.stringSet("sleepDays")
         } catch (t: Throwable) {
@@ -1042,3 +1321,90 @@ private fun JSONObject.stringSet(key: String): Set<String> {
     for (i in 0 until arr.length()) out.add(arr.optString(i))
     return out
 }
+
+
+private fun AccountItem.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("username", username)
+    put("email", email)
+    put("password", password ?: "")
+    put("totp", totp ?: "")
+    put("layer", layer)
+    put("category", category)
+    put("recoveryEmail", recoveryEmail)
+    put("recoveryPhone", recoveryPhone)
+    put("codes", codes ?: "")
+    put("notes", notes ?: "")
+    put("updatedAt", updatedAt)
+}
+
+private fun JSONObject.toAccount(): AccountItem = AccountItem(
+    optLong("id"), optString("title"), optString("username"), optString("email"),
+    optString("password").ifBlank { null }, optString("totp").ifBlank { null },
+    optString("layer", "normal"), optString("category", "other"),
+    optString("recoveryEmail"), optString("recoveryPhone"),
+    optString("codes").ifBlank { null }, optString("notes").ifBlank { null },
+    optLong("updatedAt")
+)
+
+private fun AccountDevice.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("name", name)
+    put("platform", platform)
+    put("lastSeen", lastSeen)
+    put("current", current)
+}
+
+private fun JSONObject.toAccountDevice(): AccountDevice = AccountDevice(
+    optLong("id"), optString("name"), optString("platform", "android"),
+    optLong("lastSeen"), optBoolean("current")
+)
+
+private fun AccountRelation.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("fromId", fromId)
+    put("toId", toId)
+    put("kind", kind)
+}
+
+private fun JSONObject.toAccountRelation(): AccountRelation =
+    AccountRelation(optLong("id"), optLong("fromId"), optLong("toId"), optString("kind"))
+
+private fun ScreenshotItem.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("label", label)
+    put("mime", mime)
+    put("payload", payload)
+    put("at", at)
+}
+
+private fun JSONObject.toScreenshot(): ScreenshotItem =
+    ScreenshotItem(optLong("id"), optString("label"), optString("mime", "image/jpeg"), optString("payload"), optLong("at"))
+
+private fun LinkedNote.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("body", body)
+    put("tags", tags)
+    put("at", at)
+}
+
+private fun JSONObject.toLinkedNote(): LinkedNote =
+    LinkedNote(optLong("id"), optString("title"), optString("body"), optString("tags"), optLong("at"))
+
+private fun ExtraRecord.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("kind", kind)
+    put("title", title)
+    put("detail", detail)
+    put("amount", amount)
+    put("status", status)
+    put("dueAt", dueAt)
+    put("createdAt", createdAt)
+}
+
+private fun JSONObject.toExtra(): ExtraRecord = ExtraRecord(
+    optLong("id"), optString("kind"), optString("title"), optString("detail"),
+    optDouble("amount", 0.0), optString("status", "open"), optLong("dueAt"), optLong("createdAt")
+)

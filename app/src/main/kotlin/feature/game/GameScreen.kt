@@ -45,6 +45,8 @@ fun GameScreen(onBack: () -> Unit) {
     var adding by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf("") }
     var target by remember { mutableStateOf("21") }
+    val weeklyTitle = stringResource(R.string.game_weekly)
+    val monthlyTitle = stringResource(R.string.game_monthly)
 
     ScreenScaffold(
         title = stringResource(R.string.feature_game),
@@ -95,6 +97,40 @@ fun GameScreen(onBack: () -> Unit) {
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
+                }
+            }
+
+            Surface(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.55f)
+            ) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(stringResource(R.string.game_magic), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.game_shields, store.shields), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.game_shield_hint), style = MaterialTheme.typography.bodySmall)
+                    OutlinedButton(onClick = { store.buyShield() }) {
+                        Text(stringResource(R.string.game_shield_buy, store.config.shieldCost))
+                    }
+                    if (store.frozenDay == store.today) {
+                        Text(stringResource(R.string.game_freeze_done))
+                    } else {
+                        OutlinedButton(onClick = { store.freezeToday() }) {
+                            Text(stringResource(R.string.game_freeze) + " · " + stringResource(R.string.game_freeze_cost, store.config.freezeCost))
+                        }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(onClick = { store.addCampaign(weeklyTitle, store.config.weeklyRaidTarget) }) {
+                            Text(stringResource(R.string.game_weekly))
+                        }
+                        OutlinedButton(onClick = { store.addCampaign(monthlyTitle, store.config.monthlyChallengeTarget) }) {
+                            Text(stringResource(R.string.game_monthly))
+                        }
+                    }
+                    Text(stringResource(R.string.game_medals), style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.game_medal_rank, rankLabel(store.rankKey)))
+                    Text(stringResource(R.string.game_medal_campaign) + ": " + if (store.campaigns.any { it.done }) stringResource(R.string.game_unlocked) else stringResource(R.string.game_no_medal))
+                    Text(stringResource(R.string.game_medal_streak) + ": " + if (store.level >= 5) stringResource(R.string.game_unlocked) else stringResource(R.string.game_no_medal))
                 }
             }
 

@@ -8,5 +8,8 @@ data class Task(
     val note: String,
     val priority: Priority,
     val done: Boolean,
-    val createdAt: Long
+    val createdAt: Long,
+    val dueAt: Long = 0L,
+    val repeat: String = "",
+    val list: String = ""
 )
