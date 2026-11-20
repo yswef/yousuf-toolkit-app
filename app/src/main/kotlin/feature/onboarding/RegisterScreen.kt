@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.ProfileFields
+import core.design.ageFromBirthDate
 import core.design.ScreenScaffold
 import core.design.goalKeys
 import core.design.teamKeys
@@ -41,10 +42,15 @@ fun RegisterScreen(onBack: () -> Unit, onDone: () -> Unit) {
     val store = LocalStore.current
     var name by remember { mutableStateOf(store.profileName) }
     var age by remember { mutableStateOf(if (store.profileAge > 0) store.profileAge.toString() else "") }
+    var birthDate by remember { mutableStateOf(store.profileBirthDate) }
+    var height by remember { mutableStateOf(if (store.profileHeightCm > 0) store.profileHeightCm.toString() else "") }
+    var weight by remember { mutableStateOf(if (store.profileWeightKg > 0.0) store.profileWeightKg.toString() else "") }
+    var gender by remember { mutableStateOf(store.profileGender.ifBlank { "unspecified" }) }
+    var activity by remember { mutableStateOf(store.profileActivity.ifBlank { "medium" }) }
     var goal by remember { mutableStateOf(store.profileGoal.ifBlank { goalKeys.first() }) }
     var team by remember { mutableStateOf(store.profileTeam.ifBlank { teamKeys.first() }) }
 
-    val ageValue = age.toIntOrNull()
+    val ageValue = ageFromBirthDate(birthDate) ?: age.toIntOrNull()
     val valid = name.isNotBlank() && ageValue != null && ageValue in 10..99
 
     ScreenScaffold(
@@ -98,7 +104,17 @@ fun RegisterScreen(onBack: () -> Unit, onDone: () -> Unit) {
                         goal = goal,
                         onGoal = { goal = it },
                         team = team,
-                        onTeam = { team = it }
+                        onTeam = { team = it },
+                        birthDate = birthDate,
+                        onBirthDate = { birthDate = it },
+                        height = height,
+                        onHeight = { height = it },
+                        weight = weight,
+                        onWeight = { weight = it },
+                        gender = gender,
+                        onGender = { gender = it },
+                        activity = activity,
+                        onActivity = { activity = it }
                     )
                 }
             }
@@ -112,7 +128,17 @@ fun RegisterScreen(onBack: () -> Unit, onDone: () -> Unit) {
             Button(
                 onClick = {
                     ageValue?.let {
-                        store.saveProfile(name, it, goal, team)
+                        store.saveProfile(
+                            name = name,
+                            age = it,
+                            goal = goal,
+                            team = team,
+                            birthDate = birthDate,
+                            heightCm = height.toIntOrNull() ?: 0,
+                            weightKg = weight.toDoubleOrNull() ?: 0.0,
+                            gender = gender,
+                            activity = activity
+                        )
                         onDone()
                     }
                 },
