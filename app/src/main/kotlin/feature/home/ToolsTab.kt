@@ -15,6 +15,10 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -35,6 +39,13 @@ import data.local.LocalStore
 @Composable
 fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
     var opening by remember { mutableStateOf<MagicBook?>(null) }
+    var query by remember { mutableStateOf("") }
+    val visibleSections = bookSections.mapNotNull { section ->
+        val books = section.books.filter { book ->
+            query.isBlank() || stringResource(book.title).contains(query, ignoreCase = true)
+        }
+        if (books.isEmpty()) null else section.copy(books = books)
+    }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -44,7 +55,15 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item(span = { GridItemSpan(maxLineSpan) }, key = "tools-head") {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+                    placeholder = { Text(stringResource(R.string.tools_search)) }
+                )
                 Text(
                     stringResource(R.string.tools_subtitle),
                     style = MaterialTheme.typography.bodySmall,
@@ -52,7 +71,7 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
                 )
             }
         }
-        bookSections.forEach { section ->
+        visibleSections.forEach { section ->
             item(span = { GridItemSpan(maxLineSpan) }, key = "section-${section.title}") {
                 Text(
                     stringResource(section.title),

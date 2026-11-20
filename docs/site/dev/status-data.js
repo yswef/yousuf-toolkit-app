@@ -1,5 +1,5 @@
 window.PROJECT_STATUS={
-  updated:'2026-11-19',
+  updated:'2026-11-20',
   updatedBy:'arena-agent',
   stages:[
     {id:'repo',title:'المستودع والهيكل',tag:'',status:'wait',note:'بانتظار تحققك من صفحة الاختبارات'},

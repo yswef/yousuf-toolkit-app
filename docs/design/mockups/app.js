@@ -34,6 +34,7 @@
     x: '<path d="m6 6 12 12M18 6 6 18"/>',
     "arrow-left": '<path d="M20 12H5"/><path d="m11 6-6 6 6 6"/>',
     "arrow-right": '<path d="M4 12h15"/><path d="m13 6 6 6-6 6"/>',
+    heart: '<path d="M12 20s-7-4.3-7-9.2A4 4 0 0 1 12 8a4 4 0 0 1 7 2.8C19 15.7 12 20 12 20z"/>',
     target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
     flame: '<path d="M12 21c4 0 6-2.6 6-6 0-4.5-4-6.5-4-10-3 1.5-4 4-4 6-1.5-1-2-2.5-2-4-2 2-2 4.5-2 6 0 4.5 2.5 8 6 8z"/>',
     coins: '<ellipse cx="9" cy="7" rx="5" ry="2.5"/><path d="M4 7v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V7"/><path d="M4 11v4c0 1.4 2.2 2.5 5 2.5"/><ellipse cx="16" cy="16" rx="4" ry="2"/><path d="M12 16v3c0 1.1 1.8 2 4 2s4-.9 4-2v-3"/>',
@@ -165,6 +166,174 @@
     });
   }
 
+
+  const BOOKS = {
+    tasks: {
+      title: "كتاب المهام", desc: "تنظيم اليوم، الأولويات، والمصفوفة.",
+      start: "#143A2E", end: "#081A14", glow: "#5CD39B", icon: "check-square",
+      chapters: [
+        { icon: "check-square", label: "المهام اليومية", href: "tasks.html" },
+        { icon: "calendar", label: "قادم ومتأخر", href: "tasks.html" },
+        { icon: "target", label: "مصفوفة أيزنهاور", href: "states.html" }
+      ]
+    },
+    money: {
+      title: "كتاب المال", desc: "الرصيد، الفئات، والحركات.",
+      start: "#0E3B38", end: "#061C1B", glow: "#6FE3D5", icon: "wallet",
+      chapters: [
+        { icon: "wallet", label: "سجل الحركات", href: "money.html" },
+        { icon: "chart", label: "الميزانية والتقرير", href: "money.html" },
+        { icon: "coins", label: "المحافظ والعملات", href: "states.html" }
+      ]
+    },
+    health: {
+      title: "كتاب الحياة", desc: "الماء، النوم، والتمارين.",
+      start: "#4A231A", end: "#26100A", glow: "#F0B08A", icon: "droplet",
+      chapters: [
+        { icon: "droplet", label: "الماء", href: "tool-water.html" },
+        { icon: "bed", label: "النوم", href: "states.html" },
+        { icon: "dumbbell", label: "التمارين", href: "stats.html" }
+      ]
+    },
+    faith: {
+      title: "كتاب الإيمان", desc: "الأذكار، الصلوات، والقبلة.",
+      start: "#3A2C80", end: "#1C123F", glow: "#E8C06A", icon: "mosque",
+      chapters: [
+        { icon: "mosque", label: "صلوات اليوم", href: "states.html" },
+        { icon: "book-open", label: "حصن المسلم", href: "states.html" },
+        { icon: "compass", label: "القبلة", href: "states.html" }
+      ]
+    },
+    library: {
+      title: "كتاب المكتبة", desc: "٢٢ كتاباً في الحياة والتنمية.",
+      start: "#1B2350", end: "#0A0F26", glow: "#A8B4FF", icon: "book-open",
+      chapters: [
+        { icon: "book", label: "كتبي", href: "states.html" },
+        { icon: "plus", label: "إضافة كتاب", href: "states.html" },
+        { icon: "notebook", label: "ملاحظات القراءة", href: "states.html" }
+      ]
+    },
+    learn: {
+      title: "كتاب التعلم", desc: "مهارات، خطط، ومسارات.",
+      start: "#32204F", end: "#170E2A", glow: "#C9B0F2", icon: "brain",
+      chapters: [
+        { icon: "brain", label: "خطة التعلم", href: "states.html" },
+        { icon: "target", label: "الأهداف", href: "states.html" },
+        { icon: "chart", label: "التقدم", href: "stats.html" }
+      ]
+    },
+    journal: {
+      title: "كتاب المذكرات", desc: "يومياتك ومزاجك.",
+      start: "#3B2A18", end: "#20140A", glow: "#E8C06A", icon: "notebook",
+      chapters: [
+        { icon: "notebook", label: "مذكرات اليوم", href: "states.html" },
+        { icon: "heart", label: "المزاج", href: "states.html" }
+      ]
+    },
+    forum: {
+      title: "كتاب المنتدى", desc: "مجتمع السحرة وأسئلتهم.",
+      start: "#123836", end: "#071D1C", glow: "#6FE3D5", icon: "users",
+      chapters: [
+        { icon: "message", label: "المواضيع", href: "forum.html" },
+        { icon: "plus", label: "موضوع جديد", href: "forum.html" }
+      ]
+    },
+    device: {
+      title: "كتاب الحاجب", desc: "التطبيقات، الحدود، والصلاحيات.",
+      start: "#1E2A45", end: "#0D1422", glow: "#A8B4FF", icon: "shield",
+      chapters: [
+        { icon: "shield", label: "حاجب التطبيقات", href: "states.html" },
+        { icon: "clock", label: "حدود الوقت", href: "states.html" },
+        { icon: "lock", label: "الخصوصية", href: "states.html" }
+      ]
+    },
+    data: {
+      title: "كتاب البيانات", desc: "الاستهلاك والسرعة والذاكرة.",
+      start: "#26303B", end: "#10161C", glow: "#9FB4C9", icon: "chart",
+      chapters: [
+        { icon: "chart", label: "استهلاك البيانات", href: "stats.html" },
+        { icon: "refresh", label: "اختبار السرعة", href: "states.html" }
+      ]
+    },
+    privacy: {
+      title: "كتاب الخصوصية", desc: "الصلاحيات وما يُشارك.",
+      start: "#2A1A33", end: "#120A18", glow: "#C9B0F2", icon: "lock",
+      chapters: [
+        { icon: "lock", label: "الصلاحيات", href: "states.html" },
+        { icon: "shield", label: "المتجر الآمن", href: "store.html" }
+      ]
+    },
+    cleaner: {
+      title: "كتاب التنظيف", desc: "الملفات المؤقتة والذاكرة.",
+      start: "#23303A", end: "#0F171C", glow: "#9FB4C9", icon: "trash",
+      chapters: [
+        { icon: "trash", label: "تنظيف سريع", href: "states.html" },
+        { icon: "chart", label: "تفاصيل التخزين", href: "stats.html" }
+      ]
+    },
+    path: {
+      title: "كتاب المسار", desc: "الرتب، الحملات، ورحلتك.",
+      start: "#3A2C1A", end: "#1C1409", glow: "#E8C06A", icon: "compass",
+      chapters: [
+        { icon: "compass", label: "خريطة الرتب", href: "achievements.html" },
+        { icon: "target", label: "الحملات", href: "achievements.html" }
+      ]
+    },
+    achievements: {
+      title: "كتاب الإنجازات", desc: "الأوسمة، XP، والاحتفال.",
+      start: "#33235F", end: "#180F32", glow: "#E8C06A", icon: "trophy",
+      chapters: [
+        { icon: "trophy", label: "الأوسمة", href: "achievements.html" },
+        { icon: "star", label: "XP والرتبة", href: "achievements.html" }
+      ]
+    },
+    store: {
+      title: "كتاب المتجر", desc: "سكنات وعناصر تُفتح بالعملات.",
+      start: "#143A2E", end: "#081A14", glow: "#E8C06A", icon: "bag",
+      chapters: [
+        { icon: "bag", label: "المتجر", href: "store.html" },
+        { icon: "sparkles", label: "السكنات", href: "store.html" }
+      ]
+    },
+    raids: {
+      title: "كتاب الغارات", desc: "تحديات ثابتة لا يكتبها المستخدم.",
+      start: "#3F1A22", end: "#200A0F", glow: "#FF8A92", icon: "target",
+      chapters: [
+        { icon: "target", label: "الغارة الحالية", href: "achievements.html" },
+        { icon: "trophy", label: "سجل الغارات", href: "achievements.html" }
+      ]
+    }
+  };
+
+  function setupGrimoires() {
+    const sheet = $("#grimoire-sheet");
+    if (!sheet) return;
+    const scrim = $(".scrim");
+    const title = $("[data-book-title]", sheet);
+    const desc = $("[data-book-desc]", sheet);
+    const cover = $("[data-book-cover]", sheet);
+    const list = $("[data-book-chapters]", sheet);
+    function open(key) {
+      const book = BOOKS[key];
+      if (!book) return;
+      title.textContent = book.title;
+      desc.textContent = book.desc;
+      cover.style.setProperty("--book-start", book.start);
+      cover.style.setProperty("--book-end", book.end);
+      cover.style.setProperty("--book-glow", book.glow);
+      cover.innerHTML = '<span class="icon" data-icon="' + book.icon + '"></span>';
+      list.innerHTML = book.chapters.map((c) =>
+        '<a class="chapter" href="' + c.href + '"><span class="icon sm" data-icon="' + c.icon + '"></span>' +
+        '<span>' + c.label + '</span><span class="icon sm chev" data-icon="chevron-left"></span></a>'
+      ).join("");
+      mountIcons(sheet);
+      scrim.classList.add("open");
+      sheet.classList.add("open");
+      sheet.setAttribute("aria-hidden", "false");
+    }
+    $$("[data-grimoire]").forEach((b) => b.addEventListener("click", () => open(b.dataset.grimoire)));
+  }
+
   function setupFilters() {
     $$("[data-filter-input]").forEach((input) => {
       input.addEventListener("input", () => {
@@ -180,6 +349,20 @@
         if (!chip) return;
         $$(".chip", row).forEach((c) => c.setAttribute("aria-pressed", "false"));
         chip.setAttribute("aria-pressed", "true");
+      });
+    });
+  }
+
+  function setupAudio() {
+    let audio = null;
+    $$("[data-audio]").forEach((b) => {
+      b.addEventListener("click", () => {
+        if (!audio) audio = new Audio();
+        audio.pause();
+        audio.src = b.dataset.audio;
+        audio.currentTime = 0;
+        audio.play().catch(() => toast("تعذّر تشغيل الصوت"));
+        toast("صوت نور يعمل");
       });
     });
   }
@@ -264,12 +447,15 @@
   function init() {
     setupLab();
     mountIcons();
-    applyTheme(store.get("yd-theme", "light"));
+    const savedTheme = store.get("yd-theme", "");
+    applyTheme(savedTheme || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
     applyMotion(store.get("yd-motion", "full"));
     applyFont(store.get("yd-font", "1"));
     setupMisc();
     setupSheet();
+    setupGrimoires();
     setupTasks();
+    setupAudio();
     setupFilters();
     setupReveal();
     setupSwatches();

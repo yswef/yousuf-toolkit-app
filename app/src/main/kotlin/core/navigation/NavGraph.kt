@@ -20,7 +20,10 @@ import feature.faith.FaithScreen
 import feature.firewall.FirewallScreen
 import feature.forum.ForumScreen
 import feature.game.GameScreen
+import feature.home.AccountScreen
 import feature.home.HomeScreen
+import feature.home.PathScreen
+import feature.home.StatsScreen
 import feature.intro.IntroScreen
 import feature.journal.JournalScreen
 import feature.learn.LearnScreen
@@ -75,6 +78,20 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         }
         composable(Routes.HOME) {
             HomeScreen(
+                onFeature = { nav.navigate(it) },
+                onSettings = { nav.navigate(Routes.SETTINGS) },
+                onAccount = { nav.navigate(Routes.ACCOUNT) }
+            )
+        }
+        composable(Routes.STATS) {
+            StatsScreen(onBack = { nav.popBackStack() })
+        }
+        composable(Routes.PATH) {
+            PathScreen(onBack = { nav.popBackStack() }, onFeature = { nav.navigate(it) })
+        }
+        composable(Routes.ACCOUNT) {
+            AccountScreen(
+                onBack = { nav.popBackStack() },
                 onFeature = { nav.navigate(it) },
                 onSettings = { nav.navigate(Routes.SETTINGS) },
                 ui = ui

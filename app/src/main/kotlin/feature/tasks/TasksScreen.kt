@@ -62,7 +62,7 @@ import java.time.ZoneId
 private enum class TaskFilter { ALL, TODAY, UPCOMING, OVERDUE, DONE }
 
 @Composable
-fun TasksScreen(onBack: () -> Unit, onMore: () -> Unit = {}) {
+fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Boolean = false) {
     val store = LocalStore.current
     var adding by remember { mutableStateOf(false) }
     var denied by remember { mutableStateOf(false) }
@@ -71,19 +71,10 @@ fun TasksScreen(onBack: () -> Unit, onMore: () -> Unit = {}) {
     val done = store.tasks.filter { it.done }
     val today = LocalDate.now()
 
-    ScreenScaffold(
-        title = stringResource(R.string.feature_tasks),
-        onBack = onBack,
-        actions = {
-            TextButton(onClick = onMore) { Text(stringResource(R.string.tasks_pro)) }
-            IconButton(onClick = { adding = true }) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
-            }
-        }
-    ) { padding ->
+    val content: @Composable (PaddingValues) -> Unit = { padding ->
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = if (embedded) 96.dp else 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
@@ -187,6 +178,21 @@ fun TasksScreen(onBack: () -> Unit, onMore: () -> Unit = {}) {
                 }
             }
         }
+    }
+    if (embedded) {
+        content(PaddingValues(0.dp))
+    } else {
+        ScreenScaffold(
+            title = stringResource(R.string.feature_tasks),
+            onBack = onBack,
+            actions = {
+                TextButton(onClick = onMore) { Text(stringResource(R.string.tasks_pro)) }
+                IconButton(onClick = { adding = true }) {
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
+                }
+            },
+            content = content
+        )
     }
 
     if (adding) {
