@@ -5,12 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
-class UiState(context: Context) {
+class UiState(context: Context, initialSystemDark: Boolean) {
     private val prefs = context.getSharedPreferences("appearance", Context.MODE_PRIVATE)
     private var overrideDark by mutableStateOf(
         if (prefs.contains("dark")) prefs.getBoolean("dark", false) else null
     )
-    var systemDark by mutableStateOf(false)
+    var systemDark by mutableStateOf(initialSystemDark)
     var mode by mutableStateOf(UiMode.PROFESSIONAL)
     val followsSystem: Boolean get() = overrideDark == null
     var dark: Boolean
