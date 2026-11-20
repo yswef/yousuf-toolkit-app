@@ -53,7 +53,8 @@
    ```powershell
    $sdk = "$env:LOCALAPPDATA\Android\Sdk"
    New-Item -ItemType Directory -Force "$sdk\cmdline-tools" | Out-Null
-   Expand-Archive "$HOME\Downloads\commandlinetools-win-*.zip" -DestinationPath "$env:TEMP\cmdline-tools"
+   $zip = (Get-ChildItem "$HOME\Downloads\commandlinetools-win-*.zip" | Select-Object -First 1).FullName
+   Expand-Archive $zip -DestinationPath "$env:TEMP\cmdline-tools" -Force
    Move-Item "$env:TEMP\cmdline-tools\cmdline-tools" "$sdk\cmdline-tools\latest"
    ```
    المهم أن يكون المسار النهائي:
@@ -63,9 +64,11 @@
 4. اضبط المتغيرات واضبط PATH لهذه الجلسة:
    ```powershell
    [Environment]::SetEnvironmentVariable("ANDROID_HOME", $sdk, "User")
-   [Environment]::SetEnvironmentVariable("JAVA_HOME", "C:\Program Files\Eclipse Adoptium\jdk-17*", "User")
+   $jdk = (Get-ChildItem "C:\Program Files\Eclipse Adoptium\jdk-17*" | Select-Object -First 1).FullName
+   [Environment]::SetEnvironmentVariable("JAVA_HOME", $jdk, "User")
    $env:ANDROID_HOME = $sdk
-   $env:Path += ";$sdk\cmdline-tools\latest\bin;$sdk\platform-tools"
+   $env:JAVA_HOME = $jdk
+   $env:Path += ";$sdk\cmdline-tools\latest\bin;$sdk\platform-tools;$jdk\bin"
    ```
    إن كان مسار JDK مختلفاً، اقرأه من `Get-ChildItem "C:\Program Files\Eclipse Adoptium"`.
 5. اقبل التراخيص وثبّت الحزم:
