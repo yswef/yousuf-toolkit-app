@@ -34,9 +34,55 @@ import data.local.LocalStore
 
 @Composable
 fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
+    var opening by remember { mutableStateOf<MagicBook?>(null) }
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 92.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }, key = "tools-head") {
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    stringResource(R.string.tools_subtitle),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        bookSections.forEach { section ->
+            item(span = { GridItemSpan(maxLineSpan) }, key = "section-${section.title}") {
+                Text(
+                    stringResource(section.title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+            items(items = section.books, key = { it.route }) { book ->
+                MagicBookCard(book = book, onClick = { opening = book })
+            }
+        }
+    }
+
+    opening?.let { book ->
+        MagicBookOpen(
+            book = book,
+            onCancel = { opening = null },
+            onOpened = {
+                opening = null
+                onFeature(book.route)
+            }
+        )
+    }
+}
+
+@Composable
+fun DataManagement() {
     val store = LocalStore.current
     val context = LocalContext.current
-    var opening by remember { mutableStateOf<MagicBook?>(null) }
     var status by remember { mutableStateOf<String?>(null) }
 
     fun read(uri: Uri): String? = runCatching {
@@ -46,8 +92,7 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
     val backup = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
         if (uri != null) {
             val ok = runCatching {
-                context.contentResolver.openOutputStream(uri)?.use { it.write(store.backupText().toByteArray()) }
-                true
+                context.contentResolver.openOutputStream(uri)?.use { it.write(store.backupText().toByteArray()) } != null
             }.getOrDefault(false)
             status = context.getString(if (ok) R.string.tools_backup_done else R.string.tools_backup_failed)
         }
@@ -74,23 +119,6 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
         }
     }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 92.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
-    ) {
-        item(span = { GridItemSpan(maxLineSpan) }, key = "tools-head") {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(
-                    stringResource(R.string.tools_subtitle),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-        item(span = { GridItemSpan(maxLineSpan) }, key = "tools-data") {
             GlassCard {
                 Text(
                     stringResource(R.string.tools_data),
@@ -134,30 +162,4 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
                 )
                 status?.let { InfoCard(text = it) }
             }
-        }
-        bookSections.forEach { section ->
-            item(span = { GridItemSpan(maxLineSpan) }, key = "section-${section.title}") {
-                Text(
-                    stringResource(section.title),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-            items(items = section.books, key = { it.route }) { book ->
-                MagicBookCard(book = book, onClick = { opening = book })
-            }
-        }
-    }
-
-    opening?.let { book ->
-        MagicBookOpen(
-            book = book,
-            onCancel = { opening = null },
-            onOpened = {
-                opening = null
-                onFeature(book.route)
-            }
-        )
-    }
 }
