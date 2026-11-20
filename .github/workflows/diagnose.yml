@@ -16,7 +16,7 @@ jobs:
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v4
       - run: chmod +x gradlew
-      - run: ./gradlew :app:assembleTester --stacktrace > /tmp/build.log 2>&1 || true
+      - run: ./gradlew --no-daemon --stacktrace assembleTester > /tmp/build.log 2>&1 || true
       - run: |
           grep -E "^e: |error:|FAILURE:|What went wrong|Caused by|BUILD SUCCESSFUL|Task .* not found" /tmp/build.log | head -120 > build-errors.txt
           git config user.name "diagnose"
