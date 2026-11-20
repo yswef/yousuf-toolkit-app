@@ -21,8 +21,12 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import com.yousuf.toolkit.R
 import core.design.BookSymbol
 import core.design.drawBookSymbol
+import core.design.rememberMentorVoice
 import kotlinx.coroutines.delay
 
 private val night = Color(0xFF07030F)
@@ -60,6 +65,7 @@ fun OnboardingScreen(onRegister: () -> Unit) {
         reveal.animateTo(1f, tween(1100, easing = FastOutSlowInEasing))
     }
 
+    val playVoice = rememberMentorVoice(R.raw.nour_intro)
     val lines = listOf(
         R.string.mentor_line_1,
         R.string.mentor_line_2,
@@ -168,8 +174,17 @@ fun OnboardingScreen(onRegister: () -> Unit) {
                             stringResource(R.string.mentor_name),
                             color = gold,
                             style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(1f)
                         )
+                        IconButton(onClick = playVoice, modifier = Modifier.size(32.dp)) {
+                            Icon(
+                                Icons.Filled.PlayArrow,
+                                contentDescription = stringResource(R.string.mentor_voice_play),
+                                tint = gold,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
                     }
                     Text(
                         full.take(shown),

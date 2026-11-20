@@ -184,6 +184,9 @@
     <string name="mentor_line_2">هنا يتحوّل كل عمل صغير تقوم به إلى سحر يزيد قوّتك.</string>
     <string name="mentor_line_3">ستتعلم تنظيم وقتك ومالك وصحتك، خطوة بخطوة وبلا ضغط.</string>
     <string name="mentor_line_4">أخبرني عنك الآن، وسأفتح لك بوابتك الأولى.</string>
+    <string name="mentor_voice_play">اسمع صوت نور</string>
+    <string name="rank_congrats_title">تهنئة نور</string>
+    <string name="rank_congrats_body">مبروك! أنت الآن %1$s. سحرك أقوى، والطريق أمامك مفتوح.</string>
     <string name="onboarding_skip">تخطي الحوار</string>
     <string name="onboarding_next">التالي</string>
     <string name="onboarding_finish">سجّل بياناتك</string>

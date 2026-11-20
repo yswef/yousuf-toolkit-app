@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +36,7 @@ import core.design.FormDialog
 import core.design.InfoCard
 import data.local.LocalStore
 import core.design.ScreenScaffold
+import core.design.rememberMentorVoice
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -42,6 +44,7 @@ import java.time.ZoneId
 @Composable
 fun GameScreen(onBack: () -> Unit) {
     val store = LocalStore.current
+    val playRank = rememberMentorVoice(R.raw.nour_rank)
     var adding by remember { mutableStateOf(false) }
     var title by remember { mutableStateOf("") }
     var target by remember { mutableStateOf("21") }
@@ -97,6 +100,33 @@ fun GameScreen(onBack: () -> Unit) {
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
+                }
+            }
+
+            Surface(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                shape = RoundedCornerShape(20.dp),
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f)
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, top = 10.dp, bottom = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            stringResource(R.string.rank_congrats_title),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Text(
+                            stringResource(R.string.rank_congrats_body, rankLabel(store.rankKey)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                    IconButton(onClick = playRank) {
+                        Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.mentor_voice_play))
+                    }
                 }
             }
 
