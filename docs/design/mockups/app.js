@@ -353,6 +353,20 @@
     });
   }
 
+  function setupAudio() {
+    let audio = null;
+    $$("[data-audio]").forEach((b) => {
+      b.addEventListener("click", () => {
+        if (!audio) audio = new Audio();
+        audio.pause();
+        audio.src = b.dataset.audio;
+        audio.currentTime = 0;
+        audio.play().catch(() => toast("تعذّر تشغيل الصوت"));
+        toast("صوت نور يعمل");
+      });
+    });
+  }
+
   function setupConfetti() {
     const box = $(".confetti");
     if (!box || root.getAttribute("data-motion") === "none") return;
@@ -441,6 +455,7 @@
     setupSheet();
     setupGrimoires();
     setupTasks();
+    setupAudio();
     setupFilters();
     setupReveal();
     setupSwatches();
