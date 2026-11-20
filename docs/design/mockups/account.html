@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حسابي والإعدادات — Y-Dimension</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body data-screen="account" data-title="حسابي والإعدادات" data-sub="ملف البطل + المزامنة + المظهر + البيانات">
+<div class="lab" data-lab></div>
+<div class="stage">
+  <div class="phone">
+    <div class="statusbar"><span>٩:٤١</span><span class="status-right"><span>5G</span><span class="status-dot"></span><span class="battery"></span></span></div>
+
+    <header class="appbar">
+      <a class="iconbtn" href="today.html" aria-label="رجوع"><span class="icon" data-icon="arrow-right"></span></a>
+      <div>
+        <h1 class="appbar-title">حسابي</h1>
+        <p class="appbar-sub">إعداداتك في مكان واحد</p>
+      </div>
+      <div class="appbar-spacer"></div>
+      <button class="iconbtn" aria-label="تعديل"><span class="icon" data-icon="edit"></span></button>
+    </header>
+
+    <main class="content no-nav">
+      <div class="stack">
+        <section class="card hero" style="display:flex;align-items:center;gap:14px">
+          <div class="avatar" style="width:58px;height:58px;font-size:1.25rem">ي</div>
+          <div style="flex:1;min-width:0">
+            <b style="font-size:1.0625rem">يوسف</b>
+            <p style="margin:2px 0 0">فارس · المستوى 6 · ١٬٢٤٠ XP</p>
+            <div style="display:flex;gap:6px;margin-top:7px">
+              <span class="chip gold" style="min-height:24px;font-size:.625rem;padding:0 8px"><span class="icon sm" data-icon="flame"></span> ٥ أيام</span>
+              <span class="chip" style="min-height:24px;font-size:.625rem;padding:0 8px">فريق النور</span>
+            </div>
+          </div>
+          <span class="icon" data-icon="chevron-left" style="color:var(--on-surface-variant)"></span>
+        </section>
+
+        <section class="card" style="display:flex;align-items:center;gap:12px">
+          <div class="habit-ico" style="--habit-color:var(--primary)"><span class="icon" data-icon="cloud"></span></div>
+          <div style="flex:1"><b style="font-size:.8125rem">المزامنة السحابية</b><p>سجّل الدخول لحفظ تقدمك بين الأجهزة.</p></div>
+          <button class="chip active" style="min-height:34px" data-toast="فُتح تسجيل الدخول">دخول</button>
+        </section>
+
+        <div class="list-label">المظهر</div>
+        <section class="list">
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--outline-variant)" data-toast="اختر الوضع من الأعلى للمعاينة">
+            <span class="li-icon"><span class="icon sm" data-icon="sun"></span></span>
+            <span class="li-body"><b>الوضع</b><span>فاتح / داكن / تلقائي</span></span>
+            <span class="li-end">تلقائي</span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--outline-variant)" data-toast="اللون: بنفسجي">
+            <span class="li-icon"><span class="icon sm" data-icon="sparkles"></span></span>
+            <span class="li-body"><b>لون الهوية</b><span>بنفسجي · أربع سكنات للعبة فقط</span></span>
+            <span class="li-end"><span style="display:inline-block;width:16px;height:16px;border-radius:50%;background:#6C4CF1;vertical-align:-3px"></span></span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--outline-variant)" data-toast="مستوى الحركة الحالي: كامل">
+            <span class="li-icon"><span class="icon sm" data-icon="play"></span></span>
+            <span class="li-body"><b>مستوى الحركة</b><span>كامل / خفيف / بدون</span></span>
+            <span class="li-end">كامل</span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--outline-variant)" data-toast="حجم الخط: 100%">
+            <span class="li-icon"><span class="icon sm" data-icon="edit"></span></span>
+            <span class="li-body"><b>حجم الخط</b><span>يتبع تكبير خط النظام أيضاً</span></span>
+            <span class="li-end">100%</span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+          <div class="list-item">
+            <span class="li-icon"><span class="icon sm" data-icon="grid"></span></span>
+            <span class="li-body"><b>ألوان الجهاز</b><span>Dynamic Color على أندرويد 12+</span></span>
+            <span class="switch" role="switch" aria-checked="false" aria-label="ألوان الجهاز"></span>
+          </div>
+        </section>
+
+        <div class="list-label">الأمان</div>
+        <section class="list">
+          <div class="list-item">
+            <span class="li-icon"><span class="icon sm" data-icon="lock"></span></span>
+            <span class="li-body"><b>قفل التطبيق</b><span>رمز أو بصمة عند الفتح</span></span>
+            <span class="switch" role="switch" aria-checked="false" aria-label="قفل التطبيق"></span>
+          </div>
+          <div class="list-item">
+            <span class="li-icon"><span class="icon sm" data-icon="shield"></span></span>
+            <span class="li-body"><b>الخصوصية</b><span>لا تُرسل بياناتك دون إذن</span></span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </div>
+        </section>
+
+        <div class="list-label">البيانات</div>
+        <section class="list">
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--outline-variant)" data-toast="بدأ النسخ الاحتياطي">
+            <span class="li-icon"><span class="icon sm" data-icon="download"></span></span>
+            <span class="li-body"><b>نسخة احتياطية</b><span>ملف JSON واحد لكل شيء</span></span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0;border-bottom:1px solid var(--outline-variant)" data-toast="اختر ملف الاستيراد">
+            <span class="li-icon"><span class="icon sm" data-icon="upload"></span></span>
+            <span class="li-body"><b>استيراد</b><span>نسخة سابقة أو CSV</span></span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0" data-toast="استيراد الرسائل اختياري">
+            <span class="li-icon"><span class="icon sm" data-icon="message"></span></span>
+            <span class="li-body"><b>استيراد الحركات من الرسائل</b><span>اختياري · محلي فقط</span></span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+        </section>
+
+        <div class="list-label">عن التطبيق</div>
+        <section class="list">
+          <div class="list-item">
+            <span class="li-icon"><span class="icon sm" data-icon="sparkles"></span></span>
+            <span class="li-body"><b>Y-Dimension</b><span>الإصدار 0.10.3 · بناء 13</span></span>
+            <span class="li-end">محدّث</span>
+          </div>
+          <button class="list-item" style="width:100%;text-align:start;background:none;border:0" data-toast="الترخيص والمصادر">
+            <span class="li-icon"><span class="icon sm" data-icon="book"></span></span>
+            <span class="li-body"><b>الترخيص والمصادر</b><span>حصن المسلم · MIT</span></span>
+            <span class="icon sm" data-icon="chevron-left"></span>
+          </button>
+        </section>
+
+        <button class="btn ghost" style="color:var(--error-ink);border-color:color-mix(in srgb,var(--error) 35%,transparent)" data-toast="تسجيل الخروج">تسجيل الخروج</button>
+        <p class="section-sub" style="text-align:center;margin-bottom:8px">الخادم والمزامنة تفاصيل تقنية لا تظهر في الواجهة.</p>
+      </div>
+    </main>
+
+    <div class="toast" role="status"><span class="icon sm" data-icon="check"></span><span class="toast-text"></span><button hidden>تراجع</button></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

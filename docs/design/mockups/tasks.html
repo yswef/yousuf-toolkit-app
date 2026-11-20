@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المهام — Y-Dimension</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body data-screen="tasks" data-title="المهام" data-sub="ملخص + فلاتر + تجميع + إنجاز بحركة">
+<div class="lab" data-lab></div>
+<div class="stage">
+  <div class="phone">
+    <div class="statusbar"><span>٩:٤١</span><span class="status-right"><span>5G</span><span class="status-dot"></span><span class="battery"></span></span></div>
+
+    <header class="appbar">
+      <div>
+        <h1 class="appbar-title">المهام</h1>
+        <p class="appbar-sub">٥ مفتوحة · ٢ منجزة اليوم</p>
+      </div>
+      <div class="appbar-spacer"></div>
+      <button class="iconbtn" aria-label="بحث"><span class="icon" data-icon="search"></span></button>
+      <button class="iconbtn" aria-label="ترتيب"><span class="icon" data-icon="filter"></span></button>
+    </header>
+
+    <main class="content">
+      <div class="stack">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="flex:1">
+              <div style="display:flex;align-items:baseline;gap:6px">
+                <span style="font-size:1.75rem;font-weight:900;line-height:1" data-count="72">72</span>
+                <span style="font-size:.75rem;color:var(--on-surface-variant)">٪ إنجاز اليوم</span>
+              </div>
+              <div class="progress" style="--value:72%;margin-top:10px"><span></span></div>
+            </div>
+            <div class="ring-stat" style="--v:72%"><b>٦/٨</b></div>
+          </div>
+          <div style="display:flex;gap:14px;margin-top:12px;font-size:.6875rem;color:var(--on-surface-variant)">
+            <span><span class="icon sm" data-icon="flame" style="color:var(--gold);vertical-align:-4px"></span> ٥ أيام متتالية</span>
+            <span><span class="icon sm" data-icon="target" style="vertical-align:-4px"></span> ٣ مهام اليوم</span>
+          </div>
+        </div>
+
+        <div class="search">
+          <span class="icon sm" data-icon="search"></span>
+          <input type="search" placeholder="ابحث في المهام" aria-label="بحث في المهام" data-filter-input>
+        </div>
+
+        <div class="chiprow" role="group" aria-label="فلترة المهام">
+          <button class="chip" aria-pressed="true">الكل</button>
+          <button class="chip" aria-pressed="false">اليوم</button>
+          <button class="chip" aria-pressed="false">قادم</button>
+          <button class="chip" aria-pressed="false">متأخر</button>
+          <button class="chip" aria-pressed="false">منجز</button>
+        </div>
+
+        <div class="group-title overdue">متأخر</div>
+        <div class="task" data-search style="--priority:var(--error-ink)">
+          <button class="task-check" aria-label="إنجاز المهمة" aria-pressed="false"><span class="icon" data-icon="check"></span></button>
+          <div class="task-body">
+            <div class="task-title">رياضة ٢٠ دقيقة</div>
+            <div class="task-meta"><span class="prio">عالية</span><span><span class="icon sm" data-icon="calendar"></span> أمس</span><span>#صحة</span></div>
+          </div>
+          <button class="iconbtn task-more" aria-label="خيارات"><span class="icon sm" data-icon="more"></span></button>
+        </div>
+
+        <div class="group-title today">اليوم</div>
+        <div class="task" data-search style="--priority:var(--error-ink)">
+          <button class="task-check" aria-label="إنجاز المهمة" aria-pressed="false"><span class="icon" data-icon="check"></span></button>
+          <div class="task-body">
+            <div class="task-title">أذكار الصباح</div>
+            <div class="task-meta"><span class="prio">عالية</span><span><span class="icon sm" data-icon="clock"></span> ٥ دقائق</span><span>#روتين</span></div>
+          </div>
+          <button class="iconbtn task-more" aria-label="خيارات"><span class="icon sm" data-icon="more"></span></button>
+        </div>
+        <div class="task done" data-search style="--priority:var(--success-ink)">
+          <button class="task-check" aria-label="إلغاء الإنجاز" aria-pressed="true"><span class="icon" data-icon="check"></span></button>
+          <div class="task-body">
+            <div class="task-title">مراجعة خطة اليوم</div>
+            <div class="task-meta"><span class="prio">عادية</span><span><span class="icon sm" data-icon="calendar"></span> اليوم</span></div>
+          </div>
+          <button class="iconbtn task-more" aria-label="خيارات"><span class="icon sm" data-icon="more"></span></button>
+        </div>
+        <div class="task" data-search style="--priority:var(--primary)">
+          <button class="task-check" aria-label="إنجاز المهمة" aria-pressed="false"><span class="icon" data-icon="check"></span></button>
+          <div class="task-body">
+            <div class="task-title">شرب ٨ أكواب ماء</div>
+            <div class="task-meta"><span class="prio">منخفضة</span><span><span class="icon sm" data-icon="droplet"></span> ٥ / ٨</span><span>#صحة</span></div>
+          </div>
+          <button class="iconbtn task-more" aria-label="خيارات"><span class="icon sm" data-icon="more"></span></button>
+        </div>
+
+        <div class="group-title">غداً</div>
+        <div class="task" data-search style="--priority:var(--primary)">
+          <button class="task-check" aria-label="إنجاز المهمة" aria-pressed="false"><span class="icon" data-icon="check"></span></button>
+          <div class="task-body">
+            <div class="task-title">قراءة ١٠ صفحات</div>
+            <div class="task-meta"><span class="prio">عادية</span><span><span class="icon sm" data-icon="book-open"></span> غداً</span><span>#تعلم</span></div>
+          </div>
+          <button class="iconbtn task-more" aria-label="خيارات"><span class="icon sm" data-icon="more"></span></button>
+        </div>
+        <div class="task" data-search style="--priority:var(--primary)">
+          <button class="task-check" aria-label="إنجاز المهمة" aria-pressed="false"><span class="icon" data-icon="check"></span></button>
+          <div class="task-body">
+            <div class="task-title">مراجعة ميزانية الأسبوع</div>
+            <div class="task-meta"><span class="prio">عادية</span><span><span class="icon sm" data-icon="wallet"></span> غداً</span><span>#مال</span></div>
+          </div>
+          <button class="iconbtn task-more" aria-label="خيارات"><span class="icon sm" data-icon="more"></span></button>
+        </div>
+
+        <div class="card flat" style="text-align:center;color:var(--on-surface-variant);font-size:.75rem">
+          إنجاز المهمة يمنح XP ويستهلك طاقة حسب الإعدادات.
+          <a href="states.html" style="color:var(--primary);font-weight:800;display:block;margin-top:4px">عرض الحالة الفارغة</a>
+        </div>
+      </div>
+    </main>
+
+    <button class="fab" aria-label="مهمة جديدة" data-open-sheet><span class="icon" data-icon="plus"></span></button>
+
+    <nav class="tabbar" aria-label="التنقل الرئيسي">
+      <a class="tab" href="today.html"><span class="icon" data-icon="home"></span><span>اليوم</span></a>
+      <a class="tab" href="tasks.html" aria-current="page"><span class="icon" data-icon="check-square"></span><span>المهام</span></a>
+      <a class="tab" href="money.html"><span class="icon" data-icon="wallet"></span><span>المال</span></a>
+      <a class="tab" href="tools.html"><span class="icon" data-icon="grid"></span><span>الأدوات</span></a>
+    </nav>
+
+    <div class="scrim" data-close-sheet></div>
+    <section class="sheet" aria-hidden="true" aria-label="مهمة جديدة">
+      <div class="sheet-handle"></div>
+      <h2>مهمة جديدة</h2>
+      <p class="hint">العنوان فقط يكفي. الباقي اختياري.</p>
+      <div class="stack tight">
+        <label class="search" style="background:var(--surface-variant)">
+          <span class="icon sm" data-icon="edit"></span>
+          <input placeholder="ماذا تريد أن تنجز؟" aria-label="عنوان المهمة">
+        </label>
+        <div class="chiprow">
+          <button class="chip active">اليوم</button>
+          <button class="chip">غداً</button>
+          <button class="chip">بلا موعد</button>
+          <button class="chip"><span class="icon sm" data-icon="flag"></span> أولوية</button>
+        </div>
+        <button class="btn" style="margin-top:8px" data-sheet-action="المهمة"><span class="icon sm" data-icon="plus"></span> أضف المهمة</button>
+      </div>
+    </section>
+
+    <div class="toast" role="status"><span class="icon sm" data-icon="check"></span><span class="toast-text"></span><button hidden>تراجع</button></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

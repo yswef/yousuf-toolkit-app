@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الحالات — Y-Dimension</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body data-screen="states" data-title="حالات الشاشات" data-sub="فارغ · تحميل · خطأ · بدون إنترنت · خط 130%">
+<div class="lab" data-lab></div>
+<div class="stage">
+  <div class="phone">
+    <div class="statusbar"><span>٩:٤١</span><span class="status-right"><span>5G</span><span class="status-dot"></span><span class="battery"></span></span></div>
+
+    <header class="appbar">
+      <a class="iconbtn" href="index.html" aria-label="رجوع"><span class="icon" data-icon="arrow-right"></span></a>
+      <div>
+        <h1 class="appbar-title">الحالات</h1>
+        <p class="appbar-sub">كل شاشة تحتاج الأربع حالات</p>
+      </div>
+    </header>
+
+    <main class="content no-nav">
+      <div class="stack">
+        <div class="section-head" style="margin-top:0"><h2>فارغ — المهام</h2></div>
+        <section class="card" style="text-align:center">
+          <img class="empty-art" src="../../../app/src/main/res/drawable-nodpi/empty_tasks.png" alt="رسم حالة فارغة للمهام">
+          <p style="margin:10px 0 12px;color:var(--on-surface-variant);font-size:.8125rem">لا توجد مهام بعد. أضف مهمتك الأولى.</p>
+          <button class="btn" data-toast="مهمة جديدة"><span class="icon sm" data-icon="plus"></span> إضافة مهمة</button>
+        </section>
+
+        <div class="section-head"><h2>فارغ — المال</h2></div>
+        <section class="card" style="text-align:center">
+          <img class="empty-art" style="height:150px" src="../../../app/src/main/res/drawable-nodpi/empty_money.png" alt="رسم حالة فارغة للمال">
+          <p style="margin:10px 0 0;color:var(--on-surface-variant);font-size:.8125rem">لا توجد حركات مالية بعد.</p>
+        </section>
+
+        <div class="section-head"><h2>تحميل</h2></div>
+        <section class="card" aria-busy="true" aria-label="جارٍ التحميل">
+          <div class="skeleton sk-line" style="height:16px;width:45%"></div>
+          <div class="skeleton sk-line w80"></div>
+          <div class="skeleton sk-line w60"></div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <div class="skeleton" style="height:40px;flex:1;border-radius:12px"></div>
+            <div class="skeleton" style="height:40px;flex:1;border-radius:12px"></div>
+          </div>
+        </section>
+
+        <div class="section-head"><h2>خطأ</h2></div>
+        <section class="card error-card">
+          <div style="display:flex;gap:10px;align-items:flex-start">
+            <span class="icon" data-icon="cloud-off" style="color:var(--error-ink)"></span>
+            <div style="flex:1">
+              <b style="font-size:.875rem">تعذّر تحميل البيانات</b>
+              <p>تحقق من الاتصال ثم أعد المحاولة. بياناتك المحلية سليمة.</p>
+            </div>
+          </div>
+          <button class="btn ghost" style="width:100%;margin-top:12px;min-height:44px" data-toast="إعادة المحاولة"><span class="icon sm" data-icon="refresh"></span> إعادة المحاولة</button>
+        </section>
+
+        <div class="section-head"><h2>بدون إنترنت</h2></div>
+        <div class="notice" style="background:color-mix(in srgb,var(--warning) 10%,var(--surface));border-color:color-mix(in srgb,var(--warning) 30%,transparent)">
+          <span class="icon sm" data-icon="cloud-off" style="color:var(--warning-ink)"></span>
+          <span>أنت بدون اتصال. نعرض آخر نسخة محفوظة.</span>
+        </div>
+        <section class="card">
+          <div class="tx" style="--tx-color:#FFA94D">
+            <div class="tx-icon"><span class="icon sm" data-icon="bag"></span></div>
+            <div class="tx-body"><div class="tx-title">بقالة الأسبوع</div><div class="tx-sub">محفوظة محلياً · ١٨ نوفمبر</div></div>
+            <div class="tx-amount out">-286</div>
+          </div>
+        </section>
+
+        <div class="section-head"><h2>خط 130%</h2></div>
+        <section class="card">
+          <p style="margin:0 0 8px">استخدم مبدّل الخط في الأعلى. كل الصفوف مرنة، ولا يُقص النص.</p>
+          <div class="task" style="--priority:var(--primary)">
+            <button class="task-check" aria-label="إنجاز" aria-pressed="false"><span class="icon" data-icon="check"></span></button>
+            <div class="task-body"><div class="task-title">نص طويل لاختبار التكبير: مراجعة خطة الأسبوع وتحديد الأولويات</div><div class="task-meta"><span class="prio">عادية</span><span>#اختبار</span></div></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="toast" role="status"><span class="icon sm" data-icon="check"></span><span class="toast-text"></span><button hidden>تراجع</button></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
