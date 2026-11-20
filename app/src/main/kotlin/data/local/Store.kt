@@ -472,9 +472,9 @@ class Store(context: Context) {
         save()
     }
 
-    fun addLedger(title: String, amount: Double, income: Boolean, category: String) {
-        if (title.isBlank() || amount <= 0.0) return
-        ledger = ledger + Ledger(nextId(), title.trim(), amount, income, category, System.currentTimeMillis())
+    fun addLedger(title: String, amount: Double, income: Boolean, category: String, at: Long = System.currentTimeMillis()) {
+        if (title.isBlank() || !amount.isFinite() || amount <= 0.0) return
+        ledger = ledger + Ledger(nextId(), title.trim(), amount, income, category, at)
         save()
     }
 
