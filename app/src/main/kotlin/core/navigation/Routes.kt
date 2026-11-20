@@ -29,6 +29,7 @@ object Routes {
     const val MONEY = "money"
     const val MONEYPRO = "moneypro"
     const val NOTIFLOG = "notiflog"
+    const val PDFREADER = "pdfreader"
     const val PROFILE = "profile"
     const val RAIDS = "raids"
     const val SHOP = "shop"

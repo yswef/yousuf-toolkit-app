@@ -32,6 +32,7 @@ import feature.notiflog.NotiflogScreen
 import feature.onboarding.OnboardingScreen
 import feature.onboarding.RegisterScreen
 import feature.profile.ProfileScreen
+import feature.reader.PdfReaderScreen
 import feature.raids.RaidsScreen
 import feature.settings.SettingsScreen
 import feature.shop.ShopScreen
@@ -117,6 +118,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.MONEYPRO) { MoneyProScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.NOTIFLOG) { NotiflogScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.PROFILE) { ProfileScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.PDFREADER) { PdfReaderScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.RAIDS) { RaidsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.SHOP) { ShopScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.SKIN) { SkinScreen(onBack = { nav.popBackStack() }) }

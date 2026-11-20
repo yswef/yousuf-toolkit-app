@@ -39,7 +39,8 @@ val bookSections = listOf(
             MagicBook(Routes.LEARN, R.string.feature_learn, Color(0xFF84CC16), Color(0xFF3F6212), Color(0xFFE7F9B8), BookSymbol.LEAF),
             MagicBook(Routes.LEARNPRO, R.string.life_learn, Color(0xFF65A30D), Color(0xFF1A2E05), Color(0xFFE7F9B8), BookSymbol.ORB),
             MagicBook(Routes.LIBRARY, R.string.feature_library, Color(0xFFD97706), Color(0xFF7C2D12), Color(0xFFFFE0B2), BookSymbol.ORB),
-            MagicBook(Routes.LIBRARYPRO, R.string.life_books, Color(0xFFB45309), Color(0xFF431407), Color(0xFFFFE0B2), BookSymbol.DIAMOND)
+            MagicBook(Routes.LIBRARYPRO, R.string.life_books, Color(0xFFB45309), Color(0xFF431407), Color(0xFFFFE0B2), BookSymbol.DIAMOND),
+            MagicBook(Routes.PDFREADER, R.string.feature_pdf, Color(0xFFDC2626), Color(0xFF450A0A), Color(0xFFFFD1D1), BookSymbol.RUNE)
         )
     ),
     BookSection(
