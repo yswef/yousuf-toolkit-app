@@ -555,4 +555,24 @@
         <item>خ</item>
         <item>ج</item>
     </string-array>
+    <string name="money_date">تاريخ العملية</string>
+    <string name="money_date_today">اليوم</string>
+    <string name="money_date_yesterday">أمس</string>
+    <string name="money_date_before_yesterday">قبل أمس</string>
+    <string name="money_date_choose">اختيار تاريخ: %1$s</string>
+    <string name="theme_system">اتباع مظهر الجهاز</string>
+    <string name="debt_title">الديون</string>
+    <string name="debt_add">إضافة دين</string>
+    <string name="debt_empty">لا توجد ديون مسجلة.</string>
+    <string name="debt_ledger_header">العمليات</string>
+    <string name="debt_person">اسم الشخص</string>
+    <string name="debt_direction_mine">عليّ</string>
+    <string name="debt_direction_theirs">لي</string>
+    <string name="debt_i_owe">عليّ: %1$s</string>
+    <string name="debt_owed_to_me">لي: %1$s</string>
+    <string name="debt_settled">تم السداد</string>
+    <string name="debt_unsettled">لم يُسدد</string>
+    <string name="debt_separate_hint">الديون سجل مستقل ولا تغيّر رصيد العمليات تلقائياً.</string>
+    <string name="debt_delete_title">حذف الدين؟</string>
+    <string name="debt_delete_message">سيُحذف سجل الدين مع %1$s.</string>
 </resources>

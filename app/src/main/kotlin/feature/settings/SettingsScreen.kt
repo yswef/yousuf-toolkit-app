@@ -1,5 +1,7 @@
 package feature.settings
 
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +24,7 @@ import com.yousuf.toolkit.R
 import core.design.ScreenScaffold
 import core.design.UiMode
 import core.design.UiState
+import feature.home.DataManagement
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,9 +39,11 @@ fun SettingsScreen(
 ) {
     ScreenScaffold(title = stringResource(R.string.feature_settings), onBack = onBack) { padding ->
         Column(
-            Modifier.fillMaxSize().padding(padding).padding(16.dp),
+            Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            DataManagement()
+            HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(stringResource(R.string.ui_mode))
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(selected = ui.mode == UiMode.PROFESSIONAL, onClick = { ui.mode = UiMode.PROFESSIONAL })
@@ -49,8 +54,14 @@ fun SettingsScreen(
                 Text(stringResource(R.string.ui_simple))
             }
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.theme_system), modifier = Modifier.weight(1f))
+                Switch(checked = ui.followsSystem, onCheckedChange = {
+                    if (it) ui.followSystem() else ui.dark = ui.dark
+                })
+            }
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.dark_theme), modifier = Modifier.weight(1f))
-                Switch(checked = ui.dark, onCheckedChange = { ui.dark = it })
+                Switch(checked = ui.dark, onCheckedChange = { ui.dark = it }, enabled = !ui.followsSystem)
             }
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(

@@ -15,6 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -44,6 +47,7 @@ import core.design.InfoCard
 import core.design.ScreenScaffold
 import data.local.LocalStore
 import domain.model.Ledger
+import domain.model.Debt
 import domain.model.categoryKeys
 import core.device.SmsReader
 import kotlinx.coroutines.Dispatchers
@@ -53,14 +57,19 @@ import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
 import android.Manifest
+import android.app.DatePickerDialog
+import java.time.LocalDate
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoneyScreen(onBack: () -> Unit) {
+fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit) {
     val store = LocalStore.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var adding by remember { mutableStateOf(false) }
+    var addingDebt by remember { mutableStateOf(false) }
+    var deletingDebt by remember { mutableStateOf<Debt?>(null) }
     var status by remember { mutableStateOf("") }
 
     fun importMessages() {
@@ -136,6 +145,24 @@ fun MoneyScreen(onBack: () -> Unit) {
                     }
                 }
             }
+            item {
+                OutlinedButton(onClick = onWallets, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.feature_wallets))
+                }
+            }
+            item {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.debt_title), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                    TextButton(onClick = { addingDebt = true }) { Text(stringResource(R.string.debt_add)) }
+                }
+            }
+            if (store.debts.isEmpty()) {
+                item { Text(stringResource(R.string.debt_empty), color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            }
+            items(store.debts.sortedWith(compareBy<Debt> { it.settled }.thenByDescending { it.at }), key = { "debt-${it.id}" }) { debt ->
+                DebtRow(debt, onSettled = { store.setDebtSettled(debt.id, it) }, onDelete = { deletingDebt = debt })
+            }
+            item { Text(stringResource(R.string.debt_ledger_header), style = MaterialTheme.typography.titleMedium) }
             if (entries.isEmpty()) {
                 item {
                     Text(
@@ -151,13 +178,71 @@ fun MoneyScreen(onBack: () -> Unit) {
         }
     }
 
+    if (addingDebt) {
+        DebtDialog(onDismiss = { addingDebt = false }, onAdd = { person, amount, owedByMe, note ->
+            store.addDebt(person, amount, owedByMe, note)
+        })
+    }
+    deletingDebt?.let { debt ->
+        AlertDialog(
+            onDismissRequest = { deletingDebt = null },
+            title = { Text(stringResource(R.string.debt_delete_title)) },
+            text = { Text(stringResource(R.string.debt_delete_message, debt.person)) },
+            confirmButton = { TextButton(onClick = { store.deleteDebt(debt.id); deletingDebt = null }) { Text(stringResource(R.string.delete)) } },
+            dismissButton = { TextButton(onClick = { deletingDebt = null }) { Text(stringResource(R.string.cancel)) } }
+        )
+    }
+
     if (adding) {
         LedgerDialog(
             onDismiss = { adding = false },
-            onAdd = { title, amount, isIncome, category ->
-                store.addLedger(title, amount, isIncome, category)
+            onAdd = { title, amount, isIncome, category, at ->
+                store.addLedger(title, amount, isIncome, category, at)
             }
         )
+    }
+}
+
+@Composable
+private fun DebtRow(debt: Debt, onSettled: (Boolean) -> Unit, onDelete: () -> Unit) {
+    Card(Modifier.fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text(debt.person, style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(if (debt.owedByMe) R.string.debt_i_owe else R.string.debt_owed_to_me, amountText(debt.amount)))
+                if (debt.note.isNotBlank()) Text(debt.note, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(if (debt.settled) R.string.debt_settled else R.string.debt_unsettled), style = MaterialTheme.typography.bodySmall)
+            }
+            Checkbox(checked = debt.settled, onCheckedChange = onSettled)
+            IconButton(onClick = onDelete) { Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete)) }
+        }
+    }
+}
+
+@Composable
+private fun DebtDialog(onDismiss: () -> Unit, onAdd: (String, Double, Boolean, String) -> Unit) {
+    var person by remember { mutableStateOf("") }
+    var amount by remember { mutableStateOf("") }
+    var note by remember { mutableStateOf("") }
+    var owedByMe by remember { mutableStateOf(true) }
+    val value = amount.toDoubleOrNull()
+    FormDialog(
+        title = stringResource(R.string.debt_add),
+        confirm = stringResource(R.string.add),
+        onDismiss = onDismiss,
+        valid = person.isNotBlank() && value != null && value.isFinite() && value > 0,
+        onConfirm = { value?.let { onAdd(person, it, owedByMe, note) }; onDismiss() }
+    ) {
+        OutlinedTextField(value = person, onValueChange = { person = it }, label = { Text(stringResource(R.string.debt_person)) }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+        OutlinedTextField(value = amount, onValueChange = { amount = it }, label = { Text(stringResource(R.string.money_amount)) }, modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal), singleLine = true)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(selected = owedByMe, onClick = { owedByMe = true })
+            Text(stringResource(R.string.debt_direction_mine))
+            RadioButton(selected = !owedByMe, onClick = { owedByMe = false })
+            Text(stringResource(R.string.debt_direction_theirs))
+        }
+        OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text(stringResource(R.string.task_note)) }, modifier = Modifier.fillMaxWidth())
+        Text(stringResource(R.string.debt_separate_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
@@ -192,12 +277,14 @@ private fun LedgerRow(entry: Ledger, onDelete: () -> Unit) {
 @Composable
 private fun LedgerDialog(
     onDismiss: () -> Unit,
-    onAdd: (String, Double, Boolean, String) -> Unit
+    onAdd: (String, Double, Boolean, String, Long) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var income by remember { mutableStateOf(false) }
     var category by remember { mutableStateOf(categoryKeys.last()) }
+    val context = LocalContext.current
+    var date by remember { mutableStateOf(LocalDate.now()) }
     val parsed = amount.toDoubleOrNull()
 
     FormDialog(
@@ -205,10 +292,10 @@ private fun LedgerDialog(
         confirm = stringResource(R.string.add),
         onDismiss = onDismiss,
         onConfirm = {
-            parsed?.let { onAdd(title, it, income, category) }
+            parsed?.let { onAdd(title, it, income, category, date.atTime(LocalTime.now()).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()) }
             onDismiss()
         },
-        valid = title.isNotBlank() && parsed != null && parsed > 0.0
+        valid = title.isNotBlank() && parsed != null && parsed.isFinite() && parsed > 0.0
     ) {
         OutlinedTextField(
             value = title,
@@ -225,6 +312,32 @@ private fun LedgerDialog(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             modifier = Modifier.fillMaxWidth()
         )
+        Text(stringResource(R.string.money_date), style = MaterialTheme.typography.labelLarge)
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(listOf(0L, 1L, 2L)) { days ->
+                val day = LocalDate.now().minusDays(days)
+                FilterChip(
+                    selected = date == day,
+                    onClick = { date = day },
+                    label = { Text(stringResource(when (days) {
+                        0L -> R.string.money_date_today
+                        1L -> R.string.money_date_yesterday
+                        else -> R.string.money_date_before_yesterday
+                    })) }
+                )
+            }
+            item {
+                FilterChip(
+                    selected = date !in listOf(LocalDate.now(), LocalDate.now().minusDays(1), LocalDate.now().minusDays(2)),
+                    onClick = {
+                        DatePickerDialog(context, { _, year, month, day ->
+                            date = LocalDate.of(year, month + 1, day)
+                        }, date.year, date.monthValue - 1, date.dayOfMonth).show()
+                    },
+                    label = { Text(stringResource(R.string.money_date_choose, date.toString())) }
+                )
+            }
+        }
         Text(stringResource(R.string.money_kind), style = MaterialTheme.typography.labelLarge)
         Row(verticalAlignment = Alignment.CenterVertically) {
             RadioButton(selected = !income, onClick = { income = false })

@@ -57,7 +57,6 @@ val bookSections = listOf(
             MagicBook(Routes.NOTIFLOG, R.string.feature_notiflog, Color(0xFF3B82F6), Color(0xFF1E3A8A), Color(0xFFCFE0FF), BookSymbol.RUNE),
             MagicBook(Routes.UPDATER, R.string.feature_updater, Color(0xFF38BDF8), Color(0xFF075985), Color(0xFFC9EFFF), BookSymbol.STAR),
             MagicBook(Routes.VAULT, R.string.feature_vault, Color(0xFFA16207), Color(0xFF422006), Color(0xFFFFE7A3), BookSymbol.DIAMOND),
-            MagicBook(Routes.WALLETS, R.string.feature_wallets, Color(0xFF16A34A), Color(0xFF064E3B), Color(0xFFC9F5DA), BookSymbol.ORB)
         )
     ),
     BookSection(
