@@ -1,0 +1,2 @@
+e: file:///home/runner/work/yousuf-toolkit-app/yousuf-toolkit-app/app/src/main/kotlin/core/config/AppConfig.kt:75:62 No value passed for parameter 'latestReleaseUrl'.
+FAILURE: Build failed with an exception.
