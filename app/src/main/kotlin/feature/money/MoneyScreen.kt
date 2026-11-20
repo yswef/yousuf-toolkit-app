@@ -108,7 +108,7 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
     val content: @Composable (PaddingValues) -> Unit = { padding ->
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = if (embedded) 96.dp else 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (embedded) {

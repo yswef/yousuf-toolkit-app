@@ -74,7 +74,7 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
     val content: @Composable (PaddingValues) -> Unit = { padding ->
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 24.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = if (embedded) 96.dp else 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item {
