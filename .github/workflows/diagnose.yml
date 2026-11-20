@@ -25,10 +25,13 @@ jobs:
           echo "android.builder.sdkDownload=true" >> "$HOME/.gradle/gradle.properties"
       - uses: gradle/actions/setup-gradle@v4
       - name: build
-        run: ./gradlew --no-daemon --stacktrace assembleTester 2>&1 | tee build-errors.txt
-      - name: upload errors
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-errors
-          path: build-errors.txt
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace assembleTester 2>&1 | tee build-errors.txt
+      - name: surface errors
+        if: failure()
+        run: |
+          grep -E "^e: |Execution failed|FAILURE:" build-errors.txt | head -40 | while IFS= read -r line; do
+            echo "::error title=build::$line"
+          done
+          tail -60 build-errors.txt
