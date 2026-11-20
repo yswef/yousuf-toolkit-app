@@ -25,4 +25,10 @@ jobs:
           echo "android.builder.sdkDownload=true" >> "$HOME/.gradle/gradle.properties"
       - uses: gradle/actions/setup-gradle@v4
       - name: build
-        run: ./gradlew --no-daemon --stacktrace assembleTester
+        run: ./gradlew --no-daemon --stacktrace assembleTester 2>&1 | tee build-errors.txt
+      - name: upload errors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-errors
+          path: build-errors.txt
