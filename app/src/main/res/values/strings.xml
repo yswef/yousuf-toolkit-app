@@ -933,4 +933,33 @@
     <string name="pdf_next">التالية</string>
     <string name="pdf_none">لم يُفتح ملف بعد.</string>
     <string name="pdf_fail">تعذر فتح الملف</string>
+
+    <string name="feature_adhkar">حصن المسلم</string>
+    <string name="adhkar_search">ابحث في الأذكار</string>
+    <string name="adhkar_none">لا توجد نتائج.</string>
+    <string name="adhkar_open">فتح</string>
+    <string name="adhkar_items_count">%1$d ذكراً</string>
+    <string name="adhkar_repeat">يُقال %1$d مرات</string>
+    <string name="adhkar_once">يُقال مرة واحدة</string>
+    <string name="adhkar_tap">عدّ</string>
+    <string name="adhkar_done">تم</string>
+    <string name="adhkar_source">المصدر: حصن المسلم للشيخ سعيد بن علي بن وهف القحطاني، بيانات Islamic Pro Azkar API بترخيص MIT.</string>
+
+    <string-array name="starter_tasks">
+        <item>أذكار الصباح</item>
+        <item>مراجعة خطة اليوم</item>
+        <item>شرب 8 أكواب ماء</item>
+        <item>قراءة 10 صفحات</item>
+        <item>رياضة 20 دقيقة</item>
+        <item>النوم قبل 11</item>
+    </string-array>
+
+    <string name="tasks_pro">المزيد</string>
+    <string name="task_summary">مفتوحة: %1$d · منجزة: %2$d</string>
+    <string name="task_filter_all">الكل</string>
+    <string name="task_filter_today">اليوم</string>
+    <string name="task_filter_upcoming">قادم</string>
+    <string name="task_filter_overdue">متأخر</string>
+    <string name="task_filter_done">منجز</string>
+    <string name="task_upcoming">قادم</string>
 </resources>

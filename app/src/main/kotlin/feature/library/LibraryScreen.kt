@@ -1,14 +1,17 @@
 package feature.library
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -28,6 +31,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -62,10 +68,16 @@ fun LibraryScreen(onBack: () -> Unit, onPdf: () -> Unit = {}) {
         ) {
             if (books.isEmpty()) {
                 item {
+                    Image(
+                        painter = painterResource(R.drawable.empty_library),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(24.dp))
+                    )
                     Text(
                         stringResource(R.string.library_none),
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(vertical = 24.dp)
+                        modifier = Modifier.padding(vertical = 12.dp)
                     )
                 }
             }

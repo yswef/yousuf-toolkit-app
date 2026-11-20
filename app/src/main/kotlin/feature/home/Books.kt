@@ -32,6 +32,7 @@ val bookSections = listOf(
             MagicBook(Routes.WATER, R.string.feature_water, Color(0xFF22D3EE), Color(0xFF0B5C86), Color(0xFFC5F6FF), BookSymbol.DROP),
             MagicBook(Routes.SLEEP, R.string.feature_sleep, Color(0xFF6A5CFF), Color(0xFF2A1B7A), Color(0xFFD7D0FF), BookSymbol.MOON),
             MagicBook(Routes.FAITH, R.string.feature_faith, Color(0xFF10B981), Color(0xFF046B4A), Color(0xFFC7F9E5), BookSymbol.STAR),
+            MagicBook(Routes.ADHKAR, R.string.feature_adhkar, Color(0xFF047857), Color(0xFF022C22), Color(0xFFC7F5E5), BookSymbol.ORB),
             MagicBook(Routes.LEARN, R.string.feature_learn, Color(0xFF84CC16), Color(0xFF3F6212), Color(0xFFE7F9B8), BookSymbol.LEAF),
             MagicBook(Routes.LIBRARY, R.string.feature_library, Color(0xFFD97706), Color(0xFF7C2D12), Color(0xFFFFE0B2), BookSymbol.ORB),
             MagicBook(Routes.HEALTHPRO, R.string.feature_life, Color(0xFF0F766E), Color(0xFF042F2E), Color(0xFFC7F5EF), BookSymbol.LEAF)

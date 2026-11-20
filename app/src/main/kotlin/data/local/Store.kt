@@ -142,6 +142,8 @@ class Store(context: Context) {
         private set
     var frozenDay by mutableStateOf("")
         private set
+    var starterSeeded by mutableStateOf(false)
+        private set
     var smsSeen by mutableStateOf<Set<String>>(emptySet())
         private set
     private var faithDays by mutableStateOf<Set<String>>(emptySet())
@@ -489,6 +491,18 @@ class Store(context: Context) {
         frozenDay = today
         save()
         return true
+    }
+
+    fun seedStarterTasks(titles: List<String>) {
+        if (starterSeeded) return
+        if (tasks.isEmpty()) {
+            val now = System.currentTimeMillis()
+            tasks = titles.filter { it.isNotBlank() }.mapIndexed { index, title ->
+                Task(nextId(), title, "", if (index < 2) Priority.HIGH else Priority.NORMAL, false, now + index, 0L, "", "")
+            }
+        }
+        starterSeeded = true
+        save()
     }
 
     fun addHabit(title: String) {
@@ -933,6 +947,7 @@ class Store(context: Context) {
         root.put("extras", JSONArray().apply { extras.forEach { put(it.toJson()) } })
         root.put("shields", shields)
         root.put("frozenDay", frozenDay)
+        root.put("starterSeeded", starterSeeded)
         root.put("habits", JSONArray().apply {
             habits.forEach { h ->
                 put(JSONObject().apply {
@@ -1262,6 +1277,7 @@ class Store(context: Context) {
             extras = root.optJSONArray("extras").mapObjects { it.toExtra() }
             shields = root.optInt("shields", 0)
             frozenDay = root.optString("frozenDay", "")
+            starterSeeded = root.optBoolean("starterSeeded", false)
             habits = root.optJSONArray("habits").mapObjects {
                 Habit(it.optLong("id"), it.optString("title"), it.optInt("streak"), it.optInt("best"), it.optString("lastDay"))
             }
