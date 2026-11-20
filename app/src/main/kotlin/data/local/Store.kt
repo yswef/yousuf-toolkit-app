@@ -86,6 +86,20 @@ class Store(context: Context) {
         private set
     var profileTeam by mutableStateOf("")
         private set
+    var profileBirthDate by mutableStateOf("")
+        private set
+    var profileHeightCm by mutableStateOf(0)
+        private set
+    var profileWeightKg by mutableStateOf(0.0)
+        private set
+    var profileGender by mutableStateOf("")
+        private set
+    var profileActivity by mutableStateOf("")
+        private set
+    var seenRank by mutableStateOf("")
+        private set
+    var pendingRankUp by mutableStateOf<String?>(null)
+        private set
     var joinedAt by mutableStateOf(0L)
         private set
     var wallets by mutableStateOf<List<Wallet>>(emptyList())
@@ -152,6 +166,13 @@ class Store(context: Context) {
     init {
         read()
         ensureDay(false)
+        if (seenRank.isBlank()) {
+            seenRank = rankKey
+        } else if (seenRank != rankKey) {
+            pendingRankUp = rankKey
+            seenRank = rankKey
+            save()
+        }
     }
 
     val today: String
@@ -187,6 +208,21 @@ class Store(context: Context) {
     val hasProfile: Boolean
         get() = profileName.isNotBlank()
 
+    val computedAge: Int
+        get() = if (profileBirthDate.isNotBlank()) {
+            runCatching {
+                java.time.Period.between(java.time.LocalDate.parse(profileBirthDate), java.time.LocalDate.now()).years
+            }.getOrDefault(profileAge)
+        } else {
+            profileAge
+        }
+
+    val bmi: Double
+        get() {
+            val meters = profileHeightCm / 100.0
+            return if (meters > 0.0 && profileWeightKg > 0.0) profileWeightKg / (meters * meters) else 0.0
+        }
+
     val openTasks: Int
         get() = tasks.count { !it.done }
 
@@ -206,10 +242,31 @@ class Store(context: Context) {
         save()
     }
 
-    fun saveProfile(name: String, age: Int, goal: String, team: String) {
+    fun saveProfile(
+        name: String,
+        age: Int,
+        goal: String,
+        team: String,
+        birthDate: String = "",
+        heightCm: Int = 0,
+        weightKg: Double = 0.0,
+        gender: String = "",
+        activity: String = ""
+    ) {
         if (name.isBlank()) return
         profileName = name.trim()
-        profileAge = age
+        profileBirthDate = birthDate.trim()
+        profileAge = if (profileBirthDate.isNotBlank()) {
+            runCatching {
+                java.time.Period.between(java.time.LocalDate.parse(profileBirthDate), java.time.LocalDate.now()).years
+            }.getOrDefault(age.coerceAtLeast(0))
+        } else {
+            age
+        }
+        profileHeightCm = heightCm.coerceIn(0, 300)
+        profileWeightKg = if (weightKg.isFinite()) weightKg.coerceIn(0.0, 500.0) else 0.0
+        profileGender = gender
+        profileActivity = activity
         profileGoal = goal
         profileTeam = team
         if (joinedAt == 0L) joinedAt = System.currentTimeMillis()
@@ -883,6 +940,24 @@ class Store(context: Context) {
         if (value <= 0) return
         points += value
         xp += value
+        celebrateRankIfNeeded()
+    }
+
+    private fun celebrateRankIfNeeded() {
+        val key = rankKey
+        if (seenRank.isBlank()) {
+            seenRank = key
+            return
+        }
+        if (key != seenRank) {
+            pendingRankUp = key
+            seenRank = key
+            save()
+        }
+    }
+
+    fun consumeRankUp() {
+        pendingRankUp = null
     }
 
     private fun takePoints(value: Int) {
@@ -917,6 +992,12 @@ class Store(context: Context) {
         root.put("profileAge", profileAge)
         root.put("profileGoal", profileGoal)
         root.put("profileTeam", profileTeam)
+        root.put("profileBirthDate", profileBirthDate)
+        root.put("profileHeightCm", profileHeightCm)
+        root.put("profileWeightKg", profileWeightKg)
+        root.put("profileGender", profileGender)
+        root.put("profileActivity", profileActivity)
+        root.put("seenRank", seenRank)
         root.put("joinedAt", joinedAt)
         root.put("serverUrl", serverUrl)
         root.put("authToken", authToken)
@@ -1142,6 +1223,12 @@ class Store(context: Context) {
             profileAge = root.optInt("profileAge", 0)
             profileGoal = root.optString("profileGoal", "")
             profileTeam = root.optString("profileTeam", "")
+            profileBirthDate = root.optString("profileBirthDate", "")
+            profileHeightCm = root.optInt("profileHeightCm", 0)
+            profileWeightKg = root.optDouble("profileWeightKg", 0.0)
+            profileGender = root.optString("profileGender", "")
+            profileActivity = root.optString("profileActivity", "")
+            seenRank = root.optString("seenRank", "")
             joinedAt = root.optLong("joinedAt", 0L)
             serverUrl = root.optString("serverUrl", config.apiBase)
             authToken = root.optString("authToken", "")
