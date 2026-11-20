@@ -54,8 +54,14 @@ fun SettingsScreen(
                 Text(stringResource(R.string.ui_simple))
             }
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(stringResource(R.string.theme_system), modifier = Modifier.weight(1f))
+                Switch(checked = ui.followsSystem, onCheckedChange = {
+                    if (it) ui.followSystem() else ui.dark = ui.dark
+                })
+            }
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.dark_theme), modifier = Modifier.weight(1f))
-                Switch(checked = ui.dark, onCheckedChange = { ui.dark = it })
+                Switch(checked = ui.dark, onCheckedChange = { ui.dark = it }, enabled = !ui.followsSystem)
             }
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(
