@@ -11,3 +11,5 @@
 - 2026-11-19 | arena-agent | ranks, campaigns, skin, license, sms, tests, icon, hosting | changes/2026-11-19_arena-agent_phases-6-8.md
 - 2026-11-19 | arena-agent | four-tab hub, quick add, stats, import/export | changes/2026-11-19_arena-agent_four-tab-hub.md
 - 2026-11-19 | arena-agent | plan review checklist, notes and suggestions | changes/2026-11-19_arena-agent_plan-review-workspace.md
+
+- 2026-11-20: مراجعة النواقص وملاحظات الاختبار ونقل إدارة البيانات إلى الإعدادات؛ التفاصيل في `changes/2026-11-20_arena-agent_review-and-backup.md`.
