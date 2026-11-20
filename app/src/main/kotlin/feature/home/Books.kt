@@ -76,6 +76,7 @@ val bookSections = listOf(
         R.string.section_more,
         listOf(
             MagicBook(Routes.FORUM, R.string.feature_forum, Color(0xFF6366F1), Color(0xFF312E81), Color(0xFFD5D4FF), BookSymbol.RUNE),
+            MagicBook(Routes.ALARM, R.string.feature_alarm, Color(0xFFF59E0B), Color(0xFF7C2D12), Color(0xFFFFE8B8), BookSymbol.STAR),
             MagicBook(Routes.LICENSE, R.string.feature_license, Color(0xFFA8A29E), Color(0xFF44403C), Color(0xFFEDE9E4), BookSymbol.STAR),
             MagicBook(Routes.DEVMODE, R.string.feature_devmode, Color(0xFF334155), Color(0xFF020617), Color(0xFFC8D4E6), BookSymbol.RUNE),
             MagicBook(Routes.TESTS, R.string.feature_tests, Color(0xFFA855F7), Color(0xFF581C87), Color(0xFFE9D0FF), BookSymbol.STAR)

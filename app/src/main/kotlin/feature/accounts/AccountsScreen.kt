@@ -197,8 +197,8 @@ private fun AccountCard(account: AccountItem, onEdit: () -> Unit) {
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
     var reveal by remember(account.id) { mutableStateOf(false) }
-    val password = remember(account.id) { store.accountPassword(account) }
-    val totpSecret = remember(account.id) { store.accountTotp(account) }
+    val password = remember(account.id, account.updatedAt) { store.accountPassword(account) }
+    val totpSecret = remember(account.id, account.updatedAt) { store.accountTotp(account) }
     val code = remember(account.id, totpSecret) { if (totpSecret.isBlank()) null else Totp.code(totpSecret) }
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {

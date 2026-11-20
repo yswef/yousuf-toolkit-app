@@ -816,6 +816,13 @@ class Store(context: Context) {
         return true
     }
 
+    fun addAlarm(title: String, text: String, at: Long): Long {
+        val id = nextId()
+        extras = listOf(ExtraRecord(id, "alarm", title.trim(), text.trim(), 0.0, "open", at, System.currentTimeMillis())) + extras
+        save()
+        return id
+    }
+
     fun updateExtra(id: Long, status: String, amount: Double? = null) {
         extras = extras.map {
             if (it.id == id) it.copy(status = status, amount = amount ?: it.amount) else it

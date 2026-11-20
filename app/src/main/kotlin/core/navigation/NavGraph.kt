@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import core.design.UiState
 import data.local.LocalStore
 import feature.accounts.AccountsScreen
+import feature.alarm.AlarmScreen
 import feature.blocker.BlockerScreen
 import feature.cleaner.CleanerScreen
 import feature.contacts.ContactsScreen
@@ -93,6 +94,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
             )
         }
         composable(Routes.ACCOUNTS) { AccountsScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.ALARM) { AlarmScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CLEANER) { CleanerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CONTACTS) { ContactsScreen(onBack = { nav.popBackStack() }) }

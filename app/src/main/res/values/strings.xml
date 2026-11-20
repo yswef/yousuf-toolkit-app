@@ -898,4 +898,22 @@
     <string name="game_medal_campaign">وسام الحملات</string>
     <string name="game_no_medal">لم يُفتح بعد</string>
     <string name="game_unlocked">مفتوح</string>
+
+    <string name="feature_alarm">المنبه والإشعارات الذكية</string>
+    <string name="alarm_title">عنوان المنبه</string>
+    <string name="alarm_time">الوقت</string>
+    <string name="alarm_schedule">جدولة منبه قوي</string>
+    <string name="alarm_added">تمت الجدولة</string>
+    <string name="alarm_exact_denied">اسمح بالمنبهات الدقيقة من الإعدادات</string>
+    <string name="alarm_no_permission">إذن الإشعارات مرفوض</string>
+    <string name="alarm_none">لا منبهات مجدولة.</string>
+    <string name="alarm_smart">ملخص ذكي يومي</string>
+    <string name="alarm_smart_hint">ملخص مهام وماء ونوم الساعة 8 مساءً.</string>
+    <string name="alarm_smart_schedule">جدولة الملخص</string>
+    <string name="alarm_smart_done">تمت جدولة الملخص لليوم</string>
+    <string name="alarm_delete">إلغاء</string>
+    <string name="alarm_default">منبه</string>
+    <string name="alarm_summary">مهام: %1$d | ماء: %2$d | هدف النوم: %3$d</string>
+    <string name="notif_channel">تنبيهات</string>
+    <string name="notif_channel_desc">منبهات وتذكيرات</string>
 </resources>
