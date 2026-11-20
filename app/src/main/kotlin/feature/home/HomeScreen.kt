@@ -65,6 +65,7 @@ fun HomeScreen(onFeature: (String) -> Unit, onSettings: () -> Unit, ui: UiState)
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
             topBar = {
                 TopAppBar(
                     title = {

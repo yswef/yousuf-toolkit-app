@@ -71,7 +71,7 @@ fun PathTab(store: Store, onFeature: (String) -> Unit, onAdd: () -> Unit, modifi
 
     LazyColumn(
         modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 92.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 132.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
@@ -429,6 +429,7 @@ private fun rankLabel(key: String): String = when (key) {
     "novice" -> stringResource(R.string.rank_novice)
     "apprentice" -> stringResource(R.string.rank_apprentice)
     "knight" -> stringResource(R.string.rank_knight)
+    "lieutenant" -> stringResource(R.string.rank_lieutenant)
     "captain" -> stringResource(R.string.rank_captain)
     "mage" -> stringResource(R.string.rank_mage)
     "sage" -> stringResource(R.string.rank_sage)

@@ -374,9 +374,10 @@
     <string name="rank_novice">مبتدئ</string>
     <string name="rank_apprentice">متدرّب</string>
     <string name="rank_knight">فارس</string>
+    <string name="rank_lieutenant">نائب القائد</string>
     <string name="rank_captain">قائد</string>
     <string name="rank_mage">ساحر</string>
-    <string name="rank_sage">حكيم</string>
+    <string name="rank_sage">إمبراطور سحر</string>
     <string name="rank_emperor">إمبراطور</string>
     <string name="rank_next">التالي: %1$s عند المستوى %2$d</string>
     <string name="rank_max">وصلت أعلى رتبة.</string>
@@ -539,6 +540,11 @@
     <string name="account_guest">بطل بلا اسم</string>
     <string name="account_edit">الملف الشخصي</string>
     <string name="account_appearance">المظهر</string>
+    <string name="account_cloud">الحساب السحابي</string>
+    <string name="account_follow_system">اتبع نظام الجهاز</string>
+    <string name="auth_logged_in">تم تسجيل الدخول</string>
+    <string name="auth_registered">تم إنشاء الحساب</string>
+    <string name="auth_failed">تعذر الاتصال</string>
     <string name="account_app">التطبيق</string>
     <string name="account_dark">الوضع الداكن</string>
     <string name="account_mode">الواجهة</string>
@@ -851,6 +857,7 @@
     <string name="life_open_link_fail">تعذر فتح الرابط</string>
 
     <string name="feature_device_pro">أدوات الجهاز المتقدمة</string>
+    <string name="device_more">المزيد</string>
     <string name="devpro_performance">الأداء</string>
     <string name="devpro_memory">الذاكرة: %1$d MB من %2$d MB</string>
     <string name="devpro_battery">البطارية: %1$d%%</string>

@@ -40,7 +40,7 @@ import domain.model.Book
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LibraryScreen(onBack: () -> Unit) {
+fun LibraryScreen(onBack: () -> Unit, onPdf: () -> Unit = {}) {
     val store = LocalStore.current
     var adding by remember { mutableStateOf(false) }
     val books = store.books
@@ -49,6 +49,7 @@ fun LibraryScreen(onBack: () -> Unit) {
         title = stringResource(R.string.feature_library),
         onBack = onBack,
         actions = {
+            TextButton(onClick = onPdf) { Text(stringResource(R.string.feature_pdf)) }
             IconButton(onClick = { adding = true }) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
             }

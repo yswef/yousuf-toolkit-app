@@ -237,6 +237,7 @@ private fun checkedToday(at: Long): Boolean =
 private fun rankLabel(key: String): String = when (key) {
     "apprentice" -> stringResource(R.string.rank_apprentice)
     "knight" -> stringResource(R.string.rank_knight)
+    "lieutenant" -> stringResource(R.string.rank_lieutenant)
     "captain" -> stringResource(R.string.rank_captain)
     "mage" -> stringResource(R.string.rank_mage)
     "sage" -> stringResource(R.string.rank_sage)

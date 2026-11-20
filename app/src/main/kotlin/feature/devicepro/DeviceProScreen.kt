@@ -54,8 +54,8 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 @Composable
-fun DeviceProScreen(onBack: () -> Unit) {
-    var tab by rememberSaveable { mutableStateOf(0) }
+fun DeviceProScreen(onBack: () -> Unit, onOpen: (String) -> Unit = {}, initialTab: Int = 0) {
+    var tab by rememberSaveable { mutableStateOf(initialTab.coerceIn(0, 3)) }
     val tabs = listOf(
         R.string.devpro_performance,
         R.string.devpro_sd,
@@ -74,6 +74,11 @@ fun DeviceProScreen(onBack: () -> Unit) {
                 1 -> StorageTab()
                 2 -> DownloadTab()
                 else -> ContactsTab()
+            }
+            Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(onClick = { onOpen(core.navigation.Routes.CLEANER) }) { Text(stringResource(R.string.feature_cleaner)) }
+                TextButton(onClick = { onOpen(core.navigation.Routes.CONTACTS) }) { Text(stringResource(R.string.feature_contacts)) }
+                TextButton(onClick = { onOpen(core.navigation.Routes.UPDATER) }) { Text(stringResource(R.string.feature_updater)) }
             }
         }
     }
