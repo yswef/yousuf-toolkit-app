@@ -187,6 +187,7 @@
     <string name="mentor_voice_play">اسمع صوت نور</string>
     <string name="rank_congrats_title">تهنئة نور</string>
     <string name="rank_congrats_body">مبروك! أنت الآن %1$s. سحرك أقوى، والطريق أمامك مفتوح.</string>
+    <string name="rank_congrats_new_body">مبروك! وصلت إلى رتبة جديدة. سحرك أصبح أقوى، والطريق أمامك مفتوح. لا تتوقف الآن.</string>
     <string name="onboarding_skip">تخطي الحوار</string>
     <string name="onboarding_next">التالي</string>
     <string name="onboarding_finish">سجّل بياناتك</string>
@@ -977,4 +978,28 @@
     <string name="today_done">منجزة</string>
     <string name="today_ratio">نسبة الإنجاز</string>
     <string name="tools_search">ابحث عن كتاب أو أداة</string>
+
+    <string name="register_birth_date">تاريخ الميلاد</string>
+    <string name="register_birth_hint">اختر تاريخ ميلادك</string>
+    <string name="register_age_computed">العمر: %1$d سنة</string>
+    <string name="register_age_legacy">العمر (إن لم تحدد التاريخ)</string>
+    <string name="register_height">الطول (سم)</string>
+    <string name="register_weight">الوزن (كجم)</string>
+    <string name="register_gender">الجنس</string>
+    <string name="register_activity">مستوى النشاط</string>
+    <string name="gender_male">ذكر</string>
+    <string name="gender_female">أنثى</string>
+    <string name="gender_unspecified">غير محدد</string>
+    <string name="activity_low">قليل</string>
+    <string name="activity_medium">متوسط</string>
+    <string name="activity_high">عالي</string>
+    <string name="profile_birth_date">تاريخ الميلاد</string>
+    <string name="profile_height">الطول</string>
+    <string name="profile_weight">الوزن</string>
+    <string name="profile_bmi">مؤشر كتلة الجسم</string>
+    <string name="profile_gender">الجنس</string>
+    <string name="profile_activity">النشاط</string>
+    <string name="profile_value_cm">%1$d سم</string>
+    <string name="profile_value_kg">%1$s كجم</string>
+    <string name="profile_value_bmi">%1$s</string>
 </resources>

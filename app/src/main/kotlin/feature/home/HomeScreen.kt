@@ -1,6 +1,9 @@
 package feature.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,8 +13,10 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -21,6 +26,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -31,6 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringArrayResource
@@ -40,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yousuf.toolkit.R
 import core.design.MagicBackground
+import core.design.rememberMentorVoice
 import core.navigation.Routes
 import data.local.LocalStore
 import feature.money.MoneyScreen
@@ -55,6 +65,7 @@ fun HomeScreen(
     onAccount: () -> Unit
 ) {
     val store = LocalStore.current
+    val playRank = rememberMentorVoice(R.raw.nour_rank)
     val starterTasks = stringArrayResource(R.array.starter_tasks).toList()
     LaunchedEffect(Unit) { store.seedStarterTasks(starterTasks) }
     var tab by rememberSaveable { mutableStateOf(0) }
@@ -164,6 +175,33 @@ fun HomeScreen(
 
         if (adding) {
             QuickAddSheet(store, onDismiss = { adding = false })
+        }
+
+        if (store.pendingRankUp != null) {
+            AlertDialog(
+                onDismissRequest = { store.consumeRankUp() },
+                icon = {
+                    Image(
+                        painter = painterResource(R.drawable.mentor),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(72.dp).clip(CircleShape)
+                    )
+                },
+                title = { Text(stringResource(R.string.rank_congrats_title)) },
+                text = { Text(stringResource(R.string.rank_congrats_new_body)) },
+                confirmButton = {
+                    TextButton(onClick = { playRank() }) {
+                        Icon(Icons.Filled.PlayArrow, contentDescription = null)
+                        Text(stringResource(R.string.mentor_voice_play))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { store.consumeRankUp() }) {
+                        Text(stringResource(R.string.ok))
+                    }
+                }
+            )
         }
     }
 }
