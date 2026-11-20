@@ -72,7 +72,7 @@ data class AppConfig(
             )
         } catch (t: Throwable) {
             Log.e("AppConfig", "Failed to load app.json", t)
-            AppConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, "")
+            AppConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, "", "")
         }
     }
 }
