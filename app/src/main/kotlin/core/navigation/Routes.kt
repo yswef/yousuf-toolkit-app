@@ -1,6 +1,10 @@
 package core.navigation
 
 object Routes {
+    const val HEALTHPRO = "healthpro"
+    const val LEARNPRO = "learnpro"
+    const val FAITHPRO = "faithpro"
+    const val LIBRARYPRO = "librarypro"
     const val INTRO = "intro"
     const val REGISTER = "register"
     const val ONBOARDING = "onboarding"
@@ -11,6 +15,7 @@ object Routes {
     const val CLEANER = "cleaner"
     const val CONTACTS = "contacts"
     const val DEVICE = "device"
+    const val DEVICEPRO = "devicepro"
     const val DEVMODE = "devmode"
     const val FAITH = "faith"
     const val FIREWALL = "firewall"

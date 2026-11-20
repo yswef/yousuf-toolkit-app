@@ -12,6 +12,7 @@ import feature.blocker.BlockerScreen
 import feature.cleaner.CleanerScreen
 import feature.contacts.ContactsScreen
 import feature.device.DeviceScreen
+import feature.devicepro.DeviceProScreen
 import feature.devmode.DevmodeScreen
 import feature.faith.FaithScreen
 import feature.firewall.FirewallScreen
@@ -21,6 +22,7 @@ import feature.home.HomeScreen
 import feature.intro.IntroScreen
 import feature.journal.JournalScreen
 import feature.learn.LearnScreen
+import feature.life.LifeScreen
 import feature.library.LibraryScreen
 import feature.license.LicenseScreen
 import feature.money.MoneyScreen
@@ -95,8 +97,13 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.CLEANER) { CleanerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CONTACTS) { ContactsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.DEVICE) { DeviceScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.DEVICEPRO) { DeviceProScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.DEVMODE) { DevmodeScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.FAITH) { FaithScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.HEALTHPRO) { LifeScreen(initialTab = 0, onBack = { nav.popBackStack() }) }
+        composable(Routes.LEARNPRO) { LifeScreen(initialTab = 1, onBack = { nav.popBackStack() }) }
+        composable(Routes.FAITHPRO) { LifeScreen(initialTab = 2, onBack = { nav.popBackStack() }) }
+        composable(Routes.LIBRARYPRO) { LifeScreen(initialTab = 3, onBack = { nav.popBackStack() }) }
         composable(Routes.FIREWALL) { FirewallScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.FORUM) { ForumScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.GAME) { GameScreen(onBack = { nav.popBackStack() }) }

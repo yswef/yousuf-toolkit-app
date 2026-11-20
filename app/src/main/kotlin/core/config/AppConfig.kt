@@ -20,6 +20,10 @@ data class AppConfig(
     val sleepGoal: Int,
     val apiBase: String,
     val latestReleaseUrl: String,
+    val shieldCost: Int = 50,
+    val freezeCost: Int = 30,
+    val weeklyRaidTarget: Int = 7,
+    val monthlyChallengeTarget: Int = 30,
     val ranks: List<Pair<String, Int>> = emptyList()
 ) {
     companion object {
@@ -60,11 +64,15 @@ data class AppConfig(
                 sleepGoal = daily.optInt("sleepGoalHours", 0),
                 apiBase = env.optString("apiBaseUrl", ""),
                 latestReleaseUrl = updater.optString("latestReleaseUrl", ""),
+                shieldCost = game.optInt("shieldCost", 50),
+                freezeCost = game.optInt("freezeCost", 30),
+                weeklyRaidTarget = game.optInt("weeklyRaidTarget", 7),
+                monthlyChallengeTarget = game.optInt("monthlyChallengeTarget", 30),
                 ranks = ranks.sortedBy { it.second }
             )
         } catch (t: Throwable) {
             Log.e("AppConfig", "Failed to load app.json", t)
-            AppConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, "", "")
+            AppConfig(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, "")
         }
     }
 }

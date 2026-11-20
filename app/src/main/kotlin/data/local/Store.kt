@@ -138,6 +138,10 @@ class Store(context: Context) {
         private set
     var habits by mutableStateOf<List<Habit>>(emptyList())
         private set
+    var shields by mutableStateOf(0)
+        private set
+    var frozenDay by mutableStateOf("")
+        private set
     var smsSeen by mutableStateOf<Set<String>>(emptySet())
         private set
     private var faithDays by mutableStateOf<Set<String>>(emptySet())
@@ -469,6 +473,22 @@ class Store(context: Context) {
         if (title.isBlank()) return
         tasks = tasks + Task(nextId(), title.trim(), note.trim(), priority, false, System.currentTimeMillis(), dueAt, repeat, list.trim())
         save()
+    }
+
+    fun buyShield(): Boolean {
+        if (points < config.shieldCost) return false
+        takePoints(config.shieldCost)
+        shields += 1
+        save()
+        return true
+    }
+
+    fun freezeToday(): Boolean {
+        if (frozenDay == today || points < config.freezeCost) return false
+        takePoints(config.freezeCost)
+        frozenDay = today
+        save()
+        return true
     }
 
     fun addHabit(title: String) {
@@ -904,6 +924,8 @@ class Store(context: Context) {
         root.put("screenshots", JSONArray().apply { screenshots.forEach { put(it.toJson()) } })
         root.put("linkedNotes", JSONArray().apply { linkedNotes.forEach { put(it.toJson()) } })
         root.put("extras", JSONArray().apply { extras.forEach { put(it.toJson()) } })
+        root.put("shields", shields)
+        root.put("frozenDay", frozenDay)
         root.put("habits", JSONArray().apply {
             habits.forEach { h ->
                 put(JSONObject().apply {
@@ -1231,6 +1253,8 @@ class Store(context: Context) {
             screenshots = root.optJSONArray("screenshots").mapObjects { it.toScreenshot() }
             linkedNotes = root.optJSONArray("linkedNotes").mapObjects { it.toLinkedNote() }
             extras = root.optJSONArray("extras").mapObjects { it.toExtra() }
+            shields = root.optInt("shields", 0)
+            frozenDay = root.optString("frozenDay", "")
             habits = root.optJSONArray("habits").mapObjects {
                 Habit(it.optLong("id"), it.optString("title"), it.optInt("streak"), it.optInt("best"), it.optString("lastDay"))
             }
