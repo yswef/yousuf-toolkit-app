@@ -74,7 +74,7 @@ import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit, onMore: () -> Unit = {}) {
+fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Unit = {}, embedded: Boolean = false) {
     val store = LocalStore.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -105,32 +105,27 @@ fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit, onMore: () -> Unit = 
     val income = store.ledger.filter { it.income }.sumOf { it.amount }
     val expense = store.ledger.filterNot { it.income }.sumOf { it.amount }
 
-    ScreenScaffold(
-        title = stringResource(R.string.feature_money),
-        onBack = onBack,
-        actions = {
-            TextButton(onClick = onMore) {
-                Text(stringResource(R.string.moneypro_budget))
-            }
-            TextButton(onClick = {
-                if (SmsReader.hasPermission(context)) {
-                    importMessages()
-                } else {
-                    smsPermission.launch(Manifest.permission.READ_SMS)
-                }
-            }) {
-                Text(stringResource(R.string.money_sms_import))
-            }
-            IconButton(onClick = { adding = true }) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
-            }
-        }
-    ) { padding ->
+    val content: @Composable (PaddingValues) -> Unit = { padding ->
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            if (embedded) {
+                item {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        FilterChip(selected = false, onClick = { adding = true }, label = { Text(stringResource(R.string.add)) })
+                        FilterChip(selected = false, onClick = onMore, label = { Text(stringResource(R.string.moneypro_budget)) })
+                        FilterChip(
+                            selected = false,
+                            onClick = {
+                                if (SmsReader.hasPermission(context)) importMessages() else smsPermission.launch(Manifest.permission.READ_SMS)
+                            },
+                            label = { Text(stringResource(R.string.money_sms_import)) }
+                        )
+                    }
+                }
+            }
             if (status.isNotBlank()) {
                 item { InfoCard(text = status) }
             }
@@ -196,6 +191,32 @@ fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit, onMore: () -> Unit = 
                 LedgerRow(entry = entry, onDelete = { store.deleteLedger(entry.id) })
             }
         }
+    }
+    if (embedded) {
+        content(PaddingValues(0.dp))
+    } else {
+        ScreenScaffold(
+            title = stringResource(R.string.feature_money),
+            onBack = onBack,
+            actions = {
+                TextButton(onClick = onMore) {
+                    Text(stringResource(R.string.moneypro_budget))
+                }
+                TextButton(onClick = {
+                    if (SmsReader.hasPermission(context)) {
+                        importMessages()
+                    } else {
+                        smsPermission.launch(Manifest.permission.READ_SMS)
+                    }
+                }) {
+                    Text(stringResource(R.string.money_sms_import))
+                }
+                IconButton(onClick = { adding = true }) {
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
+                }
+            },
+            content = content
+        )
     }
 
     if (addingDebt) {

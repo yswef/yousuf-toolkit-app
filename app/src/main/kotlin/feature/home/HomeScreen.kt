@@ -6,11 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -39,30 +40,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yousuf.toolkit.R
 import core.design.MagicBackground
-import core.design.UiState
+import core.navigation.Routes
 import data.local.LocalStore
+import feature.money.MoneyScreen
+import feature.tasks.TasksScreen
 
 private data class Tab(val label: Int, val icon: ImageVector)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onFeature: (String) -> Unit, onSettings: () -> Unit, ui: UiState) {
+fun HomeScreen(
+    onFeature: (String) -> Unit,
+    onSettings: () -> Unit,
+    onAccount: () -> Unit
+) {
     val store = LocalStore.current
     val starterTasks = stringArrayResource(R.array.starter_tasks).toList()
     LaunchedEffect(Unit) { store.seedStarterTasks(starterTasks) }
     var tab by rememberSaveable { mutableStateOf(0) }
     var adding by remember { mutableStateOf(false) }
     val tabs = listOf(
-        Tab(R.string.tab_path, Icons.Filled.Star),
-        Tab(R.string.tab_stats, Icons.Filled.DateRange),
-        Tab(R.string.tab_tools, Icons.Filled.List),
-        Tab(R.string.tab_account, Icons.Filled.Person)
+        Tab(R.string.tab_today, Icons.Filled.Home),
+        Tab(R.string.tab_tasks, Icons.Filled.CheckCircle),
+        Tab(R.string.tab_money, Icons.Filled.ShoppingCart),
+        Tab(R.string.tab_tools, Icons.Filled.List)
     )
     val title = when (tab) {
-        0 -> R.string.path_title
-        1 -> R.string.stats_title
-        2 -> R.string.tools_title
-        else -> R.string.account_title
+        0 -> R.string.tab_today
+        1 -> R.string.tab_tasks
+        2 -> R.string.tab_money
+        else -> R.string.tab_tools
     }
 
     MagicBackground {
@@ -73,26 +80,35 @@ fun HomeScreen(onFeature: (String) -> Unit, onSettings: () -> Unit, ui: UiState)
             topBar = {
                 TopAppBar(
                     title = {
-                        Column {
-                            Text(
-                                stringResource(title),
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                            if (tab == 0) {
+                        if (tab == 0) {
+                            Column {
                                 Text(
                                     if (store.profileName.isNotBlank()) {
                                         stringResource(R.string.home_greeting, store.profileName)
                                     } else {
                                         stringResource(R.string.home_greeting_guest)
                                     },
+                                    style = MaterialTheme.typography.titleLarge,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    stringResource(title),
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                             }
+                        } else {
+                            Text(
+                                stringResource(title),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     },
                     actions = {
+                        IconButton(onClick = onAccount) {
+                            Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.account_title))
+                        }
                         IconButton(onClick = onSettings) {
                             Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.feature_settings))
                         }
@@ -107,7 +123,7 @@ fun HomeScreen(onFeature: (String) -> Unit, onSettings: () -> Unit, ui: UiState)
                             selected = tab == index,
                             onClick = { tab = index },
                             icon = { Icon(item.icon, contentDescription = null) },
-                            label = { Text(stringResource(item.label), fontSize = 11.sp) }
+                            label = { Text(stringResource(item.label), fontSize = 12.sp) }
                         )
                     }
                 }
@@ -122,10 +138,26 @@ fun HomeScreen(onFeature: (String) -> Unit, onSettings: () -> Unit, ui: UiState)
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (tab) {
-                    0 -> PathTab(store, onFeature, onAdd = { adding = true }, Modifier.fillMaxSize())
-                    1 -> StatsTab(store, Modifier.fillMaxSize())
-                    2 -> ToolsTab(onFeature, Modifier.fillMaxSize())
-                    else -> AccountTab(store, ui, onFeature, onSettings, Modifier.fillMaxSize())
+                    0 -> TodayTab(
+                        store = store,
+                        onTasks = { tab = 1 },
+                        onRank = { onFeature(Routes.PATH) },
+                        onStats = { onFeature(Routes.STATS) },
+                        onWater = { onFeature(Routes.WATER) },
+                        onFaith = { onFeature(Routes.FAITH) },
+                        onSleep = { onFeature(Routes.SLEEP) },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    1 -> TasksScreen(
+                        embedded = true,
+                        onMore = { onFeature(Routes.TASKSPRO) }
+                    )
+                    2 -> MoneyScreen(
+                        embedded = true,
+                        onWallets = { onFeature(Routes.WALLETS) },
+                        onMore = { onFeature(Routes.MONEYPRO) }
+                    )
+                    else -> ToolsTab(onFeature, Modifier.fillMaxSize())
                 }
             }
         }
