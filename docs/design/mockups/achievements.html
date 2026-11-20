@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الإنجازات — Y-Dimension</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body data-screen="achievements" data-title="الإنجازات والمسار" data-sub="المسار ينتقل هنا · خلفية سحرية مسموحة" data-confetti="true">
+<div class="lab" data-lab></div>
+<div class="stage">
+  <div class="phone magic">
+    <div class="confetti" aria-hidden="true"></div>
+    <div class="statusbar"><span>٩:٤١</span><span class="status-right"><span>5G</span><span class="status-dot"></span><span class="battery"></span></span></div>
+
+    <header class="appbar">
+      <a class="iconbtn" href="today.html" aria-label="رجوع"><span class="icon" data-icon="arrow-right"></span></a>
+      <div>
+        <h1 class="appbar-title">الإنجازات</h1>
+        <p class="appbar-sub">رتبتك، أوسمتك، وحملاتك</p>
+      </div>
+      <div class="appbar-spacer"></div>
+      <button class="iconbtn" aria-label="مشاركة"><span class="icon" data-icon="upload"></span></button>
+    </header>
+
+    <main class="content no-nav">
+      <div class="stack">
+        <section class="rank-hero">
+          <div class="rank-ring" style="--v:68%">
+            <div class="inner">
+              <b>6</b>
+              <span>المستوى</span>
+            </div>
+          </div>
+          <h2>فارس</h2>
+          <p>التالي: نائب القائد عند المستوى 7</p>
+          <div style="display:flex;gap:14px;font-size:.75rem;color:var(--on-surface-variant)">
+            <span><b style="color:var(--gold-ink)" data-count="1240">1,240</b> XP</span>
+            <span>·</span>
+            <span>٥ أيام متتالية</span>
+          </div>
+          <div class="progress gold" style="width:100%;--value:68%;margin-top:10px"><span></span></div>
+        </section>
+
+        <div class="section-head"><h2>سلّم الرتب</h2><span class="link">كل الرتب</span></div>
+        <div class="ladder">
+          <div class="rung done"><b>مبتدئ</b>1</div>
+          <div class="rung done"><b>متدرّب</b>3</div>
+          <div class="rung done"><b>فارس</b>5</div>
+          <div class="rung now"><b>نائب القائد</b>7</div>
+          <div class="rung"><b>قائد</b>8</div>
+          <div class="rung"><b>ساحر</b>12</div>
+          <div class="rung"><b>إمبراطور سحر</b>16</div>
+          <div class="rung"><b>إمبراطور</b>20</div>
+        </div>
+
+        <div class="section-head"><h2>الأوسمة</h2><a class="link" href="#">٤ من ١٢</a></div>
+        <section class="card">
+          <div class="badges">
+            <div class="badge"><span class="icon" data-icon="droplet"></span>ماء</div>
+            <div class="badge"><span class="icon" data-icon="mosque"></span>إيمان</div>
+            <div class="badge"><span class="icon" data-icon="flame"></span>سلسلة</div>
+            <div class="badge"><span class="icon" data-icon="check-square"></span>مهام</div>
+            <div class="badge locked"><span class="icon" data-icon="book"></span>قارئ</div>
+            <div class="badge locked"><span class="icon" data-icon="dumbbell"></span>رياضة</div>
+            <div class="badge locked"><span class="icon" data-icon="wallet"></span>ادخار</div>
+            <div class="badge locked"><span class="icon" data-icon="crown"></span>إمبراطور</div>
+          </div>
+        </section>
+
+        <div class="section-head"><h2>حملاتك</h2><a class="link" href="#">الكل</a></div>
+        <section class="card">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="habit-ico" style="--habit-color:var(--primary)"><span class="icon" data-icon="compass"></span></div>
+            <div style="flex:1"><b style="font-size:.8125rem">بناء روتين الصباح</b><p>٣ من ٧ أيام</p></div>
+            <span style="font-size:.75rem;font-weight:800;color:var(--gold-ink)">+١٢٠ XP</span>
+          </div>
+          <div class="progress" style="--value:43%;margin-top:10px"><span></span></div>
+        </section>
+        <section class="card">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="habit-ico" style="--habit-color:var(--section-money)"><span class="icon" data-icon="coins"></span></div>
+            <div style="flex:1"><b style="font-size:.8125rem">ادخار ٥٠٠ ريال</b><p>٢٨٠ من ٥٠٠</p></div>
+            <span style="font-size:.75rem;font-weight:800;color:var(--gold-ink)">+٨٠ XP</span>
+          </div>
+          <div class="progress" style="--value:56%;margin-top:10px"><span></span></div>
+        </section>
+
+        <div class="notice" style="margin-bottom:8px">
+          <span class="icon sm" data-icon="sparkles"></span>
+          <span>الغارات تحديات ثابتة تُفتح بالنقاط، ولا يكتبها المستخدم.</span>
+        </div>
+      </div>
+    </main>
+
+    <div class="toast" role="status"><span class="icon sm" data-icon="check"></span><span class="toast-text"></span><button hidden>تراجع</button></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,12 +1,19 @@
 package feature.money
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -36,6 +43,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -168,10 +179,16 @@ fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit, onMore: () -> Unit = 
             item { Text(stringResource(R.string.debt_ledger_header), style = MaterialTheme.typography.titleMedium) }
             if (entries.isEmpty()) {
                 item {
+                    Image(
+                        painter = painterResource(R.drawable.empty_money),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxWidth().height(180.dp).clip(RoundedCornerShape(24.dp))
+                    )
                     Text(
                         stringResource(R.string.money_none),
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(vertical = 24.dp)
+                        modifier = Modifier.padding(vertical = 12.dp)
                     )
                 }
             }
@@ -256,7 +273,13 @@ private fun LedgerRow(entry: Ledger, onDelete: () -> Unit) {
             Modifier.fillMaxWidth().padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(Modifier.weight(1f)) {
+            Box(
+                Modifier.size(38.dp).clip(CircleShape).background(categoryColor(entry.category).copy(alpha = 0.18f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(Modifier.size(12.dp).clip(CircleShape).background(categoryColor(entry.category)))
+            }
+            Column(Modifier.weight(1f).padding(start = 12.dp)) {
                 Text(entry.title, style = MaterialTheme.typography.bodyLarge)
                 Text(
                     stringResource(R.string.money_row_meta, dateText(entry.at), categoryLabel(entry.category)),
@@ -359,6 +382,16 @@ private fun LedgerDialog(
             }
         }
     }
+}
+
+@Composable
+private fun categoryColor(key: String): Color = when (key) {
+    "salary" -> Color(0xFF5CC59A)
+    "food" -> Color(0xFFFFA94D)
+    "transport" -> Color(0xFF4DABF7)
+    "bills" -> Color(0xFFFF6B8A)
+    "shopping" -> Color(0xFFB197FC)
+    else -> Color(0xFFC09843)
 }
 
 @Composable

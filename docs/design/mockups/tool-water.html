@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الماء — Y-Dimension</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body data-screen="water" data-title="أداة نموذجية: الماء" data-sub="حلقة هدف + إضافة فورية + أسبوع">
+<div class="lab" data-lab></div>
+<div class="stage">
+  <div class="phone">
+    <div class="statusbar"><span>٩:٤١</span><span class="status-right"><span>5G</span><span class="status-dot"></span><span class="battery"></span></span></div>
+
+    <header class="appbar">
+      <a class="iconbtn" href="tools.html" aria-label="رجوع"><span class="icon" data-icon="arrow-right"></span></a>
+      <div>
+        <h1 class="appbar-title">الماء</h1>
+        <p class="appbar-sub">الهدف اليومي: ٨ أكواب</p>
+      </div>
+      <div class="appbar-spacer"></div>
+      <button class="iconbtn" aria-label="خيارات"><span class="icon" data-icon="more"></span></button>
+    </header>
+
+    <main class="content no-nav">
+      <div class="stack stagger">
+        <div class="water-ring" style="--v:62%" role="img" aria-label="٥ من ٨ أكواب">
+          <div class="inner"><b>٥</b><span>من ٨ أكواب</span></div>
+        </div>
+
+        <div class="cup-row" aria-hidden="true">
+          <div class="cup full"></div><div class="cup full"></div><div class="cup full"></div><div class="cup full"></div><div class="cup full"></div>
+          <div class="cup"></div><div class="cup"></div><div class="cup"></div>
+        </div>
+
+        <div style="display:flex;gap:10px">
+          <button class="btn" style="flex:1" data-toast="أُضيف كوب ماء · +5 XP"><span class="icon sm" data-icon="plus"></span> أضف كوباً</button>
+          <button class="btn ghost" style="width:56px;padding:0" aria-label="أنقص كوباً"><span class="icon" data-icon="x"></span></button>
+        </div>
+
+        <section class="card">
+          <div class="section-head" style="margin:0 0 2px"><h2>آخر ٧ أيام</h2><span class="link">٤١ كوباً</span></div>
+          <div class="bars" style="height:96px" aria-label="أكواب الماء يومياً">
+            <div class="bar-col"><div class="bar" style="--h:62%;background:color-mix(in srgb,var(--section-money) 30%,transparent)"></div><span>س</span></div>
+            <div class="bar-col"><div class="bar" style="--h:87%;background:color-mix(in srgb,var(--section-money) 30%,transparent)"></div><span>ح</span></div>
+            <div class="bar-col"><div class="bar" style="--h:50%;background:color-mix(in srgb,var(--section-money) 30%,transparent)"></div><span>ن</span></div>
+            <div class="bar-col"><div class="bar" style="--h:100%;background:color-mix(in srgb,var(--section-money) 30%,transparent)"></div><span>ث</span></div>
+            <div class="bar-col"><div class="bar" style="--h:75%;background:color-mix(in srgb,var(--section-money) 30%,transparent)"></div><span>ر</span></div>
+            <div class="bar-col"><div class="bar" style="--h:62%;background:color-mix(in srgb,var(--section-money) 30%,transparent)"></div><span>خ</span></div>
+            <div class="bar-col"><div class="bar now" style="--h:62%;background:var(--section-money)"></div><span>ج</span></div>
+          </div>
+        </section>
+
+        <section class="card row">
+          <div class="habit-ico" style="--habit-color:var(--section-money)"><span class="icon" data-icon="target"></span></div>
+          <div style="flex:1"><b style="font-size:.8125rem">هدفك</b><p>٨ أكواب يومياً · يمكن تعديله من الإعدادات</p></div>
+          <span class="switch on" role="switch" aria-checked="true" aria-label="تذكير الماء"></span>
+        </section>
+
+        <p class="section-sub" style="text-align:center">كل كوب يمنح ٥ نقاط. السجل يُحفظ محلياً.</p>
+      </div>
+    </main>
+
+    <div class="toast" role="status"><span class="icon sm" data-icon="check"></span><span class="toast-text"></span><button hidden>تراجع</button></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -11,6 +11,7 @@ object Routes {
     const val HOME = "home"
     const val SETTINGS = "settings"
     const val ACCOUNTS = "accounts"
+    const val ADHKAR = "adhkar"
     const val ALARM = "alarm"
     const val BLOCKER = "blocker"
     const val CLEANER = "cleaner"

@@ -17,32 +17,44 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.Accent
 import core.design.BookSymbol
+import core.design.FormDialog
 import core.design.UiMode
 import core.design.UiState
 import core.design.drawBookSymbol
+import core.net.Api
 import core.navigation.Routes
 import data.local.Store
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.launch
 
 @Composable
 fun AccountTab(
@@ -54,6 +66,17 @@ fun AccountTab(
 ) {
     val symbol = BookSymbol.entries.getOrElse(store.avatar) { BookSymbol.ORB }
     val scheme = MaterialTheme.colorScheme
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val base = store.serverUrl.ifBlank { store.config.apiBase }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var busy by remember { mutableStateOf(false) }
+    var authStatus by remember { mutableStateOf("") }
+    var showRegister by remember { mutableStateOf(false) }
+    var regName by remember { mutableStateOf("") }
+    var regEmail by remember { mutableStateOf("") }
+    var regPassword by remember { mutableStateOf("") }
     val joined = runCatching {
         Instant.ofEpochMilli(store.joinedAt).atZone(ZoneId.systemDefault()).toLocalDate()
             .format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
@@ -106,6 +129,79 @@ fun AccountTab(
                 }
                 Button(onClick = { onFeature(Routes.PROFILE) }, modifier = Modifier.fillMaxWidth()) {
                     Text(stringResource(R.string.account_edit))
+                }
+            }
+        }
+        item {
+            GlassCard {
+                Text(
+                    stringResource(R.string.account_cloud),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                if (store.authToken.isBlank()) {
+                    Text(
+                        stringResource(R.string.account_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    OutlinedTextField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = { Text(stringResource(R.string.account_email)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = password,
+                        onValueChange = { password = it },
+                        label = { Text(stringResource(R.string.account_password)) },
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(
+                            enabled = !busy && email.isNotBlank() && password.isNotBlank(),
+                            onClick = {
+                                busy = true
+                                authStatus = ""
+                                scope.launch {
+                                    runCatching { Api.login(Api.normalizeBase(base), email.trim(), password) }
+                                        .onSuccess { result ->
+                                            store.saveAccount(result.token, result.user.id, result.user.name, result.user.email)
+                                            password = ""
+                                            authStatus = context.getString(R.string.auth_logged_in)
+                                        }
+                                        .onFailure { authStatus = it.message ?: context.getString(R.string.auth_failed) }
+                                    busy = false
+                                }
+                            }
+                        ) { Text(stringResource(R.string.sync_login_btn)) }
+                        OutlinedButton(onClick = { showRegister = true }) {
+                            Text(stringResource(R.string.account_register))
+                        }
+                    }
+                } else {
+                    Text(
+                        stringResource(R.string.sync_logged_as) + " " +
+                            store.accountName.ifBlank { store.accountEmail },
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    OutlinedButton(
+                        onClick = {
+                            scope.launch {
+                                val token = store.authToken
+                                store.logout()
+                                runCatching { Api.logout(Api.normalizeBase(base), token) }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text(stringResource(R.string.sync_logout)) }
+                }
+                if (busy) CircularProgressIndicator(Modifier.size(22.dp))
+                if (authStatus.isNotBlank()) {
+                    Text(authStatus, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                 }
             }
         }
@@ -166,7 +262,11 @@ fun AccountTab(
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.account_dark), modifier = Modifier.weight(1f))
-                    Switch(checked = ui.dark, onCheckedChange = { ui.dark = it })
+                    Switch(checked = ui.dark, onCheckedChange = { ui.dark = it }, enabled = !ui.followsSystem)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.account_follow_system), modifier = Modifier.weight(1f))
+                    Switch(checked = ui.followsSystem, onCheckedChange = { if (it) ui.followSystem() else ui.dark = ui.dark })
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(stringResource(R.string.account_mode), modifier = Modifier.weight(1f))
@@ -195,6 +295,34 @@ fun AccountTab(
             }
         }
     }
+    if (showRegister) {
+        FormDialog(
+            title = stringResource(R.string.account_register),
+            confirm = stringResource(R.string.account_confirm),
+            onDismiss = { showRegister = false },
+            onConfirm = {
+                busy = true
+                authStatus = ""
+                scope.launch {
+                    runCatching { Api.register(Api.normalizeBase(base), regName.trim(), regEmail.trim(), regPassword) }
+                        .onSuccess { result ->
+                            store.saveAccount(result.token, result.user.id, result.user.name, result.user.email)
+                            regPassword = ""
+                            showRegister = false
+                            authStatus = context.getString(R.string.auth_registered)
+                        }
+                        .onFailure { authStatus = it.message ?: context.getString(R.string.auth_failed) }
+                    busy = false
+                }
+            },
+            valid = regName.isNotBlank() && regEmail.isNotBlank() && regPassword.length >= 8
+        ) {
+            Text(stringResource(R.string.account_hint), style = MaterialTheme.typography.bodySmall)
+            OutlinedTextField(value = regName, onValueChange = { regName = it }, label = { Text(stringResource(R.string.account_name)) }, singleLine = true)
+            OutlinedTextField(value = regEmail, onValueChange = { regEmail = it }, label = { Text(stringResource(R.string.account_email)) }, singleLine = true)
+            OutlinedTextField(value = regPassword, onValueChange = { regPassword = it }, label = { Text(stringResource(R.string.account_password)) }, singleLine = true, visualTransformation = PasswordVisualTransformation())
+        }
+    }
 }
 
 @Composable
@@ -216,6 +344,7 @@ private fun rankName(key: String): String = when (key) {
     "novice" -> stringResource(R.string.rank_novice)
     "apprentice" -> stringResource(R.string.rank_apprentice)
     "knight" -> stringResource(R.string.rank_knight)
+    "lieutenant" -> stringResource(R.string.rank_lieutenant)
     "captain" -> stringResource(R.string.rank_captain)
     "mage" -> stringResource(R.string.rank_mage)
     "sage" -> stringResource(R.string.rank_sage)

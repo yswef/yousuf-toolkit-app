@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import core.design.UiState
 import data.local.LocalStore
 import feature.accounts.AccountsScreen
+import feature.adhkar.AdhkarScreen
 import feature.alarm.AlarmScreen
 import feature.blocker.BlockerScreen
 import feature.cleaner.CleanerScreen
@@ -95,12 +96,13 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
             )
         }
         composable(Routes.ACCOUNTS) { AccountsScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.ADHKAR) { AdhkarScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.ALARM) { AlarmScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CLEANER) { CleanerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CONTACTS) { ContactsScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.DEVICE) { DeviceScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.DEVICEPRO) { DeviceProScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.DEVICE) { DeviceScreen(onBack = { nav.popBackStack() }, onMore = { nav.navigate(Routes.DEVICEPRO) }) }
+        composable(Routes.DEVICEPRO) { DeviceProScreen(onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it) }) }
         composable(Routes.DEVMODE) { DevmodeScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.FAITH) { FaithScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.HEALTHPRO) { LifeScreen(initialTab = 0, onBack = { nav.popBackStack() }) }
@@ -112,7 +114,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.GAME) { GameScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.JOURNAL) { JournalScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LEARN) { LearnScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }, onPdf = { nav.navigate(Routes.PDFREADER) }) }
         composable(Routes.LICENSE) { LicenseScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.MONEY) { MoneyScreen(onBack = { nav.popBackStack() }, onWallets = { nav.navigate(Routes.WALLETS) }, onMore = { nav.navigate(Routes.MONEYPRO) }) }
         composable(Routes.MONEYPRO) { MoneyProScreen(onBack = { nav.popBackStack() }) }

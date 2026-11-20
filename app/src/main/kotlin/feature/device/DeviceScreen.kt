@@ -63,18 +63,21 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun DeviceScreen(onBack: () -> Unit, initialTab: Int = 0, titleOverride: String? = null) {
+fun DeviceScreen(onBack: () -> Unit, initialTab: Int = 0, titleOverride: String? = null, onMore: () -> Unit = {}) {
     val store = LocalStore.current
-    var tab by remember { mutableStateOf(initialTab.coerceIn(0, 5)) }
+    var tab by remember { mutableStateOf(initialTab.coerceIn(0, 4)) }
     val labels = listOf(
         stringResource(R.string.device_tab_usage),
         stringResource(R.string.device_tab_blocker),
         stringResource(R.string.device_tab_domains),
         stringResource(R.string.device_tab_notifications),
-        stringResource(R.string.device_tab_vault),
-        stringResource(R.string.device_tab_sync)
+        stringResource(R.string.device_tab_vault)
     )
-    ScreenScaffold(title = titleOverride ?: stringResource(R.string.feature_device), onBack = onBack) { padding ->
+    ScreenScaffold(
+        title = titleOverride ?: stringResource(R.string.feature_device),
+        onBack = onBack,
+        actions = { TextButton(onClick = onMore) { Text(stringResource(R.string.device_more)) } }
+    ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
             MagicTabs(labels = labels, selected = tab, onSelect = { tab = it })
             when (tab) {
@@ -82,8 +85,7 @@ fun DeviceScreen(onBack: () -> Unit, initialTab: Int = 0, titleOverride: String?
                 1 -> BlockerTab(store)
                 2 -> DomainsTab(store)
                 3 -> NotificationsTab(store)
-                4 -> VaultTab(store)
-                else -> SyncTab(store)
+                else -> VaultTab(store)
             }
         }
     }

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المنتدى — Y-Dimension</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body data-screen="forum" data-title="المنتدى" data-sub="مواضيع + ردود + موضوع جديد">
+<div class="lab" data-lab></div>
+<div class="stage">
+  <div class="phone">
+    <div class="statusbar"><span>٩:٤١</span><span class="status-right"><span>5G</span><span class="status-dot"></span><span class="battery"></span></span></div>
+
+    <header class="appbar">
+      <a class="iconbtn" href="tools.html" aria-label="رجوع"><span class="icon" data-icon="arrow-right"></span></a>
+      <div>
+        <h1 class="appbar-title">المنتدى</h1>
+        <p class="appbar-sub">أسئلة، أفكار، وتجارب</p>
+      </div>
+      <div class="appbar-spacer"></div>
+      <button class="iconbtn" aria-label="بحث"><span class="icon" data-icon="search"></span></button>
+    </header>
+
+    <main class="content no-nav">
+      <div class="stack">
+        <div class="chiprow">
+          <button class="chip active">الكل</button>
+          <button class="chip">المهام</button>
+          <button class="chip">المال</button>
+          <button class="chip">الجهاز</button>
+          <button class="chip">عام</button>
+        </div>
+
+        <section class="card" style="padding:4px 14px">
+          <article class="topic">
+            <div class="avatar sm">ن</div>
+            <div style="flex:1;min-width:0">
+              <h3>كيف ترتبون مهام الأسبوع بدون تعقيد؟</h3>
+              <p>جرّبت فلاتر اليوم وقادم، لكن أحتاج روتيناً بسيطاً.</p>
+              <div class="topic-meta"><span>نور</span><span>·</span><span>منذ ساعتين</span><span>·</span><span><span class="icon sm" data-icon="message" style="vertical-align:-4px"></span> ١٢</span></div>
+            </div>
+          </article>
+          <article class="topic">
+            <div class="avatar sm" style="background:linear-gradient(145deg,#0E8278,#0B4F49)">س</div>
+            <div style="flex:1;min-width:0">
+              <h3>أفضل طريقة لتقسيم ميزانية الشهر</h3>
+              <p>٥٠/٣٠/٢٠ أم حسب الأولويات؟ شاركوني تجربتكم.</p>
+              <div class="topic-meta"><span>سارة</span><span>·</span><span>أمس</span><span>·</span><span><span class="icon sm" data-icon="message" style="vertical-align:-4px"></span> ٨</span></div>
+            </div>
+          </article>
+          <article class="topic">
+            <div class="avatar sm" style="background:linear-gradient(145deg,#9A741F,#5F4610)">م</div>
+            <div style="flex:1;min-width:0">
+              <h3>تقرير: أسبوع كامل بدون تأجيل</h3>
+              <p>ما نفع معي: مهمتان فقط في اليوم + مراجعة مسائية.</p>
+              <div class="topic-meta"><span>محمد</span><span>·</span><span>منذ ٣ أيام</span><span>·</span><span><span class="icon sm" data-icon="message" style="vertical-align:-4px"></span> ٢١</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="card flat" style="text-align:center;font-size:.75rem;color:var(--on-surface-variant)">
+          المنتدى يحتاج تسجيل الدخول. تسجيل الدخول من «حسابي».
+          <a href="account.html" style="color:var(--primary);font-weight:800;display:block;margin-top:4px">فتح حسابي</a>
+        </section>
+      </div>
+    </main>
+
+    <a class="fab" href="#" aria-label="موضوع جديد" data-open-sheet><span class="icon" data-icon="plus"></span></a>
+
+    <div class="scrim" data-close-sheet></div>
+    <section class="sheet" aria-hidden="true" aria-label="موضوع جديد">
+      <div class="sheet-handle"></div>
+      <h2>موضوع جديد</h2>
+      <p class="hint">اكتب عنواناً واضحاً، ثم المحتوى.</p>
+      <div class="stack tight">
+        <label class="search" style="background:var(--surface-variant)"><span class="icon sm" data-icon="edit"></span><input placeholder="العنوان" aria-label="عنوان الموضوع"></label>
+        <label class="search" style="background:var(--surface-variant);height:96px;align-items:flex-start;padding-top:12px"><span class="icon sm" data-icon="message"></span><input placeholder="المحتوى" aria-label="محتوى الموضوع"></label>
+        <button class="btn" data-sheet-action="الموضوع">إرسال</button>
+      </div>
+    </section>
+
+    <div class="toast" role="status"><span class="icon sm" data-icon="check"></span><span class="toast-text"></span><button hidden>تراجع</button></div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
