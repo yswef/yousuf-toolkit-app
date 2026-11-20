@@ -38,6 +38,9 @@ import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.FormDialog
 import core.design.ProfileFields
+import core.design.activityLabel
+import core.design.ageFromBirthDate
+import core.design.genderLabel
 import core.design.ScreenScaffold
 import core.design.goalKeys
 import core.design.goalLabel
@@ -138,7 +141,27 @@ private fun HeaderCard(store: Store) {
 private fun DetailCard(store: Store) {
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 6.dp)) {
-            InfoRow(stringResource(R.string.profile_age_label), stringResource(R.string.profile_age_value, store.profileAge))
+            InfoRow(stringResource(R.string.profile_age_label), stringResource(R.string.profile_age_value, store.computedAge))
+            if (store.profileBirthDate.isNotBlank()) {
+                HorizontalDivider()
+                InfoRow(stringResource(R.string.profile_birth_date), formatBirthDate(store.profileBirthDate))
+            }
+            if (store.profileHeightCm > 0) {
+                HorizontalDivider()
+                InfoRow(stringResource(R.string.profile_height), stringResource(R.string.profile_value_cm, store.profileHeightCm))
+            }
+            if (store.profileWeightKg > 0.0) {
+                HorizontalDivider()
+                InfoRow(stringResource(R.string.profile_weight), stringResource(R.string.profile_value_kg, formatNumber(store.profileWeightKg)))
+            }
+            if (store.bmi > 0.0) {
+                HorizontalDivider()
+                InfoRow(stringResource(R.string.profile_bmi), stringResource(R.string.profile_value_bmi, formatNumber(store.bmi)))
+            }
+            HorizontalDivider()
+            InfoRow(stringResource(R.string.profile_gender), genderLabel(store.profileGender.ifBlank { "unspecified" }))
+            HorizontalDivider()
+            InfoRow(stringResource(R.string.profile_activity), activityLabel(store.profileActivity.ifBlank { "medium" }))
             HorizontalDivider()
             InfoRow(stringResource(R.string.profile_goal_label), goalLabel(store.profileGoal.ifBlank { goalKeys.first() }))
             HorizontalDivider()
@@ -171,9 +194,14 @@ private fun InfoRow(label: String, value: String) {
 private fun EditDialog(store: Store, onClose: () -> Unit) {
     var name by remember { mutableStateOf(store.profileName) }
     var age by remember { mutableStateOf(if (store.profileAge > 0) store.profileAge.toString() else "") }
+    var birthDate by remember { mutableStateOf(store.profileBirthDate) }
+    var height by remember { mutableStateOf(if (store.profileHeightCm > 0) store.profileHeightCm.toString() else "") }
+    var weight by remember { mutableStateOf(if (store.profileWeightKg > 0.0) store.profileWeightKg.toString() else "") }
+    var gender by remember { mutableStateOf(store.profileGender.ifBlank { "unspecified" }) }
+    var activity by remember { mutableStateOf(store.profileActivity.ifBlank { "medium" }) }
     var goal by remember { mutableStateOf(store.profileGoal.ifBlank { goalKeys.first() }) }
     var team by remember { mutableStateOf(store.profileTeam.ifBlank { teamKeys.first() }) }
-    val ageValue = age.toIntOrNull()
+    val ageValue = ageFromBirthDate(birthDate) ?: age.toIntOrNull()
     val valid = name.isNotBlank() && ageValue != null && ageValue in 10..99
 
     FormDialog(
@@ -181,7 +209,19 @@ private fun EditDialog(store: Store, onClose: () -> Unit) {
         confirm = stringResource(R.string.save),
         onDismiss = onClose,
         onConfirm = {
-            ageValue?.let { store.saveProfile(name, it, goal, team) }
+            ageValue?.let {
+                store.saveProfile(
+                    name = name,
+                    age = it,
+                    goal = goal,
+                    team = team,
+                    birthDate = birthDate,
+                    heightCm = height.toIntOrNull() ?: 0,
+                    weightKg = weight.toDoubleOrNull() ?: 0.0,
+                    gender = gender,
+                    activity = activity
+                )
+            }
             onClose()
         },
         valid = valid
@@ -194,10 +234,28 @@ private fun EditDialog(store: Store, onClose: () -> Unit) {
             goal = goal,
             onGoal = { goal = it },
             team = team,
-            onTeam = { team = it }
+            onTeam = { team = it },
+            birthDate = birthDate,
+            onBirthDate = { birthDate = it },
+            height = height,
+            onHeight = { height = it },
+            weight = weight,
+            onWeight = { weight = it },
+            gender = gender,
+            onGender = { gender = it },
+            activity = activity,
+            onActivity = { activity = it }
         )
     }
 }
+
+private fun formatBirthDate(value: String): String =
+    runCatching {
+        java.time.LocalDate.parse(value).format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd"))
+    }.getOrDefault(value)
+
+private fun formatNumber(value: Double): String =
+    if (value % 1.0 == 0.0) value.toInt().toString() else String.format(java.util.Locale.US, "%.1f", value)
 
 private fun joinedText(at: Long): String =
     if (at <= 0L) "-" else Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).toLocalDate().toString()
