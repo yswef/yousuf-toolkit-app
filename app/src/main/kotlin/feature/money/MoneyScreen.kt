@@ -63,7 +63,7 @@ import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit) {
+fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit, onMore: () -> Unit = {}) {
     val store = LocalStore.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -98,6 +98,9 @@ fun MoneyScreen(onBack: () -> Unit, onWallets: () -> Unit) {
         title = stringResource(R.string.feature_money),
         onBack = onBack,
         actions = {
+            TextButton(onClick = onMore) {
+                Text(stringResource(R.string.moneypro_budget))
+            }
             TextButton(onClick = {
                 if (SmsReader.hasPermission(context)) {
                     importMessages()

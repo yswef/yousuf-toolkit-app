@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import core.design.UiState
 import data.local.LocalStore
+import feature.accounts.AccountsScreen
 import feature.blocker.BlockerScreen
 import feature.cleaner.CleanerScreen
 import feature.contacts.ContactsScreen
@@ -23,6 +24,7 @@ import feature.learn.LearnScreen
 import feature.library.LibraryScreen
 import feature.license.LicenseScreen
 import feature.money.MoneyScreen
+import feature.moneypro.MoneyProScreen
 import feature.notiflog.NotiflogScreen
 import feature.onboarding.OnboardingScreen
 import feature.onboarding.RegisterScreen
@@ -33,6 +35,7 @@ import feature.shop.ShopScreen
 import feature.skin.SkinScreen
 import feature.sleep.SleepScreen
 import feature.tasks.TasksScreen
+import feature.taskspro.TasksProScreen
 import feature.tests.TestsScreen
 import feature.updater.UpdaterScreen
 import feature.vault.VaultScreen
@@ -87,6 +90,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
                 onTests = { nav.navigate(Routes.TESTS) }
             )
         }
+        composable(Routes.ACCOUNTS) { AccountsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.BLOCKER) { BlockerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CLEANER) { CleanerScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.CONTACTS) { ContactsScreen(onBack = { nav.popBackStack() }) }
@@ -100,14 +104,16 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.LEARN) { LearnScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LICENSE) { LicenseScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.MONEY) { MoneyScreen(onBack = { nav.popBackStack() }, onWallets = { nav.navigate(Routes.WALLETS) }) }
+        composable(Routes.MONEY) { MoneyScreen(onBack = { nav.popBackStack() }, onWallets = { nav.navigate(Routes.WALLETS) }, onMore = { nav.navigate(Routes.MONEYPRO) }) }
+        composable(Routes.MONEYPRO) { MoneyProScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.NOTIFLOG) { NotiflogScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.PROFILE) { ProfileScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.RAIDS) { RaidsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.SHOP) { ShopScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.SKIN) { SkinScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.SLEEP) { SleepScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.TASKS) { TasksScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.TASKS) { TasksScreen(onBack = { nav.popBackStack() }, onMore = { nav.navigate(Routes.TASKSPRO) }) }
+        composable(Routes.TASKSPRO) { TasksProScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.TESTS) { TestsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.UPDATER) { UpdaterScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.VAULT) { VaultScreen(onBack = { nav.popBackStack() }) }
