@@ -115,6 +115,7 @@ fun QuickAddSheet(store: Store, onDismiss: () -> Unit) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            SmartLine(store, onDismiss)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(QuickType.TASK, QuickType.MONEY, QuickType.WATER).forEach { item ->
                     TypeCard(item, type == item, Modifier.weight(1f)) { type = item }
@@ -271,3 +272,81 @@ private fun workoutLabel(key: String): String = when (key) {
     "stretch" -> stringResource(R.string.workout_stretch)
     else -> stringResource(R.string.workout_walk)
 }
+
+private sealed class Smart {
+    data class TaskItem(val title: String) : Smart()
+    data class Money(val title: String, val amount: Double, val income: Boolean) : Smart()
+    data class Water(val cups: Int) : Smart()
+}
+
+private fun normalizeDigits(t: String): String = buildString {
+    for (c in t) append(if (c in '\u0660'..'\u0669') ('0' + (c - '\u0660')) else if (c in '\u06F0'..'\u06F9') ('0' + (c - '\u06F0')) else c)
+}
+
+private val incomeWords = listOf("راتب", "دخل", "ربح", "استلمت", "مكافأة", "salary", "income")
+
+private fun parseSmart(raw: String): Smart? {
+    val text = normalizeDigits(raw.trim())
+    if (text.isBlank()) return null
+    val tokens = text.split(Regex("\\s+"))
+    val first = tokens.first().lowercase()
+    val number = tokens.firstNotNullOfOrNull { it.trimStart('+', '-').toDoubleOrNull() }
+    if (first == "ماء" || first == "water") {
+        return Smart.Water((number?.toInt() ?: 1).coerceIn(1, 20))
+    }
+    if (first == "مهمة" || first == "task") {
+        val title = tokens.drop(1).joinToString(" ")
+        return if (title.isBlank()) null else Smart.TaskItem(title)
+    }
+    if (number != null && number > 0.0) {
+        val numToken = tokens.first { it.trimStart('+', '-').toDoubleOrNull() != null }
+        val title = tokens.filter { it != numToken }.joinToString(" ")
+        val income = numToken.startsWith("+") || incomeWords.any { text.contains(it, ignoreCase = true) }
+        return Smart.Money(title, number, income)
+    }
+    return Smart.TaskItem(text)
+}
+
+@Composable
+private fun SmartLine(store: Store, onDone: () -> Unit) {
+    var text by remember { mutableStateOf("") }
+    val parsed = remember(text) { parseSmart(text) }
+    val defaultTitle = stringResource(R.string.quick_money_default)
+
+    fun apply() {
+        when (val p = parsed) {
+            is Smart.TaskItem -> store.addTask(p.title, "", Priority.NORMAL)
+            is Smart.Money -> store.addLedger(p.title.ifBlank { defaultTitle }, p.amount, p.income, "other")
+            is Smart.Water -> repeat(p.cups) { store.addWater(1) }
+            null -> return
+        }
+        core.design.SoundFx.play(core.design.SoundFx.Fx.SUCCESS)
+        onDone()
+    }
+
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        OutlinedTextField(
+            value = text,
+            onValueChange = { text = it },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = { Text(stringResource(R.string.smart_hint)) },
+            keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Done),
+            keyboardActions = androidx.compose.foundation.text.KeyboardActions(onDone = { apply() })
+        )
+        val label = when (val p = parsed) {
+            is Smart.TaskItem -> stringResource(R.string.smart_task, p.title)
+            is Smart.Money -> stringResource(if (p.income) R.string.smart_income else R.string.smart_expense, p.title, amountPlain(p.amount))
+            is Smart.Water -> stringResource(R.string.smart_water, p.cups)
+            null -> null
+        }
+        if (label != null) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f))
+                androidx.compose.material3.Button(onClick = { apply() }) { Text(stringResource(R.string.add)) }
+            }
+        }
+    }
+}
+
+private fun amountPlain(v: Double): String = if (v % 1.0 == 0.0) v.toLong().toString() else v.toString()
