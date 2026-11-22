@@ -17,6 +17,7 @@ object Routes {
     const val ADHKAR = "adhkar"
     const val ALARM = "alarm"
     const val BLOCKER = "blocker"
+    const val WATCH = "watch"
     const val CLEANER = "cleaner"
     const val CONTACTS = "contacts"
     const val DEVICE = "device"
