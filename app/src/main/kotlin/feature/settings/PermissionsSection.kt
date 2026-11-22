@@ -1,0 +1,150 @@
+package feature.settings
+
+import android.Manifest
+import android.app.AppOpsManager
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.os.Process
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import core.design.SoundFx
+import core.device.Access
+import data.local.LocalStore
+
+private const val MISSION_POINTS = 10
+private const val ALL_BONUS = 50
+
+private class Perm(
+    val key: String,
+    val title: String,
+    val why: String,
+    val runtime: String? = null,
+    val special: Boolean = false,
+    val granted: (Context) -> Boolean,
+    val settings: (Context) -> Intent
+)
+
+private fun usageGranted(c: Context): Boolean {
+    val ops = c.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    val mode = if (Build.VERSION.SDK_INT >= 29)
+        ops.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), c.packageName)
+    else @Suppress("DEPRECATION") ops.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), c.packageName)
+    return mode == AppOpsManager.MODE_ALLOWED
+}
+
+private fun runtimeGranted(c: Context, p: String) =
+    ContextCompat.checkSelfPermission(c, p) == PackageManager.PERMISSION_GRANTED
+
+private fun appDetails(c: Context) = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${c.packageName}"))
+
+private val perms = listOf(
+    Perm("notif", "الإشعارات", "تنبيهات المهام والمواعيد وحلقات الأنمي الجديدة", Manifest.permission.POST_NOTIFICATIONS,
+        granted = { if (Build.VERSION.SDK_INT >= 33) runtimeGranted(it, Manifest.permission.POST_NOTIFICATIONS) else true },
+        settings = { Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, it.packageName) }),
+    Perm("alarm", "المنبهات الدقيقة", "تذكيرات تعمل في وقتها بالضبط", special = true,
+        granted = { if (Build.VERSION.SDK_INT >= 31) (it.getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms() else true },
+        settings = { if (Build.VERSION.SDK_INT >= 31) Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:${it.packageName}")) else appDetails(it) }),
+    Perm("files", "الوصول لكل الملفات", "منظّف التخزين: ملفات مكررة وكبيرة ومجلدات فارغة", special = true,
+        granted = { if (Build.VERSION.SDK_INT >= 30) Environment.isExternalStorageManager() else true },
+        settings = { if (Build.VERSION.SDK_INT >= 30) Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:${it.packageName}")) else appDetails(it) }),
+    Perm("usage", "إحصاءات الاستخدام", "وقت الشاشة ومحدّد التطبيقات", special = true,
+        granted = ::usageGranted, settings = { Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS) }),
+    Perm("access", "خدمة الإتاحة", "حظر التطبيقات المشتتة أثناء التركيز", special = true,
+        granted = Access::accessibility, settings = { Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS) }),
+    Perm("listener", "قراءة الإشعارات", "تلخيص الإشعارات وتنظيفها", special = true,
+        granted = Access::notificationListener, settings = { Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS) }),
+    Perm("sms", "الرسائل", "قراءة الرسائل البنكية لتسجيل المصروفات", Manifest.permission.READ_SMS,
+        granted = { runtimeGranted(it, Manifest.permission.READ_SMS) }, settings = ::appDetails),
+    Perm("contacts", "جهات الاتصال", "تذكيرات أعياد الميلاد والتواصل", Manifest.permission.READ_CONTACTS,
+        granted = { runtimeGranted(it, Manifest.permission.READ_CONTACTS) }, settings = ::appDetails),
+    Perm("loc", "الموقع", "أوقات الصلاة والقبلة", Manifest.permission.ACCESS_FINE_LOCATION,
+        granted = { runtimeGranted(it, Manifest.permission.ACCESS_FINE_LOCATION) }, settings = ::appDetails),
+    Perm("mic", "الميكروفون", "الإدخال الصوتي للمهام", Manifest.permission.RECORD_AUDIO,
+        granted = { runtimeGranted(it, Manifest.permission.RECORD_AUDIO) }, settings = ::appDetails)
+)
+
+@Composable
+fun PermissionsSection() {
+    val context = LocalContext.current
+    val store = LocalStore.current
+    var tick by remember { mutableIntStateOf(0) }
+    val owner = LocalLifecycleOwner.current
+    DisposableEffect(owner) {
+        val obs = LifecycleEventObserver { _, e -> if (e == Lifecycle.Event.ON_RESUME) tick++ }
+        owner.lifecycle.addObserver(obs)
+        onDispose { owner.lifecycle.removeObserver(obs) }
+    }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { tick++ }
+
+    @Suppress("UNUSED_EXPRESSION") tick
+    val states = perms.map { it to it.granted(context) }
+    // منح نقاط المهام لكل صلاحية مفعّلة مرة واحدة، ومكافأة إضافية عند إكمالها كلها.
+    LaunchedEffect(tick) {
+        states.forEach { (p, ok) -> if (ok && store.claimMission("perm_${p.key}", MISSION_POINTS)) SoundFx.play(SoundFx.Fx.COIN) }
+        if (states.all { it.second } && store.claimMission("perm_all", ALL_BONUS)) SoundFx.play(SoundFx.Fx.LEVEL_UP)
+    }
+
+    val done = states.count { it.second }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("الصلاحيات والمهام", style = MaterialTheme.typography.titleMedium)
+        Text(
+            "$done من ${perms.size} مفعّلة. كل صلاحية تفعّلها تمنحك $MISSION_POINTS نقاط مرة واحدة، ومكافأة $ALL_BONUS عند إكمالها كلها. كلها اختيارية.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        states.forEach { (p, ok) ->
+            val claimed = store.missionClaimed("perm_${p.key}")
+            Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)) {
+                Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(Modifier.weight(1f)) {
+                        Text(p.title, style = MaterialTheme.typography.titleSmall)
+                        Text(p.why, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        if (claimed) Text("✓ +$MISSION_POINTS نقاط", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                    if (ok) {
+                        OutlinedButton(onClick = { runCatching { context.startActivity(p.settings(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }) { Text("إدارة") }
+                    } else {
+                        Button(onClick = {
+                            val r = p.runtime
+                            if (r != null && !p.special) {
+                                launcher.launch(r)
+                            } else runCatching { context.startActivity(p.settings(context).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                        }) { Text("تفعيل") }
+                    }
+                }
+            }
+        }
+    }
+}
