@@ -169,6 +169,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.VAULT) { VaultScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.WALLETS) { WalletsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.WATER) { WaterScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.WATCH) { feature.watch.WatchScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.WORKOUTS) { WorkoutsScreen(onBack = { nav.popBackStack() }) }
     }
 }
