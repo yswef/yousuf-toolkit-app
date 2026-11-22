@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         SoundFx.init(applicationContext)
+        feature.watch.WatchScheduler.ensure(applicationContext)
         setContent {
             val store = remember { Store.of(applicationContext) }
             val systemDark = isSystemInDarkTheme()
