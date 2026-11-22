@@ -48,11 +48,11 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
     }
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(3),
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 132.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         item(span = { GridItemSpan(maxLineSpan) }, key = "tools-head") {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
