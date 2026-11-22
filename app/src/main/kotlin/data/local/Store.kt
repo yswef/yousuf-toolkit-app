@@ -620,6 +620,17 @@ class Store(context: Context) {
         save()
     }
 
+    fun missionClaimed(key: String): Boolean = extras.any { it.kind == "mission" && it.title == key }
+
+    /** يمنح نقاط مهمة إعداد مرة واحدة فقط. يعيد true إن مُنحت الآن. */
+    fun claimMission(key: String, reward: Int): Boolean {
+        if (missionClaimed(key)) return false
+        extras = listOf(ExtraRecord(nextId(), "mission", key, "", reward.toDouble(), "done", 0L, System.currentTimeMillis())) + extras
+        addPoints(reward)
+        save()
+        return true
+    }
+
     fun lessonDone(key: String): Boolean = extras.any { it.kind == "lesson" && it.title == key }
 
     /** يبدّل إنجاز درس في مسار تعليمي. يعيد true إن صار منجزاً. */
