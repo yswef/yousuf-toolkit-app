@@ -49,6 +49,8 @@ fun SettingsScreen(
             Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            PermissionsSection()
+            HorizontalDivider(Modifier.padding(vertical = 12.dp))
             DataManagement()
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(stringResource(R.string.ui_mode))
