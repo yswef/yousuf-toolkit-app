@@ -50,6 +50,7 @@ fun WorkoutsScreen(onBack: () -> Unit) {
     val store = LocalStore.current
     val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
+    var openPlan by remember { mutableStateOf<WorkoutPlan?>(null) }
 
     val logs = store.workouts.sortedByDescending { it.at }
     val total = store.workouts.sumOf { it.minutes }
@@ -90,6 +91,7 @@ fun WorkoutsScreen(onBack: () -> Unit) {
                     }
                 }
             }
+            workoutPlansSection { openPlan = it }
             if (logs.isEmpty()) {
                 item {
                     EmptyIllustration(R.drawable.empty_workouts, stringResource(R.string.workout_none))
@@ -101,6 +103,8 @@ fun WorkoutsScreen(onBack: () -> Unit) {
             }
         }
     }
+
+    openPlan?.let { WorkoutPlanSheet(it, store) { openPlan = null } }
 
     if (adding) {
         WorkoutDialog(
