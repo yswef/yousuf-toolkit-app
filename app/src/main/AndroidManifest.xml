@@ -38,6 +38,10 @@
         </activity>
 
         <receiver
+            android:name="feature.watch.WatchCheckReceiver"
+            android:exported="false" />
+
+        <receiver
             android:name="core.device.ReminderReceiver"
             android:exported="false" />
 
