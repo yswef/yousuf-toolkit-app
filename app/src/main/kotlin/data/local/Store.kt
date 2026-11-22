@@ -151,6 +151,7 @@ class Store(context: Context) {
 
     init {
         read()
+        ensureDefaultWallet()
         ensureDay(false)
     }
 
@@ -229,7 +230,22 @@ class Store(context: Context) {
         save()
     }
 
+    /** الحساب الافتراضي: يُنشأ تلقائياً برصيد دفتر الحركات الحالي، وتتحرك أرصدته مع كل دخل ومصروف. */
+    private fun ensureDefaultWallet() {
+        if (wallets.any { it.name == DEFAULT_WALLET }) return
+        wallets = listOf(Wallet(nextId(), DEFAULT_WALLET, balance)) + wallets
+        save()
+    }
+
+    private fun adjustDefaultWallet(delta: Double) {
+        if (wallets.none { it.name == DEFAULT_WALLET }) ensureDefaultWallet()
+        wallets = wallets.map { if (it.name == DEFAULT_WALLET) it.copy(balance = it.balance + delta) else it }
+    }
+
+    fun isDefaultWallet(wallet: Wallet) = wallet.name == DEFAULT_WALLET
+
     fun deleteWallet(id: Long) {
+        if (wallets.any { it.id == id && it.name == DEFAULT_WALLET }) return
         wallets = wallets.filterNot { it.id == id }
         save()
     }
@@ -465,6 +481,7 @@ class Store(context: Context) {
                     at = if (item.at > 0L) item.at else System.currentTimeMillis()
                 )
             ) + ledger
+            adjustDefaultWallet(if (item.income) item.amount else -item.amount)
             added++
         }
         if (added > 0) save()
@@ -558,6 +575,12 @@ class Store(context: Context) {
         return true
     }
 
+    fun restoreTask(task: Task) {
+        if (tasks.any { it.id == task.id }) return
+        tasks = tasks + task
+        save()
+    }
+
     fun deleteTask(id: Long) {
         tasks = tasks.filterNot { it.id == id }
         save()
@@ -566,6 +589,7 @@ class Store(context: Context) {
     fun addLedger(title: String, amount: Double, income: Boolean, category: String, at: Long = System.currentTimeMillis()) {
         if (title.isBlank() || !amount.isFinite() || amount <= 0.0) return
         ledger = ledger + Ledger(nextId(), title.trim(), amount, income, category, at)
+        adjustDefaultWallet(if (income) amount else -amount)
         save()
     }
 
@@ -596,7 +620,63 @@ class Store(context: Context) {
         save()
     }
 
+    fun lessonDone(key: String): Boolean = extras.any { it.kind == "lesson" && it.title == key }
+
+    /** يبدّل إنجاز درس في مسار تعليمي. يعيد true إن صار منجزاً. */
+    fun toggleLesson(key: String): Boolean {
+        val existing = extras.firstOrNull { it.kind == "lesson" && it.title == key }
+        if (existing != null) {
+            extras = extras.filterNot { it.id == existing.id }
+            takePoints(LESSON_POINTS)
+            save()
+            return false
+        }
+        extras = listOf(ExtraRecord(nextId(), "lesson", key, "", 0.0, "done", 0L, System.currentTimeMillis())) + extras
+        addPoints(LESSON_POINTS)
+        save()
+        return true
+    }
+
+    fun restoreLedger(item: Ledger) {
+        if (ledger.any { it.id == item.id }) return
+        ledger = ledger + item
+        adjustDefaultWallet(if (item.income) item.amount else -item.amount)
+        save()
+    }
+
+    fun restoreWorkout(item: Workout) {
+        if (workouts.any { it.id == item.id }) return
+        workouts = workouts + item
+        addPoints(config.pointsWorkout)
+        save()
+    }
+
+    fun restoreEntry(item: JournalEntry) {
+        if (journal.any { it.id == item.id }) return
+        journal = journal + item
+        save()
+    }
+
+    fun restoreSleep(item: SleepLog) {
+        if (sleep.any { it.id == item.id }) return
+        sleep = sleep + item
+        save()
+    }
+
+    fun restoreLearn(item: LearnItem) {
+        if (learn.any { it.id == item.id }) return
+        learn = learn + item
+        save()
+    }
+
+    fun restoreBook(item: Book) {
+        if (books.any { it.id == item.id }) return
+        books = books + item
+        save()
+    }
+
     fun deleteLedger(id: Long) {
+        ledger.firstOrNull { it.id == id }?.let { adjustDefaultWallet(if (it.income) -it.amount else it.amount) }
         ledger = ledger.filterNot { it.id == id }
         save()
     }
@@ -1424,3 +1504,7 @@ private fun JSONObject.toExtra(): ExtraRecord = ExtraRecord(
     optLong("id"), optString("kind"), optString("title"), optString("detail"),
     optDouble("amount", 0.0), optString("status", "open"), optLong("dueAt"), optLong("createdAt")
 )
+
+const val DEFAULT_WALLET = "الحساب الافتراضي"
+
+private const val LESSON_POINTS = 5

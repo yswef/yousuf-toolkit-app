@@ -23,7 +23,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.rememberCoroutineScope
+import core.design.SoundFx
+import core.design.SwipeActionRow
+import kotlinx.coroutines.launch
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
@@ -67,11 +77,43 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
     var adding by remember { mutableStateOf(false) }
     var denied by remember { mutableStateOf(false) }
     var filter by remember { mutableStateOf(TaskFilter.ALL) }
-    val open = store.tasks.filterNot { it.done }
-    val done = store.tasks.filter { it.done }
+    var query by remember { mutableStateOf("") }
+    val snack = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val undoLabel = stringResource(R.string.undo)
+    val deletedLabel = stringResource(R.string.task_deleted)
+    val matches: (Task) -> Boolean = { t ->
+        query.isBlank() || t.title.contains(query, ignoreCase = true) ||
+            t.note.contains(query, ignoreCase = true) || t.list.contains(query, ignoreCase = true)
+    }
+    val open = store.tasks.filterNot { it.done }.filter(matches)
+    val done = store.tasks.filter { it.done }.filter(matches)
+
+    fun toggle(task: Task) {
+        val was = task.done
+        if (!store.toggleTask(task.id)) {
+            denied = true
+            SoundFx.play(SoundFx.Fx.ERROR)
+        } else if (!was) {
+            SoundFx.play(SoundFx.Fx.SUCCESS)
+        } else {
+            SoundFx.play(SoundFx.Fx.TAP)
+        }
+    }
+
+    fun remove(task: Task) {
+        store.deleteTask(task.id)
+        SoundFx.play(SoundFx.Fx.DELETE)
+        scope.launch {
+            snack.currentSnackbarData?.dismiss()
+            val result = snack.showSnackbar(deletedLabel, actionLabel = undoLabel, duration = SnackbarDuration.Short)
+            if (result == SnackbarResult.ActionPerformed) store.restoreTask(task)
+        }
+    }
     val today = LocalDate.now()
 
     val content: @Composable (PaddingValues) -> Unit = { padding ->
+      Box(Modifier.fillMaxSize()) {
         LazyColumn(
             Modifier.fillMaxSize().padding(padding),
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 12.dp, bottom = if (embedded) 96.dp else 24.dp),
@@ -106,6 +148,22 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
                         )
                     }
                 }
+            }
+            item {
+                OutlinedTextField(
+                    value = query,
+                    onValueChange = { query = it },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(28.dp),
+                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
+                    trailingIcon = {
+                        if (query.isNotEmpty()) {
+                            IconButton(onClick = { query = "" }) { Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.cancel)) }
+                        }
+                    },
+                    placeholder = { Text(stringResource(R.string.search_hint)) }
+                )
             }
             item {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -145,7 +203,7 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
             }
             if (filter == TaskFilter.DONE) {
                 items(done.sortedByDescending { it.createdAt }, key = { it.id }) { task ->
-                    TaskRow(task, onToggle = { if (!store.toggleTask(task.id)) denied = true }, onDelete = { store.deleteTask(task.id) })
+                    TaskRow(task, Modifier.animateItem(), onToggle = { toggle(task) }, onDelete = { remove(task) })
                 }
             } else {
                 val visible = when (filter) {
@@ -172,12 +230,16 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
                             )
                         }
                         items(bucket.second, key = { "t-${it.id}-${filter.name}" }) { task ->
-                            TaskRow(task, onToggle = { if (!store.toggleTask(task.id)) denied = true }, onDelete = { store.deleteTask(task.id) })
+                            TaskRow(task, Modifier.animateItem(), onToggle = { toggle(task) }, onDelete = { remove(task) })
                         }
                     }
                 }
             }
         }
+        if (embedded) {
+            SnackbarHost(snack, Modifier.align(Alignment.BottomCenter).padding(bottom = 88.dp))
+        }
+      }
     }
     if (embedded) {
         content(PaddingValues(0.dp))
@@ -185,6 +247,7 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
         ScreenScaffold(
             title = stringResource(R.string.feature_tasks),
             onBack = onBack,
+            snackbarHost = snack,
             actions = {
                 TextButton(onClick = onMore) { Text(stringResource(R.string.tasks_pro)) }
                 IconButton(onClick = { adding = true }) {
@@ -217,7 +280,8 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
 }
 
 @Composable
-private fun TaskRow(task: Task, onToggle: () -> Unit, onDelete: () -> Unit) {
+private fun TaskRow(task: Task, modifier: Modifier = Modifier, onToggle: () -> Unit, onDelete: () -> Unit) {
+  SwipeActionRow(modifier = modifier, onSwipeStart = onToggle, onSwipeEnd = onDelete) {
     Card(Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -251,6 +315,7 @@ private fun TaskRow(task: Task, onToggle: () -> Unit, onDelete: () -> Unit) {
             }
         }
     }
+  }
 }
 
 @Composable

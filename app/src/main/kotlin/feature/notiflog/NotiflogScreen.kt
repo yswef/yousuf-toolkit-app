@@ -1,5 +1,6 @@
 package feature.notiflog
 
+import core.design.EmptyIllustration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,11 +43,7 @@ fun NotiflogScreen(onBack: () -> Unit) {
         ) {
             InfoCard(text = stringResource(R.string.notif_hint))
             if (store.notifications.isEmpty()) {
-                Text(
-                    stringResource(R.string.notif_empty),
-                    modifier = Modifier.padding(16.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                EmptyIllustration(R.drawable.empty_notifications, stringResource(R.string.notif_empty))
             }
             store.notifications.forEach { entry ->
                 RowItem(

@@ -1,5 +1,18 @@
 package feature.home
 
+import core.design.LocalSnackbar
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,7 +58,7 @@ import data.local.LocalStore
 import feature.money.MoneyScreen
 import feature.tasks.TasksScreen
 
-private data class Tab(val label: Int, val icon: ImageVector)
+private data class Tab(val label: Int, val icon: ImageVector, val iconOff: ImageVector)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,10 +73,10 @@ fun HomeScreen(
     var tab by rememberSaveable { mutableStateOf(0) }
     var adding by remember { mutableStateOf(false) }
     val tabs = listOf(
-        Tab(R.string.tab_today, Icons.Filled.Home),
-        Tab(R.string.tab_tasks, Icons.Filled.CheckCircle),
-        Tab(R.string.tab_money, Icons.Filled.ShoppingCart),
-        Tab(R.string.tab_tools, Icons.Filled.List)
+        Tab(R.string.tab_today, Icons.Filled.Home, Icons.Outlined.Home),
+        Tab(R.string.tab_tasks, Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
+        Tab(R.string.tab_money, Icons.Filled.ShoppingCart, Icons.Outlined.ShoppingCart),
+        Tab(R.string.tab_tools, Icons.Filled.List, Icons.Outlined.List)
     )
     val title = when (tab) {
         0 -> R.string.tab_today
@@ -72,11 +85,14 @@ fun HomeScreen(
         else -> R.string.tab_tools
     }
 
+    val homeSnack = remember { SnackbarHostState() }
+    CompositionLocalProvider(LocalSnackbar provides homeSnack) {
     MagicBackground {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
+            snackbarHost = { SnackbarHost(homeSnack) },
             topBar = {
                 TopAppBar(
                     title = {
@@ -117,12 +133,12 @@ fun HomeScreen(
                 )
             },
             bottomBar = {
-                NavigationBar(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.94f)) {
+                NavigationBar {
                     tabs.forEachIndexed { index, item ->
                         NavigationBarItem(
                             selected = tab == index,
                             onClick = { tab = index },
-                            icon = { Icon(item.icon, contentDescription = null) },
+                            icon = { Icon(if (tab == index) item.icon else item.iconOff, contentDescription = null) },
                             label = { Text(stringResource(item.label), fontSize = 12.sp) }
                         )
                     }
@@ -137,7 +153,12 @@ fun HomeScreen(
             }
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
-                when (tab) {
+                AnimatedContent(
+                    targetState = tab,
+                    transitionSpec = { fadeIn(tween(220, delayMillis = 60)) togetherWith fadeOut(tween(120)) },
+                    label = "home-tabs"
+                ) { current ->
+                when (current) {
                     0 -> TodayTab(
                         store = store,
                         onTasks = { tab = 1 },
@@ -159,11 +180,13 @@ fun HomeScreen(
                     )
                     else -> ToolsTab(onFeature, Modifier.fillMaxSize())
                 }
+                }
             }
         }
 
         if (adding) {
             QuickAddSheet(store, onDismiss = { adding = false })
         }
+    }
     }
 }

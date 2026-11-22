@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="clean_storage">المستخدم %1$s من %2$s</string>
+    <string name="clean_free">المتاح %1$s</string>
+    <string name="clean_perm_text">لفحص ملفات الجهاز (المجلدات الفارغة، الملفات المؤقتة، حزم APK، المكرر والكبير) يلزم السماح بالوصول إلى كل الملفات. بدونه يُنظَّف مؤقت التطبيق فقط. لا يُحذف شيء قبل مراجعتك وتأكيدك.</string>
+    <string name="clean_perm_btn">السماح بالوصول إلى الملفات</string>
+    <string name="clean_scan_all">فحص شامل للجهاز</string>
+    <string name="clean_rescan">إعادة الفحص</string>
+    <string name="clean_stage_cache">فحص ذاكرة التطبيق…</string>
+    <string name="clean_stage_files">فحص ملفات الجهاز…</string>
+    <string name="clean_stage_empty">البحث عن المجلدات الفارغة…</string>
+    <string name="clean_stage_dupes">البحث عن الملفات المكررة…</string>
+    <string name="clean_cat_cache">ذاكرة التطبيق المؤقتة</string>
+    <string name="clean_cat_cache_d">ملفات يعاد إنشاؤها تلقائياً. حذفها آمن.</string>
+    <string name="clean_cat_temp">ملفات مؤقتة وسجلات</string>
+    <string name="clean_cat_temp_d">امتدادات tmp وlog وbak وold وdmp وكاش الصور المصغرة.</string>
+    <string name="clean_cat_empty">مجلدات فارغة</string>
+    <string name="clean_cat_empty_d">مجلدات لا تحوي أي ملف. مجلدات النظام والمجلدات الأساسية مستثناة.</string>
+    <string name="clean_cat_apk">حزم تثبيت قديمة (APK)</string>
+    <string name="clean_cat_apk_d">ملفات تثبيت تبقى بعد تثبيت التطبيق.</string>
+    <string name="clean_cat_dupes">ملفات مكررة</string>
+    <string name="clean_cat_dupes_d">نسخ مطابقة تماماً (بالمحتوى). تُبقى أقدم نسخة وتُعرض الباقي. غير محددة افتراضياً.</string>
+    <string name="clean_cat_large">ملفات كبيرة</string>
+    <string name="clean_cat_large_d">أكبر الملفات (فوق 100 ميغابايت) للمراجعة. غير محددة افتراضياً.</string>
+    <string name="clean_items_size">%1$d عنصر • %2$s</string>
+    <string name="clean_more">و %1$d عنصراً آخر (تدخل في التحديد الكلي)</string>
+    <string name="clean_nothing">لا يوجد ما يستحق التنظيف. جهازك مرتب!</string>
+    <string name="clean_selected_btn">تنظيف المحدد (%1$s)</string>
+    <string name="clean_confirm_title">تأكيد الحذف</string>
+    <string name="clean_confirm_text">سيتم حذف %1$d عنصراً (%2$s) نهائياً ولا يمكن التراجع.</string>
+    <string name="clean_done">تم تحرير %1$s وحذف %2$d عنصراً</string>
+    <string name="clean_safe_note">لا يُمس مجلد Android ولا مجلدات النظام، والمجلدات لا تُحذف إلا إذا كانت فارغة.</string>
+</resources>

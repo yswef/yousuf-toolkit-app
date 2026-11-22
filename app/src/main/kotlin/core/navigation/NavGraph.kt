@@ -1,5 +1,9 @@
 package core.navigation
 
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -54,7 +58,23 @@ import feature.workouts.WorkoutsScreen
 @Composable
 fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
     val store = LocalStore.current
-    NavHost(navController = nav, startDestination = Routes.INTRO) {
+    val spec = tween<Float>(300)
+    NavHost(
+        navController = nav,
+        startDestination = Routes.INTRO,
+        enterTransition = {
+            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(320), initialOffset = { it / 3 }) + fadeIn(spec)
+        },
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(320), targetOffset = { it / 6 }) + fadeOut(tween(200))
+        },
+        popEnterTransition = {
+            slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(320), initialOffset = { it / 6 }) + fadeIn(spec)
+        },
+        popExitTransition = {
+            slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(320), targetOffset = { it / 3 }) + fadeOut(tween(200))
+        }
+    ) {
         composable(Routes.INTRO) {
             IntroScreen(onFinish = {
                 val target = if (store.onboarded && store.hasProfile) Routes.HOME else Routes.ONBOARDING

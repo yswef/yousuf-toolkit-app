@@ -1,5 +1,7 @@
 package feature.library
 
+import core.design.rememberUndoHost
+import core.design.SwipeActionRow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,6 +50,7 @@ import domain.model.Book
 @Composable
 fun LibraryScreen(onBack: () -> Unit, onPdf: () -> Unit = {}) {
     val store = LocalStore.current
+    val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
     val books = store.books
 
@@ -82,11 +85,10 @@ fun LibraryScreen(onBack: () -> Unit, onPdf: () -> Unit = {}) {
                 }
             }
             items(books, key = { it.id }) { book ->
-                BookRow(
-                    book = book,
-                    onMore = { store.readMore(book.id, 10) },
-                    onDelete = { store.deleteBook(book.id) }
-                )
+                val remove = { store.deleteBook(book.id); undo.deleted { store.restoreBook(book) } }
+                SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) {
+                    BookRow(book = book, onMore = { store.readMore(book.id, 10) }, onDelete = remove)
+                }
             }
         }
     }

@@ -1,5 +1,8 @@
 package feature.workouts
 
+import core.design.EmptyIllustration
+import core.design.rememberUndoHost
+import core.design.SwipeActionRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,6 +48,7 @@ import java.time.ZoneId
 @Composable
 fun WorkoutsScreen(onBack: () -> Unit) {
     val store = LocalStore.current
+    val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
 
     val logs = store.workouts.sortedByDescending { it.at }
@@ -88,15 +92,12 @@ fun WorkoutsScreen(onBack: () -> Unit) {
             }
             if (logs.isEmpty()) {
                 item {
-                    Text(
-                        stringResource(R.string.workout_none),
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(vertical = 24.dp)
-                    )
+                    EmptyIllustration(R.drawable.empty_workouts, stringResource(R.string.workout_none))
                 }
             }
             items(logs, key = { it.id }) { log ->
-                WorkoutRow(log = log, onDelete = { store.deleteWorkout(log.id) })
+                val remove = { store.deleteWorkout(log.id); undo.deleted { store.restoreWorkout(log) } }
+                SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) { WorkoutRow(log = log, onDelete = remove) }
             }
         }
     }

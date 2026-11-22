@@ -9,6 +9,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import core.design.AppTheme
+import core.design.SoundFx
 import core.design.UiState
 import core.navigation.AppNav
 import data.local.LocalStore
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        SoundFx.init(applicationContext)
         setContent {
             val store = remember { Store.of(applicationContext) }
             val systemDark = isSystemInDarkTheme()

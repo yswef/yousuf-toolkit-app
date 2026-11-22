@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="undo">تراجع</string>
+    <string name="task_deleted">تم حذف المهمة</string>
+    <string name="search_hint">بحث</string>
+    <string name="sound_title">المؤثرات الصوتية</string>
+    <string name="sound_desc">أصوات قصيرة عند الإنجاز والحذف والتنظيف</string>
+    <string name="item_deleted">تم الحذف</string>
+    <string name="default_account_hint">حساب افتراضي • يتحدث تلقائياً</string>
+    <string name="learn_paths_title">المسارات التعليمية</string>
+    <string name="learn_paths_sub">دروس مرتبة بالتدريج. علّم الدرس عند إنجازه لتحصل على نقاط.</string>
+    <string name="learn_my_goals">أهدافي الخاصة</string>
+    <string name="path_meta">%1$s • %2$d دروس • %3$d دقيقة</string>
+    <string name="path_progress">%1$d من %2$d منجز</string>
+    <string name="path_lesson_min">%1$d دقيقة</string>
+    <string name="care_skin_title">روتين العناية بالبشرة</string>
+    <string name="care_skin_type">نوع بشرتك</string>
+    <string name="care_morning">الصباح</string>
+    <string name="care_evening">المساء</string>
+    <string name="care_weekly">أسبوعياً</string>
+    <string name="care_show_tips">نصائح للبشرة</string>
+    <string name="care_hide_tips">إخفاء</string>
+    <string name="care_food_title">العناية بالأكل</string>
+    <string name="care_food_goals">أهداف اليوم</string>
+    <string name="care_meals_today">وجبات اليوم: %1$d • %2$d سعرة</string>
+    <string name="care_meals_none">لم تسجّل وجبات اليوم بعد.</string>
+    <string name="care_food_ideas">أفكار وجبات صحية</string>
+    <string name="care_meal_add">إضافة وجبة</string>
+    <string name="care_meal_name">اسم الوجبة</string>
+    <string name="care_meal_kcal">السعرات (اختياري)</string>
+    <string name="care_disclaimer">معلومات عامة للتوعية وليست نصيحة طبية. لأي حالة صحية أو حمية خاصة استشر الطبيب أو أخصائي التغذية.</string>
+</resources>

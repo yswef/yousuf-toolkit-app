@@ -116,6 +116,8 @@ private fun HealthTab(onAdd: (String) -> Unit) {
     val store = LocalStore.current
     val today = LocalDate.now().toEpochDay()
     LazyColumn(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        item { NutritionCard() }
+        item { SkinRoutineCard() }
         item {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {

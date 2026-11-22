@@ -1,5 +1,12 @@
 package feature.settings
 
+import core.design.ToggleRow
+import core.design.SoundFx
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -63,6 +70,14 @@ fun SettingsScreen(
                 Text(stringResource(R.string.dark_theme), modifier = Modifier.weight(1f))
                 Switch(checked = ui.dark, onCheckedChange = { ui.dark = it }, enabled = !ui.followsSystem)
             }
+            val context = LocalContext.current
+            var sound by remember { mutableStateOf(SoundFx.enabled) }
+            ToggleRow(
+                title = stringResource(R.string.sound_title),
+                subtitle = stringResource(R.string.sound_desc),
+                checked = sound,
+                onChange = { sound = it; SoundFx.setEnabled(context, it) }
+            )
             HorizontalDivider(Modifier.padding(vertical = 12.dp))
             Text(
                 stringResource(R.string.settings_visuals),

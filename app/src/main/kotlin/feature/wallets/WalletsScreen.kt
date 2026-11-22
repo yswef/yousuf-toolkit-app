@@ -1,5 +1,6 @@
 package feature.wallets
 
+import core.design.EmptyIllustration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,11 +67,7 @@ fun WalletsScreen(onBack: () -> Unit) {
         ) {
             InfoCard(text = stringResource(R.string.wallets_desc))
             if (store.wallets.isEmpty()) {
-                Text(
-                    stringResource(R.string.wallet_empty),
-                    modifier = Modifier.padding(16.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                EmptyIllustration(R.drawable.empty_wallets, stringResource(R.string.wallet_empty))
             }
             store.wallets.forEach { wallet ->
                 Surface(
@@ -87,11 +84,13 @@ fun WalletsScreen(onBack: () -> Unit) {
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.weight(1f)
                             )
-                            IconButton(onClick = { store.deleteWallet(wallet.id) }) {
-                                Icon(
-                                    Icons.Filled.Delete,
-                                    contentDescription = stringResource(R.string.common_delete)
-                                )
+                            if (!store.isDefaultWallet(wallet)) {
+                                IconButton(onClick = { store.deleteWallet(wallet.id) }) {
+                                    Icon(
+                                        Icons.Filled.Delete,
+                                        contentDescription = stringResource(R.string.common_delete)
+                                    )
+                                }
                             }
                         }
                         Text(

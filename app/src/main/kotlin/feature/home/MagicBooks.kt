@@ -155,10 +155,11 @@ fun MagicBookOpen(book: MagicBook, onCancel: () -> Unit, onOpened: () -> Unit) {
     var finished by remember { mutableStateOf(false) }
 
     LaunchedEffect(book.route) {
-        zoom.animateTo(1f, tween(420, easing = FastOutSlowInEasing))
-        glow.animateTo(1f, tween(300))
-        turn.animateTo(1f, tween(980, easing = FastOutSlowInEasing))
-        delay(260)
+        core.design.SoundFx.play(core.design.SoundFx.Fx.OPEN)
+        zoom.animateTo(1f, tween(260, easing = FastOutSlowInEasing))
+        glow.animateTo(1f, tween(160))
+        turn.animateTo(1f, tween(520, easing = FastOutSlowInEasing))
+        delay(120)
         finished = true
         onOpened()
     }

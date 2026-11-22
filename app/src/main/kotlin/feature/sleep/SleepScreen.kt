@@ -1,5 +1,7 @@
 package feature.sleep
 
+import core.design.rememberUndoHost
+import core.design.SwipeActionRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,6 +46,7 @@ import java.util.Locale
 @Composable
 fun SleepScreen(onBack: () -> Unit) {
     val store = LocalStore.current
+    val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
 
     val today = store.sleepToday()
@@ -103,7 +106,8 @@ fun SleepScreen(onBack: () -> Unit) {
                 }
             }
             items(logs, key = { it.id }) { log ->
-                SleepRow(log = log, onDelete = { store.deleteSleep(log.id) })
+                val remove = { store.deleteSleep(log.id); undo.deleted { store.restoreSleep(log) } }
+                SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) { SleepRow(log = log, onDelete = remove) }
             }
         }
     }

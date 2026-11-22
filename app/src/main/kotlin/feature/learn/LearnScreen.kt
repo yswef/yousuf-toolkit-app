@@ -1,5 +1,7 @@
 package feature.learn
 
+import core.design.rememberUndoHost
+import core.design.SwipeActionRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,7 +44,9 @@ import domain.model.LearnItem
 @Composable
 fun LearnScreen(onBack: () -> Unit) {
     val store = LocalStore.current
+    val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
+    var openPath by remember { mutableStateOf<LearnPath?>(null) }
     val items = store.learn
 
     ScreenScaffold(
@@ -59,6 +63,15 @@ fun LearnScreen(onBack: () -> Unit) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            learnPathsSection(store) { openPath = it }
+            item {
+                Text(
+                    stringResource(R.string.learn_my_goals),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
             item {
                 Text(
                     stringResource(R.string.learn_total, store.learnedMinutes),
@@ -76,14 +89,15 @@ fun LearnScreen(onBack: () -> Unit) {
                 }
             }
             items(items, key = { it.id }) { item ->
-                LearnRow(
-                    item = item,
-                    onMore = { store.learnMore(item.id, 15) },
-                    onDelete = { store.deleteLearn(item.id) }
-                )
+                val remove = { store.deleteLearn(item.id); undo.deleted { store.restoreLearn(item) } }
+                SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) {
+                    LearnRow(item = item, onMore = { store.learnMore(item.id, 15) }, onDelete = remove)
+                }
             }
         }
     }
+
+    openPath?.let { LearnPathSheet(it) { openPath = null } }
 
     if (adding) {
         LearnDialog(

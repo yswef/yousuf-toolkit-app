@@ -1,5 +1,9 @@
 package feature.money
 
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.CardDefaults
+import core.design.rememberUndoHost
+import core.design.SwipeActionRow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -76,6 +80,7 @@ import java.time.LocalTime
 @Composable
 fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Unit = {}, embedded: Boolean = false) {
     val store = LocalStore.current
+    val undo = rememberUndoHost()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var adding by remember { mutableStateOf(false) }
@@ -128,6 +133,29 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
             }
             if (status.isNotBlank()) {
                 item { InfoCard(text = status) }
+            }
+            item {
+                val account = store.wallets.firstOrNull { store.isDefaultWallet(it) }
+                if (account != null) {
+                    Card(
+                        onClick = onWallets,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                    ) {
+                        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text(account.name, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                                Text(
+                                    amountText(account.balance),
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                            Text(stringResource(R.string.default_account_hint), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
+                    }
+                }
             }
             item {
                 Card(Modifier.fillMaxWidth()) {
@@ -188,7 +216,8 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
                 }
             }
             items(entries, key = { it.id }) { entry ->
-                LedgerRow(entry = entry, onDelete = { store.deleteLedger(entry.id) })
+                val remove = { store.deleteLedger(entry.id); undo.deleted { store.restoreLedger(entry) } }
+                SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) { LedgerRow(entry = entry, onDelete = remove) }
             }
         }
     }

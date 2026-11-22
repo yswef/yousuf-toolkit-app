@@ -1,5 +1,8 @@
 package feature.journal
 
+import core.design.EmptyIllustration
+import core.design.rememberUndoHost
+import core.design.SwipeActionRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -41,6 +44,7 @@ import java.time.ZoneId
 @Composable
 fun JournalScreen(onBack: () -> Unit) {
     val store = LocalStore.current
+    val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
     val entries = store.journal.sortedByDescending { it.at }
 
@@ -54,11 +58,7 @@ fun JournalScreen(onBack: () -> Unit) {
         }
     ) { padding ->
         if (entries.isEmpty()) {
-            Text(
-                stringResource(R.string.journal_none),
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.fillMaxSize().padding(padding).padding(24.dp)
-            )
+            EmptyIllustration(R.drawable.empty_journal, stringResource(R.string.journal_none), Modifier.padding(padding).padding(8.dp))
         } else {
             LazyColumn(
                 Modifier.fillMaxSize().padding(padding),
@@ -66,7 +66,8 @@ fun JournalScreen(onBack: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(entries, key = { it.id }) { entry ->
-                    EntryRow(entry = entry, onDelete = { store.deleteEntry(entry.id) })
+                    val remove = { store.deleteEntry(entry.id); undo.deleted { store.restoreEntry(entry) } }
+                    SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) { EntryRow(entry = entry, onDelete = remove) }
                 }
             }
         }
