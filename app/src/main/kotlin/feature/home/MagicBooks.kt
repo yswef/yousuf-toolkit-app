@@ -70,17 +70,17 @@ private val goldDeep = Color(0xFFB9862B)
 
 @Composable
 fun MagicBookCard(book: MagicBook, onClick: () -> Unit) {
-    val shape = RoundedCornerShape(20.dp)
+    val shape = RoundedCornerShape(16.dp)
     Box(
         Modifier
             .fillMaxWidth()
-            .aspectRatio(0.74f)
+            .aspectRatio(1f)
             .graphicsLayer {
-                rotationX = 5f
-                rotationY = -6f
+                rotationX = 2f
+                rotationY = -3f
                 cameraDistance = 16f * density
             }
-            .shadow(10.dp, shape)
+            .shadow(6.dp, shape)
             .clip(shape)
             .background(Brush.linearGradient(listOf(book.start, book.end)))
             .border(1.dp, Color.White.copy(alpha = 0.32f), shape)
@@ -113,34 +113,30 @@ fun MagicBookCard(book: MagicBook, onClick: () -> Unit) {
             Modifier
                 .align(Alignment.CenterEnd)
                 .fillMaxHeight()
-                .width(7.dp)
+                .width(5.dp)
                 .background(Brush.verticalGradient(listOf(goldLight, goldDeep)))
         )
         Column(
             Modifier
                 .fillMaxSize()
-                .padding(start = 14.dp, end = 17.dp, top = 12.dp, bottom = 12.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(start = 8.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                stringResource(R.string.book_kind),
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.72f),
-                letterSpacing = 2.sp
-            )
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Canvas(Modifier.size(58.dp)) {
+            Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                Canvas(Modifier.size(40.dp)) {
                     drawCircle(book.glow.copy(alpha = 0.18f), size.minDimension * 0.5f, center)
                     drawBookSymbol(book.symbol, book.glow, center, size.minDimension * 0.34f)
                 }
             }
             Text(
                 stringResource(book.title),
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 maxLines = 2,
-                lineHeight = 21.sp
+                textAlign = TextAlign.Center,
+                lineHeight = 14.sp
             )
         }
     }
