@@ -39,12 +39,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.BookSymbol
+import core.design.StatTile
 import core.design.drawBookSymbol
 import data.local.Store
 import domain.model.Priority
@@ -95,14 +97,14 @@ fun TodayTab(
                                 .clip(CircleShape)
                                 .background(
                                     Brush.radialGradient(
-                                        listOf(MaterialTheme.colorScheme.primary, Color(0xFF2B185F))
+                                        listOf(MaterialTheme.colorScheme.primary, lerp(MaterialTheme.colorScheme.primary, Color.Black, 0.55f))
                                     )
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 store.level.toString(),
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold
                             )
@@ -316,12 +318,7 @@ private fun HabitRow(
 
 @Composable
 private fun MiniStat(value: String, label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    Card(modifier.clickable(onClick = onClick)) {
-        Column(Modifier.fillMaxWidth().padding(vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(value, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-    }
+    StatTile(value = value, label = label, modifier = modifier, onClick = onClick)
 }
 
 @Composable

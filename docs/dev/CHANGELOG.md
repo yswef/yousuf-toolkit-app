@@ -20,3 +20,4 @@
 - 2026-11-20: حصن المسلم والمهام الأولية والصور الفارغة وتحسين المهام؛ `changes/2026-11-20_arena-agent_adhkar-ui.md`.
 - 2026-11-20: ترتيب الكتب والوضع الليلي ونقل الحساب إلى حسابي؛ `changes/2026-11-20_arena-agent_ui-consolidation.md`.
 - 2026-11-19: الحسابات والأمان وTOTP والمال والمهام المتقدمة ومركز الحياة وأدوات الجهاز والمنبه ولوحة PHP؛ `changes/2026-11-19_arena-agent_accounts-completion.md`.
+- 2026-11-22 | Claude Sonnet 5.5 | ux audit fixes and shared design refresh | changes/2026-11-22_claude-sonnet-5-5_ux-audit-fixes.md

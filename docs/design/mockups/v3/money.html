@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>المال</title><link rel="stylesheet" href="v3.css"></head>
+<body><div class="phone" id="p"></div><script src="icons.js"></script><script>
+const r=(i,t,m,a,c)=>`<div class="row"><span class="lead">${ic(i)}</span><div class="body"><div class="ttl">${t}</div><div class="sub">${m}</div></div><span class="end ${c}">${a}</span></div>`;
+p.innerHTML=`${status}
+<main class="screen" style="gap:18px">
+ <header class="top"><div class="avatar">ي</div><div class="t"><h1>المال</h1></div><div class="ibtn">${ic("settings")}</div></header>
+ <section class="hero solid">
+  <div><p>الرصيد الكلي</p><div class="big">١٢٬٤٥٠<small>ريال</small></div></div>
+  <div class="pills"><div class="pill"><small>دخل الشهر</small><b><span class=ltr>+٣٬٢٠٠</span></b></div><div class="pill"><small>مصروف الشهر</small><b><span class=ltr>−٢٬١٤٠</span></b></div></div>
+  <div class="act"><a><span>${ic("arrow_down")}</span>دخل</a><a><span>${ic("arrow_up")}</span>مصروف</a><a><span>${ic("swap")}</span>تحويل</a><a><span>${ic("wallet")}</span>المحافظ</a></div>
+ </section>
+ <section>
+  <div class="sec"><h2>آخر الحركات</h2><a>عرض الكل</a></div>
+  <div class="dayh">اليوم</div>
+  <div class="group">${r("coffee","قهوة","طعام · محفظة نقدية","<span class=ltr>−١٥</span>","out")}${r("arrow_down","راتب","دخل · الحساب الافتراضي","<span class=ltr>+٣٬٢٠٠</span>","in")}</div>
+  <div class="dayh" style="margin-top:12px">أمس</div>
+  <div class="group">${r("cart","مشتريات البيت","منزل · محفظة نقدية","<span class=ltr>−٣٨٠</span>","out")}</div>
+ </section>
+</main>
+<div class="fab">${ic("add")}إضافة</div>
+${nav(2)}`;
+</script></body></html>

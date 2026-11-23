@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>شاشة أداة</title><link rel="stylesheet" href="v3.css"></head>
+<body><div class="phone" id="p"></div><script src="icons.js"></script><script>
+const r=(t,m,e)=>`<div class="row"><span class="lead">${ic("drop")}</span><div class="body"><div class="ttl">${t}</div><div class="sub">${m}</div></div><span class="end">${e}</span></div>`;
+p.innerHTML=`${status}
+<main class="screen" style="gap:18px">
+ <div class="appbar"><div class="ibtn">${ic("back")}</div><h1>الماء</h1><div class="ibtn">${ic("settings")}</div></div>
+ <section class="hero" style="flex-direction:column;text-align:center;gap:10px;padding:24px"><div class="ring" style="width:140px;height:140px">${ring(.625)}<b style="font-size:34px">٥/٨</b></div><h3>باقي ٣ أكواب للوصول لهدفك</h3></section>
+ <div class="btn">${ic("add")}&nbsp;إضافة كوب</div>
+ <section><div class="dayh">سجل اليوم</div><div class="group">${r("كوب ماء","٢:١٥ م","+١")}${r("كوب ماء","١١:٠٠ ص","+١")}${r("كوب ماء","٨:٣٠ ص","+٣")}</div></section>
+</main>`;
+</script></body></html>

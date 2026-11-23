@@ -94,8 +94,7 @@ fun LifeScreen(initialTab: Int, onBack: () -> Unit) {
     adding?.let { mode ->
         LifeAddDialog(mode = mode, onDismiss = { adding = null })
     }
-    if (adhkar != null) {
-        val item = adhkar!!
+    adhkar?.let { item ->
         AlertDialog(
             onDismissRequest = { adhkar = null },
             title = { Text(stringResource(R.string.life_adhkar_due)) },
@@ -269,7 +268,7 @@ private fun LearnTab(onAdd: (String) -> Unit) {
                 TextButton(onClick = { onAdd("note") }) { Text(stringResource(R.string.add)) }
             }
         }
-        items(store.extras.filter { it.kind == "note" }) { note ->
+        items(store.extras.filter { it.kind == "note" }, key = { it.id }) { note ->
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(12.dp)) {
                     Text(note.title, fontWeight = FontWeight.Bold)
@@ -494,7 +493,7 @@ private fun BooksTab(onAdd: (String) -> Unit) {
                 TextButton(onClick = { onAdd("paidbook") }) { Text(stringResource(R.string.add)) }
             }
         }
-        items(store.extras.filter { it.kind == "paidbook" }) { book ->
+        items(store.extras.filter { it.kind == "paidbook" }, key = { it.id }) { book ->
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(book.title, fontWeight = FontWeight.Bold)
@@ -514,7 +513,7 @@ private fun BooksTab(onAdd: (String) -> Unit) {
                 TextButton(onClick = { onAdd("readnote") }) { Text(stringResource(R.string.add)) }
             }
         }
-        items(store.extras.filter { it.kind == "readnote" }) { note ->
+        items(store.extras.filter { it.kind == "readnote" }, key = { it.id }) { note ->
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(12.dp)) {
                     Text(note.title, fontWeight = FontWeight.Bold)

@@ -114,3 +114,10 @@
 - `feature/settings/PermissionsSection.kt`: حالة كل صلاحية + تفعيل + مهام نقاط (`Store.claimMission/missionClaimed`, kind="mission").
 - `docs/site/index.html` موقع التوثيق، `docs/AUDIT.md`.
 - لم يُبنَ شيء ولم يُشغَّل. لم يُنفَّذ بعد: تحسين شاشات (accounts/forum/shop/raids…) بنفس نمط swipe/undo/empty.
+
+## متابعة 2026-11-22 (د): تدقيق UX وإصلاحات (لم يُبنَ ولم يُشغَّل)
+- أُصلح في `Store.kt`: الحفظ الذري، نسخة `state.corrupt.json` عند تلف الحالة، استعادة آمنة، تكرار المهام المتكررة عند التراجع، تحليل CSV.
+- نظام التصميم: `Theme.kt` (تباين وأشكال وحاويات تتبع الهوية)، `Surfaces.kt`، `Sections.kt`، وقشرة الرئيسية وتبويب اليوم وقارئ PDF والصلاحيات.
+- محمية ولم تُمس: Intro، Onboarding، Register، Type.kt، NavGraph.kt، أصول نور. التفاصيل في `docs/dev/changes/2026-11-22_claude-sonnet-5-5_ux-audit-fixes.md`.
+- لم يُنفَّذ: إعادة تصميم بقية الشاشات واحدة واحدة (تأخذ شكل النظام المشترك الجديد فقط)، وتحويل `DEFAULT_WALLET` من اسم نصي إلى معرّف.
+

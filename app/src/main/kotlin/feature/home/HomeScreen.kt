@@ -1,5 +1,6 @@
 package feature.home
 
+import androidx.activity.compose.BackHandler
 import core.design.LocalSnackbar
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.material3.SnackbarHostState
@@ -72,6 +73,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) { store.seedStarterTasks(starterTasks) }
     var tab by rememberSaveable { mutableStateOf(0) }
     var adding by remember { mutableStateOf(false) }
+    BackHandler(enabled = tab != 0 && !adding) { tab = 0 }
     val tabs = listOf(
         Tab(R.string.tab_today, Icons.Filled.Home, Icons.Outlined.Home),
         Tab(R.string.tab_tasks, Icons.Filled.CheckCircle, Icons.Outlined.CheckCircle),
@@ -133,7 +135,7 @@ fun HomeScreen(
                 )
             },
             bottomBar = {
-                NavigationBar {
+                NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
                     tabs.forEachIndexed { index, item ->
                         NavigationBarItem(
                             selected = tab == index,

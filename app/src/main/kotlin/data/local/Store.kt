@@ -34,6 +34,10 @@ import domain.model.prayerKeys
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -230,7 +234,6 @@ class Store(context: Context) {
         save()
     }
 
-    /** الحساب الافتراضي: يُنشأ تلقائياً برصيد دفتر الحركات الحالي، وتتحرك أرصدته مع كل دخل ومصروف. */
     private fun ensureDefaultWallet() {
         if (wallets.any { it.name == DEFAULT_WALLET }) return
         wallets = listOf(Wallet(nextId(), DEFAULT_WALLET, balance)) + wallets
@@ -418,24 +421,26 @@ class Store(context: Context) {
     fun backupText(): String = snapshot()
 
     fun restoreBackup(text: String): Boolean {
-        return try {
-            val root = JSONObject(text)
-            if (!root.has("points") && !root.has("tasks")) {
-                false
-            } else {
-                read(root)
-                save()
-                true
-            }
+        val root = try {
+            JSONObject(text)
         } catch (t: Throwable) {
-            false
+            return false
         }
+        if (!root.has("points") && !root.has("tasks")) return false
+        val previous = JSONObject(snapshot())
+        if (!read(root)) {
+            read(previous)
+            return false
+        }
+        ensureDefaultWallet()
+        save()
+        return true
     }
 
     fun importMoneyCsv(text: String): Int {
         var added = 0
         text.lineSequence().forEach { line ->
-            val cols = line.split(',').map { it.trim().trim('"') }
+            val cols = csvCols(line)
             if (cols.size < 3) return@forEach
             val amount = cols[2].replace(",", "").toDoubleOrNull() ?: return@forEach
             if (amount <= 0.0) return@forEach
@@ -450,7 +455,7 @@ class Store(context: Context) {
     fun importTaskCsv(text: String): Int {
         var added = 0
         text.lineSequence().forEach { line ->
-            val cols = line.split(',').map { it.trim().trim('"') }
+            val cols = csvCols(line)
             val title = cols.firstOrNull().orEmpty()
             if (title.isBlank()) return@forEach
             if (title.contains("title", true) || title.contains("اسم", false)) return@forEach
@@ -570,6 +575,12 @@ class Store(context: Context) {
             energy = (energy + config.energyCost).coerceAtMost(config.energyMax)
             takePoints(config.pointsTask)
             tasks = tasks.map { if (it.id == id) it.copy(done = false) else it }
+            if (task.repeat.isNotBlank()) {
+                val spawned = tasks.firstOrNull {
+                    it.id > task.id && !it.done && it.title == task.title && it.repeat == task.repeat && it.list == task.list
+                }
+                if (spawned != null) tasks = tasks.filterNot { it.id == spawned.id }
+            }
         }
         save()
         return true
@@ -622,7 +633,6 @@ class Store(context: Context) {
 
     fun missionClaimed(key: String): Boolean = extras.any { it.kind == "mission" && it.title == key }
 
-    /** يمنح نقاط مهمة إعداد مرة واحدة فقط. يعيد true إن مُنحت الآن. */
     fun claimMission(key: String, reward: Int): Boolean {
         if (missionClaimed(key)) return false
         extras = listOf(ExtraRecord(nextId(), "mission", key, "", reward.toDouble(), "done", 0L, System.currentTimeMillis())) + extras
@@ -633,7 +643,6 @@ class Store(context: Context) {
 
     fun lessonDone(key: String): Boolean = extras.any { it.kind == "lesson" && it.title == key }
 
-    /** يبدّل إنجاز درس في مسار تعليمي. يعيد true إن صار منجزاً. */
     fun toggleLesson(key: String): Boolean {
         val existing = extras.firstOrNull { it.kind == "lesson" && it.title == key }
         if (existing != null) {
@@ -991,6 +1000,7 @@ class Store(context: Context) {
         }
     }
 
+    @Synchronized
     private fun nextId(): Long = seq++
 
     private fun dayOf(at: Long): String =
@@ -1196,14 +1206,24 @@ class Store(context: Context) {
         io.execute {
             try {
                 val temp = File(file.parentFile, "state.tmp")
-                temp.writeText(text)
-                if (!temp.renameTo(file)) {
-                    file.delete()
-                    temp.renameTo(file)
+                FileOutputStream(temp).use { out ->
+                    out.write(text.toByteArray(Charsets.UTF_8))
+                    out.fd.sync()
+                }
+                try {
+                    Files.move(temp.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+                } catch (e: AtomicMoveNotSupportedException) {
+                    Files.move(temp.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING)
                 }
             } catch (t: Throwable) {
                 Log.e("Store", "Failed to save state", t)
             }
+        }
+    }
+
+    private fun preserveCorrupt() {
+        runCatching {
+            file.copyTo(File(file.parentFile, "state.corrupt.json"), overwrite = true)
         }
     }
 
@@ -1219,9 +1239,9 @@ class Store(context: Context) {
         }
     }
 
-    private fun read(restored: JSONObject? = null) {
-        if (restored == null && !file.exists()) return
-        try {
+    private fun read(restored: JSONObject? = null): Boolean {
+        if (restored == null && !file.exists()) return true
+        return try {
             val root = restored ?: JSONObject(file.readText())
             onboarded = root.optBoolean("onboarded", false)
             points = root.optInt("points", 0)
@@ -1374,8 +1394,11 @@ class Store(context: Context) {
             }
             faithDays = root.stringSet("faithDays")
             sleepDays = root.stringSet("sleepDays")
+            true
         } catch (t: Throwable) {
             Log.e("Store", "Failed to read state", t)
+            if (restored == null) preserveCorrupt()
+            false
         }
     }
 }
@@ -1519,3 +1542,28 @@ private fun JSONObject.toExtra(): ExtraRecord = ExtraRecord(
 const val DEFAULT_WALLET = "الحساب الافتراضي"
 
 private const val LESSON_POINTS = 5
+
+private fun csvCols(line: String): List<String> {
+    val out = ArrayList<String>()
+    val cur = StringBuilder()
+    var quoted = false
+    var i = 0
+    while (i < line.length) {
+        val c = line[i]
+        when {
+            c == '"' && quoted && i + 1 < line.length && line[i + 1] == '"' -> {
+                cur.append('"')
+                i++
+            }
+            c == '"' -> quoted = !quoted
+            c == ',' && !quoted -> {
+                out.add(cur.toString().trim())
+                cur.setLength(0)
+            }
+            else -> cur.append(c)
+        }
+        i++
+    }
+    out.add(cur.toString().trim())
+    return out
+}

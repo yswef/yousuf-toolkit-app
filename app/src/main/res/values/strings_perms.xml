@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="perms_title">الصلاحيات والمهام</string>
+    <string name="perms_summary">%1$d من %2$d مفعّلة. كل صلاحية تفعّلها تمنحك %3$d نقاط مرة واحدة، ومكافأة %4$d عند إكمالها كلها. كلها اختيارية.</string>
+    <string name="perms_claimed">✓ +%1$d نقاط</string>
+    <string name="perms_manage">إدارة</string>
+    <string name="perms_enable">تفعيل</string>
+    <string name="perm_notif_title">الإشعارات</string>
+    <string name="perm_notif_why">تنبيهات المهام والمواعيد وحلقات الأنمي الجديدة</string>
+    <string name="perm_alarm_title">المنبهات الدقيقة</string>
+    <string name="perm_alarm_why">تذكيرات تعمل في وقتها بالضبط</string>
+    <string name="perm_files_title">الوصول لكل الملفات</string>
+    <string name="perm_files_why">منظّف التخزين: ملفات مكررة وكبيرة ومجلدات فارغة</string>
+    <string name="perm_usage_title">إحصاءات الاستخدام</string>
+    <string name="perm_usage_why">وقت الشاشة ومحدّد التطبيقات</string>
+    <string name="perm_access_title">خدمة الإتاحة</string>
+    <string name="perm_access_why">حظر التطبيقات المشتتة أثناء التركيز</string>
+    <string name="perm_listener_title">قراءة الإشعارات</string>
+    <string name="perm_listener_why">تلخيص الإشعارات وتنظيفها</string>
+    <string name="perm_sms_title">الرسائل</string>
+    <string name="perm_sms_why">قراءة الرسائل البنكية لتسجيل المصروفات</string>
+    <string name="perm_contacts_title">جهات الاتصال</string>
+    <string name="perm_contacts_why">تذكيرات أعياد الميلاد والتواصل</string>
+    <string name="perm_loc_title">الموقع</string>
+    <string name="perm_loc_why">أوقات الصلاة والقبلة</string>
+    <string name="perm_mic_title">الميكروفون</string>
+    <string name="perm_mic_why">الإدخال الصوتي للمهام</string>
+</resources>

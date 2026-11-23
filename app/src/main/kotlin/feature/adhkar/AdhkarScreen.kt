@@ -48,8 +48,9 @@ fun AdhkarScreen(onBack: () -> Unit) {
         title = selected?.title ?: stringResource(R.string.feature_adhkar),
         onBack = { if (selected != null) selected = null else onBack() }
     ) { padding ->
-        if (selected != null) {
-            DhikrList(category = selected!!, modifier = Modifier.fillMaxSize().padding(padding))
+        val current = selected
+        if (current != null) {
+            DhikrList(category = current, modifier = Modifier.fillMaxSize().padding(padding))
         } else {
             LazyColumn(
                 Modifier.fillMaxSize().padding(padding),

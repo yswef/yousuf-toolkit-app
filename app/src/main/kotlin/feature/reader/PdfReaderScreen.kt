@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
@@ -39,6 +40,7 @@ import com.yousuf.toolkit.R
 import core.design.InfoCard
 import core.design.ScreenScaffold
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
@@ -51,46 +53,47 @@ fun PdfReaderScreen(onBack: () -> Unit) {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
     var status by remember { mutableStateOf("") }
     var url by remember { mutableStateOf("") }
-    val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        val target = File(context.cacheDir, "reader.pdf")
-        runCatching {
-            context.contentResolver.openInputStream(uri)?.use { input ->
-                target.outputStream().use { output -> input.copyTo(output) }
-            }
-        }
-        file = target
-        page = 0
-        status = ""
-        runCatching {
-            ParcelFileDescriptor.open(target, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
-                PdfRenderer(descriptor).use { renderer ->
-                    pages = renderer.pageCount
-                }
-            }
-        }.onFailure { status = context.getString(R.string.pdf_fail) }
-    }
+    val scope = rememberCoroutineScope()
+    val failText = stringResource(R.string.pdf_fail)
+    val targetWidth = context.resources.displayMetrics.widthPixels.coerceIn(720, 1440)
+
     fun render(index: Int) {
         val target = file ?: return
-        if (target.length() == 0L) return
-        runCatching {
-            ParcelFileDescriptor.open(target, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
-                PdfRenderer(descriptor).use { renderer ->
-                    val safe = index.coerceIn(0, renderer.pageCount - 1)
-                    renderer.openPage(safe).use { pdfPage ->
-                        val width = 1080
-                        val height = (width.toFloat() * pdfPage.height / pdfPage.width).toInt().coerceAtLeast(1)
-                        val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                        image.eraseColor(Color.WHITE)
-                        pdfPage.render(image, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-                        bitmap = image
-                        page = safe
-                    }
-                }
+        scope.launch {
+            val result = withContext(Dispatchers.IO) { renderPdfPage(target, index, targetWidth) }
+            if (result == null) {
+                status = failText
+            } else {
+                bitmap = result.first
+                page = result.second
             }
-        }.onFailure { status = context.getString(R.string.pdf_fail) }
+        }
     }
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val target = File(context.cacheDir, "reader.pdf")
+            val count = withContext(Dispatchers.IO) {
+                runCatching {
+                    context.contentResolver.openInputStream(uri)?.use { input ->
+                        target.outputStream().use { output -> input.copyTo(output) }
+                    }
+                    pdfPageCount(target)
+                }.getOrNull()
+            }
+            if (count == null || count <= 0) {
+                status = failText
+            } else {
+                file = target
+                pages = count
+                status = ""
+                render(0)
+            }
+        }
+    }
+    ScreenScaffold(title = stringResource(R.string.feature_pdf), onBack = onBack) { padding ->
+    Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Card(Modifier.fillMaxWidth()) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(R.string.feature_pdf), style = MaterialTheme.typography.titleMedium)
@@ -102,11 +105,12 @@ fun PdfReaderScreen(onBack: () -> Unit) {
                 if (status.isNotBlank()) InfoCard(text = status)
             }
         }
-        if (bitmap == null) {
+        val current = bitmap
+        if (current == null) {
             InfoCard(text = stringResource(R.string.pdf_none))
         } else {
             Image(
-                bitmap = bitmap!!.asImageBitmap(),
+                bitmap = current.asImageBitmap(),
                 contentDescription = stringResource(R.string.feature_pdf),
                 modifier = Modifier.fillMaxWidth(),
                 filterQuality = FilterQuality.Medium
@@ -118,4 +122,26 @@ fun PdfReaderScreen(onBack: () -> Unit) {
             }
         }
     }
+    }
 }
+
+private fun pdfPageCount(target: File): Int? = runCatching {
+    ParcelFileDescriptor.open(target, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+        PdfRenderer(descriptor).use { it.pageCount }
+    }
+}.getOrNull()
+
+private fun renderPdfPage(target: File, index: Int, width: Int): Pair<Bitmap, Int>? = runCatching {
+    ParcelFileDescriptor.open(target, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+        PdfRenderer(descriptor).use { renderer ->
+            val safe = index.coerceIn(0, renderer.pageCount - 1)
+            renderer.openPage(safe).use { pdfPage ->
+                val height = (width.toFloat() * pdfPage.height / pdfPage.width).toInt().coerceAtLeast(1)
+                val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                image.eraseColor(Color.WHITE)
+                pdfPage.render(image, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+                image to safe
+            }
+        }
+    }
+}.getOrNull()

@@ -218,11 +218,13 @@ private fun SavingsTab() {
         }
     }
     if (adding) AddItemDialog(kind = "saving", onDismiss = { adding = false })
-    if (saving != null) AmountDialog(
-        title = stringResource(R.string.moneypro_add_amount),
-        onDismiss = { saving = null },
-        onSave = { amount -> store.addExtraAmount(saving!!.id, amount); saving = null }
-    )
+    saving?.let { target ->
+        AmountDialog(
+            title = stringResource(R.string.moneypro_add_amount),
+            onDismiss = { saving = null },
+            onSave = { amount -> store.addExtraAmount(target.id, amount); saving = null }
+        )
+    }
 }
 
 @Composable

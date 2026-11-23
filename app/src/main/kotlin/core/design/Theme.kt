@@ -1,10 +1,14 @@
 package core.design
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.unit.dp
 
 enum class UiMode {
     PROFESSIONAL,
@@ -31,8 +35,8 @@ private val LightScheme = lightColorScheme(
     onSurface = Color(0xFF1B1A24),
     surfaceVariant = Color(0xFFF0ECF8),
     onSurfaceVariant = Color(0xFF5E5A6E),
-    outline = Color(0xFFD8D3E6),
-    outlineVariant = Color(0xFFE9E4F2),
+    outline = Color(0xFF857F96),
+    outlineVariant = Color(0xFFDDD7EA),
     error = Color(0xFFC03943),
     onError = Color.White,
     errorContainer = Color(0xFFFBE0E2),
@@ -66,8 +70,8 @@ private val DarkScheme = darkColorScheme(
     onSurface = Color(0xFFECE9F5),
     surfaceVariant = Color(0xFF25232F),
     onSurfaceVariant = Color(0xFFB3AEC4),
-    outline = Color(0xFF3A3748),
-    outlineVariant = Color(0xFF2C2938),
+    outline = Color(0xFF8C87A0),
+    outlineVariant = Color(0xFF3D3A4C),
     error = Color(0xFFFF8A92),
     onError = Color(0xFF3A0006),
     errorContainer = Color(0xFF5C1219),
@@ -81,6 +85,14 @@ private val DarkScheme = darkColorScheme(
     surfaceContainerHighest = Color(0xFF2F2D3B)
 )
 
+private val AppShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(22.dp),
+    extraLarge = RoundedCornerShape(28.dp)
+)
+
 @Composable
 fun AppTheme(
     mode: UiMode,
@@ -90,10 +102,13 @@ fun AppTheme(
 ) {
     val base = if (dark) DarkScheme else LightScheme
     val skin = accentOf(accent)
+    val tint = if (dark) skin.dark else skin.light
     val colors = base.copy(
-        primary = if (dark) skin.dark else skin.light,
-        inversePrimary = if (dark) skin.light else skin.dark
+        primary = tint,
+        inversePrimary = if (dark) skin.light else skin.dark,
+        primaryContainer = if (dark) lerp(base.surface, tint, 0.28f) else lerp(Color.White, tint, 0.16f),
+        onPrimaryContainer = if (dark) lerp(tint, Color.White, 0.65f) else lerp(tint, Color.Black, 0.65f)
     )
     val type = if (mode == UiMode.SIMPLE) simpleType() else professionalType()
-    MaterialTheme(colorScheme = colors, typography = type, content = content)
+    MaterialTheme(colorScheme = colors, typography = type, shapes = AppShapes, content = content)
 }

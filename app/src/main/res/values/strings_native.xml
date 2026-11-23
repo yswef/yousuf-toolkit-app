@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="today_hero_title">أنجزت %1$d من %2$d مهام</string>
+    <string name="today_level_rank">المستوى %1$d · %2$s</string>
+    <string name="habit_plus">+%1$d</string>
+</resources>
