@@ -3,6 +3,7 @@ package feature.workouts
 import core.design.EmptyIllustration
 import core.design.rememberUndoHost
 import core.design.SwipeActionRow
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -51,6 +52,13 @@ fun WorkoutsScreen(onBack: () -> Unit) {
     val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
     var openPlan by remember { mutableStateOf<WorkoutPlan?>(null) }
+    var library by remember { mutableStateOf(false) }
+
+    if (library) {
+        BackHandler { library = false }
+        ExerciseLibraryScreen(onBack = { library = false })
+        return
+    }
 
     val logs = store.workouts.sortedByDescending { it.at }
     val total = store.workouts.sumOf { it.minutes }
@@ -88,6 +96,18 @@ fun WorkoutsScreen(onBack: () -> Unit) {
                             )
                             Text(store.workouts.size.toString(), style = MaterialTheme.typography.headlineSmall)
                         }
+                    }
+                }
+            }
+            item(key = "library-entry") {
+                Card(onClick = { library = true }, modifier = Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("مكتبة التمارين", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            "أكثر من 870 تمريناً بالصور والشرح، مع بحث وفلترة بالعضلة والأداة والمستوى.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }
