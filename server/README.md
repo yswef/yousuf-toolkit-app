@@ -20,7 +20,7 @@
 - `GET|POST /api/raids.php?action=info|checkin`.
 - `GET|POST|DELETE /api/vault.php`.
 - `GET|POST /api/license.php`.
-- `GET|POST /admin.php` لوحة إدارة محمية بـ `admin_token`.
+- `GET|POST /admin/` لوحة إدارة محمية بـ `admin_token`، وكلها في مجلد واحد `public/admin/` (انظر `public/admin/README.md`).
 
 نشر هوستنجر: `HOSTINGER.md`.
 
