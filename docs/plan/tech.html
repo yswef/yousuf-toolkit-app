@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>التقنية — كل ما يحتاجه يوسف</title>
+<meta name="description" content="أندرويد 14 والبنية والصلاحيات الحساسة.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="plan.css">
+</head>
+<body data-page="tech">
+<a class="skip" href="#main">تخطي إلى المحتوى</a>
+<div class="topbar">
+  <button id="menuBtn" type="button" aria-label="القائمة" aria-controls="side" aria-expanded="false">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <b>التقنية</b>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<aside class="side" id="side" aria-label="قائمة الصفحات">
+  <div class="brand"><b>كل ما يحتاجه يوسف</b><span>مساحة الخطة والمراجعة</span></div>
+  <nav>
+<div class="grp"><span>المراجعة</span>
+<a class="nl" href="plan.html" style="--d:40"><i></i>الفكرة والقرارات</a>
+<a class="nl" href="compare.html" style="--d:165"><i></i>المقارنة</a>
+<a class="nl" href="checklist.html" style="--d:140"><i></i>قائمة التحقق</a>
+<a class="nl" href="notes.html" style="--d:18"><i></i>ملاحظاتي</a>
+<a class="nl" href="suggestions.html" style="--d:275"><i></i>اقتراحات</a>
+<a class="nl" href="review.html" style="--d:55"><i></i>ملاحظات الاختبار</a>
+</div>
+<div class="grp"><span>التفاصيل</span>
+<a class="nl" href="features.html" style="--d:212"><i></i>المميزات</a>
+<a class="nl" href="refs.html" style="--d:190"><i></i>التطبيقات المرجعية</a>
+<a class="nl" href="paid.html" style="--d:335"><i></i>المدفوعة</a>
+<a class="nl" href="tech.html" aria-current="page" style="--d:245"><i></i>التقنية</a>
+<a class="nl" href="admin.html" style="--d:5"><i></i>لوحة التحكم</a>
+<a class="nl" href="sources.html" style="--d:85"><i></i>المصادر</a>
+</div>
+<div class="grp"><span>أدوات</span>
+<a class="nl" href="prompts.html" style="--d:300"><i></i>البرومتات</a>
+<a class="nl" href="steps.html" style="--d:120"><i></i>الخطوات</a>
+</div>
+  </nav>
+  <div class="meter" aria-live="polite"><span id="meterTxt">قائمة التحقق: 0 من 0</span><div class="bar"><i id="meterBar"></i></div></div>
+</aside>
+<div class="content">
+<div class="page">
+<header class="hero"><small>التفاصيل</small><h1>التقنية</h1><p>أندرويد 14 والبنية والصلاحيات الحساسة.</p></header>
+<main id="main"><div class="sec">
+<div class="box note">
+        <h3>رأي المحلل أولاً</h3>
+        <p>الفكرة تحوي أكثر من ستين ميزة، وبعضها يلمس صلاحيات حساسة في أندرويد. لو بدأنا بكل شيء معاً فلن تصل إلى نسخة تستخدمها يومياً. الحل أن نبني نواة صغيرة تعمل وتستخدمها فعلاً، ثم نضيف طبقة بعد طبقة. الاقتراحات أدناه مبدئية وتنتظر قرارك.</p>
+      </div>
+      <div class="box">
+        <h3>ماذا يعني اختيار أندرويد 14 كأقل إصدار</h3>
+        <ul class="plain" id="a14List"></ul>
+        <p class="count">راجع هذه النقاط مع وثائق أندرويد وقت البناء، فتفاصيل الصلاحيات تتغير.</p>
+      </div>
+      <div class="grid" id="archGrid"></div>
+      <h3>الصلاحيات الحساسة وما يقابلها في جوجل بلاي</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>الصلاحية</th><th>الميزة</th><th>الوضع في بلاي</th></tr></thead>
+        <tbody id="permTable"></tbody>
+      </table></div>
+      <p class="count">سياسات بلاي تتغير، فتراجع قبل أي نشر. لذلك أقترح نسختين من نفس المشروع: كاملة للتحميل المباشر، وخفيفة لبلاي إن قررت النشر هناك.</p>
+</div></main>
+<div class="pager"><a class="pv" href="paid.html"><small>السابق</small><b>المميزات المدفوعة</b></a><a class="nx" href="admin.html"><small>التالي</small><b>لوحة التحكم</b></a></div>
+</div>
+</div>
+</div>
+<script src="plan.js"></script>
+<script src="plan-ui.js"></script>
+</body>
+</html>
