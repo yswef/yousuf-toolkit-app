@@ -3,7 +3,7 @@
 النطاق: `https://yousef.romoozbasmah.com`
 
 1. من hPanel فعّل PHP 8.1 أو أحدث، وأنشئ قاعدة MySQL ومستخدماً لها.
-2. ارفع محتويات `server/public/` إلى `public_html/` حتى تصبح `public_html/api/auth.php`.
+2. ارفع محتويات `server/public/` إلى `public_html/` حتى تصبح `public_html/api/auth.php` و`public_html/admin/index.php` (لوحة التحكم في مجلد `admin` وحده، ويمكن رفعه أو دمجه منفصلاً).
 3. ارفع `server/src/` و`server/config/` و`server/migrations/` إلى مجلد النطاق خارج `public_html`:
    `domains/yousef.romoozbasmah.com/src` و`config` و`migrations`.
 4. انسخ `config/config.example.php` إلى `config/config.php` واملأ `db` و`base_url` و`license_secret`.
