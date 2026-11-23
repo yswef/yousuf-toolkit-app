@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>لوحة التحكم — كل ما يحتاجه يوسف</title>
+<meta name="description" content="مجلد admin: الأقسام والرفع والدمج.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<link rel="stylesheet" href="plan.css">
+</head>
+<body data-page="admin">
+<a class="skip" href="#main">تخطي إلى المحتوى</a>
+<div class="topbar">
+  <button id="menuBtn" type="button" aria-label="القائمة" aria-controls="side" aria-expanded="false">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+  <b>لوحة التحكم</b>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="shell">
+<aside class="side" id="side" aria-label="قائمة الصفحات">
+  <div class="brand"><b>كل ما يحتاجه يوسف</b><span>مساحة الخطة والمراجعة</span></div>
+  <nav>
+<div class="grp"><span>المراجعة</span>
+<a class="nl" href="plan.html" style="--d:40"><i></i>الفكرة والقرارات</a>
+<a class="nl" href="compare.html" style="--d:165"><i></i>المقارنة</a>
+<a class="nl" href="checklist.html" style="--d:140"><i></i>قائمة التحقق</a>
+<a class="nl" href="notes.html" style="--d:18"><i></i>ملاحظاتي</a>
+<a class="nl" href="suggestions.html" style="--d:275"><i></i>اقتراحات</a>
+<a class="nl" href="review.html" style="--d:55"><i></i>ملاحظات الاختبار</a>
+</div>
+<div class="grp"><span>التفاصيل</span>
+<a class="nl" href="features.html" style="--d:212"><i></i>المميزات</a>
+<a class="nl" href="refs.html" style="--d:190"><i></i>التطبيقات المرجعية</a>
+<a class="nl" href="paid.html" style="--d:335"><i></i>المدفوعة</a>
+<a class="nl" href="tech.html" style="--d:245"><i></i>التقنية</a>
+<a class="nl" href="admin.html" aria-current="page" style="--d:5"><i></i>لوحة التحكم</a>
+<a class="nl" href="sources.html" style="--d:85"><i></i>المصادر</a>
+</div>
+<div class="grp"><span>أدوات</span>
+<a class="nl" href="prompts.html" style="--d:300"><i></i>البرومتات</a>
+<a class="nl" href="steps.html" style="--d:120"><i></i>الخطوات</a>
+</div>
+  </nav>
+  <div class="meter" aria-live="polite"><span id="meterTxt">قائمة التحقق: 0 من 0</span><div class="bar"><i id="meterBar"></i></div></div>
+</aside>
+<div class="content">
+<div class="page">
+<header class="hero"><small>التفاصيل</small><h1>لوحة التحكم</h1><p>مجلد admin: الأقسام والرفع والدمج.</p></header>
+<main id="main"><div class="sec">
+
+<div class="box note"><h3>الوضع الحالي</h3><p>اللوحة مبنية وتعمل، وصارت كلها في <b>مجلد واحد</b>: <code>server/public/admin/</code>. ملف <code>index.php</code> هو اللوحة، فترفعها أو تدمجها مع لوحة أخرى بنسخ المجلد فقط.</p></div>
+
+<div class="box"><h3>أقسام اللوحة</h3>
+<ul class="plain">
+<li><b>نظرة عامة:</b> المستخدمون والنشطون والتراخيص والنقاط والمشتريات والمزامنة، مع رسم للتسجيلات.</li>
+<li><b>السرعة والصحة:</b> زمن الاتصال بالقاعدة والاستعلامات، إصدار PHP وMySQL، الذاكرة والقرص، وتنظيف رموز الجلسات القديمة.</li>
+<li><b>المستخدمون:</b> بحث بالاسم أو البريد أو الرقم، وتعديل النقاط.</li>
+<li><b>التراخيص:</b> اكتب رقم الحساب فيظهر كود الترخيص جاهزاً للنسخ.</li>
+<li><b>المتجر والحملات:</b> إضافة العناصر ومواسم الغارات وتعديلها وإخفاؤها.</li>
+<li><b>الإعلانات والمنتدى والسجل:</b> نشر إعلان، إشراف على المنتدى، وسجل بكل إجراء إداري.</li>
+</ul></div>
+
+<div class="box"><h3>الرفع على الاستضافة</h3>
+<ol class="plain">
+<li>ارفع مجلد <code>admin</code> كاملاً إلى <code>public_html/admin/</code> بجانب <code>api/</code>.</li>
+<li>تأكد أن <code>config/config.php</code> و<code>src/</code> في مجلد النطاق خارج <code>public_html</code> (مستويان فوق مجلد admin). هذا هو الترتيب المشروح في <code>HOSTINGER.md</code>.</li>
+<li>اضبط <code>admin_token</code> في <code>config.php</code> (12 حرفاً عشوائياً على الأقل).</li>
+<li>افتح <code>https://النطاق/admin/</code> وادخل بالرمز.</li>
+</ol>
+<p class="count">إن اختلف ترتيب المجلدات، انسخ <code>settings.example.php</code> إلى <code>settings.php</code> وحدد <code>server_root</code>.</p></div>
+
+<div class="box"><h3>الدمج مع لوحة تحكم أخرى</h3>
+<ul class="plain">
+<li>انسخ المجلد كما هو داخل اللوحة الأخرى، أو اجعل رابطاً في قائمتها يشير إلى <code>admin/</code>.</li>
+<li>لا تعارض في الجلسات: اسم الجلسة <code>yd_admin</code> وملفات قفل المحاولات تبدأ بـ<code>yd_admin_</code>.</li>
+<li>كل الأنماط والسكربتات داخل الصفحة نفسها، فلا ملفات CSS أو JS تُنقل.</li>
+<li>الجداول الإضافية التي تحتاجها اللوحة تُنشأ عند أول فتح ولا تمس جداول غيرها.</li>
+</ul></div>
+
+<div class="box"><h3>الحماية الموجودة</h3>
+<ul class="plain">
+<li>رمز دخول واحد من <code>config.php</code>، وقفل مؤقت بعد 5 محاولات خاطئة.</li>
+<li>جلسة 8 ساعات بكوكي <code>HttpOnly</code> و<code>SameSite=Strict</code>، وCSRF على كل نموذج.</li>
+<li>رؤوس أمان (CSP وX-Frame-Options)، وكل إجراء إداري يُسجَّل.</li>
+<li>نصيحة: غيّر اسم المجلد إلى اسم غير مألوف وقيّد الوصول بعنوان IP من <code>.htaccess</code> إن أمكن.</li>
+</ul></div>
+
+<div class="box note"><h3>ما لم يُبنَ بعد</h3>
+<ul class="plain">
+<li>جدول مديرين مستقل بكلمات مرور مجزأة؛ الحالي رمز واحد.</li>
+<li>تحكم بكل ميزة (مجانية أو مدفوعة) من اللوحة.</li>
+<li>إدارة قواعد قراءة رسائل المحافظ من اللوحة.</li>
+</ul></div>
+
+</div></main>
+<div class="pager"><a class="pv" href="tech.html"><small>السابق</small><b>التقنية</b></a><a class="nx" href="sources.html"><small>التالي</small><b>المصادر</b></a></div>
+</div>
+</div>
+</div>
+<script src="plan.js"></script>
+<script src="plan-ui.js"></script>
+</body>
+</html>
