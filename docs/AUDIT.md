@@ -5,10 +5,10 @@
 - لا `TODO/FIXME` في الكود.
 - المكونات في المانيفست: Activity + 4 مستقبلات/خدمات، كلها موجودة بالكود.
 - فحص صياغة Kotlin (tree-sitter) على كل الملفات المعدّلة: 0 أخطاء. فحص مراجع الموارد: نظيف.
-- PHP: `php -l` على admin.php والـAPI الجديد.
+- PHP: `php -l` على admin/index.php والـAPI الجديد.
 
 ## أُصلح
-- `server/public/admin.php` كان يستعلم جداول غير موجودة (`vaults`, `shop_items`, `raids`, `forum_*`, `sync_states`) → أُعيدت كتابته على المخطط الفعلي.
+- `server/public/admin/index.php` (كانت admin.php) كان يستعلم جداول غير موجودة (`vaults`, `shop_items`, `raids`, `forum_*`, `sync_states`) → أُعيدت كتابته على المخطط الفعلي.
 - الصلاحيات كانت مبعثرة → شاشة موحدة في الإعدادات مع مهام نقاط.
 
 ## معروف / متبقٍ
