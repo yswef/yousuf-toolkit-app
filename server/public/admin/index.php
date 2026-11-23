@@ -3,19 +3,27 @@
 declare(strict_types=1);
 
 /*
- * Y-Dimension control panel — single file. Upload to public/ next to api/.
+ * Y-Dimension control panel — self-contained folder: everything lives in public/admin/.
+ * Upload this whole folder as public_html/admin/ (or merge it into another panel).
  * Login with `admin_token` from config/config.php (the "code").
  * Features: overview stats, speed/health, users, licenses, shop, raid campaigns,
  * announcements, forum moderation, audit log. CSRF + login rate limit + session hardening.
+ *
+ * Server root = the folder that holds config/ and src/ (two levels above this file by default:
+ *   repo:       server/public/admin/  -> server/
+ *   hostinger:  public_html/admin/    -> domains/<site>/
+ * Different layout? Copy settings.example.php to settings.php and set 'server_root'.
  */
 
-$configFile = dirname(__DIR__) . '/config/config.php';
+$adminSettings = is_file(__DIR__ . '/settings.php') ? (array) require __DIR__ . '/settings.php' : [];
+$serverRoot = rtrim((string) ($adminSettings['server_root'] ?? getenv('YD_SERVER_ROOT') ?: dirname(__DIR__, 2)), '/\\');
+$configFile = $serverRoot . '/config/config.php';
 if (!is_file($configFile)) {
     http_response_code(500);
-    exit('config/config.php is missing');
+    exit('config/config.php is missing (server_root: ' . htmlspecialchars($serverRoot, ENT_QUOTES, 'UTF-8') . ')');
 }
 $config = require $configFile;
-require_once dirname(__DIR__) . '/src/license.php';
+require_once $serverRoot . '/src/license.php';
 date_default_timezone_set('UTC');
 
 $t0 = microtime(true);
@@ -41,6 +49,7 @@ function ago(int $ts): string {
 }
 function dt(int $ts): string { return $ts > 0 ? date('Y-m-d H:i', $ts) : '—'; }
 
+$selfUrl = (string) strtok((string) ($_SERVER['REQUEST_URI'] ?? 'index.php'), '?');
 $adminToken = (string) ($config['admin_token'] ?? '');
 $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
 
@@ -49,7 +58,7 @@ $loginError = '';
 if (($_GET['logout'] ?? '') === '1') {
     $_SESSION = [];
     session_destroy();
-    header('Location: admin.php');
+    header('Location: ' . $selfUrl);
     exit;
 }
 if (empty($_SESSION['ok'])) {
@@ -68,7 +77,7 @@ if (empty($_SESSION['ok'])) {
             $_SESSION['ok'] = true;
             $_SESSION['csrf'] = bin2hex(random_bytes(16));
             $_SESSION['at'] = time();
-            header('Location: admin.php');
+            header('Location: ' . $selfUrl);
             exit;
         } else {
             $fails++;
@@ -93,7 +102,7 @@ button{background:var(--pri);color:#fff;border:0;cursor:pointer;font-weight:700}
 if (time() - (int) ($_SESSION['at'] ?? 0) > 8 * 3600) {
     $_SESSION = [];
     session_destroy();
-    header('Location: admin.php');
+    header('Location: ' . $selfUrl);
     exit;
 }
 $csrf = (string) $_SESSION['csrf'];
