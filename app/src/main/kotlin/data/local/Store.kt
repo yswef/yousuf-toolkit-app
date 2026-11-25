@@ -1,7 +1,10 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package data.local
 
 import android.content.Context
+import android.util.Base64
 import android.util.Log
+import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -33,8 +36,11 @@ import domain.model.Workout
 import domain.model.prayerKeys
 import org.json.JSONArray
 import org.json.JSONObject
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 import java.io.File
 import java.io.FileOutputStream
+import java.security.SecureRandom
 import java.nio.file.AtomicMoveNotSupportedException
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
@@ -118,6 +124,15 @@ class Store(context: Context) {
         private set
     var accountEmail by mutableStateOf("")
         private set
+    var localAccountName by mutableStateOf("")
+        private set
+    var localAccountEmail by mutableStateOf("")
+        private set
+    var localAccountHash by mutableStateOf("")
+        private set
+    var localAccountSalt by mutableStateOf("")
+        private set
+    val hasLocalAccount: Boolean get() = localAccountEmail.isNotBlank()
     var accent by mutableStateOf("violet")
         private set
     var avatar by mutableStateOf(0)
@@ -370,6 +385,48 @@ class Store(context: Context) {
         accountName = ""
         accountEmail = ""
         save()
+    }
+
+    fun createLocalAccount(name: String, email: String, password: String): Boolean {
+        val cleanName = name.trim()
+        val cleanEmail = email.trim().lowercase()
+        if (cleanName.isBlank() || password.length < 8) return false
+        if (!Patterns.EMAIL_ADDRESS.matcher(cleanEmail).matches()) return false
+        val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        localAccountName = cleanName.take(80)
+        localAccountEmail = cleanEmail
+        localAccountSalt = Base64.encodeToString(salt, Base64.NO_WRAP)
+        localAccountHash = hashPassword(password, salt)
+        if (profileName.isBlank()) profileName = localAccountName
+        save()
+        return true
+    }
+
+    fun verifyLocalAccount(email: String, password: String): Boolean {
+        if (!hasLocalAccount || localAccountHash.isBlank() || localAccountSalt.isBlank()) return false
+        if (!localAccountEmail.equals(email.trim(), ignoreCase = true)) return false
+        val salt = runCatching { Base64.decode(localAccountSalt, Base64.NO_WRAP) }.getOrNull() ?: return false
+        return hashPassword(password, salt) == localAccountHash
+    }
+
+    fun deleteLocalAccount() {
+        localAccountName = ""
+        localAccountEmail = ""
+        localAccountHash = ""
+        localAccountSalt = ""
+        save()
+    }
+
+    private fun hashPassword(password: String, salt: ByteArray): String {
+        val spec = PBEKeySpec(password.toCharArray(), salt, 20000, 256)
+        return try {
+            Base64.encodeToString(
+                SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256").generateSecret(spec).encoded,
+                Base64.NO_WRAP
+            )
+        } finally {
+            spec.clearPassword()
+        }
     }
 
     fun addCampaign(title: String, target: Int): Boolean {
@@ -1024,6 +1081,10 @@ class Store(context: Context) {
         root.put("accountId", accountId)
         root.put("accountName", accountName)
         root.put("accountEmail", accountEmail)
+        root.put("localAccountName", localAccountName)
+        root.put("localAccountEmail", localAccountEmail)
+        root.put("localAccountHash", localAccountHash)
+        root.put("localAccountSalt", localAccountSalt)
         root.put("accent", accent)
         root.put("avatar", avatar)
         root.put("premium", premium)
@@ -1259,6 +1320,10 @@ class Store(context: Context) {
             accountId = root.optLong("accountId", 0L)
             accountName = root.optString("accountName", "")
             accountEmail = root.optString("accountEmail", "")
+            localAccountName = root.optString("localAccountName", "")
+            localAccountEmail = root.optString("localAccountEmail", "")
+            localAccountHash = root.optString("localAccountHash", "")
+            localAccountSalt = root.optString("localAccountSalt", "")
             accent = root.optString("accent", "violet")
             avatar = root.optInt("avatar", 0).coerceIn(0, 7)
             premium = root.optBoolean("premium", false)
@@ -1567,3 +1632,5 @@ private fun csvCols(line: String): List<String> {
     out.add(cur.toString().trim())
     return out
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

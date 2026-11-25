@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +56,9 @@ import core.design.UiMode
 import core.design.UiState
 import core.design.drawBookSymbol
 import core.net.Api
+import core.net.ApiException
+import core.net.authError
+import core.net.healthStatus
 import core.navigation.Routes
 import data.local.Store
 import java.time.Instant
@@ -75,6 +79,7 @@ fun AccountTab(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val base = store.serverUrl.ifBlank { store.config.apiBase }
+    var serverInput by remember { mutableStateOf(base) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
@@ -155,12 +160,50 @@ fun AccountTab(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
+                Text(
+                    stringResource(R.string.auth_cloud_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                OutlinedTextField(
+                    value = serverInput,
+                    onValueChange = { serverInput = it },
+                    label = { Text(stringResource(R.string.auth_server_field)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(
+                        onClick = {
+                            store.saveServerUrl(serverInput)
+                            authStatus = context.getString(R.string.sync_saved)
+                        }
+                    ) { Text(stringResource(R.string.common_save)) }
+                    TextButton(
+                        onClick = {
+                            busy = true
+                            authStatus = ""
+                            scope.launch {
+                                authStatus = healthStatus(context, Api.health(Api.normalizeBase(serverInput)))
+                                busy = false
+                            }
+                        }
+                    ) { Text(stringResource(R.string.auth_server_check)) }
+                }
+                if (store.hasLocalAccount) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            stringResource(R.string.auth_local_exists, store.localAccountEmail),
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.weight(1f)
+                        )
+                        TextButton(onClick = {
+                            store.deleteLocalAccount()
+                            authStatus = context.getString(R.string.auth_local_removed)
+                        }) { Text(stringResource(R.string.auth_local_remove)) }
+                    }
+                }
                 if (store.authToken.isBlank()) {
-                    Text(
-                        stringResource(R.string.account_hint),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
@@ -183,13 +226,18 @@ fun AccountTab(
                                 busy = true
                                 authStatus = ""
                                 scope.launch {
-                                    runCatching { Api.login(Api.normalizeBase(base), email.trim(), password) }
-                                        .onSuccess { result ->
-                                            store.saveAccount(result.token, result.user.id, result.user.name, result.user.email)
-                                            password = ""
-                                            authStatus = context.getString(R.string.auth_logged_in)
-                                        }
-                                        .onFailure { authStatus = it.message ?: context.getString(R.string.auth_failed) }
+                                    if (store.verifyLocalAccount(email.trim(), password)) {
+                                        password = ""
+                                        authStatus = context.getString(R.string.auth_local_login)
+                                    } else {
+                                        runCatching { Api.login(Api.normalizeBase(base), email.trim(), password) }
+                                            .onSuccess { result ->
+                                                store.saveAccount(result.token, result.user.id, result.user.name, result.user.email)
+                                                password = ""
+                                                authStatus = context.getString(R.string.auth_logged_in)
+                                            }
+                                            .onFailure { authStatus = authError(context, it) }
+                                    }
                                     busy = false
                                 }
                             }
@@ -221,6 +269,7 @@ fun AccountTab(
                 }
             }
         }
+
         item {
             GlassCard {
                 Text(
@@ -312,6 +361,15 @@ fun AccountTab(
         }
     }
     if (showRegister) {
+        fun createLocal() {
+            val ok = store.createLocalAccount(regName.trim(), regEmail.trim(), regPassword)
+            authStatus = context.getString(if (ok) R.string.auth_local_created else R.string.auth_email_invalid)
+            if (ok) {
+                regPassword = ""
+                password = ""
+                showRegister = false
+            }
+        }
         FormDialog(
             title = stringResource(R.string.account_register),
             confirm = stringResource(R.string.account_confirm),
@@ -327,7 +385,15 @@ fun AccountTab(
                             showRegister = false
                             authStatus = context.getString(R.string.auth_registered)
                         }
-                        .onFailure { authStatus = it.message ?: context.getString(R.string.auth_failed) }
+                        .onFailure { e ->
+                            if (e is ApiException && (e.message == Api.SERVER_HTML ||
+                                    e.message == Api.NETWORK_ERROR || e.message == Api.BAD_JSON ||
+                                    e.message == Api.INVALID_BASE)) {
+                                createLocal()
+                            } else {
+                                authStatus = authError(context, e)
+                            }
+                        }
                     busy = false
                 }
             },
@@ -337,8 +403,12 @@ fun AccountTab(
             OutlinedTextField(value = regName, onValueChange = { regName = it }, label = { Text(stringResource(R.string.account_name)) }, singleLine = true)
             OutlinedTextField(value = regEmail, onValueChange = { regEmail = it }, label = { Text(stringResource(R.string.account_email)) }, singleLine = true)
             OutlinedTextField(value = regPassword, onValueChange = { regPassword = it }, label = { Text(stringResource(R.string.account_password)) }, singleLine = true, visualTransformation = PasswordVisualTransformation())
+            TextButton(onClick = { createLocal() }, modifier = Modifier.fillMaxWidth()) {
+                Text(stringResource(R.string.auth_local_create))
+            }
         }
     }
+
 }
 
 @Composable

@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package feature.device
 
 import android.app.TimePickerDialog
@@ -50,6 +51,7 @@ import core.design.ToggleRow
 import core.device.Access
 import core.device.AppUsage
 import core.net.Api
+import core.net.authError
 import data.local.Store
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -579,7 +581,7 @@ private fun SyncTab(store: Store) {
                                 password = ""
                                 status = context.getString(R.string.sync_ok)
                             }.onFailure {
-                                status = it.message ?: context.getString(R.string.sync_failed)
+                                status = authError(context, it)
                             }
                             busy = false
                         }
@@ -609,7 +611,7 @@ private fun SyncTab(store: Store) {
                                     }.onSuccess {
                                         status = context.getString(R.string.sync_ok)
                                     }.onFailure {
-                                        status = it.message ?: context.getString(R.string.sync_failed)
+                                        status = authError(context, it)
                                     }
                                     runCatching {
                                         store.vault.forEach { note ->
@@ -680,7 +682,7 @@ private fun SyncTab(store: Store) {
                             showRegister = false
                             status = context.getString(R.string.account_created)
                         }.onFailure {
-                            status = it.message ?: context.getString(R.string.sync_failed)
+                            status = authError(context, it)
                         }
                         busy = false
                     }
@@ -766,3 +768,5 @@ private fun payload(store: Store): JSONObject {
     })
     return root
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

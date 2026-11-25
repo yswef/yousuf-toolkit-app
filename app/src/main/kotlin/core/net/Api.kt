@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package core.net
 
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,11 @@ data class RaidInfo(val season: Long, val progress: Int, val goal: Int, val memb
 data class CheckinResult(val connected: Boolean, val nextInSeconds: Int, val day: Int)
 
 object Api {
+    const val SERVER_HTML = "server_html"
+    const val NETWORK_ERROR = "network_error"
+    const val BAD_JSON = "invalid_json_response"
+    const val INVALID_BASE = "invalid_base"
+
     fun validBase(raw: String): Boolean {
         val value = raw.trim()
         return value.startsWith("https://") || value.startsWith("http://")
@@ -181,6 +187,24 @@ object Api {
         }
     }
 
+    suspend fun health(base: String): String {
+        if (!validBase(base)) return INVALID_BASE
+        return withContext(Dispatchers.IO) {
+            val root = runCatching { call(base, "/", "GET", null) }
+            if (root.getOrNull()?.optBoolean("ok") == true) return@withContext "ok"
+            val probe = runCatching { call(base, "/api/auth.php?action=login", "GET", null) }
+            val failure = probe.exceptionOrNull()
+            if (failure is ApiException) {
+                val msg = failure.message ?: NETWORK_ERROR
+                return@withContext when (msg) {
+                    SERVER_HTML, NETWORK_ERROR, BAD_JSON, INVALID_BASE -> msg
+                    else -> "ok"
+                }
+            }
+            if (probe.isSuccess) "ok" else NETWORK_ERROR
+        }
+    }
+
     private fun call(
         base: String,
         path: String,
@@ -188,8 +212,12 @@ object Api {
         body: JSONObject?,
         token: String = ""
     ): JSONObject {
-        if (!validBase(base)) throw ApiException(0, "invalid base url")
-        val connection = URL(normalizeBase(base) + path).openConnection() as HttpURLConnection
+        if (!validBase(base)) throw ApiException(0, INVALID_BASE)
+        val connection = try {
+            URL(normalizeBase(base) + path).openConnection() as HttpURLConnection
+        } catch (t: java.io.IOException) {
+            throw ApiException(0, NETWORK_ERROR)
+        }
         try {
             connection.requestMethod = method
             connection.connectTimeout = 8000
@@ -204,13 +232,20 @@ object Api {
             val code = connection.responseCode
             val stream = if (code in 200..299) connection.inputStream else connection.errorStream
             val text = stream?.bufferedReader()?.use { it.readText() }.orEmpty()
+            val type = connection.contentType.orEmpty()
+            if (text.trimStart().startsWith("<") || type.contains("text/html", ignoreCase = true)) {
+                throw ApiException(code, SERVER_HTML)
+            }
             val parsed = runCatching { JSONObject(text) }.getOrElse {
-                JSONObject().put("error", if (text.isBlank()) "HTTP $code" else text.take(300))
+                if (code in 200..299) throw ApiException(code, BAD_JSON)
+                JSONObject().put("error", if (text.isBlank()) "HTTP $code" else text.take(200))
             }
             if (code !in 200..299) {
                 throw ApiException(code, parsed.optString("error", "HTTP $code"))
             }
             return parsed
+        } catch (t: java.io.IOException) {
+            throw ApiException(0, NETWORK_ERROR)
         } finally {
             connection.disconnect()
         }
@@ -232,3 +267,5 @@ private fun <T> JSONArray?.mapObjects(block: (JSONObject) -> T): List<T> {
     }
     return out
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

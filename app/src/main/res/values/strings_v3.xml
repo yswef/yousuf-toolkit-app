@@ -35,5 +35,20 @@
     <string name="v3_about">عن التطبيق</string>
     <string name="v3_more">المزيد</string>
     <string name="v3_ledger_header">آخر الحركات</string>
+    <string name="auth_cloud_note">الحساب اختياري. الحساب المحلي يعمل بلا إنترنت، والحساب السحابي يحتاج رفع ملفات API على الخادم.</string>
+    <string name="auth_server_field">عنوان API للخادم</string>
+    <string name="auth_server_check">فحص الخادم</string>
+    <string name="auth_server_ok">الخادم يستجيب بصيغة JSON صحيحة.</string>
+    <string name="auth_server_html">الخادم يرد بصفحة HTML بدل JSON: ملفات API غير مرفوعة على هذا النطاق، أو العنوان يشير إلى صفحة الموقع. ارفع مجلد server/public/api وserver/src وconfig.php، أو صحّح العنوان.</string>
+    <string name="auth_server_bad_json">الخادم يرد بصيغة غير متوقعة؛ تأكد من ملفات API وقاعدة البيانات.</string>
+    <string name="auth_network_error">لا يمكن الوصول إلى الخادم؛ تحقق من الإنترنت وعنوان الخادم.</string>
+    <string name="auth_server_fail">تعذر الاتصال بالخادم: %1$s</string>
+    <string name="auth_local_create">إنشاء حساب محلي (يعمل بلا إنترنت)</string>
+    <string name="auth_local_created">تم إنشاء حساب محلي على الجهاز. كل الميزات تعمل الآن، والمزامنة السحابية غير مفعّلة.</string>
+    <string name="auth_local_login">تم الدخول بحسابك المحلي.</string>
+    <string name="auth_local_exists">حساب محلي: %1$s</string>
+    <string name="auth_local_remove">حذف</string>
+    <string name="auth_local_removed">حُذف الحساب المحلي.</string>
+    <string name="auth_email_invalid">أدخل اسماً وبريداً صحيحاً وكلمة مرور من 8 أحرف على الأقل.</string>
 </resources>
 <!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->
