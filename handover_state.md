@@ -131,3 +131,13 @@
 - الإصدار: `versionName 0.16.0` و`versionCode 18`، والتاج `v0.16.0-test.1` يبني `assembleTester` عبر `release.yml`.
 - التحقق المتاح: tree-sitter على 113 ملف Kotlin بلا أخطاء صياغة جديدة (4 عُقد موجودة أصلاً في TasksScreen.kt)، كل مراجع الموارد والاستيرادات المحلية محلولة، وخريطة اللوحة 13/13. غياب Java وAndroid SDK محلياً: لم يُنفَّذ `./gradlew assembleDebug` ولا اختبار جهاز؛ خط البناء على GitHub هو أول تحقق حقيقي بالترجمة.
 
+## متابعة 2026-11-26: تشخيص تعذّر إنشاء الحساب + إصلاح (0.16.1)
+
+- السبب: اللوحة التابعة `server/public/boards/y-dimensions/` إعلانية بلا كود تنفيذي وبلا نقطة HTTP؛ رفعها إلى لوحة الأم لا ينشئ `/api/auth.php`. التطبيق يستدعي `POST {apiBaseUrl}/api/auth.php?action=register`، و`config/environments.json` يشير إلى `https://yousef.romoozbasmah.com` وهو موقع سيرة/WordPress؛ النطاق يرد بصفحة HTML «الصفحة غير موجودة» بدل JSON، فكان نص HTML يظهر داخل بطاقة الحساب.
+- النشر الصحيح للحساب السحابي: رفع `server/public/` إلى جذر النطاق (`public_html/api/auth.php`)، و`server/src` و`server/config` و`server/migrations` خارجه، وإنشاء `config.php` واستيراد `001_init.sql`؛ أو ضبط عنوان API الذي تعرضه لوحة الأم في حقل «عنوان API للخادم» داخل التطبيق.
+- `core/net/Api.kt`: تصنيف الأعطال (`server_html`, `network_error`, `invalid_json_response`, `invalid_base`) بدل عرض HTML، و`Api.health` يفحص `/` ثم `/api/auth.php` (أي رد JSON يعني أن الملفات مرفوعة).
+- `core/net/ApiMessages.kt`: ترجمة الأعطال إلى رسائل عربية قابلة للتنفيذ، مستخدمة في `AccountTab.kt` و`DeviceScreen.kt` (تبويب المزامنة).
+- `data/local/Store.kt`: حساب محلي على الجهاز بـ PBKDF2-HMAC-SHA256 + ملح عشوائي محفوظ في الحالة المحلية، مع `createLocalAccount` / `verifyLocalAccount` / `deleteLocalAccount`؛ لا كلمة مرور نصية ولا توكن سحابي مزيف.
+- `AccountTab.kt`: حقل عنوان الخادم + «حفظ» و«فحص الخادم»، بطاقة الحساب المحلي، الدخول المحلي أولاً، وإنشاء حساب محلي صريح أو تلقائي عند غياب الـ API. زر «دخول» يبقى معطلاً حتى يُملأ البريد وكلمة المرور (سلوك موجود مسبقاً).
+- الإصدار `0.16.1` (code 19)، التاج `v0.16.1-test.1`.
+
