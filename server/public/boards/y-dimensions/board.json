@@ -1,0 +1,96 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.board/1.0",
+  "board_id": "y-dimensions",
+  "app_id": "y-dimensions",
+  "kind": "admin_panel",
+  "title": "لوحة تحكم Y- Dimensions",
+  "type": "mobile",
+  "developer": {
+    "name": "يوسف الحمزي",
+    "email": "yswefalhmzy@gmail.com"
+  },
+  "engine": {
+    "runtime": "mother_panel",
+    "renderer": "mother_panel.renderer.default",
+    "entrypoint": null,
+    "standalone_code": false,
+    "independent_token": false,
+    "db": "mother_panel.db.shared",
+    "note": "لوحة الأم وحدها تحوي الكود والرمز؛ هذه اللوحة تعريفات وبيانات وقوالب تُعرض عبرها"
+  },
+  "layout": {
+    "dir": "rtl",
+    "lang": "ar",
+    "css": "views/board.css"
+  },
+  "navigation": [
+    {
+      "id": "home",
+      "label": "الرئيسية",
+      "section": "sections/home.json",
+      "view": "views/dashboard.html",
+      "hook": "mother_panel.stats.home"
+    },
+    {
+      "id": "admin_boards",
+      "label": "لوحات الإدارة",
+      "section": "sections/admin-boards.json",
+      "view": "views/admin-boards.html",
+      "hook": "mother_panel.boards.cards"
+    },
+    {
+      "id": "accounts",
+      "label": "الحسابات",
+      "section": "sections/accounts.json",
+      "view": "views/accounts.html",
+      "hook": "mother_panel.accounts.list"
+    },
+    {
+      "id": "licenses",
+      "label": "التراخيص",
+      "section": "sections/licenses.json",
+      "view": "views/licenses.html",
+      "hook": "mother_panel.licenses.list"
+    },
+    {
+      "id": "reviews",
+      "label": "المدونة الموحّدة",
+      "section": "sections/reviews.json",
+      "view": "views/reviews.html",
+      "hook": "mother_panel.blog.list"
+    },
+    {
+      "id": "sister_apps",
+      "label": "التطبيقات الأخرى",
+      "section": "sections/sister-apps.json",
+      "view": "views/sister-apps.html",
+      "hook": "mother_panel.apps.sisters"
+    },
+    {
+      "id": "settings",
+      "label": "بيانات التطبيق",
+      "section": "sections/settings.json",
+      "view": null,
+      "hook": "mother_panel.app.data"
+    }
+  ],
+  "assets": {
+    "icon": "assets/icon.svg",
+    "css": "views/board.css"
+  },
+  "data_files": [
+    "app.json",
+    "database.json",
+    "stats.json",
+    "sync.json"
+  ],
+  "mother_panel_card": {
+    "title": "Y- Dimensions",
+    "icon": "assets/icon.svg",
+    "stats_table": "board_stats",
+    "scope": "app_id = y-dimensions",
+    "click_action": "mother_panel.boards.open"
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

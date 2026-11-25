@@ -1,0 +1,20 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "home",
+  "label": "الرئيسية",
+  "app_id": "y-dimensions",
+  "view": "views/dashboard.html",
+  "show_users_count": true,
+  "show_all_app_stats": true,
+  "stats_ref": "stats.json#/home/stats",
+  "hook": "mother_panel.stats.home",
+  "data_source": "mother_panel.db.shared",
+  "no_sample_data": true,
+  "includes": [
+    "قسم «لوحات الإدارة» مصغّر",
+    "قسم «التطبيقات الأخرى»",
+    "حالة المزامنة مع لوحة الأم"
+  ],
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

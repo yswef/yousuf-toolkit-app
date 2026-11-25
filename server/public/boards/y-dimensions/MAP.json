@@ -1,0 +1,411 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.install-map/1.0",
+  "map_version": "1.0",
+  "app_id": "y-dimensions",
+  "board_id": "y-dimensions",
+  "app_name": "Y- Dimensions",
+  "app_type": "mobile",
+  "developer": {
+    "name": "يوسف الحمزي",
+    "email": "yswefalhmzy@gmail.com"
+  },
+  "source_root": "server/public/boards/y-dimensions",
+  "target_root": "{mother_panel.boards_dir}/y-dimensions",
+  "runner": "mother_panel.install.map",
+  "install": {
+    "mode": "ordered_copy",
+    "order_strict": true,
+    "create_directories_before_file": true,
+    "on_missing_file": "abort_and_rollback",
+    "on_order_error": "abort_and_rollback",
+    "persist_paths_to": [
+      "app_files",
+      "board_files"
+    ],
+    "persist_order_column": "order_no",
+    "persist_hash_column": "sha256",
+    "scope": "app_id = y-dimensions",
+    "order": [
+      {
+        "step": 1,
+        "source": "server/public/boards/y-dimensions/app.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/app.json",
+        "path": "app.json",
+        "action": "copy",
+        "required": true,
+        "note": "بيانات التطبيق: الاسم، الوصف، التاجات، علامات البحث، الإصدار، الأيقونة، التوثيق، المطوّر",
+        "sha256": "5ae5560bcbfc019b5620bc393b20ea65a2a1216dd82cbf499b9f772850b34c34",
+        "bytes": 3352,
+        "hash_exempt": false
+      },
+      {
+        "step": 2,
+        "source": "server/public/boards/y-dimensions/assets/icon.svg",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/assets/icon.svg",
+        "path": "assets/icon.svg",
+        "action": "copy",
+        "required": true,
+        "note": "أيقونة التطبيق لبطاقة العرض في لوحة الأم",
+        "sha256": "4c9953c2435b7760a98b24b6032082327fe7f3b7afc56e7fc2bd52ffa0b90387",
+        "bytes": 1252,
+        "hash_exempt": false
+      },
+      {
+        "step": 3,
+        "source": "server/public/boards/y-dimensions/board.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/board.json",
+        "path": "board.json",
+        "action": "copy",
+        "required": true,
+        "note": "تعريف اللوحة: المحرّك، التنقل، بطاقة لوحة الأم",
+        "sha256": "c0870b90477bf8d18865c2570827161000c74fd2634e48adb9f565e1ee9e50f6",
+        "bytes": 2804,
+        "hash_exempt": false
+      },
+      {
+        "step": 4,
+        "source": "server/public/boards/y-dimensions/database.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/database.json",
+        "path": "database.json",
+        "action": "copy",
+        "required": true,
+        "note": "عقد القاعدة الموحّدة والجداول وأنواع المتغيّرات",
+        "sha256": "be08f105f0a6ef078f2de643c4419fd88d3461357a2f53b801fb6aec5137c65c",
+        "bytes": 14691,
+        "hash_exempt": false
+      },
+      {
+        "step": 5,
+        "source": "server/public/boards/y-dimensions/stats.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/stats.json",
+        "path": "stats.json",
+        "action": "copy",
+        "required": true,
+        "note": "إحصائيات الرئيسية وبطاقات لوحات الإدارة",
+        "sha256": "36882352cf16415130089c2874e42685559ea7d8c32d89f476530e2551a00f81",
+        "bytes": 5349,
+        "hash_exempt": false
+      },
+      {
+        "step": 6,
+        "source": "server/public/boards/y-dimensions/sync.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sync.json",
+        "path": "sync.json",
+        "action": "copy",
+        "required": true,
+        "note": "سجل hooks وعقد المزامنة مع لوحة الأم",
+        "sha256": "27226587d93558b4d4ac85e2acbeb32c4c17ab5d43e5f571393e721e628c6a6a",
+        "bytes": 8004,
+        "hash_exempt": false
+      },
+      {
+        "step": 7,
+        "source": "server/public/boards/y-dimensions/sections/home.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/home.json",
+        "path": "sections/home.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم الرئيسية",
+        "sha256": "3ef08a79199db7a586894532461850815262fd599deb929ce04cd99bb2304bcd",
+        "bytes": 788,
+        "hash_exempt": false
+      },
+      {
+        "step": 8,
+        "source": "server/public/boards/y-dimensions/sections/admin-boards.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/admin-boards.json",
+        "path": "sections/admin-boards.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم لوحات الإدارة",
+        "sha256": "ee3489a47829d0fae2bfb6cbba2c7fcad22c130cd4be539379922fa56c4139dc",
+        "bytes": 1044,
+        "hash_exempt": false
+      },
+      {
+        "step": 9,
+        "source": "server/public/boards/y-dimensions/sections/accounts.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/accounts.json",
+        "path": "sections/accounts.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم الحسابات",
+        "sha256": "eb958db91beaceee34d06290f240d18a5d236c850156b10580adbcafe8a96213",
+        "bytes": 998,
+        "hash_exempt": false
+      },
+      {
+        "step": 10,
+        "source": "server/public/boards/y-dimensions/sections/licenses.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/licenses.json",
+        "path": "sections/licenses.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم التراخيص",
+        "sha256": "91fdf44f82f780893c8b8cf704998ebe6f270ab6184de75a206f14c75e1201cd",
+        "bytes": 1311,
+        "hash_exempt": false
+      },
+      {
+        "step": 11,
+        "source": "server/public/boards/y-dimensions/sections/reviews.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/reviews.json",
+        "path": "sections/reviews.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم المدونة الموحّدة",
+        "sha256": "271198c6ff8961c76324742996d3f37d2341b1af0a892cbcd1fd7205f874f091",
+        "bytes": 938,
+        "hash_exempt": false
+      },
+      {
+        "step": 12,
+        "source": "server/public/boards/y-dimensions/sections/sister-apps.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/sister-apps.json",
+        "path": "sections/sister-apps.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم التطبيقات الأخرى",
+        "sha256": "42dcf11eeaff13a0986ea5355c8ac9253861f391532140dfe9290deabf53dad6",
+        "bytes": 1225,
+        "hash_exempt": false
+      },
+      {
+        "step": 13,
+        "source": "server/public/boards/y-dimensions/sections/settings.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/sections/settings.json",
+        "path": "sections/settings.json",
+        "action": "copy",
+        "required": true,
+        "note": "قسم بيانات التطبيق والمطوّر",
+        "sha256": "6269c2a5c1bb89cda3d77b24c9947b22a1e134deb368299ba0985e81966cfcfd",
+        "bytes": 750,
+        "hash_exempt": false
+      },
+      {
+        "step": 14,
+        "source": "server/public/boards/y-dimensions/views/dashboard.html",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/dashboard.html",
+        "path": "views/dashboard.html",
+        "action": "copy",
+        "required": true,
+        "note": "قالب الرئيسية",
+        "sha256": "e013321debb23a0530a1e13bc164c9bf94441bb4f9270a098ef9ca5f334dc9bf",
+        "bytes": 3504,
+        "hash_exempt": false
+      },
+      {
+        "step": 15,
+        "source": "server/public/boards/y-dimensions/views/admin-boards.html",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/admin-boards.html",
+        "path": "views/admin-boards.html",
+        "action": "copy",
+        "required": true,
+        "note": "قالب بطاقات لوحات الإدارة",
+        "sha256": "46e198a0b6207306171724e1fb8238d26b747c172d7e4c1b66005075cfbdc0e5",
+        "bytes": 1321,
+        "hash_exempt": false
+      },
+      {
+        "step": 16,
+        "source": "server/public/boards/y-dimensions/views/accounts.html",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/accounts.html",
+        "path": "views/accounts.html",
+        "action": "copy",
+        "required": true,
+        "note": "قالب الحسابات",
+        "sha256": "14d5cf89c827f95db27ec3f5da6c7b0fd6814fd1b7600cb8f93e198509ae2b4b",
+        "bytes": 1152,
+        "hash_exempt": false
+      },
+      {
+        "step": 17,
+        "source": "server/public/boards/y-dimensions/views/licenses.html",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/licenses.html",
+        "path": "views/licenses.html",
+        "action": "copy",
+        "required": true,
+        "note": "قالب التراخيص",
+        "sha256": "f055184825bad55e624715d6b8ae3d824e711daa7ad0835789936aae4e198584",
+        "bytes": 1255,
+        "hash_exempt": false
+      },
+      {
+        "step": 18,
+        "source": "server/public/boards/y-dimensions/views/reviews.html",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/reviews.html",
+        "path": "views/reviews.html",
+        "action": "copy",
+        "required": true,
+        "note": "قالب المدونة الموحّدة",
+        "sha256": "3c3e5f40b1b2d833823ed672f59d438b5ba7d13cedfac5207b33ea5f70d13d01",
+        "bytes": 826,
+        "hash_exempt": false
+      },
+      {
+        "step": 19,
+        "source": "server/public/boards/y-dimensions/views/sister-apps.html",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/sister-apps.html",
+        "path": "views/sister-apps.html",
+        "action": "copy",
+        "required": true,
+        "note": "قالب التطبيقات الأخرى (يسلَّم لتطبيق الموبايل)",
+        "sha256": "89b4e3e1b23bda78d8f7dc5afb0da663c0e86f961aa79d26cd8c6030e33f5ffc",
+        "bytes": 990,
+        "hash_exempt": false
+      },
+      {
+        "step": 20,
+        "source": "server/public/boards/y-dimensions/views/board.css",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/views/board.css",
+        "path": "views/board.css",
+        "action": "copy",
+        "required": true,
+        "note": "أنماط القوالب",
+        "sha256": "e9c439082245a09369215cf6e07ad63fa3a840639a7567ff37a67f8442b3a82e",
+        "bytes": 2222,
+        "hash_exempt": false
+      },
+      {
+        "step": 21,
+        "source": "server/public/boards/y-dimensions/docs/README.md",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/docs/README.md",
+        "path": "docs/README.md",
+        "action": "copy",
+        "required": true,
+        "note": "توثيق اللوحة",
+        "sha256": "f24481fbde3abe3851fc0134585682269901e01e118362fdff88a641055a43a3",
+        "bytes": 4540,
+        "hash_exempt": false
+      },
+      {
+        "step": 22,
+        "source": "server/public/boards/y-dimensions/docs/DATABASE.md",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/docs/DATABASE.md",
+        "path": "docs/DATABASE.md",
+        "action": "copy",
+        "required": true,
+        "note": "توثيق الجداول وأنواع المتغيّرات",
+        "sha256": "0f66c6b3cc5bcf2a46ede2ac3ec0d9aca527ea774fd0267d9e3bfb1ddb113670",
+        "bytes": 8020,
+        "hash_exempt": false
+      },
+      {
+        "step": 23,
+        "source": "server/public/boards/y-dimensions/docs/SYNC.md",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/docs/SYNC.md",
+        "path": "docs/SYNC.md",
+        "action": "copy",
+        "required": true,
+        "note": "توثيق المزامنة",
+        "sha256": "5caa65561ba7c53bd7c950213af0c86a74cf914c9defad66666c4c672b485308",
+        "bytes": 2722,
+        "hash_exempt": false
+      },
+      {
+        "step": 24,
+        "source": "server/public/boards/y-dimensions/docs/VERIFY.md",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/docs/VERIFY.md",
+        "path": "docs/VERIFY.md",
+        "action": "copy",
+        "required": true,
+        "note": "تقرير التحقق (يكتبه خطوة Verify بعد حساب البصمات)",
+        "sha256": null,
+        "bytes": null,
+        "hash_exempt": true,
+        "hash_exempt_reason": "يكتبه خطوة Verify بعد حساب البصمات"
+      },
+      {
+        "step": 25,
+        "source": "server/public/boards/y-dimensions/MAP.json",
+        "destination": "{mother_panel.boards_dir}/y-dimensions/MAP.json",
+        "path": "MAP.json",
+        "action": "copy",
+        "required": true,
+        "note": "خريطة التثبيت نفسها (تُقرأ أولاً وتُثبّت أخيراً)",
+        "sha256": null,
+        "bytes": null,
+        "hash_exempt": true,
+        "hash_exempt_reason": "مرجع ذاتي: لا يمكن احتواء بصمته داخل نفسه"
+      }
+    ]
+  },
+  "verify": {
+    "runner": "mother_panel.verify.run",
+    "run_before_completion": true,
+    "report_path": "docs/VERIFY.md",
+    "expected_file_count": 25,
+    "expected_steps": "1..25 متسلسلة بلا تكرار",
+    "steps": [
+      {
+        "id": "V1",
+        "check": "all_files_present",
+        "expect": "كل المسارات في install.order موجودة"
+      },
+      {
+        "id": "V2",
+        "check": "order_matches",
+        "expect": "الترتيب 1..N مطابق تماماً للمسارات، بلا تقديم أو تأخير أو تكرار"
+      },
+      {
+        "id": "V3",
+        "check": "sha256_matches",
+        "expect": "كل بصمة مطابقة عدا الملفات المعفاة صراحةً"
+      },
+      {
+        "id": "V4",
+        "check": "json_parse",
+        "expect": "كل ملف .json صالح"
+      },
+      {
+        "id": "V5",
+        "check": "developer_signature_start_and_end",
+        "expect": "توقيع يوسف الحمزي في بداية ونهاية كل ملف"
+      },
+      {
+        "id": "V6",
+        "check": "no_ddl",
+        "expect": "لا عبارات DDL ولا جدول مستخدمين جديد"
+      },
+      {
+        "id": "V7",
+        "check": "single_unified_db",
+        "expect": "الاتصال mother_panel.db.shared فقط، ولا جدول users محلي"
+      },
+      {
+        "id": "V8",
+        "check": "no_standalone_code",
+        "expect": "لا PHP/JS ولا نقطة دخول ولا رمز ولا مفتاح داخل اللوحة"
+      },
+      {
+        "id": "V9",
+        "check": "mother_panel_refs_resolve",
+        "expect": "كل مرجع mother_panel.* معرّف في sync.json"
+      },
+      {
+        "id": "V10",
+        "check": "icon_resolves",
+        "expect": "app.json#/icon يشير إلى assets/icon.svg المثبّت"
+      },
+      {
+        "id": "V11",
+        "check": "install_scope_clean",
+        "expect": "مجلد التثبيت يحوي ملفات الخريطة فقط، ولا مساراً خارج مجلد اللوحة"
+      },
+      {
+        "id": "V12",
+        "check": "internal_refs_resolve",
+        "expect": "كل أقسام/قوالب/توثيق مشار إليه موجود في الخريطة"
+      },
+      {
+        "id": "V13",
+        "check": "tables_list_exact",
+        "expect": "الجداول الـ24 الحالية مذكورة بالاسم وبلا إنشاء جداول"
+      }
+    ],
+    "on_failure": "abort_and_rollback",
+    "on_success": "mark_installed_and_report"
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

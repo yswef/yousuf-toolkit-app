@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->
+<resources>
+    <string name="v3_avatar_guest">ي</string>
+    <string name="v3_today_progress">أنجزت %1$d من %2$d مهام</string>
+    <string name="v3_today_level">المستوى %1$d · %2$s</string>
+    <string name="v3_add_one">+١</string>
+    <string name="v3_tools_groups">وصول سريع</string>
+    <string name="v3_tools_clear">مسح البحث</string>
+    <string name="v3_tools_none">لا توجد أدوات مطابقة لبحثك.</string>
+    <string name="v3_tools_money">المال</string>
+    <string name="v3_tools_health">الصحة والحياة</string>
+    <string name="v3_tools_device">الجهاز</string>
+    <string name="v3_tools_sub_wallets">الأرصدة والتحويل</string>
+    <string name="v3_tools_sub_advanced">ميزانية وادخار</string>
+    <string name="v3_tools_sub_life">بشرة وغذاء ومزاج</string>
+    <string name="v3_tools_sub_workouts">برامج تمارين جاهزة</string>
+    <string name="v3_tools_sub_device">المنظف والاستخدام</string>
+    <string name="v3_tools_sub_vault">ملاحظات مشفرة</string>
+    <string name="v3_sister_apps">التطبيقات الأخرى</string>
+    <string name="v3_sister_apps_empty">تظهر هنا بطاقات تطبيقات المطوّر الأخرى عند توفّرها من لوحة الأم.</string>
+    <string name="v3_appearance">المظهر وسهولة الاستخدام</string>
+    <string name="v3_font_size">حجم الخط</string>
+    <string name="v3_font_normal">عادي</string>
+    <string name="v3_font_large">كبير</string>
+    <string name="v3_font_xlarge">كبير جداً</string>
+    <string name="v3_motion">مستوى الحركة</string>
+    <string name="v3_motion_full">كامل</string>
+    <string name="v3_motion_light">خفيف</string>
+    <string name="v3_motion_none">بدون</string>
+    <string name="v3_motion_system">النظام يطلب تقليل الحركة، لذلك أُوقفت الحركة.</string>
+    <string name="v3_accent">لون الهوية</string>
+    <string name="v3_theme_system_hint">يتبع مظهر الجهاز تلقائياً</string>
+    <string name="v3_developer_info">المطوّر: %1$s · البريد: %2$s</string>
+    <string name="v3_about">عن التطبيق</string>
+    <string name="v3_more">المزيد</string>
+    <string name="v3_ledger_header">آخر الحركات</string>
+</resources>
+<!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->

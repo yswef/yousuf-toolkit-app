@@ -1,0 +1,22 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "settings",
+  "label": "بيانات التطبيق",
+  "developer": {
+    "name": "يوسف الحمزي",
+    "email": "yswefalhmzy@gmail.com"
+  },
+  "app": {
+    "name": "Y- Dimensions",
+    "type": "mobile",
+    "version_ref": "app.json#/version",
+    "icon_ref": "app.json#/icon",
+    "docs_ref": "app.json#/documentation"
+  },
+  "standalone_code": false,
+  "token": null,
+  "db": "mother_panel.db.shared",
+  "review": "المطوّر فقط",
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package feature.home
 
 import androidx.compose.foundation.Canvas
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
@@ -44,6 +47,9 @@ import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.Accent
 import core.design.BookSymbol
+import core.design.V3Group
+import core.design.V3Hero
+import core.design.V3Row
 import core.design.FormDialog
 import core.design.UiMode
 import core.design.UiState
@@ -88,7 +94,7 @@ fun AccountTab(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         item {
-            GlassCard {
+            V3Hero {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         Modifier
@@ -130,6 +136,16 @@ fun AccountTab(
                 Button(onClick = { onFeature(Routes.PROFILE) }, modifier = Modifier.fillMaxWidth()) {
                     Text(stringResource(R.string.account_edit))
                 }
+            }
+        }
+        item {
+            V3Group {
+                V3Row(
+                    title = stringResource(R.string.feature_settings),
+                    subtitle = stringResource(R.string.v3_appearance),
+                    icon = Icons.Filled.Settings,
+                    onClick = onSettings
+                )
             }
         }
         item {
@@ -351,3 +367,5 @@ private fun rankName(key: String): String = when (key) {
     "emperor" -> stringResource(R.string.rank_emperor)
     else -> key
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

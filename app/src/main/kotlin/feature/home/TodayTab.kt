@@ -1,29 +1,17 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package feature.home
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,19 +23,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.BookSymbol
 import core.design.StatTile
-import core.design.drawBookSymbol
+import core.design.V3CheckRow
+import core.design.V3Group
+import core.design.V3HabitTile
+import core.design.V3Hero
+import core.design.V3Ring
+import core.design.V3Row
+import core.design.V3SectionHeader
 import data.local.Store
 import domain.model.Priority
 import domain.model.Task
@@ -65,189 +54,162 @@ fun TodayTab(
     modifier: Modifier = Modifier
 ) {
     var denied by remember { mutableStateOf(false) }
+    val scheme = MaterialTheme.colorScheme
     val open = store.tasks.filterNot { it.done }
     val todayTasks = open.sortedWith(
         compareBy<Task> { if (it.dueAt > 0L) 0 else 1 }.thenBy { it.dueAt }.thenByDescending { it.priority.ordinal }
     ).take(3)
     val done = store.tasks.count { it.done }
+    val total = store.tasks.size
     val faith = store.prayersToday().size
     val water = store.waterToday()
     val sleep = store.sleepToday()
     val waterGoal = store.config.waterGoal.coerceAtLeast(1)
     val sleepGoal = store.config.sleepGoal.coerceAtLeast(1)
+    val prayerGoal = prayerKeys.size.coerceAtLeast(1)
 
     LazyColumn(
         modifier.fillMaxSize(),
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 28.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            Card(
-                modifier = Modifier.fillMaxWidth().clickable(onClick = onRank),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.72f)
-                )
-            ) {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                                .background(
-                                    Brush.radialGradient(
-                                        listOf(MaterialTheme.colorScheme.primary, lerp(MaterialTheme.colorScheme.primary, Color.Black, 0.55f))
-                                    )
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                store.level.toString(),
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Column(Modifier.weight(1f).padding(start = 12.dp)) {
-                            Text(
-                                rankLabel(store.rankKey),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                stringResource(R.string.game_level_points, store.level, store.points),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+            V3Hero(onClick = onRank) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+                    V3Ring(
+                        progress = if (total == 0) 0f else done.toFloat() / total,
+                        size = 84.dp,
+                        stroke = 9.dp,
+                        color = scheme.primary
+                    ) {
                         Text(
-                            "${store.points} XP",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontWeight = FontWeight.Bold
+                            "$done/$total",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = scheme.onPrimaryContainer
                         )
                     }
-                    LinearProgressIndicator(
-                        progress = { store.rankProgress },
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                    Text(
-                        store.nextRank?.let { stringResource(R.string.rank_next, rankLabel(it.first), it.second) }
-                            ?: stringResource(R.string.rank_max),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(
+                            stringResource(R.string.v3_today_progress, done, total),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = scheme.onPrimaryContainer
+                        )
+                        Text(
+                            stringResource(R.string.v3_today_level, store.level, rankLabel(store.rankKey)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = scheme.onPrimaryContainer
+                        )
+                        LinearProgressIndicator(
+                            progress = { store.rankProgress },
+                            modifier = Modifier.fillMaxWidth(),
+                            color = scheme.primary,
+                            trackColor = scheme.surfaceVariant
+                        )
+                        Text(
+                            store.nextRank?.let { stringResource(R.string.rank_next, rankLabel(it.first), it.second) }
+                                ?: stringResource(R.string.rank_max),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = scheme.onPrimaryContainer
+                        )
+                    }
                 }
             }
         }
 
         item {
-            SectionHeader(
+            V3SectionHeader(
                 title = stringResource(R.string.today_tasks),
                 action = stringResource(R.string.today_view_all),
                 onAction = onTasks
             )
         }
-        if (todayTasks.isEmpty()) {
-            item {
-                Card(Modifier.fillMaxWidth()) {
-                    Text(
-                        stringResource(R.string.today_no_tasks),
-                        modifier = Modifier.padding(16.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+        item {
+            if (todayTasks.isEmpty()) {
+                V3Group {
+                    V3Row(title = stringResource(R.string.today_no_tasks), icon = Icons.Filled.List)
                 }
-            }
-        } else {
-            items(todayTasks, key = { "today-${it.id}" }) { task ->
-                Card(Modifier.fillMaxWidth()) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            Modifier
-                                .padding(start = 10.dp)
-                                .size(width = 4.dp, height = 36.dp)
-                                .clip(RoundedCornerShape(2.dp))
-                                .background(priorityColor(task.priority))
-                        )
-                        Checkbox(
+            } else {
+                V3Group {
+                    todayTasks.forEachIndexed { index, task ->
+                        V3CheckRow(
+                            title = task.title,
+                            subtitle = priorityLabel(task.priority),
                             checked = task.done,
-                            onCheckedChange = { if (!store.toggleTask(task.id)) denied = true }
+                            dotColor = priorityColor(task.priority),
+                            divider = index > 0,
+                            onToggle = { if (!store.toggleTask(task.id)) denied = true }
                         )
-                        Column(Modifier.weight(1f)) {
-                            Text(
-                                task.title,
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.Medium,
-                                textDecoration = if (task.done) TextDecoration.LineThrough else null
-                            )
-                            Text(
-                                priorityLabel(task.priority),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = priorityColor(task.priority)
-                            )
-                        }
-                        if (task.dueAt <= 0L) {
-                            Text(
-                                stringResource(R.string.taskspro_no_due),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(end = 12.dp)
-                            )
-                        }
                     }
                 }
             }
         }
 
+        item { V3SectionHeader(title = stringResource(R.string.today_habits)) }
         item {
-            SectionHeader(title = stringResource(R.string.today_habits), action = null, onAction = {})
-        }
-        item {
-            HabitRow(
-                symbol = BookSymbol.DROP,
-                color = MaterialTheme.colorScheme.secondary,
-                title = stringResource(R.string.feature_water),
-                subtitle = stringResource(R.string.water_goal, waterGoal),
-                value = "$water / $waterGoal",
-                progress = water.toFloat() / waterGoal,
-                onAdd = { store.addWater(1) },
-                onOpen = onWater
-            )
-        }
-        item {
-            HabitRow(
-                symbol = BookSymbol.STAR,
-                color = MaterialTheme.colorScheme.tertiary,
-                title = stringResource(R.string.feature_faith),
-                subtitle = stringResource(R.string.faith_today),
-                value = stringResource(R.string.faith_progress, faith, prayerKeys.size),
-                progress = faith.toFloat() / prayerKeys.size,
-                onAdd = { store.togglePrayer(prayerKeys.firstOrNull { it !in store.prayersToday() } ?: prayerKeys.last()) },
-                onOpen = onFaith
-            )
-        }
-        item {
-            HabitRow(
-                symbol = BookSymbol.MOON,
-                color = MaterialTheme.colorScheme.primary,
-                title = stringResource(R.string.feature_sleep),
-                subtitle = stringResource(R.string.sleep_goal, sleepGoal),
-                value = stringResource(R.string.sleep_hours_value, formatHours(sleep)),
-                progress = (sleep / sleepGoal).toFloat().coerceIn(0f, 1f),
-                onAdd = onSleep,
-                onOpen = onSleep
-            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                V3HabitTile(
+                    name = stringResource(R.string.feature_water),
+                    value = "$water / $waterGoal",
+                    addText = stringResource(R.string.v3_add_one),
+                    progress = water.toFloat() / waterGoal,
+                    symbol = BookSymbol.DROP,
+                    color = scheme.secondary,
+                    onAdd = { store.addWater(1) },
+                    onOpen = onWater,
+                    modifier = Modifier.weight(1f)
+                )
+                V3HabitTile(
+                    name = stringResource(R.string.feature_faith),
+                    value = stringResource(R.string.faith_progress, faith, prayerGoal),
+                    addText = stringResource(R.string.v3_add_one),
+                    progress = faith.toFloat() / prayerGoal,
+                    symbol = BookSymbol.STAR,
+                    color = scheme.tertiary,
+                    onAdd = if (faith < prayerGoal) {
+                        {
+                            val key = prayerKeys.firstOrNull { it !in store.prayersToday() } ?: prayerKeys.last()
+                            store.togglePrayer(key)
+                        }
+                    } else null,
+                    onOpen = onFaith,
+                    modifier = Modifier.weight(1f)
+                )
+                V3HabitTile(
+                    name = stringResource(R.string.feature_sleep),
+                    value = stringResource(R.string.sleep_hours_value, formatHours(sleep)),
+                    addText = stringResource(R.string.v3_add_one),
+                    progress = (sleep / sleepGoal).toFloat().coerceIn(0f, 1f),
+                    symbol = BookSymbol.MOON,
+                    color = scheme.primary,
+                    onAdd = null,
+                    onOpen = onSleep,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
 
         item {
+            V3Group {
+                V3Row(
+                    title = stringResource(R.string.tab_stats),
+                    subtitle = stringResource(R.string.today_ratio),
+                    icon = Icons.Filled.List,
+                    onClick = onStats
+                )
+            }
+        }
+        item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MiniStat(open.size.toString(), stringResource(R.string.today_open), Modifier.weight(1f), onStats)
-                MiniStat(done.toString(), stringResource(R.string.today_done), Modifier.weight(1f), onStats)
-                MiniStat("${(if (store.tasks.isEmpty()) 0 else done * 100 / store.tasks.size)}%", stringResource(R.string.today_ratio), Modifier.weight(1f), onStats)
+                StatTile(open.size.toString(), stringResource(R.string.today_open), Modifier.weight(1f), onStats)
+                StatTile(done.toString(), stringResource(R.string.today_done), Modifier.weight(1f), onStats)
+                StatTile(
+                    "${if (total == 0) 0 else done * 100 / total}%",
+                    stringResource(R.string.today_ratio),
+                    Modifier.weight(1f),
+                    onStats
+                )
             }
         }
     }
@@ -260,65 +222,6 @@ fun TodayTab(
             confirmButton = { TextButton(onClick = { denied = false }) { Text(stringResource(R.string.ok)) } }
         )
     }
-}
-
-@Composable
-private fun SectionHeader(title: String, action: String?, onAction: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(top = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-        if (action != null) {
-            TextButton(onClick = onAction) { Text(action) }
-        }
-    }
-}
-
-@Composable
-private fun HabitRow(
-    symbol: BookSymbol,
-    color: Color,
-    title: String,
-    subtitle: String,
-    value: String,
-    progress: Float,
-    onAdd: () -> Unit,
-    onOpen: () -> Unit
-) {
-    Card(Modifier.fillMaxWidth().clickable(onClick = onOpen)) {
-        Row(Modifier.padding(start = 12.dp, end = 4.dp, top = 10.dp, bottom = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(color.copy(alpha = 0.14f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Canvas(Modifier.size(22.dp)) {
-                    drawBookSymbol(symbol, color, Offset(size.width / 2, size.height / 2), size.minDimension * 0.44f)
-                }
-            }
-            Column(Modifier.weight(1f).padding(horizontal = 10.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
-                    Text(value, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                }
-                Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                LinearProgressIndicator(
-                    progress = { progress.coerceIn(0f, 1f) },
-                    modifier = Modifier.fillMaxWidth().padding(top = 5.dp),
-                    color = color,
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant
-                )
-            }
-            IconButton(onClick = onAdd) {
-                Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
-            }
-        }
-    }
-}
-
-@Composable
-private fun MiniStat(value: String, label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    StatTile(value = value, label = label, modifier = modifier, onClick = onClick)
 }
 
 @Composable
@@ -349,3 +252,4 @@ private fun rankLabel(key: String): String = when (key) {
 
 private fun formatHours(hours: Double): String =
     if (hours % 1.0 == 0.0) hours.toInt().toString() else String.format(java.util.Locale.US, "%.1f", hours)
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

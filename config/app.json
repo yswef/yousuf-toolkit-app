@@ -62,5 +62,10 @@
         "level": 20
       }
     ]
-  }
+  },
+  "developer": {
+    "name": "يوسف الحمزي",
+    "email": "yswefalhmzy@gmail.com"
+  },
+  "sister_apps": []
 }

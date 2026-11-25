@@ -1,0 +1,10 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
+<section class="panel" data-hook="mother_panel.blog.list">
+<h2>المدونة الموحّدة — آراء وتقييمات العملاء عن التطبيقات</h2>
+<p class="hint">مدونة واحدة تجمع <code>posts</code> و<code>board_comments</code>؛ لا مدونة مستقلة لكل تطبيق.</p>
+<div class="cards" data-repeat="mother_panel.blog.list" data-isolation="app_id">
+  <article class="card"><h3>{{row.title}}</h3><p>{{row.body}}</p><span class="badge">{{row.rating}}</span></article>
+</div>
+<button data-action="mother_panel.blog.comment">إضافة رأي أو تقييم</button>
+</section>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->

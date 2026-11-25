@@ -1,0 +1,27 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "admin_boards",
+  "label": "لوحات الإدارة",
+  "view": "views/admin-boards.html",
+  "hook": "mother_panel.boards.cards",
+  "description": "واجهة صغيرة: لكل لوحة بطاقة تعرض إحصائياتها منفصلة، وكل تطبيق منفصل عن الآخر",
+  "cards_source": "boards + board_stats",
+  "card_count": "عدد اللوحات في قاعدة لوحة الأم",
+  "each_app_separate": true,
+  "no_cross_app_aggregation": true,
+  "isolation_key": "app_id",
+  "card_fields": [
+    "board_name",
+    "app_name",
+    "icon_path",
+    "users_count",
+    "downloads_count",
+    "licenses_count",
+    "ratings_count",
+    "rating_avg",
+    "visits_count"
+  ],
+  "stats_ref": "stats.json#/admin_boards",
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

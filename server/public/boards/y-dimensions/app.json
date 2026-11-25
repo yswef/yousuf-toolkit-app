@@ -1,0 +1,88 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.app-data/1.0",
+  "app_id": "y-dimensions",
+  "board_id": "y-dimensions",
+  "name": "Y- Dimensions",
+  "type": "mobile",
+  "type_note": "تطبيق موبايل فقط؛ لا سطح مكتب ولا بوت ولا إضافة متصفح",
+  "description": "تطبيق موبايل باسم Y- Dimensions ضمن مجموعة تطبيقات المطوّر يوسف الحمزي. تُدار لوحة التحكم الخاصة به كلوحة تابعة تعمل عبر لوحة الأم، بقاعدة بيانات واحدة موحّدة، وحسابات مستقلة لكل تطبيق، ومدونة موحّدة لآراء وتقييمات العملاء، وتراخيص تُدار من مكان واحد.",
+  "short_description": "لوحة تحكم تطبيق الموبايل Y- Dimensions، مزامنة بالكامل مع لوحة الأم.",
+  "tags": [
+    "Y- Dimensions",
+    "موبايل",
+    "تطبيق أندرويد",
+    "يوسف الحمزي",
+    "لوحة الأم",
+    "أبعاد",
+    "تراخيص"
+  ],
+  "search_labels": [
+    "Y Dimensions",
+    "واي دايمشنز",
+    "Y- دايمشنز",
+    "أبعاد Y",
+    "تطبيق يوسف الحمزي",
+    "لوحة Y- Dimensions",
+    "تطبيقات المطوّر",
+    "موبايل"
+  ],
+  "version": "1.0.0",
+  "version_note": "قيمة أولية يعبّئها الموديل ويراجعها المطوّر فقط",
+  "icon": "assets/icon.svg",
+  "icon_usage": "تظهر في بطاقة عرض اللوحة داخل لوحة الأم وفي بطاقات «لوحات الإدارة» و«التطبيقات الأخرى»",
+  "documentation": {
+    "path": "docs/README.md",
+    "files": [
+      "docs/README.md",
+      "docs/DATABASE.md",
+      "docs/SYNC.md",
+      "docs/VERIFY.md"
+    ],
+    "topics": [
+      "التثبيت بالخريطة",
+      "الجداول الموحّدة وأنواع المتغيّرات",
+      "عقود المزامنة",
+      "تقرير التحقق"
+    ],
+    "review": "المطوّر فقط"
+  },
+  "developer": {
+    "name": "يوسف الحمزي",
+    "email": "yswefalhmzy@gmail.com",
+    "email_source": "بريد المطوّر كما ورد في رسالته اللاحقة، بدون أي تعديل",
+    "recorded_in": [
+      "app.json",
+      "board.json",
+      "sections/settings.json",
+      "توقيع بداية ونهاية كل ملف"
+    ]
+  },
+  "mother_panel": {
+    "runtime": "mother_panel",
+    "standalone_code": false,
+    "token": null,
+    "card": {
+      "title_from": "app.json#/name",
+      "icon_from": "app.json#/icon",
+      "stats_from": "board_stats",
+      "scope": "app_id = y-dimensions"
+    }
+  },
+  "account_policy_ref": "sections/accounts.json",
+  "license_policy_ref": "sections/licenses.json",
+  "blog_policy_ref": "sections/reviews.json",
+  "sister_apps_ref": "sections/sister-apps.json",
+  "review": {
+    "by": "developer_only",
+    "model_fills": true,
+    "fields_to_review": [
+      "description",
+      "tags",
+      "search_labels",
+      "version",
+      "developer.email"
+    ]
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

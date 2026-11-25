@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package feature.home
 
 import androidx.activity.compose.BackHandler
@@ -54,6 +55,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yousuf.toolkit.R
 import core.design.MagicBackground
+import core.design.LocalMotionLevel
+import core.design.ms
+import core.design.V3Avatar
 import core.navigation.Routes
 import data.local.LocalStore
 import feature.money.MoneyScreen
@@ -73,6 +77,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) { store.seedStarterTasks(starterTasks) }
     var tab by rememberSaveable { mutableStateOf(0) }
     var adding by remember { mutableStateOf(false) }
+    val motionMs = LocalMotionLevel.current.ms(220)
     BackHandler(enabled = tab != 0 && !adding) { tab = 0 }
     val tabs = listOf(
         Tab(R.string.tab_today, Icons.Filled.Home, Icons.Outlined.Home),
@@ -97,6 +102,13 @@ fun HomeScreen(
             snackbarHost = { SnackbarHost(homeSnack) },
             topBar = {
                 TopAppBar(
+                    navigationIcon = {
+                        V3Avatar(
+                            name = store.profileName,
+                            fallback = stringResource(R.string.v3_avatar_guest),
+                            onClick = onAccount
+                        )
+                    },
                     title = {
                         if (tab == 0) {
                             Column {
@@ -124,9 +136,6 @@ fun HomeScreen(
                         }
                     },
                     actions = {
-                        IconButton(onClick = onAccount) {
-                            Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.account_title))
-                        }
                         IconButton(onClick = onSettings) {
                             Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.feature_settings))
                         }
@@ -157,7 +166,10 @@ fun HomeScreen(
             Box(Modifier.fillMaxSize().padding(padding)) {
                 AnimatedContent(
                     targetState = tab,
-                    transitionSpec = { fadeIn(tween(220, delayMillis = 60)) togetherWith fadeOut(tween(120)) },
+                    transitionSpec = {
+                        fadeIn(tween(motionMs, delayMillis = if (motionMs == 0) 0 else 60)) togetherWith
+                            fadeOut(tween(if (motionMs == 0) 0 else 120))
+                    },
                     label = "home-tabs"
                 ) { current ->
                 when (current) {
@@ -192,3 +204,5 @@ fun HomeScreen(
     }
     }
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

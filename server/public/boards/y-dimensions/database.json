@@ -1,0 +1,424 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.database-contract/1.0",
+  "app_id": "y-dimensions",
+  "policy": {
+    "database": "واحدة موحّدة تديرها لوحة الأم لكل تطبيقات المطوّر",
+    "connection": "mother_panel.db.shared",
+    "local_connection": null,
+    "create_tables": false,
+    "alter_tables": false,
+    "duplicate_tables": false,
+    "ddl_statements": [],
+    "conflicts": "none",
+    "inconsistencies": "none",
+    "writes": "mother_panel_only",
+    "transactions": "mother_panel_only",
+    "timestamps": "BIGINT Unix UTC",
+    "prepared_statements_only": true,
+    "scope_of_every_query": "app_id = :app_id مع app_id = y-dimensions",
+    "idempotency": "sync_log.request_id فريد لكل (app_id, action, request_id)",
+    "unique_keys_enforced_by_mother_panel": [
+      "users(app_id, email)",
+      "board_licenses(app_id, license_key_hash)",
+      "board_files(board_id, path)",
+      "app_files(app_id, path)"
+    ],
+    "foreign_keys": "كل user_id يشير إلى users.id في الجدول الموحّد وتديره لوحة الأم"
+  },
+  "users_unified": {
+    "name": "users",
+    "status": "موحّد لكل تطبيقات المطوّر؛ موجود مسبقاً في قاعدة لوحة الأم",
+    "created_by_this_board": false,
+    "duplicate_users_table": false,
+    "per_app_users_table": false,
+    "variables_needed_by_this_app_only": {
+      "id": "INT UNSIGNED",
+      "app_id": "VARCHAR(64)",
+      "email": "VARCHAR(190)",
+      "password_hash": "VARCHAR(255)",
+      "created_at": "BIGINT"
+    },
+    "account_separation": {
+      "auto_propagate_to_other_apps": false,
+      "new_account_per_app_required": true,
+      "same_email_allowed_across_apps": true,
+      "unique_key": [
+        "app_id",
+        "email"
+      ],
+      "note": "من يسجّل في Y- Dimensions لا يُنشأ له حساب تلقائياً في التطبيقات الأخرى؛ ينشئ حساباً جديداً في كل تطبيق بنفس البريد المسموح به"
+    }
+  },
+  "blog_unified": {
+    "single_blog": true,
+    "per_app_blogs": false,
+    "comment_blog_merged": true,
+    "tables": [
+      "posts",
+      "board_comments",
+      "board_stats"
+    ],
+    "content": "آراء وتقييمات العملاء عن التطبيقات",
+    "scope": "app_id"
+  },
+  "existing_tables": [
+    {
+      "name": "admins",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "INT UNSIGNED",
+        "email": "VARCHAR(190)",
+        "role": "VARCHAR(40)",
+        "app_id": "VARCHAR(64)"
+      },
+      "usage": "التحقق من صلاحية مدير هذه اللوحة عبر لوحة الأم"
+    },
+    {
+      "name": "app_files",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "path": "VARCHAR(255)",
+        "order_no": "INT UNSIGNED",
+        "sha256": "CHAR(64)"
+      },
+      "usage": "حفظ مسارات ملفات اللوحة بالترتيب الصحيح من MAP.json"
+    },
+    {
+      "name": "app_keys",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "meta_only",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "key_name": "VARCHAR(80)",
+        "key_hash": "CHAR(64)"
+      },
+      "usage": "المفاتيح والرموز مملوكة للوحة الأم وحدها؛ اللوحة لا تخزّن أي قيمة سرية"
+    },
+    {
+      "name": "apps",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "INT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "name": "VARCHAR(120)",
+        "type": "VARCHAR(40)",
+        "developer": "VARCHAR(120)",
+        "icon_path": "VARCHAR(255)",
+        "url": "VARCHAR(255)",
+        "version": "VARCHAR(20)",
+        "active": "TINYINT(1)"
+      },
+      "usage": "بطاقة التطبيق في لوحة الأم وقسم «التطبيقات الأخرى»"
+    },
+    {
+      "name": "audit_log",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "write_via_mother_panel",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "action": "VARCHAR(60)",
+        "actor": "VARCHAR(120)",
+        "detail": "TEXT",
+        "created_at": "BIGINT"
+      },
+      "usage": "تسجيل إنشاء/إلغاء/تفعيل التراخيص وإجراءات اللوحة"
+    },
+    {
+      "name": "board_comments",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "write_via_mother_panel",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "user_id": "INT UNSIGNED",
+        "post_id": "BIGINT UNSIGNED",
+        "body": "TEXT",
+        "rating": "TINYINT UNSIGNED",
+        "created_at": "BIGINT"
+      },
+      "usage": "تعليقات وتقييمات العملاء في المدونة الموحّدة"
+    },
+    {
+      "name": "board_files",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "board_id": "VARCHAR(64)",
+        "path": "VARCHAR(255)",
+        "order_no": "INT UNSIGNED",
+        "sha256": "CHAR(64)"
+      },
+      "usage": "سجل الملفات المثبّتة لمراجعة ترتيب التثبيت والتحقق"
+    },
+    {
+      "name": "board_licenses",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "write_via_mother_panel",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "license_key_hash": "CHAR(64)",
+        "status": "VARCHAR(20)",
+        "user_id": "INT UNSIGNED",
+        "created_at": "BIGINT",
+        "activated_at": "BIGINT",
+        "revoked_at": "BIGINT"
+      },
+      "usage": "المصدر الوحيد لتراخيص التطبيقات المدفوعة: إنشاء وإلغاء وتفعيل"
+    },
+    {
+      "name": "board_stats",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "board_id": "VARCHAR(64)",
+        "app_id": "VARCHAR(64)",
+        "users_count": "INT UNSIGNED",
+        "downloads_count": "INT UNSIGNED",
+        "licenses_count": "INT UNSIGNED",
+        "ratings_count": "INT UNSIGNED",
+        "rating_avg": "DECIMAL(3,2)",
+        "visits_count": "INT UNSIGNED",
+        "updated_at": "BIGINT"
+      },
+      "usage": "إحصائيات الرئيسية وبطاقات «لوحات الإدارة» لكل تطبيق على حدة"
+    },
+    {
+      "name": "boards",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "INT UNSIGNED",
+        "board_id": "VARCHAR(64)",
+        "app_id": "VARCHAR(64)",
+        "name": "VARCHAR(120)",
+        "icon_path": "VARCHAR(255)",
+        "active": "TINYINT(1)"
+      },
+      "usage": "قائمة اللوحات في قسم «لوحات الإدارة»"
+    },
+    {
+      "name": "cvs",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "docs",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "path": "VARCHAR(255)",
+        "title": "VARCHAR(160)",
+        "body": "TEXT",
+        "updated_at": "BIGINT"
+      },
+      "usage": "توثيق هذا التطبيق المعروض في اللوحة"
+    },
+    {
+      "name": "downloads",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "user_id": "INT UNSIGNED",
+        "version": "VARCHAR(20)",
+        "platform": "VARCHAR(40)",
+        "created_at": "BIGINT"
+      },
+      "usage": "إحصائية التنزيلات في الرئيسية"
+    },
+    {
+      "name": "items",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "messages",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "pages",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "posts",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "write_via_mother_panel",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "title": "VARCHAR(160)",
+        "body": "TEXT",
+        "author": "VARCHAR(120)",
+        "created_at": "BIGINT"
+      },
+      "usage": "مقالات المدونة الموحّدة لآراء وتقييمات العملاء عن التطبيقات"
+    },
+    {
+      "name": "projects",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "rate_limits",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "تفرضه لوحة الأم على كل اللوحات؛ لا يقرأه هذا التطبيق مباشرة"
+    },
+    {
+      "name": "settings",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "write_via_mother_panel",
+      "variables_needed_by_this_app_only": {
+        "app_id": "VARCHAR(64)",
+        "setting_key": "VARCHAR(80)",
+        "setting_value": "TEXT",
+        "updated_at": "BIGINT"
+      },
+      "usage": "إعدادات هذه اللوحة تُقرأ وتُحفظ عبر لوحة الأم فقط"
+    },
+    {
+      "name": "site_pages",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "sites",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": false,
+      "owner": "mother_panel",
+      "access": "none",
+      "variables_needed_by_this_app_only": {},
+      "usage": "موجود في قاعدة لوحة الأم ولا يحتاجه ولا يستخدمه Y- Dimensions"
+    },
+    {
+      "name": "sync_log",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "write_via_mother_panel",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "board_id": "VARCHAR(64)",
+        "action": "VARCHAR(60)",
+        "request_id": "CHAR(64)",
+        "status": "VARCHAR(20)",
+        "created_at": "BIGINT"
+      },
+      "usage": "سجل المزامنة والتحقق ومنع تكرار الكتابات"
+    },
+    {
+      "name": "visits",
+      "exists_in_unified_db": true,
+      "created_by_this_board": false,
+      "used_by_this_app": true,
+      "owner": "mother_panel",
+      "access": "read",
+      "variables_needed_by_this_app_only": {
+        "id": "BIGINT UNSIGNED",
+        "app_id": "VARCHAR(64)",
+        "user_id": "INT UNSIGNED",
+        "created_at": "BIGINT"
+      },
+      "usage": "إحصائية الزيارات في الرئيسية"
+    }
+  ],
+  "existing_tables_count": 24,
+  "tables_not_in_list_but_master": [
+    "users"
+  ],
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

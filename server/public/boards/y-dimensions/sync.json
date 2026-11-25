@@ -1,0 +1,315 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.sync-contract/1.0",
+  "app_id": "y-dimensions",
+  "board_id": "y-dimensions",
+  "mother_panel_only": true,
+  "board_has_standalone_code": false,
+  "board_has_token_or_secret": false,
+  "board_has_entrypoint": false,
+  "database": {
+    "mode": "single_unified",
+    "provider": "mother_panel.db.shared",
+    "tables_created_by_board": [],
+    "duplicate_users_table": false
+  },
+  "isolation": {
+    "key": "app_id",
+    "value": "y-dimensions",
+    "enforced_by": "mother_panel",
+    "every_query_scoped": true,
+    "cross_app_data_mixing": false
+  },
+  "hooks": {
+    "install.map": {
+      "owner": "mother_panel",
+      "call": "mother_panel.install.map",
+      "params": [
+        "map_path"
+      ],
+      "tables": [
+        "app_files",
+        "board_files",
+        "sync_log"
+      ],
+      "writes": true,
+      "note": "تثبيت الملفات بالترتيب وحفظ المسارات"
+    },
+    "verify.run": {
+      "owner": "mother_panel",
+      "call": "mother_panel.verify.run",
+      "params": [
+        "map_path"
+      ],
+      "tables": [
+        "board_files",
+        "sync_log"
+      ],
+      "writes": true,
+      "note": "التحقق قبل إعلان الاكتمال"
+    },
+    "app.data": {
+      "owner": "mother_panel",
+      "call": "mother_panel.app.data",
+      "params": [
+        "app_id"
+      ],
+      "tables": [
+        "apps",
+        "docs",
+        "settings"
+      ],
+      "writes": false,
+      "note": "بيانات التطبيق والمطوّر"
+    },
+    "stats.home": {
+      "owner": "mother_panel",
+      "call": "mother_panel.stats.home",
+      "params": [
+        "app_id"
+      ],
+      "tables": [
+        "users",
+        "downloads",
+        "board_licenses",
+        "board_comments",
+        "posts",
+        "visits",
+        "sync_log",
+        "board_stats"
+      ],
+      "writes": false,
+      "note": "عدد المستخدمين وكل إحصائيات التطبيق"
+    },
+    "boards.cards": {
+      "owner": "mother_panel",
+      "call": "mother_panel.boards.cards",
+      "params": [
+        "developer"
+      ],
+      "tables": [
+        "boards",
+        "board_stats",
+        "apps"
+      ],
+      "writes": false,
+      "note": "بطاقة إحصائيات منفصلة لكل لوحة"
+    },
+    "boards.open": {
+      "owner": "mother_panel",
+      "call": "mother_panel.boards.open",
+      "params": [
+        "board_id"
+      ],
+      "tables": [
+        "boards"
+      ],
+      "writes": false,
+      "note": "فتح لوحة تابعة من لوحة الأم"
+    },
+    "accounts.list": {
+      "owner": "mother_panel",
+      "call": "mother_panel.accounts.list",
+      "params": [
+        "app_id"
+      ],
+      "tables": [
+        "users"
+      ],
+      "writes": false,
+      "note": "حسابات هذا التطبيق فقط"
+    },
+    "accounts.register": {
+      "owner": "mother_panel",
+      "call": "mother_panel.accounts.register",
+      "params": [
+        "app_id",
+        "email",
+        "password_hash"
+      ],
+      "tables": [
+        "users",
+        "audit_log"
+      ],
+      "writes": true,
+      "note": "حساب جديد لكل تطبيق، بلا انتشار تلقائي"
+    },
+    "licenses.list": {
+      "owner": "mother_panel",
+      "call": "mother_panel.licenses.list",
+      "params": [
+        "app_id"
+      ],
+      "tables": [
+        "board_licenses"
+      ],
+      "writes": false,
+      "note": "قراءة التراخيص من المصدر الوحيد"
+    },
+    "licenses.create": {
+      "owner": "mother_panel",
+      "call": "mother_panel.licenses.create",
+      "params": [
+        "app_id",
+        "user_id",
+        "plan"
+      ],
+      "tables": [
+        "board_licenses",
+        "audit_log",
+        "sync_log"
+      ],
+      "writes": true,
+      "note": "إنشاء ترخيص للتطبيقات المدفوعة"
+    },
+    "licenses.revoke": {
+      "owner": "mother_panel",
+      "call": "mother_panel.licenses.revoke",
+      "params": [
+        "app_id",
+        "license_id"
+      ],
+      "tables": [
+        "board_licenses",
+        "audit_log",
+        "sync_log"
+      ],
+      "writes": true,
+      "note": "إلغاء ترخيص"
+    },
+    "licenses.activate": {
+      "owner": "mother_panel",
+      "call": "mother_panel.licenses.activate",
+      "params": [
+        "app_id",
+        "license_id"
+      ],
+      "tables": [
+        "board_licenses",
+        "audit_log",
+        "sync_log"
+      ],
+      "writes": true,
+      "note": "تفعيل ترخيص"
+    },
+    "blog.list": {
+      "owner": "mother_panel",
+      "call": "mother_panel.blog.list",
+      "params": [
+        "app_id"
+      ],
+      "tables": [
+        "posts",
+        "board_comments"
+      ],
+      "writes": false,
+      "note": "المدونة الموحّدة لآراء وتقييمات العملاء"
+    },
+    "blog.comment": {
+      "owner": "mother_panel",
+      "call": "mother_panel.blog.comment",
+      "params": [
+        "app_id",
+        "user_id",
+        "body",
+        "rating"
+      ],
+      "tables": [
+        "board_comments",
+        "audit_log"
+      ],
+      "writes": true,
+      "note": "إضافة رأي أو تقييم"
+    },
+    "apps.sisters": {
+      "owner": "mother_panel",
+      "call": "mother_panel.apps.sisters",
+      "params": [
+        "developer",
+        "exclude_app_id"
+      ],
+      "tables": [
+        "apps"
+      ],
+      "writes": false,
+      "note": "التطبيقات الأخرى عند المطوّر"
+    },
+    "audit.write": {
+      "owner": "mother_panel",
+      "call": "mother_panel.audit.write",
+      "params": [
+        "app_id",
+        "action",
+        "detail"
+      ],
+      "tables": [
+        "audit_log"
+      ],
+      "writes": true,
+      "note": "سجل الإجراءات"
+    },
+    "sync.log": {
+      "owner": "mother_panel",
+      "call": "mother_panel.sync.log",
+      "params": [
+        "app_id",
+        "board_id",
+        "action",
+        "request_id"
+      ],
+      "tables": [
+        "sync_log"
+      ],
+      "writes": true,
+      "note": "سجل مزامنة غير قابل للتكرار"
+    },
+    "settings.read": {
+      "owner": "mother_panel",
+      "call": "mother_panel.settings.read",
+      "params": [
+        "app_id"
+      ],
+      "tables": [
+        "settings"
+      ],
+      "writes": false,
+      "note": "إعدادات اللوحة"
+    }
+  },
+  "constants": {
+    "db.shared": "اتصال قاعدة البيانات الموحّد الذي تملكه لوحة الأم",
+    "renderer.default": "مُصيّر القوالب المشترك في لوحة الأم",
+    "assets.base": "المسار الذي تعطيه لوحة الأم لأصول اللوحة عند العرض",
+    "boards_dir": "مجلد اللوحات التابعة الذي تحدده لوحة الأم",
+    "app_config.sister_apps": "إعداد لوحة الأم الذي يوصل قسم التطبيقات الأخرى بتطبيق الموبايل"
+  },
+  "license_console": {
+    "single_place": "mother_panel",
+    "paid_apps": true,
+    "actions": [
+      "licenses.create",
+      "licenses.revoke",
+      "licenses.activate"
+    ],
+    "table": "board_licenses",
+    "key_generation": "mother_panel_only",
+    "local_secret": null,
+    "local_generation": false
+  },
+  "unified_blog": {
+    "single_blog": true,
+    "tables": [
+      "posts",
+      "board_comments"
+    ],
+    "content": "آراء وتقييمات العملاء عن التطبيقات",
+    "per_app_blogs": false
+  },
+  "sister_apps_delivery": {
+    "target": "app.mobile",
+    "via": "mother_panel.app_config.sister_apps",
+    "app_source_change": false,
+    "hook": "mother_panel.apps.sisters"
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

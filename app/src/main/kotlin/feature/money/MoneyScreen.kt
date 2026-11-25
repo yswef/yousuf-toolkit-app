@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package feature.money
 
 import androidx.compose.ui.text.font.FontWeight
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.padding
@@ -57,7 +59,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
+import core.design.BookSymbol
 import core.design.FormDialog
+import core.design.V3Hero
+import core.design.V3QuickAction
+import core.design.V3SectionHeader
 import core.design.InfoCard
 import core.design.ScreenScaffold
 import data.local.LocalStore
@@ -84,6 +90,7 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var adding by remember { mutableStateOf(false) }
+    var addIncome by remember { mutableStateOf(false) }
     var addingDebt by remember { mutableStateOf(false) }
     var deletingDebt by remember { mutableStateOf<Debt?>(null) }
     var status by remember { mutableStateOf("") }
@@ -118,16 +125,55 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
         ) {
             if (embedded) {
                 item {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        FilterChip(selected = false, onClick = { adding = true }, label = { Text(stringResource(R.string.add)) })
-                        FilterChip(selected = false, onClick = onMore, label = { Text(stringResource(R.string.moneypro_budget)) })
-                        FilterChip(
-                            selected = false,
-                            onClick = {
-                                if (SmsReader.hasPermission(context)) importMessages() else smsPermission.launch(Manifest.permission.READ_SMS)
-                            },
-                            label = { Text(stringResource(R.string.money_sms_import)) }
+                    V3Hero(onClick = onWallets) {
+                        val scheme = MaterialTheme.colorScheme
+                        Text(
+                            stringResource(R.string.money_balance),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = scheme.onPrimaryContainer
                         )
+                        Text(
+                            amountText(store.balance),
+                            style = MaterialTheme.typography.displaySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = scheme.onPrimaryContainer
+                        )
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            MoneyPill(stringResource(R.string.money_income_value, amountText(income)), Modifier.weight(1f))
+                            MoneyPill(stringResource(R.string.money_expense_value, amountText(expense)), Modifier.weight(1f))
+                        }
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            V3QuickAction(
+                                stringResource(R.string.money_income), BookSymbol.DIAMOND,
+                                { addIncome = true; adding = true }, Modifier.weight(1f),
+                                container = MaterialTheme.colorScheme.surface
+                            )
+                            V3QuickAction(
+                                stringResource(R.string.money_expense), BookSymbol.DIAMOND,
+                                { addIncome = false; adding = true }, Modifier.weight(1f),
+                                container = MaterialTheme.colorScheme.surface
+                            )
+                            V3QuickAction(
+                                stringResource(R.string.feature_wallets), BookSymbol.ORB,
+                                onWallets, Modifier.weight(1f),
+                                container = MaterialTheme.colorScheme.surface
+                            )
+                            V3QuickAction(
+                                stringResource(R.string.v3_more), BookSymbol.STAR,
+                                onMore, Modifier.weight(1f),
+                                container = MaterialTheme.colorScheme.surface
+                            )
+                        }
+                    }
+                }
+                item {
+                    TextButton(
+                        onClick = {
+                            if (SmsReader.hasPermission(context)) importMessages() else smsPermission.launch(Manifest.permission.READ_SMS)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.money_sms_import))
                     }
                 }
             }
@@ -157,27 +203,29 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
                     }
                 }
             }
-            item {
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(
-                            stringResource(R.string.money_balance),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            amountText(store.balance),
-                            style = MaterialTheme.typography.headlineMedium
-                        )
-                        Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            if (!embedded) {
+                item {
+                    Card(Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             Text(
-                                stringResource(R.string.money_income_value, amountText(income)),
-                                color = MaterialTheme.colorScheme.primary
+                                stringResource(R.string.money_balance),
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                             Text(
-                                stringResource(R.string.money_expense_value, amountText(expense)),
-                                color = MaterialTheme.colorScheme.error
+                                amountText(store.balance),
+                                style = MaterialTheme.typography.headlineMedium
                             )
+                            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                                Text(
+                                    stringResource(R.string.money_income_value, amountText(income)),
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    stringResource(R.string.money_expense_value, amountText(expense)),
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            }
                         }
                     }
                 }
@@ -199,7 +247,7 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
             items(store.debts.sortedWith(compareBy<Debt> { it.settled }.thenByDescending { it.at }), key = { "debt-${it.id}" }) { debt ->
                 DebtRow(debt, onSettled = { store.setDebtSettled(debt.id, it) }, onDelete = { deletingDebt = debt })
             }
-            item { Text(stringResource(R.string.debt_ledger_header), style = MaterialTheme.typography.titleMedium) }
+            item { V3SectionHeader(title = stringResource(R.string.v3_ledger_header)) }
             if (entries.isEmpty()) {
                 item {
                     Image(
@@ -265,6 +313,7 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
 
     if (adding) {
         LedgerDialog(
+            initialIncome = addIncome,
             onDismiss = { adding = false },
             onAdd = { title, amount, isIncome, category, at ->
                 store.addLedger(title, amount, isIncome, category, at)
@@ -317,6 +366,19 @@ private fun DebtDialog(onDismiss: () -> Unit, onAdd: (String, Double, Boolean, S
 }
 
 @Composable
+private fun MoneyPill(text: String, modifier: Modifier = Modifier) {
+    Box(
+        modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text, style = MaterialTheme.typography.labelLarge, maxLines = 1)
+    }
+}
+
+@Composable
 private fun LedgerRow(entry: Ledger, onDelete: () -> Unit) {
     Card(Modifier.fillMaxWidth()) {
         Row(
@@ -352,12 +414,13 @@ private fun LedgerRow(entry: Ledger, onDelete: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LedgerDialog(
+    initialIncome: Boolean = false,
     onDismiss: () -> Unit,
     onAdd: (String, Double, Boolean, String, Long) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
-    var income by remember { mutableStateOf(false) }
+    var income by remember { mutableStateOf(initialIncome) }
     var category by remember { mutableStateOf(categoryKeys.last()) }
     val context = LocalContext.current
     var date by remember { mutableStateOf(LocalDate.now()) }
@@ -460,3 +523,5 @@ private fun dateText(at: Long): String =
 private fun amountText(value: Double): String =
     if (value % 1.0 == 0.0) value.toLong().toString()
     else String.format(Locale.US, "%.2f", value)
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
