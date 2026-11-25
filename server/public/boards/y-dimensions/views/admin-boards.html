@@ -1,0 +1,22 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
+<section class="panel" data-hook="mother_panel.boards.cards">
+<h2>لوحات الإدارة — إحصائيات منفصلة لكل لوحة</h2>
+<p class="hint">كل تطبيق منفصل عن الآخر، بلا دمج إحصائيات بين التطبيقات.</p>
+<div class="cards" data-repeat="mother_panel.boards.cards" data-isolation="app_id">
+  <article class="card board-card">
+    <img src="{{card.icon_path}}" alt="أيقونة {{card.app_name}}" class="app-icon">
+    <h3>{{card.board_name}}</h3>
+    <p class="muted">{{card.app_name}} • {{card.app_id}}</p>
+    <dl>
+      <dt>المستخدمون</dt><dd>{{card.users_count}}</dd>
+      <dt>التنزيلات</dt><dd>{{card.downloads_count}}</dd>
+      <dt>التراخيص</dt><dd>{{card.licenses_count}}</dd>
+      <dt>التقييمات</dt><dd>{{card.ratings_count}}</dd>
+      <dt>متوسط التقييم</dt><dd>{{card.rating_avg}}</dd>
+      <dt>الزيارات</dt><dd>{{card.visits_count}}</dd>
+    </dl>
+    <a data-action="mother_panel.boards.open" data-board-id="{{card.board_id}}">فتح اللوحة</a>
+  </article>
+</div>
+</section>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->

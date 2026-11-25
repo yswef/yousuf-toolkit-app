@@ -1,0 +1,45 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "licenses",
+  "label": "التراخيص",
+  "view": "views/licenses.html",
+  "hook": "mother_panel.licenses.list",
+  "applies_to": "التطبيقات المدفوعة",
+  "single_place": "mother_panel",
+  "local_code_or_secret": false,
+  "local_key_generation": false,
+  "table": "board_licenses",
+  "key_owner": "app_keys في لوحة الأم",
+  "actions": [
+    {
+      "id": "create",
+      "label": "إنشاء ترخيص",
+      "hook": "mother_panel.licenses.create",
+      "fields": [
+        "user_id",
+        "plan"
+      ]
+    },
+    {
+      "id": "revoke",
+      "label": "إلغاء ترخيص",
+      "hook": "mother_panel.licenses.revoke",
+      "fields": [
+        "license_id"
+      ]
+    },
+    {
+      "id": "activate",
+      "label": "تفعيل ترخيص",
+      "hook": "mother_panel.licenses.activate",
+      "fields": [
+        "license_id"
+      ]
+    }
+  ],
+  "audit_hook": "mother_panel.audit.write",
+  "sync_hook": "mother_panel.sync.log",
+  "scope": "app_id = y-dimensions",
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

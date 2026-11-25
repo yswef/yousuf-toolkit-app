@@ -1,0 +1,40 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>لوحة تحكم Y- Dimensions — الرئيسية</title>
+<link rel="stylesheet" href="{{mother_panel.assets.base}}/views/board.css">
+</head>
+<body data-board="y-dimensions" data-app-id="y-dimensions" data-runtime="mother_panel">
+<header class="topbar">
+  <img src="{{mother_panel.assets.base}}/assets/icon.svg" alt="أيقونة Y- Dimensions" class="app-icon">
+  <div><h1>Y- Dimensions</h1><p>لوحة تابعة تعمل عبر لوحة الأم • تطبيق موبايل • يوسف الحمزي</p></div>
+  <span class="badge" data-bind="mother_panel.sync.log">{{mother_panel.stats.home.sync_status}}</span>
+</header>
+<main>
+  <section id="home" data-hook="mother_panel.stats.home">
+    <h2>الرئيسية — عدد المستخدمين وكل إحصائيات التطبيق</h2>
+    <div class="stats" data-bind="mother_panel.stats.home">
+      <article class="card" data-stat="users_count"><h3>عدد المستخدمين</h3><p>{{mother_panel.stats.home.users_count}}</p></article>
+      <article class="card" data-stat="new_users_today"><h3>المستخدمون الجدد اليوم</h3><p>{{mother_panel.stats.home.new_users_today}}</p></article>
+      <article class="card" data-stat="downloads_count"><h3>التنزيلات</h3><p>{{mother_panel.stats.home.downloads_count}}</p></article>
+      <article class="card" data-stat="downloads_today"><h3>تنزيلات اليوم</h3><p>{{mother_panel.stats.home.downloads_today}}</p></article>
+      <article class="card" data-stat="licenses_count"><h3>التراخيص</h3><p>{{mother_panel.stats.home.licenses_count}}</p></article>
+      <article class="card" data-stat="licenses_active"><h3>تراخيص مفعّلة</h3><p>{{mother_panel.stats.home.licenses_active}}</p></article>
+      <article class="card" data-stat="licenses_revoked"><h3>تراخيص ملغاة</h3><p>{{mother_panel.stats.home.licenses_revoked}}</p></article>
+      <article class="card" data-stat="ratings_count"><h3>التقييمات</h3><p>{{mother_panel.stats.home.ratings_count}}</p></article>
+      <article class="card" data-stat="rating_avg"><h3>متوسط التقييم</h3><p>{{mother_panel.stats.home.rating_avg}}</p></article>
+      <article class="card" data-stat="visits_count"><h3>الزيارات</h3><p>{{mother_panel.stats.home.visits_count}}</p></article>
+      <article class="card" data-stat="comments_count"><h3>آراء العملاء</h3><p>{{mother_panel.stats.home.comments_count}}</p></article>
+      <article class="card" data-stat="posts_count"><h3>مقالات المدونة الموحّدة</h3><p>{{mother_panel.stats.home.posts_count}}</p></article>
+      <article class="card" data-stat="sync_events"><h3>عمليات المزامنة</h3><p>{{mother_panel.stats.home.sync_events}}</p></article>
+      <article class="card" data-stat="sync_status"><h3>حالة المزامنة مع لوحة الأم</h3><p>{{mother_panel.stats.home.sync_status}}</p></article>
+    </div>
+  </section>
+  <section id="admin-boards" data-hook="mother_panel.boards.cards" data-include="views/admin-boards.html"></section>
+  <section id="sister-apps" data-hook="mother_panel.apps.sisters" data-include="views/sister-apps.html"></section>
+</main>
+</body>
+</html>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->

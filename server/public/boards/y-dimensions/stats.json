@@ -1,0 +1,163 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.stats/1.0",
+  "app_id": "y-dimensions",
+  "board_id": "y-dimensions",
+  "source_of_truth": "mother_panel.db.shared",
+  "sample_data": false,
+  "home": {
+    "show_users_count": true,
+    "show_all_app_stats": true,
+    "stats": [
+      {
+        "id": "users_count",
+        "label": "عدد المستخدمين",
+        "source": "users",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "new_users_today",
+        "label": "المستخدمون الجدد اليوم",
+        "source": "users",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id AND created_at >= :day_start",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "downloads_count",
+        "label": "التنزيلات",
+        "source": "downloads",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "downloads_today",
+        "label": "تنزيلات اليوم",
+        "source": "downloads",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id AND created_at >= :day_start",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "licenses_count",
+        "label": "التراخيص",
+        "source": "board_licenses",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "licenses_active",
+        "label": "تراخيص مفعّلة",
+        "source": "board_licenses",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id AND status = 'active'",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "licenses_revoked",
+        "label": "تراخيص ملغاة",
+        "source": "board_licenses",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id AND status = 'revoked'",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "ratings_count",
+        "label": "التقييمات",
+        "source": "board_comments",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id AND rating IS NOT NULL",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "rating_avg",
+        "label": "متوسط التقييم",
+        "source": "board_stats",
+        "aggregation": "rating_avg WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "decimal_2",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "visits_count",
+        "label": "الزيارات",
+        "source": "visits",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "comments_count",
+        "label": "آراء العملاء",
+        "source": "board_comments",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "posts_count",
+        "label": "مقالات المدونة الموحّدة",
+        "source": "posts",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "sync_events",
+        "label": "عمليات المزامنة",
+        "source": "sync_log",
+        "aggregation": "COUNT(*) WHERE app_id = :app_id",
+        "scope": "app_id = :app_id",
+        "format": "number",
+        "hook": "mother_panel.stats.home"
+      },
+      {
+        "id": "sync_status",
+        "label": "حالة المزامنة مع لوحة الأم",
+        "source": "sync_log",
+        "aggregation": "آخر حالة WHERE app_id = :app_id ORDER BY created_at DESC LIMIT 1",
+        "scope": "app_id = :app_id",
+        "format": "status",
+        "hook": "mother_panel.stats.home"
+      }
+    ]
+  },
+  "admin_boards": {
+    "section_label": "لوحات الإدارة",
+    "each_board_has_own_card": true,
+    "each_app_separate": true,
+    "no_cross_app_aggregation": true,
+    "cards_source": "boards JOIN board_stats ON boards.app_id = board_stats.app_id",
+    "card_stats": [
+      "users_count",
+      "downloads_count",
+      "licenses_count",
+      "ratings_count",
+      "rating_avg",
+      "visits_count"
+    ],
+    "card_fields": [
+      "name",
+      "icon_path",
+      "app_id",
+      "active"
+    ],
+    "hook": "mother_panel.boards.cards"
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

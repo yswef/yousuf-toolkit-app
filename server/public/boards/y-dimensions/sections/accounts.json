@@ -1,0 +1,21 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "accounts",
+  "label": "الحسابات",
+  "view": "views/accounts.html",
+  "hook": "mother_panel.accounts.list",
+  "users_table": "users (الموحّد في لوحة الأم)",
+  "create_local_users_table": false,
+  "auto_account_in_other_apps": false,
+  "new_account_per_app": true,
+  "same_email_allowed": true,
+  "unique_key": [
+    "app_id",
+    "email"
+  ],
+  "scope": "app_id = y-dimensions",
+  "register_hook": "mother_panel.accounts.register",
+  "note": "من يسجّل في Y- Dimensions ليس له حساب تلقائي في التطبيقات الأخرى؛ ينشئ حساباً جديداً في كل تطبيق بنفس البريد الإلكتروني المسموح به",
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

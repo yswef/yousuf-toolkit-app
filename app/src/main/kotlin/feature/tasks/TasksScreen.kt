@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 
 package feature.tasks
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,6 +41,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -56,11 +59,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.FormDialog
+import core.design.InfoCard
+import core.design.V3CheckCircle
+import core.design.V3Chip
+import core.design.V3Group
+import core.design.V3SectionHeader
 import core.design.ScreenScaffold
 import data.local.LocalStore
 import domain.model.Priority
@@ -176,10 +185,10 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
                             TaskFilter.DONE to R.string.task_filter_done
                         ), key = { it.first.name }
                     ) { pair ->
-                        FilterChip(
+                        V3Chip(
+                            label = stringResource(pair.second),
                             selected = filter == pair.first,
-                            onClick = { filter = pair.first },
-                            label = { Text(stringResource(pair.second)) }
+                            onClick = { filter = pair.first }
                         )
                     }
                 }
@@ -202,8 +211,24 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
                 }
             }
             if (filter == TaskFilter.DONE) {
-                items(done.sortedByDescending { it.createdAt }, key = { it.id }) { task ->
-                    TaskRow(task, Modifier.animateItem(), onToggle = { toggle(task) }, onDelete = { remove(task) })
+                if (done.isEmpty()) {
+                    item {
+                        InfoCard(text = stringResource(R.string.task_none))
+                    }
+                } else {
+                    item(key = "done-group") {
+                        V3Group {
+                            done.sortedByDescending { it.createdAt }.forEachIndexed { index, task ->
+                                if (index > 0) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(horizontal = 16.dp),
+                                        color = MaterialTheme.colorScheme.outlineVariant
+                                    )
+                                }
+                                TaskRow(task, Modifier, onToggle = { toggle(task) }, onDelete = { remove(task) })
+                            }
+                        }
+                    }
                 }
             } else {
                 val visible = when (filter) {
@@ -222,15 +247,20 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
                 buckets.forEach { bucket ->
                     if (bucket.second.isNotEmpty()) {
                         item(key = "head-${bucket.first}-${filter.name}") {
-                            Text(
-                                stringResource(bucket.first),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(top = 8.dp, bottom = 2.dp)
-                            )
+                            V3SectionHeader(title = stringResource(bucket.first))
                         }
-                        items(bucket.second, key = { "t-${it.id}-${filter.name}" }) { task ->
-                            TaskRow(task, Modifier.animateItem(), onToggle = { toggle(task) }, onDelete = { remove(task) })
+                        item(key = "group-${bucket.first}-${filter.name}") {
+                            V3Group {
+                                bucket.second.forEachIndexed { index, task ->
+                                    if (index > 0) {
+                                        HorizontalDivider(
+                                            modifier = Modifier.padding(horizontal = 16.dp),
+                                            color = MaterialTheme.colorScheme.outlineVariant
+                                        )
+                                    }
+                                    TaskRow(task, Modifier, onToggle = { toggle(task) }, onDelete = { remove(task) })
+                                }
+                            }
                         }
                     }
                 }
@@ -281,19 +311,18 @@ fun TasksScreen(onBack: () -> Unit = {}, onMore: () -> Unit = {}, embedded: Bool
 
 @Composable
 private fun TaskRow(task: Task, modifier: Modifier = Modifier, onToggle: () -> Unit, onDelete: () -> Unit) {
-  SwipeActionRow(modifier = modifier, onSwipeStart = onToggle, onSwipeEnd = onDelete) {
-    Card(Modifier.fillMaxWidth()) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier
-                    .padding(start = 10.dp)
-                    .width(4.dp)
-                    .height(42.dp)
-                    .clip(RoundedCornerShape(2.dp))
-                    .background(priorityColor(task.priority))
-            )
-            Checkbox(checked = task.done, onCheckedChange = { onToggle() })
-            Column(Modifier.weight(1f).padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+    SwipeActionRow(modifier = modifier, onSwipeStart = onToggle, onSwipeEnd = onDelete) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .clickable(role = Role.Button, onClick = onToggle)
+                .padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            V3CheckCircle(task.done)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(
                     task.title,
                     style = MaterialTheme.typography.bodyLarge,
@@ -315,7 +344,6 @@ private fun TaskRow(task: Task, modifier: Modifier = Modifier, onToggle: () -> U
             }
         }
     }
-  }
 }
 
 @Composable
@@ -386,3 +414,5 @@ private fun dueLabel(at: Long): String {
 
 private fun dayOf(at: Long): LocalDate? =
     if (at <= 0L) null else Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).toLocalDate()
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

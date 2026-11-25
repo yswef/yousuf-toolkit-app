@@ -1,0 +1,15 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
+<section class="panel" data-hook="mother_panel.accounts.list">
+<h2>الحسابات — Y- Dimensions فقط</h2>
+<p>الجدول الموحّد <code>users</code> في لوحة الأم. لا جدول مستخدمين محلي، ولا حساب تلقائي في التطبيقات الأخرى.</p>
+<ul>
+  <li>حساب جديد مستقل لكل تطبيق، والمفتاح الفريد <code>(app_id, email)</code>.</li>
+  <li>نفس البريد الإلكتروني مسموح به في أكثر من تطبيق.</li>
+  <li>التسجيل يتم عبر <code>mother_panel.accounts.register</code>.</li>
+</ul>
+<table data-repeat="mother_panel.accounts.list">
+  <thead><tr><th>المعرّف</th><th>البريد الإلكتروني</th><th>التطبيق</th><th>تاريخ الإنشاء</th></tr></thead>
+  <tbody><tr><td>{{row.id}}</td><td>{{row.email}}</td><td>{{row.app_id}}</td><td>{{row.created_at}}</td></tr></tbody>
+</table>
+</section>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->

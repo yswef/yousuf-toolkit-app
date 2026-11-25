@@ -1,0 +1,15 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
+<section class="panel" data-hook="mother_panel.licenses.list">
+<h2>التراخيص — مكان واحد عبر لوحة الأم</h2>
+<p class="hint">إنشاء وإلغاء وتفعيل ترخيص للتطبيقات المدفوعة، كلها تنفّذها لوحة الأم في <code>board_licenses</code>. لا مفتاح ولا توليد محلي.</p>
+<div class="actions">
+  <button data-action="mother_panel.licenses.create">إنشاء ترخيص</button>
+  <button data-action="mother_panel.licenses.activate">تفعيل ترخيص</button>
+  <button data-action="mother_panel.licenses.revoke">إلغاء ترخيص</button>
+</div>
+<table data-repeat="mother_panel.licenses.list">
+  <thead><tr><th>المعرّف</th><th>المستخدم</th><th>الحالة</th><th>الإنشاء</th><th>التفعيل</th><th>الإلغاء</th></tr></thead>
+  <tbody><tr><td>{{row.id}}</td><td>{{row.user_id}}</td><td>{{row.status}}</td><td>{{row.created_at}}</td><td>{{row.activated_at}}</td><td>{{row.revoked_at}}</td></tr></tbody>
+</table>
+</section>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->

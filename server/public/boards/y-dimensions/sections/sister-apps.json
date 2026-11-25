@@ -1,0 +1,31 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "sister_apps",
+  "label": "التطبيقات الأخرى",
+  "view": "views/sister-apps.html",
+  "hook": "mother_panel.apps.sisters",
+  "description": "قسم في التطبيق يعرض التطبيقات الأخرى الموجودة عند المطوّر يوسف الحمزي كروابط وبطاقات للتطبيقات الشقيقة",
+  "source": "apps",
+  "filter": {
+    "developer": "يوسف الحمزي",
+    "exclude_app_id": "y-dimensions",
+    "active": 1
+  },
+  "no_hardcoded_apps": true,
+  "card_fields": [
+    "name",
+    "type",
+    "icon_path",
+    "url",
+    "board_card_url",
+    "version"
+  ],
+  "delivery": {
+    "target": "app.mobile",
+    "via": "mother_panel.app_config.sister_apps",
+    "app_source_change": false,
+    "note": "يُضاف القسم داخل التطبيق عبر إعدادات لوحة الأم، بلا تعديل أي ملف خارج نطاق هذه اللوحة"
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package com.yousuf.toolkit
 
 import android.os.Bundle
@@ -27,10 +28,12 @@ class MainActivity : ComponentActivity() {
             val ui = remember { UiState(applicationContext, systemDark) }
             SideEffect { ui.systemDark = systemDark }
             CompositionLocalProvider(LocalStore provides store) {
-                AppTheme(mode = ui.mode, dark = ui.dark, accent = store.accent) {
+                AppTheme(mode = ui.mode, dark = ui.dark, accent = store.accent, fontScale = ui.fontScale, motion = ui.effectiveMotion) {
                     AppNav(ui = ui)
                 }
             }
         }
     }
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

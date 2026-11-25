@@ -1,8 +1,11 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package core.config
 
 import android.content.Context
 import android.util.Log
 import org.json.JSONObject
+
+data class SisterApp(val name: String, val url: String, val icon: String = "")
 
 data class AppConfig(
     val energyMax: Int,
@@ -24,7 +27,10 @@ data class AppConfig(
     val freezeCost: Int = 30,
     val weeklyRaidTarget: Int = 7,
     val monthlyChallengeTarget: Int = 30,
-    val ranks: List<Pair<String, Int>> = emptyList()
+    val ranks: List<Pair<String, Int>> = emptyList(),
+    val developerName: String = "",
+    val developerEmail: String = "",
+    val sisterApps: List<SisterApp> = emptyList()
 ) {
     companion object {
         fun load(context: Context): AppConfig = try {
@@ -43,6 +49,16 @@ data class AppConfig(
                     val item = rankArray.optJSONObject(i) ?: continue
                     val key = item.optString("key")
                     if (key.isNotBlank()) ranks.add(key to item.optInt("level", 1))
+                }
+            }
+            val developer = root.optJSONObject("developer")
+            val sisterArray = root.optJSONArray("sister_apps")
+            val sisters = ArrayList<SisterApp>()
+            if (sisterArray != null) {
+                for (i in 0 until sisterArray.length()) {
+                    val item = sisterArray.optJSONObject(i) ?: continue
+                    val name = item.optString("name")
+                    if (name.isNotBlank()) sisters.add(SisterApp(name, item.optString("url"), item.optString("icon", "")))
                 }
             }
             val env = runCatching {
@@ -68,7 +84,10 @@ data class AppConfig(
                 freezeCost = game.optInt("freezeCost", 30),
                 weeklyRaidTarget = game.optInt("weeklyRaidTarget", 7),
                 monthlyChallengeTarget = game.optInt("monthlyChallengeTarget", 30),
-                ranks = ranks.sortedBy { it.second }
+                ranks = ranks.sortedBy { it.second },
+                developerName = developer?.optString("name", "") ?: "",
+                developerEmail = developer?.optString("email", "") ?: "",
+                sisterApps = sisters
             )
         } catch (t: Throwable) {
             Log.e("AppConfig", "Failed to load app.json", t)
@@ -76,3 +95,5 @@ data class AppConfig(
         }
     }
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension

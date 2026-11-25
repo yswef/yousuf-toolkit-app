@@ -1,0 +1,22 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.section/1.0",
+  "id": "reviews",
+  "label": "المدونة الموحّدة",
+  "view": "views/reviews.html",
+  "hook": "mother_panel.blog.list",
+  "single_unified_blog": true,
+  "per_app_blogs": false,
+  "merged_with_comments_blog": true,
+  "tables": [
+    "posts",
+    "board_comments",
+    "board_stats"
+  ],
+  "content": "آراء وتقييمات العملاء عن التطبيقات",
+  "scope": "app_id = y-dimensions",
+  "add_review_hook": "mother_panel.blog.comment",
+  "audit_hook": "mother_panel.audit.write",
+  "note": "مدونات التطبيقات ومدونة التعليقات موحّدة في مدونة واحدة في اللوحة",
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

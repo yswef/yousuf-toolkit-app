@@ -1,0 +1,14 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
+<section class="panel" data-hook="mother_panel.apps.sisters" data-surface="mobile">
+<h2>التطبيقات الأخرى</h2>
+<p class="hint">بطاقات وروابط للتطبيقات الشقيقة عند المطوّر يوسف الحمزي، تُحمّل من جدول <code>apps</code> عبر لوحة الأم وتُعرض داخل تطبيق الموبايل.</p>
+<div class="cards" data-repeat="mother_panel.apps.sisters">
+  <a class="card app-card" href="{{row.url}}">
+    <img src="{{row.icon_path}}" alt="أيقونة {{row.name}}" class="app-icon">
+    <h3>{{row.name}}</h3>
+    <p class="muted">{{row.type}} • {{row.version}}</p>
+    <span data-action="mother_panel.boards.open" data-board-id="{{row.board_card_url}}">بطاقة اللوحة</span>
+  </a>
+</div>
+</section>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->

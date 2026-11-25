@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package core.design
 
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -6,6 +7,10 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
@@ -13,6 +18,16 @@ import androidx.compose.ui.unit.dp
 enum class UiMode {
     PROFESSIONAL,
     SIMPLE
+}
+
+enum class MotionLevel { FULL, LIGHT, NONE }
+
+val LocalMotionLevel = compositionLocalOf { MotionLevel.FULL }
+
+fun MotionLevel.ms(full: Int): Int = when (this) {
+    MotionLevel.FULL -> full
+    MotionLevel.LIGHT -> (full / 2).coerceAtLeast(80)
+    MotionLevel.NONE -> 0
 }
 
 private val LightScheme = lightColorScheme(
@@ -98,6 +113,8 @@ fun AppTheme(
     mode: UiMode,
     dark: Boolean,
     accent: String = Accent.VIOLET.key,
+    fontScale: Float = 1f,
+    motion: MotionLevel = MotionLevel.FULL,
     content: @Composable () -> Unit
 ) {
     val base = if (dark) DarkScheme else LightScheme
@@ -110,5 +127,11 @@ fun AppTheme(
         onPrimaryContainer = if (dark) lerp(tint, Color.White, 0.65f) else lerp(tint, Color.Black, 0.65f)
     )
     val type = if (mode == UiMode.SIMPLE) simpleType() else professionalType()
-    MaterialTheme(colorScheme = colors, typography = type, shapes = AppShapes, content = content)
+    val density = LocalDensity.current
+    val scaled = Density(density.density, density.fontScale * fontScale.coerceIn(1f, 1.3f))
+    CompositionLocalProvider(LocalDensity provides scaled, LocalMotionLevel provides motion) {
+        MaterialTheme(colorScheme = colors, typography = type, shapes = AppShapes, content = content)
+    }
 }
+
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
