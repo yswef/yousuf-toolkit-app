@@ -193,6 +193,8 @@ class Store(context: Context) {
         private set
     var lockEpoch by mutableStateOf(0)
         private set
+    var rightsAccepted by mutableStateOf(false)
+        private set
     var campaigns by mutableStateOf<List<Campaign>>(emptyList())
         private set
     var accounts by mutableStateOf<List<AccountItem>>(emptyList())
@@ -980,6 +982,11 @@ class Store(context: Context) {
         save()
     }
 
+    fun acceptRights() {
+        rightsAccepted = true
+        save()
+    }
+
     fun setAppLock(type: String, secret: String): Boolean {
         if (type !in listOf("pattern", "pin", "password")) return false
         val min = if (type == "password") 6 else 4
@@ -1465,6 +1472,7 @@ class Store(context: Context) {
         root.put("lockSecretHash", lockSecretHash)
         root.put("lockSalt", lockSalt)
         root.put("biometricEnabled", biometricEnabled)
+        root.put("rightsAccepted", rightsAccepted)
         root.put("campaigns", JSONArray().apply {
             campaigns.forEach { c ->
                 put(JSONObject().apply {
@@ -1786,6 +1794,7 @@ class Store(context: Context) {
             lockSecretHash = root.optString("lockSecretHash", "")
             lockSalt = root.optString("lockSalt", "")
             biometricEnabled = root.optBoolean("biometricEnabled", false)
+            rightsAccepted = root.optBoolean("rightsAccepted", false)
             campaigns = root.optJSONArray("campaigns").mapObjects {
                 Campaign(
                     id = it.optLong("id"),
