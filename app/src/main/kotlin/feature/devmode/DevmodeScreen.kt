@@ -96,7 +96,7 @@ fun DevmodeScreen(onBack: () -> Unit, onFeature: (String) -> Unit = {}) {
     }
 
     suspend fun perform(test: DevTest): String {
-        when (test.action) {
+        return when (test.action) {
             "add_task" -> { store.addTask("اختبار مطور", "من وضع المطور", Priority.NORMAL); "أُضيفت مهمة اختبار" }
             "add_ledger" -> { store.addLedger("اختبار مال", 1.0, true, "اختبار"); "أُضيفت عملية مالية" }
             "add_workout" -> { store.addWorkout("مشى", 10); "أُضيف تمرين" }

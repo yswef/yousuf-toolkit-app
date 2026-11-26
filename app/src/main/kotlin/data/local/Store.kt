@@ -204,6 +204,8 @@ class Store(context: Context) {
     val level: Int
         get() = if (config.xpPerLevel <= 0) 1 else xp / config.xpPerLevel + 1
 
+    val faithDaysCount: Int get() = faithDays.size
+
     val levelProgress: Float
         get() = if (config.xpPerLevel <= 0) 0f else (xp % config.xpPerLevel) / config.xpPerLevel.toFloat()
 

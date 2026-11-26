@@ -113,7 +113,7 @@ object DevTests {
         "journal" -> "يوميات: ${store.journal.size}"
         "water" -> "أيام ماء: ${store.water.size}"
         "sleep" -> "سجلات نوم: ${store.sleep.size}"
-        "faithDays" -> "أيام إيمان: ${store.faithDays.size}"
+        "faithDays" -> "أيام إيمان: ${store.faithDaysCount}"
         "learn" -> "دروس: ${store.learn.size}"
         "books" -> "كتب: ${store.books.size}"
         "points" -> "نقاط: ${store.points} · XP: ${store.xp}"
