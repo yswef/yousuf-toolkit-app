@@ -312,6 +312,10 @@ private fun VoiceCard(onSaved: () -> Unit) {
         if (!granted) status = context.getString(R.string.life_note_mic_denied)
     }
     fun start() {
+        if (!store.premium) {
+            status = context.getString(R.string.learn_voice_premium_needed)
+            return
+        }
         if (androidx.core.content.ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
             permission.launch(Manifest.permission.RECORD_AUDIO)
             return
@@ -340,8 +344,9 @@ private fun VoiceCard(onSaved: () -> Unit) {
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.life_note_audio), style = MaterialTheme.typography.titleMedium)
+            if (!store.premium) Text(stringResource(R.string.learn_voice_premium_needed), style = MaterialTheme.typography.bodySmall)
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                OutlinedButton(onClick = { if (recorder == null) start() else stop() }) {
+                OutlinedButton(onClick = { if (recorder == null) start() else stop() }, enabled = recorder != null || store.premium) {
                     Text(stringResource(if (recorder == null) R.string.life_note_record else R.string.life_note_stop))
                 }
             }
