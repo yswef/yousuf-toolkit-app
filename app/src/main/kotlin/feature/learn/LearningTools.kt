@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.yousuf.toolkit.R
+import core.net.Api
+import core.net.LearningPlanSummary
 import data.local.LocalStore
 import domain.model.LearningPlan
 import kotlinx.coroutines.Dispatchers
@@ -106,6 +109,17 @@ fun LearningImportCard() {
             result.onSuccess { draft ->
                 val plan = store.importLearningPlan(draft)
                 status = context.getString(R.string.learn_import_done, plan.title.ifBlank { context.getString(R.string.learn_unknown) })
+                if (store.authToken.isNotBlank()) {
+                    val uploaded = runCatching {
+                        Api.uploadLearningPlan(Api.normalizeBase(store.serverUrl), store.authToken, plan)
+                    }
+                    uploaded.onSuccess { id ->
+                        if (id > 0L) {
+                            store.markLearningPlanUploaded(plan.id, id)
+                            status = context.getString(R.string.learn_upload_done)
+                        }
+                    }.onFailure { status = context.getString(R.string.learn_upload_failed) }
+                }
             }.onFailure {
                 status = context.getString(R.string.learn_import_failed)
             }
@@ -126,6 +140,9 @@ fun LearningImportCard() {
 @Composable
 fun LearningPlansCard() {
     val store = LocalStore.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var planStatus by remember { mutableStateOf("") }
     var viewing by remember { mutableStateOf<LearningPlan?>(null) }
     val unknown = stringResource(R.string.learn_unknown)
     Card(Modifier.fillMaxWidth()) {
@@ -144,6 +161,21 @@ fun LearningPlansCard() {
                             item {
                                 TextButton(onClick = { viewing = plan }) { Text(stringResource(R.string.learn_plan_view_site)) }
                             }
+                            item {
+                                TextButton(onClick = {
+                                    scope.launch {
+                                        val uploaded = runCatching {
+                                            Api.uploadLearningPlan(Api.normalizeBase(store.serverUrl), store.authToken, plan)
+                                        }
+                                        uploaded.onSuccess { id ->
+                                            if (id > 0L) {
+                                                store.markLearningPlanUploaded(plan.id, id)
+                                                planStatus = context.getString(R.string.learn_upload_done)
+                                            } else planStatus = context.getString(R.string.learn_upload_failed)
+                                        }.onFailure { planStatus = context.getString(R.string.learn_upload_failed) }
+                                    }
+                                }, enabled = store.authToken.isNotBlank()) { Text(stringResource(R.string.learn_upload_button)) }
+                            }
                             items(plan.lessons, key = { it.id }) { lesson ->
                                 TextButton(onClick = { store.toggleLearningLesson(plan.id, lesson.id) }) {
                                     Text(if (lesson.done) stringResource(R.string.learn_lesson_undo) else stringResource(R.string.learn_lesson_done))
@@ -153,9 +185,47 @@ fun LearningPlansCard() {
                     }
                 }
             }
+            if (planStatus.isNotBlank()) Text(planStatus, style = MaterialTheme.typography.bodySmall)
         }
     }
     viewing?.let { plan -> LearningPlanViewerDialog(plan = plan, onDismiss = { viewing = null }) }
+}
+
+@Composable
+fun ReadyPlansCard() {
+    val store = LocalStore.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var plans by remember { mutableStateOf(listOf<LearningPlanSummary>()) }
+    var status by remember { mutableStateOf("") }
+    LaunchedEffect(store.serverUrl) {
+        plans = runCatching { Api.readyLearningPlans(Api.normalizeBase(store.serverUrl)) }.getOrDefault(emptyList())
+    }
+    Card(Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.learn_ready_title), style = MaterialTheme.typography.titleMedium)
+            if (plans.isEmpty()) Text(stringResource(R.string.learn_ready_empty), style = MaterialTheme.typography.bodySmall)
+            plans.forEach { summary ->
+                Column {
+                    Text(summary.title.ifBlank { stringResource(R.string.learn_unknown) }, style = MaterialTheme.typography.titleSmall)
+                    Text(stringResource(R.string.learn_plan_course_type, summary.courseType.ifBlank { summary.category }.ifBlank { stringResource(R.string.learn_unknown) }), style = MaterialTheme.typography.bodySmall)
+                    TextButton(onClick = {
+                        scope.launch {
+                            val result = runCatching { Api.learningPlan(Api.normalizeBase(store.serverUrl), summary.serverId) }
+                            val plan = result.getOrNull()
+                            if (plan != null) {
+                                store.upsertReadyPlan(plan)
+                                status = context.getString(R.string.learn_ready_done)
+                            } else {
+                                status = context.getString(R.string.learn_ready_failed)
+                            }
+                        }
+                    }) { Text(stringResource(R.string.learn_ready_download)) }
+                }
+            }
+            if (status.isNotBlank()) Text(status, style = MaterialTheme.typography.bodySmall)
+        }
+    }
 }
 
 private fun statusLabel(status: String): Int = when (status) {
