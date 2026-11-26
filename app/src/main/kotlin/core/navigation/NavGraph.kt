@@ -27,6 +27,7 @@ import feature.faith.FaithScreen
 import feature.firewall.FirewallScreen
 import feature.forum.ForumScreen
 import feature.apps.AppsScreen
+import feature.auth.AppLockSettingsScreen
 import feature.auth.AuthGateScreen
 import feature.game.GameScreen
 import feature.git.GitScreen
@@ -169,6 +170,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.GAME) { GameScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.JOURNAL) { JournalScreen(onBack = { nav.popBackStack() }, onAdd = { nav.navigate(Routes.JOURNAL_EDITOR) }) }
         composable(Routes.JOURNAL_EDITOR) { JournalEditorScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.APPLOCK) { AppLockSettingsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LEARN) { LearnScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }, onPdf = { nav.navigate(Routes.PDFREADER) }) }
         composable(Routes.LICENSE) { LicenseScreen(onBack = { nav.popBackStack() }) }
