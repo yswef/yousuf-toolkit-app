@@ -29,6 +29,7 @@ object Routes {
     const val FORUM = "forum"
     const val GAME = "game"
     const val JOURNAL = "journal"
+    const val JOURNAL_EDITOR = "journal_editor"
     const val LEARN = "learn"
     const val LIBRARY = "library"
     const val LICENSE = "license"
