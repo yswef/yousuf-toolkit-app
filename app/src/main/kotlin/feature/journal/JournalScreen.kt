@@ -132,6 +132,7 @@ private fun EntryRow(entry: JournalEntry, onDelete: () -> Unit) {
                     Text(dateText(entry.at, entry.hasTime), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     if (entry.mood.isNotBlank()) Text(stringResource(R.string.journal_mood_value, entry.mood), style = MaterialTheme.typography.bodySmall)
                     Text(stringResource(R.string.journal_background_value, names.getOrNull(backgroundIndex).orEmpty()), style = MaterialTheme.typography.bodySmall)
+                    if (entry.voicePath.isNotBlank()) Text(stringResource(R.string.journal_voice_attached), style = MaterialTheme.typography.bodySmall)
                 }
                 IconButton(onClick = onDelete) {
                     Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete))
