@@ -8,5 +8,6 @@ respond([
     'ok' => true,
     'name' => 'y-dimension',
     'time' => time(),
-    'version' => '0.5.0',
+    'version' => '0.16.2',
+    'panel' => 'panel/',
 ]);

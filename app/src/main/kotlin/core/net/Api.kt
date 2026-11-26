@@ -196,9 +196,14 @@ object Api {
             val failure = probe.exceptionOrNull()
             if (failure is ApiException) {
                 val msg = failure.message ?: NETWORK_ERROR
-                return@withContext when (msg) {
-                    SERVER_HTML, NETWORK_ERROR, BAD_JSON, INVALID_BASE -> msg
-                    else -> "ok"
+                val benign = setOf(
+                    "use POST", "unknown action", "missing token", "invalid json",
+                    "invalid credentials", "invalid name", "invalid email", "password too short"
+                )
+                return@withContext when {
+                    msg == SERVER_HTML || msg == NETWORK_ERROR || msg == BAD_JSON || msg == INVALID_BASE -> msg
+                    msg in benign -> "ok"
+                    else -> msg
                 }
             }
             if (probe.isSuccess) "ok" else NETWORK_ERROR

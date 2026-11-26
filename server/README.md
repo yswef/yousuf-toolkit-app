@@ -7,12 +7,14 @@
 1. انسخ `config/config.example.php` إلى `config/config.php` واملأ `db` و`base_url`.
 2. `allowed_origins` لقائمة أصول الويب المسموح لها، واتركها فارغة لتطبيق أندرويد.
 3. استورد `migrations/001_init.sql` في قاعدة البيانات.
-4. اجعل جذر النطاق `server/public`، لا `server/`؛ مجلدات الإعداد والمصدر محمية بـ `.htaccess`.
+4. اجعل جذر النطاق `server/public`، لا `server/`؛ مجلدات الإعداد والمصدر محمية بـ `.htaccess`. المجلد الواحد يضم `api/` و`admin/` و`panel/` و`boards/`؛ **اللوحة الأساسية التنفيذية هي `panel/`** (الواجهة، تنفيذ الأوامر، التطبيقات، الكتب، الأيقونة، التعبئة التلقائية للحقول).
 5. أضف عناصر المتجر ومواسم الغارات من SQL؛ لا توجد بيانات تجريبية مبطّنة.
 
 ## نقاط النهاية
 
-- `GET /` فحص صحة.
+- `GET /` فحص صحة (يعيد أيضاً `panel/`).
+- `GET /panel/` اللوحة الأساسية: الرئيسية، التطبيقات، الكتب، الأدوات والجداول، المستخدمون، التراخيص، الآراء، تنفيذ الأوامر، الحقول التلقائية، الـ API. نفس `admin_token` و`yd_admin`.
+- `GET /panel/api/*.php` محوّلات إلى نقاط `/api/*.php` الحقيقية، ليصلح `/panel` كعنوان API للتطبيق.
 - `POST /api/auth.php?action=register|login|logout|forgot`.
 - `POST /api/sync.php` مع `Authorization: Bearer <token>`.
 - `GET|POST /api/forum.php?action=threads|posts|new_thread|new_post`.
@@ -22,6 +24,6 @@
 - `GET|POST /api/license.php`.
 - `GET|POST /admin/` لوحة إدارة محمية بـ `admin_token`، وكلها في مجلد واحد `public/admin/` (انظر `public/admin/README.md`).
 
-نشر هوستنجر: `HOSTINGER.md`.
+نشر هوستنجر: `HOSTINGER.md`. شرح اللوحة الأساسية ولماذا تُملأ الحقول تلقائياً: `public/panel/README.md`. توليد بياناتها: `python3 tools/build_panel_data.py`.
 
 الحقول الزمنية كلها Unix UTC بالثواني. الخزنة تستقبل حمولة مشفّرة من الجهاز كما هي ولا يفكّه الخادم.

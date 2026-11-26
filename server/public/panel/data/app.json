@@ -1,0 +1,93 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "energy": {
+    "max": 100,
+    "costPerTask": 10,
+    "restGain": 20
+  },
+  "points": {
+    "task": 10,
+    "workout": 15,
+    "water": 5,
+    "faith": 20,
+    "learn": 10,
+    "reading": 5,
+    "sleep": 5
+  },
+  "levels": {
+    "xpPerLevel": 100
+  },
+  "daily": {
+    "waterGoal": 8,
+    "sleepGoalHours": 8
+  },
+  "updater": {
+    "latestReleaseUrl": "https://api.github.com/repos/yswef/yousuf-toolkit-app/releases/latest"
+  },
+  "game": {
+    "shieldCost": 50,
+    "freezeCost": 30,
+    "weeklyRaidTarget": 7,
+    "monthlyChallengeTarget": 30,
+    "ranks": [
+      {
+        "key": "novice",
+        "level": 1
+      },
+      {
+        "key": "apprentice",
+        "level": 3
+      },
+      {
+        "key": "knight",
+        "level": 5
+      },
+      {
+        "key": "lieutenant",
+        "level": 7
+      },
+      {
+        "key": "captain",
+        "level": 8
+      },
+      {
+        "key": "mage",
+        "level": 12
+      },
+      {
+        "key": "sage",
+        "level": 16
+      },
+      {
+        "key": "emperor",
+        "level": 20
+      }
+    ]
+  },
+  "developer": {
+    "name": "يوسف الحمزي",
+    "email": "yswefalhmzy@gmail.com"
+  },
+  "sister_apps": [],
+  "app": {
+    "id": "y-dimensions",
+    "name": "Y- Dimensions",
+    "type": "mobile",
+    "version": "0.16.2",
+    "version_code": 20,
+    "icon": "assets/icon.svg",
+    "developer_name": "يوسف الحمزي",
+    "developer_email": "yswefalhmzy@gmail.com",
+    "api_base": "https://yousef.romoozbasmah.com",
+    "tags": [
+      "أدوات",
+      "مهام",
+      "مال",
+      "صحة",
+      "كتب سحرية",
+      "موبايل"
+    ],
+    "description": "تطبيق Y- Dimensions: مهام، مال، عادات، كتب سحرية، وأدوات الجهاز في واجهة عربية سهلة."
+  },
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}
