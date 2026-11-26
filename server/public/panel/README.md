@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
@@ -98,3 +99,10 @@ python3 server/tools/build_panel_data.py
 - `sister_apps` فارغ حالياً؛ أضف البطاقات في `data/app.json` لتظهر في تبويب «التطبيقات» تلقائياً.
 - اللوحة التابعة `boards/y-dimensions/` لم تُلمس: بصماتها و`VERIFY 13/13` سليمة.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->
+
+
+## جديد 0.18.0
+- تبويبات: **المشرفون والمطورون** (تعيين مستخدمين + حتى 3 حسابات مشرف مع تبديل/خروج/دخول بحساب آخر)، **اختبارات المطور** (62 اختباراً يدوياً)، **بلاغات التشخيص**.
+- صلاحية وضع المطور في التطبيق تأتي من `devmode.php?action=status` فقط.
+- التحديثات الفرعية تضيف `devmode_tests.json` و`releases.json`.
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

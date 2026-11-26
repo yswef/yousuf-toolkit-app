@@ -115,6 +115,14 @@ def main():
     shutil.copyfile(
         ROOT / "app/src/main/res/mipmap-xxxhdpi/ic_launcher.png", ASSETS / "icon.png"
     )
+    for extra in ("releases.json", "devmode_tests.json"):
+        src = ROOT / "config" / extra
+        if src.is_file():
+            data = json.loads(src.read_text(encoding="utf-8"))
+            if "__developer_signature__" not in data:
+                data = signed_json(collections.OrderedDict(data))
+            text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+            (DATA / extra).write_text(text, encoding="utf-8")
     print(f"panel data rebuilt: {catalog['count']} books, {len(catalog['sections'])} sections, version {name} ({code})")
 
 

@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
 # MOTHER_PANEL_HANDOFF.md — من لوحة تحكم Y- Dimensions إلى موديل لوحة التحكم الأم
@@ -74,3 +75,14 @@
 7. كتابة تقرير تحقق موقّت باسم `VERIFY.md`.
 
 **لا تخترع قيماً حسّاسة.** اطلب `config.php` و`admin_token` و`license_secret` وتوقيع APK من المطوّر.
+
+
+## 9. تحديث 0.18.0 — المطورون والاختبارات والحسابات والتشخيص
+- أضف تبويب **«المشرفون والمطورون»**: تعيين مستخدم من `users` كـ `developer`/`admin` في الجدول الجديد غير المكرر `developer_accounts`، وحسابات لوحة تحكم (حد أقصى 3) في `panel_admins`.
+- أضف تبويب **«اختبارات المطور»** من `config/devmode_tests.json` (62 اختباراً يدوياً) مع تمكين/تعطيل كل اختبار.
+- أضف تبويب **«بلاغات التشخيص»**؛ استقبل البلاغات المجهّلة في `diagnostic_reports` وطابق `diagnostic_solutions` قبل إعادة التشخيص.
+- التطبيق: `devmode.php?action=status` يغلق وضع المطور لغير المصرّح له؛ `diagnostics.php` لل_match/report/list.
+- التطبيق: تبديل حتى 3 حسابات مع نسخة حالة لكل حساب؛ وضع المطور بأربعة أقسام (اختبارات يدوية، رجوع، بيانات، فوارق الإصدارات).
+- الترحيل `004_devmode.sql` مطلوب قبل إعلان الاكتمال؛ `users` بقي موحّداً ولم يتكرر.
+- برومت مساعد التشخيص الكامل محفوظ في `docs/diagnostics/SYSTEM_PROMPT.md` ومنفّذ في `core/diagnostics/`.
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

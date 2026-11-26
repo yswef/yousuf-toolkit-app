@@ -112,5 +112,57 @@
     <string name="update_permission">اسمح بتثبيت التطبيقات من هذا المصدر.</string>
     <string name="update_sub_ok">سُحبت التحديثات الفرعية: %1$d ملف.</string>
     <string name="update_signature">تم توحيد توقيع كل القنوات كي لا تُطلب الصلاحيات مجدداً بعد التحديث.</string>
+    <string name="accounts_max">الحسابات المحفوظة: %1$d من %2$d (الحد الأقصى 3)</string>
+    <string name="accounts_none">لا توجد حسابات محفوظة على هذا الجهاز.</string>
+    <string name="accounts_active">نشط الآن</string>
+    <string name="accounts_saved">محفوظ</string>
+    <string name="accounts_switch">تبديل</string>
+    <string name="accounts_remove">حذف</string>
+    <string name="accounts_add_another">تسجيل الدخول بحساب آخر</string>
+    <string name="accounts_logout">تسجيل الخروج</string>
+    <string name="accounts_full">وصلت للحد الأقصى (3 حسابات). احذف حساباً أولاً.</string>
+    <string name="accounts_switched">تم تبديل الحساب.</string>
+    <string name="accounts_saved_ok">تم حفظ الحساب.</string>
+
+    <string name="devmode_locked">وضع المطور مقفل: يجب تعيين حسابك كمشرف أو مطور من لوحة التحكم أولاً.</string>
+    <string name="devmode_locked_hint">من تبويب «المشرفون والمطورون» في لوحة التحكم، عيّن المستخدم ثم أعد فتح هذا القسم.</string>
+    <string name="devmode_section_tests">1) اختبارات الميزات</string>
+    <string name="devmode_section_rollback">2) الرجوع قبل الاختبار</string>
+    <string name="devmode_section_data">3) بيانات التطبيق</string>
+    <string name="devmode_section_diff">4) فوارق الإصدارات</string>
+    <string name="devmode_tests_count">%1$d اختباراً متاحاً من أصل %2$d ميزة — يدوي، واحد لكل ميزة</string>
+    <string name="devmode_test_button">اختبار</string>
+    <string name="devmode_restore_last">الرجوع للوضع قبل آخر اختبار</string>
+    <string name="devmode_restore_session">استعادة بداية الجلسة</string>
+    <string name="devmode_restored">تم الرجوع للحالة السابقة.</string>
+    <string name="devmode_restored_all">تمت استعادة حالة بداية الجلسة.</string>
+    <string name="devmode_snapshots">نسخ محفوظة: %1$d</string>
+    <string name="devmode_diff_added">أُضيف في الإصدار الحالي</string>
+    <string name="devmode_diff_removed">كان موجوداً في الإصدار السابق فقط</string>
+    <string name="devmode_diff_fixes">إصلاحات جديدة</string>
+    <string name="devmode_diff_none">لا فروق.</string>
+    <string name="devmode_diff_source">المصدر: releases.json — يُحدَّث مع التحديثات الفرعية بلا APK.</string>
+    <string name="devmode_copied">نُسخت بيانات التطبيق.</string>
+
+    <string name="diagnostics_title">تشخيص العتاد والنظام</string>
+    <string name="diagnostics_desc">قراءات فعلية فقط: بطارية/شحن، تخزين داخلي وخارجي، واي فاي، شريحة، RAM/CPU. التقرير عربي، والإصلاحات تحتاج موافقتك، والبلاغ للخادم مجهّل بالكامل.</string>
+    <string name="diag_symptoms">الأعراض (اختر ما ينطبق)</string>
+    <string name="diag_charger_age">عمر الشاحن / ملاحظات المصدر</string>
+    <string name="diag_power_notes">ملاحظات المقبس والكابل</string>
+    <string name="diag_protector">واقي الشاشة</string>
+    <string name="diag_humidity">الحرارة/الرطوبة المحيطة</string>
+    <string name="diag_run">جمع القراءات وتشخيص</string>
+    <string name="diag_raw">البيانات الخام</string>
+    <string name="diag_known">حلول معروفة من قاعدة المطوّر</string>
+    <string name="diag_fixes">إصلاحات مقترحة (بعد موافقتك)</string>
+    <string name="diag_send">إرسال لقاعدة الحلول</string>
+    <string name="diag_sent">أُرسلت البلاغات لتحسين قاعدة الحلول المستقبلية</string>
+    <string name="diag_fixed">نُفّذ الإصلاح بعد موافقتك.</string>
+    <string name="diag_confirm_title">تأكيد الإصلاح</string>
+    <string name="diag_confirm_body">سيتم تنفيذ إجراء آمن على ملفات الكاش المؤقتة فقط، دون مساس ببياناتك الشخصية.</string>
+    <string name="diag_confirm_ok">تنفيذ</string>
+    <string name="diag_permissions_desc">تُستخدم صلاحيات الشبكة والشريحة لقراءة قيم الجهاز فقط. لا يُرسل الموقع ولا اسم الشبكة ولا رقم الهاتف ولا معرّفات الجهاز.</string>
+    <string name="diag_permissions_button">منح صلاحيات القراءة</string>
+    <string name="diag_permissions_granted">صلاحيات قراءة العتاد ممنوحة؛ أي قراءة غير مدعومة سيُشار إليها بـ«غير متاح على هذا الجهاز».</string>
 </resources>
 <!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->

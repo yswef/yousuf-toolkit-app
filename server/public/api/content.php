@@ -8,7 +8,7 @@ require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 $action = (string) ($_GET['action'] ?? 'manifest');
 $dataDir = dirname(__DIR__) . '/panel/data';
-$allowed = ['app.json', 'books.json', 'environments.json', 'requirements.json'];
+$allowed = ['app.json', 'books.json', 'environments.json', 'requirements.json', 'devmode_tests.json', 'releases.json'];
 $versionFile = dirname(__DIR__) . '/content/VERSION';
 
 if ($action === 'manifest') {

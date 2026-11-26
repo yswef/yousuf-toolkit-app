@@ -1,3 +1,4 @@
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 package feature.home
 
 import androidx.compose.ui.Modifier
@@ -33,7 +34,13 @@ fun PathScreen(onBack: () -> Unit, onFeature: (String) -> Unit) {
 }
 
 @Composable
-fun AccountScreen(onBack: () -> Unit, onFeature: (String) -> Unit, onSettings: () -> Unit, ui: UiState) {
+fun AccountScreen(
+    onBack: () -> Unit,
+    onFeature: (String) -> Unit,
+    onSettings: () -> Unit,
+    ui: UiState,
+    onLogout: () -> Unit = {}
+) {
     val store = LocalStore.current
     ScreenScaffold(title = stringResource(R.string.account_title), onBack = onBack) { padding ->
         AccountTab(
@@ -41,7 +48,9 @@ fun AccountScreen(onBack: () -> Unit, onFeature: (String) -> Unit, onSettings: (
             ui = ui,
             onFeature = onFeature,
             onSettings = onSettings,
+            onLogout = onLogout,
             modifier = Modifier.fillMaxSize().padding(padding)
         )
     }
 }
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com

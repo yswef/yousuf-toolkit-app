@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
 # handover_state
@@ -168,3 +169,11 @@
 - المطوّرون: `GitScreen` + `GitHub.kt` (REST: الفروع، الأحدث، الأساسي، المقارنة، الدمج، الإصدارات، pull/push، الأوامر) + `LocalGit.kt` يكتشف مستودعات `.git` على الجهاز ويعرض الوصف وآخر تحديث والحالة.
 - الإصدار `0.17.0` (code 21).
 
+## متابعة 2026-11-26 (د): 0.18.0 — المطورون، الاختبارات اليدوية، تبديل الحسابات، تشخيص العتاد
+- اللوحة: تعيين مستخدمين كـ admin/developer (`developer_accounts`)، حسابات مشرفين للوحة بحد أقصى 3 مع تبديل/خروج/دخول بحساب آخر (`panel_admins`)، تبويب «اختبارات المطور» (62 اختباراً مولّداً من الكود)، تبويب «بلاغات التشخيص» مع حلول معروفة.
+- التطبيق: `Store` يحفظ حتى 3 حسابات في `accounts.json` مع نسخة حالة لكل حساب؛ `AccountSwitcher` في بوابة الدخول وتبويب الحساب؛ `AuthGate` يسجّل الحساب عند الدخول.
+- `DevmodeScreen` أُعيد بناؤه بأربعة أقسام: 1) اختبارات يدوية لكل ميزة (زر اختبار بجانب بياناتها)، 2) الرجوع للوضع قبل الاختبار + نسخة بداية الجلسة، 3) بيانات التطبيق، 4) فوارق الإصدارات الحالي/السابق من `releases.json`؛ البوابة تتحقق من `devmode.php?action=status`.
+- `config/devmode_tests.json` و`config/releases.json` يُحزمان كأصول ويُحدَّثان فرعياً عبر `content.php`.
+- مساعد التشخيص: حُفظ البرومت كاملاً في `docs/diagnostics/SYSTEM_PROMPT.md`؛ `DiagnosticsCollector` يجمع قراءات فعلية (بطارية/شحن، تخزين داخلي/SD، واي فاي، شريحة، RAM/CPU)، `DiagnosticEngine` يولّد التقرير الموحّد وأوامر الإصلاح المؤكدة والحزم المجهّلة، `DiagnosticsScreen` يعرضها ويرسلها.
+- ترحيل `004_devmode.sql` (جداول جديدة غير مكررة). الإصدار `0.18.0` (code 22).
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

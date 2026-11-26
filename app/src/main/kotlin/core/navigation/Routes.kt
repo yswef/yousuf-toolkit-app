@@ -1,3 +1,4 @@
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 package core.navigation
 
 object Routes {
@@ -55,4 +56,6 @@ object Routes {
     const val MEDIA = "media"
     const val FILES = "files"
     const val GIT = "git"
+    const val DIAGNOSTICS = "diagnostics"
 }
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com

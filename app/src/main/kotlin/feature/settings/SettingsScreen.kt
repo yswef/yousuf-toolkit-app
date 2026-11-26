@@ -207,6 +207,12 @@ fun SettingsScreen(
                     divider = true,
                     onClick = { onFeature(core.navigation.Routes.GIT) }
                 )
+                V3Row(
+                    title = stringResource(R.string.diagnostics_title),
+                    icon = Icons.Filled.Info,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.DIAGNOSTICS) }
+                )
             }
 
             PermissionsSection()
