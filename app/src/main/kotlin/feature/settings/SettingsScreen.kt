@@ -157,6 +157,12 @@ fun SettingsScreen(
                     onClick = onLicense
                 )
                 V3Row(
+                    title = stringResource(R.string.applock_settings),
+                    icon = Icons.Filled.Settings,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.APPLOCK) }
+                )
+                V3Row(
                     title = stringResource(R.string.settings_tests),
                     icon = Icons.Filled.List,
                     divider = true,
