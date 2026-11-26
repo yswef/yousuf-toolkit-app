@@ -39,6 +39,7 @@ import feature.intro.IntroScreen
 import feature.journal.JournalEditorScreen
 import feature.journal.JournalScreen
 import feature.learn.LearnScreen
+import feature.legal.RightsScreen
 import feature.life.LifeScreen
 import feature.library.LibraryScreen
 import feature.license.LicenseScreen
@@ -73,7 +74,11 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
     val spec = tween<Float>(300)
     NavHost(
         navController = nav,
-        startDestination = if (store.authToken.isBlank() || !store.onboarded) Routes.AUTH else Routes.INTRO,
+        startDestination = when {
+            !store.rightsAccepted -> Routes.RIGHTS
+            store.authToken.isBlank() || !store.onboarded -> Routes.AUTH
+            else -> Routes.INTRO
+        },
         enterTransition = {
             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(320), initialOffset = { it / 3 }) + fadeIn(spec)
         },
@@ -171,6 +176,12 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.JOURNAL) { JournalScreen(onBack = { nav.popBackStack() }, onAdd = { nav.navigate(Routes.JOURNAL_EDITOR) }) }
         composable(Routes.JOURNAL_EDITOR) { JournalEditorScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.APPLOCK) { AppLockSettingsScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.RIGHTS) {
+            RightsScreen(onAccepted = {
+                val target = if (store.authToken.isBlank() || !store.onboarded) Routes.AUTH else Routes.HOME
+                nav.navigate(target) { popUpTo(Routes.RIGHTS) { inclusive = true } }
+            })
+        }
         composable(Routes.LEARN) { LearnScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }, onPdf = { nav.navigate(Routes.PDFREADER) }) }
         composable(Routes.LICENSE) { LicenseScreen(onBack = { nav.popBackStack() }) }
