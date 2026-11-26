@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Y-Dimension — التوثيق</title>
 <style>
 :root{--bg:#fbf9ff;--fg:#1b1a24;--card:#fff;--pri:#6c4cf1;--bd:#d8d3e6;--mu:#5e5a6e;--sv:#f0ecf8}
@@ -10,11 +11,12 @@ code,pre{background:var(--sv);border-radius:8px;font-family:ui-monospace,monospa
 table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}td,th{border:1px solid var(--bd);padding:7px 10px;text-align:start}th{background:var(--sv)}
 .n{background:var(--sv);border-inline-start:4px solid var(--pri);padding:10px 14px;border-radius:10px}
 @media(max-width:760px){.w{display:block}aside{position:static;height:auto;border:0}}
-</style></head><body><div class="w">
+</style></head><body>
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div><div class="w">
 <aside><b>Y-Dimension</b><a href="#intro">المقدمة</a><a href="#start">البدء</a><a href="#tabs">الشاشات الرئيسية</a><a href="#features">المميزات</a><a href="#perm">الصلاحيات والمهام</a><a href="#points">النقاط والرتب</a><a href="#cleaner">منظّف التخزين</a><a href="#watch">الأنمي والمسلسلات</a><a href="#server">الخادم الاختياري</a><a href="#admin">لوحة التحكم</a><a href="#build">البناء والنشر</a><a href="#privacy">الخصوصية</a><a href="#faq">أسئلة شائعة</a></aside>
 <main>
 <h1>توثيق Y-Dimension</h1>
-<div class="n">تطبيق أندرويد (14+) يحوّل تنظيم حياتك اليومية إلى لعبة بطابع الأنمي: مهام، مال، صحة، تعلّم، عبادة، وأدوات جهاز. يعمل بالكامل دون إنترنت، والخادم اختياري للمزامنة والمنتدى والمتجر.</div>
+<div class="n">تطبيق أندرويد (14+) يحوّل تنظيم حياتك اليومية إلى لعبة بطابع الأنمي: مهام، مال، صحة، تعلّم، عبادة، وأدوات جهاز. يحتاج الإنترنت لتسجيل الدخول ومزامنة الحساب؛ بعض البيانات تُحفظ محلياً على الجهاز.</div>
 <h2 id="intro">المقدمة</h2><p>كل شيء يُحفظ محلياً في ملف JSON على جهازك. كل عمل تنجزه يمنحك نقاطاً وخبرة (XP) ترفع رتبتك. الواجهة Material 3 بخط Cairo، مع حركات انتقال وأصوات يمكن إيقافها من الإعدادات.</p>
 <h2 id="start">البدء</h2><ol><li>ثبّت ملف APK وافتح التطبيق (تظهر المقدمة وشخصية «نور»).</li><li>أكمل الملف الشخصي (الاسم، الهدف).</li><li>من الإعدادات ← «الصلاحيات والمهام» فعّل ما تحتاجه.</li><li>أضف مهمتك الأولى من الزر العائم، أو اكتب سطراً ذكياً مثل: <code>اجتماع غداً 5م</code>.</li></ol>
 <h2 id="tabs">الشاشات الرئيسية</h2><table><tr><th>التبويب</th><th>المحتوى</th></tr><tr><td>اليوم</td><td>مهام اليوم، الماء، الصلاة، النوم، بطاقة XP</td></tr><tr><td>المهام</td><td>بحث، سحب للإنجاز/الحذف مع تراجع</td></tr><tr><td>المال</td><td>المعاملات والمحافظ، «الحساب الافتراضي» يُنشأ تلقائياً</td></tr><tr><td>الأدوات</td><td>شبكة كتب مربعة صغيرة لكل الميزات</td></tr></table>
@@ -28,7 +30,8 @@ table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}td,th{bo
 <h2 id="admin">لوحة التحكم</h2><p>الرابط: <code>/admin/</code> — مجلد واحد مستقل (<code>server/public/admin</code>) يمكن رفعه أو دمجه مع لوحة أخرى. الدخول بالرمز <code>admin_token</code>. بعد 5 محاولات خاطئة يُقفل الدخول مؤقتاً، والجلسة 8 ساعات، وكل نموذج محمي بـCSRF، وكل إجراء يُسجَّل.</p>
 <table><tr><th>القسم</th><th>الوظيفة</th></tr><tr><td>نظرة عامة</td><td>المستخدمون، النشطون، التراخيص، النقاط، المشتريات، المزامنة، رسم التسجيلات</td></tr><tr><td>السرعة والصحة</td><td>زمن الاتصال بالقاعدة، زمن الاستعلامات، PHP/MySQL، الذاكرة، القرص، حجم الجداول، تنظيف الرموز القديمة</td></tr><tr><td>المستخدمون</td><td>بحث، تعديل النقاط والمستوى، إنهاء الجلسات، حذف</td></tr><tr><td>التراخيص</td><td>توليد رمز <code>YD-XXXX-XXXX-XXXX-XXXX</code> لأي مستخدم، قائمة وإلغاء</td></tr><tr><td>المتجر</td><td>إضافة/تعديل/إخفاء/حذف العناصر وآخر المشتريات</td></tr><tr><td>الحملات</td><td>إنشاء مواسم الغارات (الهدف والفترة)، إنهاء مبكر، التقدم والمشاركون</td></tr><tr><td>الإعلانات</td><td>نشر إعلان يقرأه التطبيق من <code>api/announcements.php</code></td></tr><tr><td>المنتدى</td><td>حذف المواضيع والردود</td></tr></table>
 <p class="n">نصيحة أمان: فعّل HTTPS، وقيّد الوصول لمجلد <code>admin</code> بعنوان IP في <code>.htaccess</code> إن أمكن.</p>
-<h2 id="build">البناء والنشر</h2><p>GitHub Actions يبني APK عند دفع وسم (مثل <code>v0.13.0</code>). محلياً: <code>./gradlew assembleRelease</code> (انظر <code>docs/dev/BUILD_LOCAL.md</code>). الحد الأدنى Android 14.</p>
+<h2 id="build">البناء والنشر</h2><p>GitHub Actions يبني APK عند دفع وسم (مثل <code>v0.18.0-test.1</code>). محلياً: <code>./gradlew assembleRelease</code> (انظر <code>docs/dev/BUILD_LOCAL.md</code>). الحد الأدنى Android 14.</p>
 <h2 id="privacy">الخصوصية</h2><p>لا تحليلات ولا إعلانات. البيانات محلية؛ لا يُرسل شيء للخادم إلا إن سجّلت حساباً وفعّلت المزامنة. بحث الأنمي يرسل نص البحث فقط إلى Jikan/TVMaze.</p>
 <h2 id="faq">أسئلة شائعة</h2><h3>لا تصلني الإشعارات؟</h3><p>فعّل الإشعارات والمنبهات الدقيقة، واستثنِ التطبيق من توفير البطارية.</p><h3>فُقدت نقاطي بعد السحب للحذف؟</h3><p>خصم نقاط عنصر محذوف مقصود، والتراجع يعيدها.</p><h3>كيف أنقل بياناتي؟</h3><p>الإعدادات ← إدارة البيانات ← نسخ احتياطي/استيراد.</p>
 </main></div></body></html>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

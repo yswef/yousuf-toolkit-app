@@ -1,66 +1,38 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
-# كل ما يحتاجه يوسف
+# Y- Dimensions
 
-تطبيق أندرويد (أندرويد 14 كأقل إصدار) يجمع أدوات تنظيم الحياة في لعبة بطابع أنمي سحري، مع خادم PHP ولوحة تحكم.
+تطبيق أندرويد للمهام والمال والعادات والأدوات، مع خادم PHP ولوحة تحكم. الدخول أونلاين أولاً، وبعض البيانات تُحفظ محلياً.
 
-الحالة الحالية: واجهات سحرية ومكتبة كتب والنواة (2) والحياة اليومية (3) وأدوات الجهاز (4) وخادم المجتمع (5)، مع حفظ محلي ومزامنة اختيارية. اقرأ `handover_state.md` أولاً.
+## الملخص
 
-## الفروع
+- الإصدار الحالي: `0.18.0` / `code 22`.
+- من لوحة التحكم: تعيين مشرفين ومطورين، إدارة حتى 3 حسابات، و17 تبويباً.
+- في التطبيق: تبديل حتى 3 حسابات، وضع مطور بأربعة أقسام و62 اختباراً يدوياً، وتشخيص عتاد مجهّل الهوية.
+- آخر إصدار منشور: `v0.18.0-test.1` مع `app-qa.apk`.
 
-| الفرع | الغرض |
-|---|---|
-| `main` | النسخة المستقرة. لا عمل مباشر عليه. |
-| `dev` | كل العمل. يُدمج في `main` عند الاستقرار. |
+## البناء
 
-## البناء المحلي
+اتبع `docs/dev/BUILD_LOCAL.md`. البناء والنشر على GitHub Releases عند دفع tag فقط.
 
-لا تحتاج تنزيل APK من GitHub كل مرة. اتبع `docs/dev/BUILD_LOCAL.md` لبناء التطبيق على Windows أو macOS أو Linux وتثبيته بـ`adb`، مع حدود البناء داخل Termux.
-
-## الإصدارات
-
-البناء والنشر على GitHub Releases يحدثان عند دفع tag فقط، وليس مع كل رفع.
-
-| الصيغة | النوع | ينشر كـ |
-|---|---|---|
-| `v0.<مرحلة>.0-test.<رقم>` | بناء اختبار للمطور بعد كل مرحلة | prerelease |
-| `vX.Y.Z-beta.<رقم>` | تجريبي قبل المستقر | prerelease |
-| `vX.Y.Z` | مستقر | release |
-
-إنشاء tag: شغّل `tools\scripts\tag.bat`. يتحقق من الصيغة ومن الفرع (test وbeta من `dev`، والمستقر من `main`).
-
-## نوعا البناء
-
-- `release`: للمستخدمين. لا بيانات عينة ولا أدوات اختبار.
-- `tester`: لبناء الاختبار. يسمح بوضع المطور وصفحة الاختبار. يُبنى بالمهمة `assembleTester`.
-
-يجب أن يعرّف مشروع Gradle نوع البناء `tester` ويقرأ التوقيع من متغيرات البيئة: `KEYSTORE_PATH` و`KEYSTORE_PASSWORD` و`KEY_ALIAS` و`KEY_PASSWORD`.
-
-## أسرار GitHub المطلوبة
-
-`KEYSTORE_B64` (ملف jks مشفر base64) و`KEYSTORE_PASSWORD` و`KEY_ALIAS` و`KEY_PASSWORD`.
+```
+git tag -a v0.18.0-test.1 -m "v0.18.0-test.1"
+git push origin v0.18.0-test.1
+```
 
 ## الهيكل
 
 ```
-app/            تطبيق أندرويد: core وdata وdomain وfeature، ومصادر debug وtester والاختبارات
-                القيم تُحزم من config/app.json عبر assets، والحالة في filesDir/state.json
-server/         خادم PHP، والإعداد في server/config فقط
-config/         بيئات التشغيل (أمثلة فقط)
-docs/dev/       قواعد الفريق، السجل، الرموز، توثيق الوحدات
-docs/user/      توثيق المستخدم
-docs/word/      ملفات Word للمراجعة، لا تدخل git
-docs/site/      موقعا التوثيق: dev (حالة المشروع والاختبارات) وuser
-tools/scripts/  سكربتات المطور
-.github/        خط البناء
+app/       تطبيق أندرويد
+server/    خادم PHP + اللوحة الأساسية + ترحيلات SQL
+config/    بيئات التشغيل وبيانات التطبيق
+docs/plan/ ملخص الخطة وصفحة الاقتراحات والملاحظات
+docs/      القواعد، البناء، الأصول، التشخيص، لوحة الأم، توثيق المستخدم
+.github/   خط البناء
 ```
 
-## النقل والتوسعة
+## قواعد مختصرة
 
-- لا رابط ولا مفتاح داخل الكود. الروابط من `config/environments.*.json` والخادم من `server/config/config.php`.
-- نقل الخادم من استضافة إلى أخرى يعني نسخ `server/` وتعديل ملف إعداد واحد.
-- الوحدات مستقلة تحت `app/src/main/kotlin/feature`، فإضافة ميزة لا تمس غيرها.
-
-## القواعد
-
-اقرأ `docs/dev/RULES.md` قبل أي عمل.
+اقرأ `docs/dev/RULES.md` و`handover_state.md`. قاعدة واحدة موحّدة: `users` واحدة لكل التطبيقات، ولا جدول مستخدمين خاص بتطبيق.
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

@@ -1,0 +1,61 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اقتراحات وملاحظات — خطة Y- Dimensions</title>
+<meta name="description" content="صفحة واحدة للاقتراحات والملاحظات.">
+<link rel="stylesheet" href="plan.css">
+</head>
+<body>
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
+<main class="wrap">
+  <header class="hero">
+    <span class="tag">صفحة واحدة</span>
+    <h1>اقتراحات وملاحظات</h1>
+    <p>اختر النوع، ثم اكتب المطلوب فقط.</p>
+  </header>
+
+  <section class="card">
+    <form id="feedbackForm" novalidate>
+      <label for="kind">النوع</label>
+      <select id="kind" class="field">
+        <option value="suggestion">اقتراح</option>
+        <option value="note">ملاحظة</option>
+      </select>
+
+      <div id="suggestionFields">
+        <label for="title">الاسم</label>
+        <input id="title" class="field" placeholder="اسم الاقتراح" autocomplete="off">
+        <label for="description">الوصف</label>
+        <textarea id="description" class="field" rows="3" placeholder="اشرح الفكرة باختصار"></textarea>
+      </div>
+
+      <div id="noteFields" hidden>
+        <label for="place">مكان المشكلة</label>
+        <select id="place" class="field"></select>
+        <label for="noteText">الملاحظة</label>
+        <textarea id="noteText" class="field" rows="3" placeholder="ما الذي حدث؟"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="submit">إضافة</button>
+        <button class="btn ghost" id="copyAll" type="button">نسخ الكل</button>
+        <span id="status" class="status" aria-live="polite"></span>
+      </div>
+    </form>
+    <textarea id="fallback" class="field" rows="6" readonly hidden aria-label="النص الجاهز للنسخ"></textarea>
+  </section>
+
+  <section class="card">
+    <h2>كل المدخلات <span id="count" class="muted"></span></h2>
+    <div id="list"></div>
+  </section>
+
+  <nav class="links"><a href="index.html">العودة للملخص</a></nav>
+</main>
+<script src="plan.js"></script>
+</body>
+</html>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
