@@ -17,6 +17,7 @@ import core.navigation.AppNav
 import core.update.ContentUpdate
 import data.local.LocalStore
 import data.local.Store
+import feature.auth.AppLockGate
 import feature.journal.JournalSync
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         ContentUpdate.sync(applicationContext, store.serverUrl)
                         if (store.journalAutoSync && store.premium) runCatching { JournalSync.push(store) }
                     }
-                    AppNav(ui = ui)
+                    AppLockGate { AppNav(ui = ui) }
                 }
             }
         }
