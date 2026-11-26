@@ -164,6 +164,12 @@ class Store(context: Context) {
         private set
     var licenseCode by mutableStateOf("")
         private set
+    var ownedBackgrounds by mutableStateOf(setOf("cream", "sky"))
+        private set
+    var ownedStickerPacks by mutableStateOf(setOf("free-1", "free-2"))
+        private set
+    var ownedEmojiPacks by mutableStateOf(setOf("free-1", "free-2"))
+        private set
     var campaigns by mutableStateOf<List<Campaign>>(emptyList())
         private set
     var accounts by mutableStateOf<List<AccountItem>>(emptyList())
@@ -938,6 +944,31 @@ class Store(context: Context) {
         save()
     }
 
+    fun addRichEntry(entry: JournalEntry): JournalEntry {
+        val item = entry.copy(id = nextId(), syncedAt = 0L)
+        journal = journal + item
+        save()
+        return item
+    }
+
+    fun updateJournalEntry(entry: JournalEntry) {
+        journal = journal.map { if (it.id == entry.id) entry else it }
+        save()
+    }
+
+    fun buyJournalAsset(kind: String, id: String, cost: Int): Boolean {
+        if (cost > 0 && points < cost) return false
+        if (cost > 0) takePoints(cost)
+        when (kind) {
+            "background" -> ownedBackgrounds = ownedBackgrounds + id
+            "sticker" -> ownedStickerPacks = ownedStickerPacks + id
+            "emoji" -> ownedEmojiPacks = ownedEmojiPacks + id
+            else -> return false
+        }
+        save()
+        return true
+    }
+
     fun deleteEntry(id: Long) {
         journal = journal.filterNot { it.id == id }
         save()
@@ -1258,6 +1289,9 @@ class Store(context: Context) {
         root.put("avatar", avatar)
         root.put("premium", premium)
         root.put("licenseCode", licenseCode)
+        root.put("ownedBackgrounds", JSONArray(ownedBackgrounds))
+        root.put("ownedStickerPacks", JSONArray(ownedStickerPacks))
+        root.put("ownedEmojiPacks", JSONArray(ownedEmojiPacks))
         root.put("campaigns", JSONArray().apply {
             campaigns.forEach { c ->
                 put(JSONObject().apply {
@@ -1383,6 +1417,19 @@ class Store(context: Context) {
                     put("title", t.title)
                     put("body", t.body)
                     put("at", t.at)
+                    put("mood", t.mood)
+                    put("background", t.background)
+                    put("richBody", t.richBody)
+                    put("font", t.font)
+                    put("colors", t.colors)
+                    put("drawings", t.drawings)
+                    put("stickers", t.stickers)
+                    put("images", t.images)
+                    put("emojiPack", t.emojiPack)
+                    put("stickerPack", t.stickerPack)
+                    put("voicePath", t.voicePath)
+                    put("hasTime", t.hasTime)
+                    put("syncedAt", t.syncedAt)
                 })
             }
         })
@@ -1575,6 +1622,9 @@ class Store(context: Context) {
             avatar = root.optInt("avatar", 0).coerceIn(0, 7)
             premium = root.optBoolean("premium", false)
             licenseCode = root.optString("licenseCode", "")
+            ownedBackgrounds = root.stringSet("ownedBackgrounds").ifEmpty { setOf("cream", "sky") }
+            ownedStickerPacks = root.stringSet("ownedStickerPacks").ifEmpty { setOf("free-1", "free-2") }
+            ownedEmojiPacks = root.stringSet("ownedEmojiPacks").ifEmpty { setOf("free-1", "free-2") }
             campaigns = root.optJSONArray("campaigns").mapObjects {
                 Campaign(
                     id = it.optLong("id"),
@@ -1662,7 +1712,20 @@ class Store(context: Context) {
                     id = it.optLong("id"),
                     title = it.optString("title"),
                     body = it.optString("body"),
-                    at = it.optLong("at")
+                    at = it.optLong("at"),
+                    mood = it.optString("mood", ""),
+                    background = it.optString("background", "cream"),
+                    richBody = it.optString("richBody", ""),
+                    font = it.optString("font", "Cairo"),
+                    colors = it.optString("colors", ""),
+                    drawings = it.optString("drawings", ""),
+                    stickers = it.optString("stickers", ""),
+                    images = it.optString("images", ""),
+                    emojiPack = it.optString("emojiPack", "free-1"),
+                    stickerPack = it.optString("stickerPack", "free-1"),
+                    voicePath = it.optString("voicePath", ""),
+                    hasTime = it.optBoolean("hasTime", false),
+                    syncedAt = it.optLong("syncedAt", 0L)
                 )
             }
             water = root.optJSONObject("water").toIntMap()
