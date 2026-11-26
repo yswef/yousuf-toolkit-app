@@ -39,6 +39,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,11 +58,13 @@ import java.io.StringReader
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import kotlinx.coroutines.launch
 
 @Composable
 fun JournalEditorScreen(onBack: () -> Unit) {
     val store = LocalStore.current
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var step by remember { mutableStateOf(0) }
     var mood by remember { mutableStateOf("") }
     var emojiPackId by remember { mutableStateOf(JournalAssets.emojiPacks.first().id) }
@@ -131,6 +134,9 @@ fun JournalEditorScreen(onBack: () -> Unit) {
                     syncedAt = 0L
                 )
             )
+            if (store.journalAutoSync && store.premium) {
+                scope.launch { runCatching { JournalSync.push(store) } }
+            }
             onBack()
         })
     }
