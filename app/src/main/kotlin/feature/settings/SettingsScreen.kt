@@ -179,7 +179,7 @@ fun SettingsScreen(
                 )
                 V3Row(
                     title = stringResource(R.string.apps_title),
-                    icon = Icons.Filled.Home,
+                    icon = Icons.Filled.Info,
                     divider = true,
                     onClick = { onFeature(core.navigation.Routes.APPS) }
                 )
