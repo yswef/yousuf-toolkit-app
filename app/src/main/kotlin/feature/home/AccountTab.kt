@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.yousuf.toolkit.R
 import core.design.Accent
+import feature.auth.AccountSwitcher
 import core.design.BookSymbol
 import core.design.V3Group
 import core.design.V3Hero
@@ -72,6 +73,7 @@ fun AccountTab(
     ui: UiState,
     onFeature: (String) -> Unit,
     onSettings: () -> Unit,
+    onLogout: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val symbol = BookSymbol.entries.getOrElse(store.avatar) { BookSymbol.ORB }
@@ -153,6 +155,14 @@ fun AccountTab(
                 )
             }
         }
+        item {
+            AccountSwitcher(
+                onSwitch = {},
+                onLogout = onLogout,
+                onAdd = { onFeature(Routes.AUTH) }
+            )
+        }
+
         item {
             GlassCard {
                 Text(
@@ -258,6 +268,7 @@ fun AccountTab(
                                 val token = store.authToken
                                 store.logout()
                                 runCatching { Api.logout(Api.normalizeBase(base), token) }
+                                onLogout()
                             }
                         },
                         modifier = Modifier.fillMaxWidth()

@@ -115,6 +115,10 @@ def main():
     shutil.copyfile(
         ROOT / "app/src/main/res/mipmap-xxxhdpi/ic_launcher.png", ASSETS / "icon.png"
     )
+    for extra in ("releases.json", "devmode_tests.json"):
+        src = ROOT / "config" / extra
+        if src.is_file():
+            shutil.copyfile(src, DATA / extra)
     print(f"panel data rebuilt: {catalog['count']} books, {len(catalog['sections'])} sections, version {name} ({code})")
 
 

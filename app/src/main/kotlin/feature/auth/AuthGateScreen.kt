@@ -50,6 +50,9 @@ fun AuthGateScreen() {
     var busy by remember { mutableStateOf(false) }
     var status by remember { mutableStateOf("") }
     val label = remember { "${Build.MANUFACTURER} ${Build.MODEL}".trim() }
+    val fullText = stringResource(R.string.accounts_full)
+    val switchedText = stringResource(R.string.accounts_switched)
+    val savedText = stringResource(R.string.accounts_saved_ok)
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
@@ -113,7 +116,10 @@ fun AuthGateScreen() {
                         else Api.login(base, email.trim(), password, label, label)
                     }.onSuccess { result ->
                         store.saveServerUrl(server)
-                        store.saveAccount(result.token, result.user.id, result.user.name, result.user.email)
+                        val ok = store.attachAccount(
+                            result.token, result.user.id, result.user.name, result.user.email
+                        )
+                        status = if (ok) savedText else fullText
                         password = ""
                     }.onFailure { e ->
                         status = if (e is ApiException) authError(context, e)
@@ -131,6 +137,17 @@ fun AuthGateScreen() {
             stringResource(R.string.auth_gate_device) + ": " + label,
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        AccountSwitcher(
+            onSwitch = { status = switchedText },
+            onLogout = { status = "" },
+            onAdd = {
+                email = ""
+                password = ""
+                name = ""
+                mode = false
+                status = ""
+            }
         )
     }
 }

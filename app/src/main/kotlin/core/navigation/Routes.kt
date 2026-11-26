@@ -55,4 +55,5 @@ object Routes {
     const val MEDIA = "media"
     const val FILES = "files"
     const val GIT = "git"
+    const val DIAGNOSTICS = "diagnostics"
 }

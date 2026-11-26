@@ -1,0 +1,565 @@
+{
+  "schema": "y-dimensions.devmode-tests/1.0",
+  "app_id": "y-dimensions",
+  "note": "كل ميزة على حدى مع زر اختبار يدوي بجانب بياناتها. القائمة مولّدة من Books.kt وRoutes.kt.",
+  "tests": [
+    {
+      "id": "TASKS",
+      "route": "tasks",
+      "title": "المهام",
+      "section": "الأساسيات",
+      "data_key": "tasks",
+      "action": "add_task",
+      "enabled": true
+    },
+    {
+      "id": "MONEY",
+      "route": "money",
+      "title": "المال",
+      "section": "الأساسيات",
+      "data_key": "ledger",
+      "action": "add_ledger",
+      "enabled": true
+    },
+    {
+      "id": "WORKOUTS",
+      "route": "workouts",
+      "title": "التمارين",
+      "section": "الأساسيات",
+      "data_key": "workouts",
+      "action": "add_workout",
+      "enabled": true
+    },
+    {
+      "id": "JOURNAL",
+      "route": "journal",
+      "title": "المذكرات",
+      "section": "الأساسيات",
+      "data_key": "journal",
+      "action": "add_journal",
+      "enabled": true
+    },
+    {
+      "id": "WATER",
+      "route": "water",
+      "title": "الماء",
+      "section": "الحياة اليومية",
+      "data_key": "water",
+      "action": "add_water",
+      "enabled": true
+    },
+    {
+      "id": "SLEEP",
+      "route": "sleep",
+      "title": "النوم",
+      "section": "الحياة اليومية",
+      "data_key": "sleep",
+      "action": "add_sleep",
+      "enabled": true
+    },
+    {
+      "id": "FAITH",
+      "route": "faith",
+      "title": "الإيمان",
+      "section": "الحياة اليومية",
+      "data_key": "faithDays",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "ADHKAR",
+      "route": "adhkar",
+      "title": "حصن المسلم",
+      "section": "الحياة اليومية",
+      "data_key": "adhkar",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "WATCH",
+      "route": "watch",
+      "title": "الأنمي والمسلسلات",
+      "section": "الحياة اليومية",
+      "data_key": "watch",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "LEARN",
+      "route": "learn",
+      "title": "التعلم",
+      "section": "الحياة اليومية",
+      "data_key": "learn",
+      "action": "add_learn",
+      "enabled": true
+    },
+    {
+      "id": "LIBRARY",
+      "route": "library",
+      "title": "المكتبة",
+      "section": "الحياة اليومية",
+      "data_key": "books",
+      "action": "add_book",
+      "enabled": true
+    },
+    {
+      "id": "HEALTHPRO",
+      "route": "healthpro",
+      "title": "مركز الحياة",
+      "section": "الحياة اليومية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "GAME",
+      "route": "game",
+      "title": "اللعبة",
+      "section": "اللعبة",
+      "data_key": "points",
+      "action": "add_progress",
+      "enabled": true
+    },
+    {
+      "id": "SHOP",
+      "route": "shop",
+      "title": "المتجر",
+      "section": "اللعبة",
+      "data_key": "points",
+      "action": "add_progress",
+      "enabled": true
+    },
+    {
+      "id": "RAIDS",
+      "route": "raids",
+      "title": "الغارات",
+      "section": "اللعبة",
+      "data_key": "campaigns",
+      "action": "add_campaign",
+      "enabled": true
+    },
+    {
+      "id": "PROFILE",
+      "route": "profile",
+      "title": "الملف الشخصي",
+      "section": "اللعبة",
+      "data_key": "profileName",
+      "action": "add_progress",
+      "enabled": true
+    },
+    {
+      "id": "SKIN",
+      "route": "skin",
+      "title": "المظهر",
+      "section": "اللعبة",
+      "data_key": "accent",
+      "action": "cycle_accent",
+      "enabled": true
+    },
+    {
+      "id": "DEVICE",
+      "route": "device",
+      "title": "الجهاز",
+      "section": "أدوات الجهاز",
+      "data_key": "serverUrl",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "ACCOUNTS",
+      "route": "accounts",
+      "title": "الحسابات والأمان",
+      "section": "أدوات الجهاز",
+      "data_key": "accounts",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "FORUM",
+      "route": "forum",
+      "title": "المنتدى",
+      "section": "المزيد",
+      "data_key": "serverUrl",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "ALARM",
+      "route": "alarm",
+      "title": "المنبه والإشعارات الذكية",
+      "section": "المزيد",
+      "data_key": "alarms",
+      "action": "add_alarm",
+      "enabled": true
+    },
+    {
+      "id": "LICENSE",
+      "route": "license",
+      "title": "الترخيص",
+      "section": "المزيد",
+      "data_key": "licenseCode",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "DEVMODE",
+      "route": "devmode",
+      "title": "وضع المطور",
+      "section": "المزيد",
+      "data_key": "version",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "TESTS",
+      "route": "tests",
+      "title": "الاختبارات",
+      "section": "المزيد",
+      "data_key": "version",
+      "action": "run_selftest",
+      "enabled": true
+    },
+    {
+      "id": "LEARNPRO",
+      "route": "learnpro",
+      "title": "التعلّم المتقدّم",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "FAITHPRO",
+      "route": "faithpro",
+      "title": "الإيمان المتقدّم",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "LIBRARYPRO",
+      "route": "librarypro",
+      "title": "المكتبة المتقدّمة",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "INTRO",
+      "route": "intro",
+      "title": "المقدمة",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "replay_intro",
+      "enabled": true
+    },
+    {
+      "id": "REGISTER",
+      "route": "register",
+      "title": "التسجيل",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "ONBOARDING",
+      "route": "onboarding",
+      "title": "التهيئة",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "HOME",
+      "route": "home",
+      "title": "الرئيسية",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "STATS",
+      "route": "stats",
+      "title": "الإحصائيات",
+      "section": "الميزات الإضافية",
+      "data_key": "points",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "PATH",
+      "route": "path",
+      "title": "المسار",
+      "section": "الميزات الإضافية",
+      "data_key": "xp",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "ACCOUNT",
+      "route": "account",
+      "title": "الحساب",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "SETTINGS",
+      "route": "settings",
+      "title": "الإعدادات",
+      "section": "الميزات الإضافية",
+      "data_key": "accent",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "BLOCKER",
+      "route": "blocker",
+      "title": "الحاجز",
+      "section": "الميزات الإضافية",
+      "data_key": "blockedApps",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "CLEANER",
+      "route": "cleaner",
+      "title": "المنظّف",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "CONTACTS",
+      "route": "contacts",
+      "title": "جهات الاتصال",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "DEVICEPRO",
+      "route": "devicepro",
+      "title": "الجهاز المتقدّم",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "FIREWALL",
+      "route": "firewall",
+      "title": "الجدار الناري",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "MONEYPRO",
+      "route": "moneypro",
+      "title": "المالية المتقدّمة",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "NOTIFLOG",
+      "route": "notiflog",
+      "title": "سجل الإشعارات",
+      "section": "الميزات الإضافية",
+      "data_key": "notifications",
+      "action": "add_notification",
+      "enabled": true
+    },
+    {
+      "id": "PDFREADER",
+      "route": "pdfreader",
+      "title": "قارئ PDF",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "TASKSPRO",
+      "route": "taskspro",
+      "title": "المهام المتقدّمة",
+      "section": "الميزات الإضافية",
+      "data_key": "routes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "UPDATER",
+      "route": "updater",
+      "title": "التحديثات",
+      "section": "الميزات الإضافية",
+      "data_key": "version",
+      "action": "check_updates",
+      "enabled": true
+    },
+    {
+      "id": "VAULT",
+      "route": "vault",
+      "title": "الخزنة",
+      "section": "الميزات الإضافية",
+      "data_key": "vault",
+      "action": "add_vault",
+      "enabled": true
+    },
+    {
+      "id": "WALLETS",
+      "route": "wallets",
+      "title": "المحافظ",
+      "section": "الميزات الإضافية",
+      "data_key": "wallets",
+      "action": "add_wallet",
+      "enabled": true
+    },
+    {
+      "id": "AUTH",
+      "route": "auth",
+      "title": "بوابة الدخول",
+      "section": "الميزات الإضافية",
+      "data_key": "authToken",
+      "action": "check_session",
+      "enabled": true
+    },
+    {
+      "id": "DEVICES",
+      "route": "devices",
+      "title": "الأجهزة المسجّلة",
+      "section": "الميزات الإضافية",
+      "data_key": "accountDevices",
+      "action": "check_devices",
+      "enabled": true
+    },
+    {
+      "id": "APPS",
+      "route": "apps",
+      "title": "إخفاء التطبيقات",
+      "section": "الميزات الإضافية",
+      "data_key": "hiddenApps",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "VISIBILITY",
+      "route": "visibility",
+      "title": "الإخفاء والترتيب",
+      "section": "الميزات الإضافية",
+      "data_key": "hiddenRoutes",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "MEDIA",
+      "route": "media",
+      "title": "الصور والفيديو",
+      "section": "الميزات الإضافية",
+      "data_key": "screenshots",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "FILES",
+      "route": "files",
+      "title": "الملفات والمكتبة",
+      "section": "الميزات الإضافية",
+      "data_key": "version",
+      "action": "open",
+      "enabled": true
+    },
+    {
+      "id": "GIT",
+      "route": "git",
+      "title": "إدارة مشاريع Git",
+      "section": "الميزات الإضافية",
+      "data_key": "gitRepo",
+      "action": "check_git",
+      "enabled": true
+    },
+    {
+      "id": "DIAGNOSTICS",
+      "route": "diagnostics",
+      "title": "تشخيص العتاد والنظام",
+      "section": "الميزات الإضافية",
+      "data_key": "version",
+      "action": "run_diagnostics",
+      "enabled": true
+    },
+    {
+      "id": "SOUND",
+      "route": "sound",
+      "title": "الصوتيات والمؤثرات",
+      "section": "المؤثرات",
+      "data_key": "sound",
+      "action": "play_sound",
+      "enabled": true
+    },
+    {
+      "id": "LEVEL",
+      "route": "level",
+      "title": "ارتفاع المستوى والرُتب",
+      "section": "التقدّم",
+      "data_key": "level",
+      "action": "level_up",
+      "enabled": true
+    },
+    {
+      "id": "INTRO",
+      "route": "intro",
+      "title": "إعادة عرض المقدمة",
+      "section": "التجربة الأولى",
+      "data_key": "onboarded",
+      "action": "replay_intro",
+      "enabled": true
+    },
+    {
+      "id": "NOTIFICATION",
+      "route": "notification",
+      "title": "الإشعارات المحلية",
+      "section": "النظام",
+      "data_key": "notifications",
+      "action": "add_notification",
+      "enabled": true
+    },
+    {
+      "id": "SYNC",
+      "route": "sync",
+      "title": "مزامنة الحساب مع الخادم",
+      "section": "السحابة",
+      "data_key": "authToken",
+      "action": "check_sync",
+      "enabled": true
+    },
+    {
+      "id": "CONTENT",
+      "route": "content",
+      "title": "التحديثات الفرعية",
+      "section": "السحابة",
+      "data_key": "version",
+      "action": "check_updates",
+      "enabled": true
+    },
+    {
+      "id": "BACKUP",
+      "route": "backup",
+      "title": "نسخ حالة التطبيق واستعادتها",
+      "section": "البيانات",
+      "data_key": "version",
+      "action": "check_backup",
+      "enabled": true
+    }
+  ]
+}

@@ -56,6 +56,7 @@ class Store(context: Context) {
     val config = AppConfig.load(context)
 
     private val file = File(context.applicationContext.filesDir, "state.json")
+    private val accountsFile = File(context.applicationContext.filesDir, "accounts.json")
     private val io = Executors.newSingleThreadExecutor()
     private var seq = 1L
     private var energyDay = LocalDate.now().toString()
@@ -149,6 +150,12 @@ class Store(context: Context) {
         private set
     var gitProjects by mutableStateOf<List<String>>(emptyList())
         private set
+    var savedAccounts by mutableStateOf<List<SavedAccount>>(emptyList())
+        private set
+    var activeAccountKey by mutableStateOf("")
+        private set
+    var developerRole by mutableStateOf("")
+        private set
     var accent by mutableStateOf("violet")
         private set
     var avatar by mutableStateOf(0)
@@ -185,6 +192,7 @@ class Store(context: Context) {
     private var sleepDays by mutableStateOf<Set<String>>(emptySet())
 
     init {
+        readAccounts()
         read()
         ensureDefaultWallet()
         ensureDay(false)
@@ -396,10 +404,19 @@ class Store(context: Context) {
     }
 
     fun logout() {
+        val key = activeAccountKey
+        val now = System.currentTimeMillis()
         authToken = ""
         accountId = 0L
         accountName = ""
         accountEmail = ""
+        val list = savedAccounts.map { account ->
+            if (account.key == key) account.copy(state = snapshot(), token = "", updatedAt = now)
+            else account
+        }
+        activeAccountKey = ""
+        savedAccounts = list
+        writeAccounts(list)
         save()
     }
 
@@ -423,6 +440,86 @@ class Store(context: Context) {
         if (!localAccountEmail.equals(email.trim(), ignoreCase = true)) return false
         val salt = runCatching { Base64.decode(localAccountSalt, Base64.NO_WRAP) }.getOrNull() ?: return false
         return hashPassword(password, salt) == localAccountHash
+    }
+
+    fun devSnapshot(): String = snapshot()
+
+    fun devRestore(json: String): Boolean = runCatching {
+        read(JSONObject(json))
+        save()
+        true
+    }.getOrDefault(false)
+
+    fun devGrantProgress(value: Int) {
+        addPoints(value)
+        save()
+    }
+
+    fun setDeveloper(role: String) {
+        developerRole = role
+        save()
+    }
+
+    val maxAccounts: Int get() = 3
+
+    fun attachAccount(token: String, id: Long, name: String, email: String): Boolean {
+        val key = accountKey(id, email)
+        authToken = token
+        accountId = id
+        accountName = name
+        accountEmail = email
+        val state = snapshot()
+        val entry = SavedAccount(key, email, name, id, token, state, System.currentTimeMillis())
+        val list = savedAccounts.toMutableList()
+        val index = list.indexOfFirst { it.key == key }
+        var ok = true
+        if (index >= 0) list[index] = entry
+        else if (list.size >= maxAccounts) ok = false
+        else list.add(entry)
+        if (ok) {
+            activeAccountKey = key
+            savedAccounts = list
+            writeAccounts(list)
+            save()
+        }
+        return ok
+    }
+
+    fun switchAccount(key: String): Boolean {
+        if (key == activeAccountKey) return true
+        if (savedAccounts.none { it.key == key }) return false
+        val now = System.currentTimeMillis()
+        val list = savedAccounts.map { account ->
+            if (account.key == activeAccountKey) {
+                account.copy(
+                    state = snapshot(), token = authToken, name = accountName,
+                    email = accountEmail, updatedAt = now
+                )
+            } else account
+        }.toMutableList()
+        val fresh = list.first { it.key == key }
+        activeAccountKey = key
+        if (!devRestore(fresh.state)) {
+            activeAccountKey = ""
+            return false
+        }
+        savedAccounts = list
+        writeAccounts(list)
+        return true
+    }
+
+    fun removeSavedAccount(key: String) {
+        val list = savedAccounts.filterNot { it.key == key }
+        if (key == activeAccountKey) {
+            authToken = ""
+            accountId = 0L
+            accountName = ""
+            accountEmail = ""
+            activeAccountKey = ""
+        }
+        savedAccounts = list
+        writeAccounts(list)
+        save()
     }
 
     fun deleteLocalAccount() {
@@ -1152,6 +1249,7 @@ class Store(context: Context) {
         root.put("gitOwner", gitOwner)
         root.put("gitRepo", gitRepo)
         root.put("gitProjects", JSONArray(gitProjects))
+        root.put("developerRole", developerRole)
         root.put("accent", accent)
         root.put("avatar", avatar)
         root.put("premium", premium)
@@ -1346,6 +1444,11 @@ class Store(context: Context) {
             } catch (t: Throwable) {
                 Log.e("Store", "Failed to save state", t)
             }
+            try {
+                persistAccounts(text)
+            } catch (t: Throwable) {
+                Log.e("Store", "Failed to persist accounts", t)
+            }
         }
     }
 
@@ -1353,6 +1456,70 @@ class Store(context: Context) {
         runCatching {
             file.copyTo(File(file.parentFile, "state.corrupt.json"), overwrite = true)
         }
+    }
+
+    private fun accountKey(id: Long, email: String): String = "$id:" + email.trim().lowercase()
+
+    private fun readAccounts() {
+        if (!accountsFile.isFile) return
+        runCatching {
+            val root = JSONObject(accountsFile.readText())
+            activeAccountKey = root.optString("active", "")
+            val arr = root.optJSONArray("accounts")
+            val list = ArrayList<SavedAccount>()
+            if (arr != null) {
+                for (i in 0 until arr.length()) {
+                    val o = arr.optJSONObject(i) ?: continue
+                    list.add(
+                        SavedAccount(
+                            key = o.optString("key"),
+                            email = o.optString("email"),
+                            name = o.optString("name"),
+                            userId = o.optLong("userId"),
+                            token = o.optString("token"),
+                            state = o.optString("state"),
+                            updatedAt = o.optLong("updatedAt")
+                        )
+                    )
+                }
+            }
+            savedAccounts = list.filter { it.key.isNotBlank() }
+        }.onFailure { Log.e("Store", "Failed to read accounts", it) }
+    }
+
+    private fun writeAccounts(list: List<SavedAccount>) {
+        val root = JSONObject()
+            .put("active", activeAccountKey)
+            .put("accounts", JSONArray().apply {
+                list.forEach { a ->
+                    put(
+                        JSONObject()
+                            .put("key", a.key)
+                            .put("email", a.email)
+                            .put("name", a.name)
+                            .put("userId", a.userId)
+                            .put("token", a.token)
+                            .put("state", a.state)
+                            .put("updatedAt", a.updatedAt)
+                    )
+                }
+            })
+        runCatching { accountsFile.writeText(root.toString()) }
+            .onFailure { Log.e("Store", "Failed to write accounts", it) }
+    }
+
+    private fun persistAccounts(stateText: String) {
+        val key = activeAccountKey
+        if (key.isBlank()) return
+        val list = savedAccounts.map { account ->
+            if (account.key == key) {
+                account.copy(
+                    state = stateText, token = authToken, name = accountName,
+                    email = accountEmail, updatedAt = System.currentTimeMillis()
+                )
+            } else account
+        }
+        writeAccounts(list)
     }
 
     companion object {
@@ -1399,6 +1566,7 @@ class Store(context: Context) {
             gitOwner = root.optString("gitOwner", "yswef")
             gitRepo = root.optString("gitRepo", "yousuf-toolkit-app")
             gitProjects = root.optJSONArray("gitProjects").strings()
+            developerRole = root.optString("developerRole", "")
             accent = root.optString("accent", "violet")
             avatar = root.optInt("avatar", 0).coerceIn(0, 7)
             premium = root.optBoolean("premium", false)
@@ -1677,6 +1845,16 @@ private fun ExtraRecord.toJson(): JSONObject = JSONObject().apply {
 private fun JSONObject.toExtra(): ExtraRecord = ExtraRecord(
     optLong("id"), optString("kind"), optString("title"), optString("detail"),
     optDouble("amount", 0.0), optString("status", "open"), optLong("dueAt"), optLong("createdAt")
+)
+
+data class SavedAccount(
+    val key: String,
+    val email: String,
+    val name: String,
+    val userId: Long,
+    val token: String,
+    val state: String,
+    val updatedAt: Long
 )
 
 const val DEFAULT_WALLET = "الحساب الافتراضي"

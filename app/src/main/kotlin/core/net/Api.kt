@@ -29,6 +29,7 @@ data class CheckinResult(val connected: Boolean, val nextInSeconds: Int, val day
 data class DeviceInfo(val id: Long, val label: String, val model: String, val lastSeen: Long, val createdAt: Long)
 data class ContentFile(val name: String, val sha256: String, val size: Long, val url: String)
 data class ContentManifest(val version: String, val files: List<ContentFile>)
+data class DeveloperStatus(val developer: Boolean, val role: String, val maxAccounts: Int, val tests: List<String>)
 
 object Api {
     const val SERVER_HTML = "server_html"
@@ -271,6 +272,37 @@ object Api {
             if (probe.isSuccess) "ok" else NETWORK_ERROR
         }
     }
+
+    suspend fun devmodeStatus(base: String, token: String): DeveloperStatus =
+        withContext(Dispatchers.IO) {
+            val response = call(base, "/api/devmode.php?action=status", "GET", null, token)
+            val tests = response.optJSONArray("tests").mapObjects { it.optString("id") }
+            DeveloperStatus(
+                developer = response.optBoolean("developer", false),
+                role = response.optString("role", ""),
+                maxAccounts = response.optInt("max_accounts", 3),
+                tests = tests
+            )
+        }
+
+    suspend fun diagnosticsMatch(base: String, token: String, signature: String): String? =
+        withContext(Dispatchers.IO) {
+            val response = call(
+                base, "/api/diagnostics.php?action=match", "POST",
+                JSONObject().put("issue_signature", signature), token
+            )
+            if (response.optBoolean("known", false)) response.optString("solution_ar").takeIf { it.isNotBlank() }
+            else null
+        }
+
+    suspend fun diagnosticsReport(base: String, token: String, report: JSONObject) =
+        withContext(Dispatchers.IO) {
+            val response = call(
+                base, "/api/diagnostics.php?action=report", "POST",
+                JSONObject().put("server_report", report), token
+            )
+            response.optBoolean("stored", response.optBoolean("ok", false))
+        }
 
     private fun call(
         base: String,

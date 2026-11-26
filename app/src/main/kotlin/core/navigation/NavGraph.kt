@@ -19,6 +19,7 @@ import feature.blocker.BlockerScreen
 import feature.cleaner.CleanerScreen
 import feature.contacts.ContactsScreen
 import feature.device.DeviceScreen
+import feature.diagnostics.DiagnosticsScreen
 import feature.devicepro.DeviceProScreen
 import feature.devmode.DevmodeScreen
 import feature.faith.FaithScreen
@@ -122,7 +123,10 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
                 onBack = { nav.popBackStack() },
                 onFeature = { nav.navigate(it) },
                 onSettings = { nav.navigate(Routes.SETTINGS) },
-                ui = ui
+                ui = ui,
+                onLogout = {
+                    nav.navigate(Routes.AUTH) { popUpTo(Routes.HOME) { inclusive = true } }
+                }
             )
         }
         composable(Routes.SETTINGS) {
@@ -149,7 +153,10 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.CONTACTS) { ContactsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.DEVICE) { DeviceScreen(onBack = { nav.popBackStack() }, onMore = { nav.navigate(Routes.DEVICEPRO) }) }
         composable(Routes.DEVICEPRO) { DeviceProScreen(onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it) }) }
-        composable(Routes.DEVMODE) { DevmodeScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.DEVMODE) {
+            DevmodeScreen(onBack = { nav.popBackStack() }, onFeature = { nav.navigate(it) })
+        }
+        composable(Routes.DIAGNOSTICS) { DiagnosticsScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.FAITH) { FaithScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.HEALTHPRO) { LifeScreen(initialTab = 0, onBack = { nav.popBackStack() }) }
         composable(Routes.LEARNPRO) { LifeScreen(initialTab = 1, onBack = { nav.popBackStack() }) }

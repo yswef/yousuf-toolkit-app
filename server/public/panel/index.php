@@ -47,52 +47,131 @@ function ago($ts): string {
 $self = (string) strtok((string) ($_SERVER['REQUEST_URI'] ?? 'index.php'), '?');
 $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
 
-// ---------- login (same token as public/admin) ----------
+// ---------- login / accounts (max 3) ----------
 $loginError = '';
 $readOnly = ($adminToken === '' || strlen($adminToken) < 12);
+$maxAccounts = 3;
+if (!isset($_SESSION['accounts']) || !is_array($_SESSION['accounts'])) $_SESSION['accounts'] = [];
+
+function panel_admin_label(string $token): ?string {
+    global $config;
+    $c = $config['db'] ?? [];
+    if (($c['host'] ?? '') === '' || ($c['name'] ?? '') === '') return null;
+    try {
+        $pdo = new PDO(
+            'mysql:host=' . $c['host'] . ';dbname=' . $c['name'] . ';charset=utf8mb4',
+            (string) ($c['user'] ?? ''), (string) ($c['pass'] ?? ''),
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
+        );
+        $s = $pdo->prepare('SELECT label FROM panel_admins WHERE token_hash = ? AND active = 1 LIMIT 1');
+        $s->execute([hash('sha256', $token)]);
+        $row = $s->fetch();
+        return $row ? (string) $row['label'] : null;
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+
 if (($_GET['logout'] ?? '') === '1') {
-    $_SESSION = [];
-    session_destroy();
+    $active = (string) ($_SESSION['active'] ?? '');
+    $_SESSION['accounts'] = array_values(array_filter(
+        $_SESSION['accounts'],
+        function ($a) use ($active) { return (string) ($a['id'] ?? '') !== $active; }
+    ));
+    if ($_SESSION['accounts']) {
+        $_SESSION['active'] = (string) $_SESSION['accounts'][0]['id'];
+        $_SESSION['at'] = time();
+    } else {
+        $_SESSION = [];
+        session_destroy();
+    }
     header('Location: ' . $self);
     exit;
 }
+if (($_GET['use'] ?? '') !== '' && !empty($_SESSION['ok'])) {
+    $want = (string) $_GET['use'];
+    foreach ($_SESSION['accounts'] as $a) {
+        if ((string) ($a['id'] ?? '') === $want) {
+            $_SESSION['active'] = $want;
+            $_SESSION['at'] = time();
+            break;
+        }
+    }
+    header('Location: ' . $self);
+    exit;
+}
+$forceLogin = (($_GET['add'] ?? '') === '1');
 if ($readOnly && empty($_SESSION['ok'])) {
     // config.php غير مضبوط: اعرض اللوحة بالبيانات المحلية بلا دخول، وامنع تنفيذ الأوامر.
     $_SESSION['ok'] = true;
     $_SESSION['csrf'] = bin2hex(random_bytes(16));
     $_SESSION['at'] = time();
+    $_SESSION['accounts'] = [['id' => 'preview', 'label' => 'معاينة للقراءة فقط', 'hash' => '']];
+    $_SESSION['active'] = 'preview';
 }
-if (empty($_SESSION['ok'])) {
+if (empty($_SESSION['ok']) || $forceLogin) {
     if ($adminToken === '' || strlen($adminToken) < 12) {
         $loginError = 'config/config.php غير موجود أو admin_token غير مضبوط.';
-    } elseif (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    } elseif (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && !isset($_POST['cmd']) && !isset($_POST['req_index'])) {
         $lock = sys_get_temp_dir() . '/yd_panel_' . md5($ip) . '.json';
         $st = is_file($lock) ? (json_decode((string) file_get_contents($lock), true) ?: []) : [];
         $fails = (int) ($st['n'] ?? 0);
         $until = (int) ($st['until'] ?? 0);
         if ($until > time()) {
             $loginError = 'محاولات كثيرة. انتظر ' . ($until - time()) . ' ثانية.';
-        } elseif (hash_equals($adminToken, (string) ($_POST['code'] ?? ''))) {
-            @unlink($lock);
-            session_regenerate_id(true);
-            $_SESSION['ok'] = true;
-            $_SESSION['csrf'] = bin2hex(random_bytes(16));
-            $_SESSION['at'] = time();
-            header('Location: ' . $self);
-            exit;
         } else {
-            $fails++;
-            @file_put_contents($lock, json_encode(['n' => $fails, 'until' => $fails >= 5 ? time() + 60 : 0]));
-            usleep(300000);
-            $loginError = 'الرمز غير صحيح.';
+            $code = (string) ($_POST['code'] ?? '');
+            $givenLabel = trim((string) ($_POST['label'] ?? ''));
+            $label = null;
+            if ($adminToken !== '' && hash_equals($adminToken, $code)) {
+                $label = $givenLabel !== '' ? $givenLabel : 'المشرف الأساسي';
+            } else {
+                $found = panel_admin_label($code);
+                if ($found !== null) $label = $found;
+            }
+            if ($label === null) {
+                $fails++;
+                @file_put_contents($lock, json_encode(['n' => $fails, 'until' => $fails >= 5 ? time() + 60 : 0]));
+                usleep(300000);
+                $loginError = 'الرمز غير صحيح.';
+            } else {
+                @unlink($lock);
+                $id = substr(hash('sha256', $code), 0, 12);
+                $entry = ['id' => $id, 'label' => mb_substr($label, 0, 80), 'hash' => hash('sha256', $code)];
+                $accounts = $_SESSION['accounts'];
+                $replaced = false;
+                foreach ($accounts as $i => $a) {
+                    if ((string) ($a['id'] ?? '') === $id) { $accounts[$i] = $entry; $replaced = true; break; }
+                }
+                if (!$replaced) {
+                    if (count($accounts) >= $maxAccounts) {
+                        $loginError = 'الحد الأقصى ثلاثة حسابات. احذف حساباً من تبويب «المشرفون والمطورون» أولاً.';
+                    } else {
+                        $accounts[] = $entry;
+                    }
+                }
+                if ($loginError === '') {
+                    $_SESSION['accounts'] = array_values($accounts);
+                    $_SESSION['active'] = $id;
+                    if (empty($_SESSION['ok'])) session_regenerate_id(true);
+                    $_SESSION['ok'] = true;
+                    if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
+                    $_SESSION['at'] = time();
+                    header('Location: ' . $self);
+                    exit;
+                }
+            }
         }
     }
-    if (empty($_SESSION['ok'])) {
+    if ($forceLogin || empty($_SESSION['ok'])) {
         ?><!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>اللوحة الأساسية — Y- Dimensions</title>
-<style>:root{--bg:#12111a;--fg:#f0edfa;--card:#1d1b29;--pri:#8b6cf5;--bd:#3a3650}body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--fg);font-family:system-ui,"Segoe UI",Tahoma,sans-serif}form{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:28px;width:min(92vw,380px)}img{width:64px;height:64px;border-radius:16px}h1{font-size:19px;margin:12px 0 6px}p{font-size:13px;opacity:.7;margin:0 0 16px}input,button{width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid var(--bd);font:inherit;background:transparent;color:inherit;margin-bottom:10px}button{background:var(--pri);color:#fff;border:0;cursor:pointer;font-weight:700}.e{color:#ff8a94;font-size:13px;margin-bottom:8px}</style></head><body>
-<form method="post"><img src="assets/icon.svg" alt="أيقونة التطبيق"><h1>اللوحة الأساسية — Y- Dimensions</h1><p>الواجهة + الـ API + الكتب + التطبيقات + تنفيذ الأوامر</p>
+<style>:root{--bg:#12111a;--fg:#f0edfa;--card:#1d1b29;--pri:#8b6cf5;--bd:#3a3650}body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--fg);font-family:system-ui,"Segoe UI",Tahoma,sans-serif}form{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:28px;width:min(92vw,380px)}img{width:64px;height:64px;border-radius:16px}h1{font-size:19px;margin:12px 0 6px}p{font-size:13px;opacity:.7;margin:0 0 16px}input,button{width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid var(--bd);font:inherit;background:transparent;color:inherit;margin-bottom:10px}button{background:var(--pri);color:#fff;border:0;cursor:pointer;font-weight:700}.e{color:#ff8a94;font-size:13px;margin-bottom:8px}.acc{font-size:12px;opacity:.7;margin-bottom:10px}</style></head><body>
+<form method="post"><img src="assets/icon.svg" alt="أيقونة التطبيق"><h1>اللوحة الأساسية — Y- Dimensions</h1><p>دخول بحساب مشرف · الحد الأقصى 3 حسابات محفوظة</p>
+<div class="acc">الحسابات المحفوظة: <?= count($_SESSION['accounts']) ?> / <?= $maxAccounts ?> — <?php foreach ($_SESSION['accounts'] as $a) echo h($a['label']) . ' · '; ?></div>
 <?php if ($loginError !== '') echo '<div class="e">' . h($loginError) . '</div>'; ?>
-<input type="password" name="code" placeholder="رمز الدخول (admin_token)" autocomplete="current-password" autofocus><button>دخول</button></form></body></html><?php
+<input name="label" placeholder="اسم الحساب (اختياري)" autocomplete="off">
+<input type="password" name="code" placeholder="رمز الدخول" autocomplete="current-password" autofocus><button>دخول</button>
+<a href="<?= h($self) ?>" style="display:block;text-align:center;color:var(--pri);font-size:13px;text-decoration:none">إلغاء والعودة</a></form></body></html><?php
         exit;
     }
 }
@@ -178,6 +257,11 @@ $endpoints = [
     ['content.php?action=file', 'GET', 'تنزيل ملف بيانات متغيّر', ['name']],
     ['requirements.php?action=list', 'GET', 'متطلبات التطبيقات ومصادر الأصول', []],
     ['requirements.php?action=mark', 'POST', 'التأشير على بند تم توفيره', ['X-Admin-Token']],
+    ['devmode.php?action=status', 'GET', 'صلاحية المطور وكتالوج الاختبارات', ['Authorization']],
+    ['devmode.php?action=tests', 'GET', 'اختبارات وضع المطور المفعّلة', ['Authorization']],
+    ['diagnostics.php?action=match', 'GET|POST', 'حل معروف لتوقيع مشكلة', ['Authorization']],
+    ['diagnostics.php?action=report', 'POST', 'بلاغ تشخيص مجهّل الهوية', ['Authorization']],
+    ['diagnostics.php?action=list', 'GET', 'بلاغات التشخيص للوحة', ['X-Admin-Token']],
 ];
 $tableNames = ['users', 'tokens', 'profiles', 'journal', 'ledger', 'books', 'wallets', 'threads', 'posts',
                'items', 'purchases', 'raid_seasons', 'raid_members', 'licenses', 'vault_items', 'announcements', 'admin_log'];
@@ -197,6 +281,9 @@ $commands = [
     'content.manifest' => 'عرض حزم التحديثات الفرعية وبصماتها',
     'devices.list' => 'عرض الأجهزة المسجّلة وآخر ظهور',
     'releases.list' => 'عرض الإصدارات المسجّلة',
+    'devmode.tests' => 'عدد اختبارات وضع المطور المفعّلة',
+    'diagnostics.reports' => 'آخر بلاغات تشخيص العتاد',
+    'accounts.max' => 'عرض الحد الأقصى للحسابات (3)',
 ];
 
 function endpointFile(string $target): string {
@@ -302,7 +389,7 @@ function runCommand(string $cmd, string $arg): string {
             $out[] = 'الناقص: ' . count(array_filter($reqRows, function ($r) { return empty($r['provided']); }));
             break;
         case 'content.manifest':
-            foreach (['app.json', 'books.json', 'environments.json', 'requirements.json'] as $n) {
+            foreach (['app.json', 'books.json', 'environments.json', 'requirements.json', 'devmode_tests.json', 'releases.json'] as $n) {
                 $f = $panelDir . '/data/' . $n;
                 $out[] = $n . ' => ' . (is_file($f) ? hash_file('sha256', $f) : 'مفقود');
             }
@@ -320,6 +407,22 @@ function runCommand(string $cmd, string $arg): string {
             }
             if (!$out) $out[] = 'لا إصدارات مسجّلة (جدول releases غير مستورد أو فارغ).';
             break;
+        case 'devmode.tests':
+            $t = readJson($panelDir . '/data/devmode_tests.json')['tests'] ?? [];
+            $on = count(array_filter($t, function ($x) { return !empty($x['enabled']); }));
+            $out[] = 'الاختبارات: ' . count($t) . ' | المفعّل: ' . $on . ' | المعطّل: ' . (count($t) - $on);
+            $out[] = 'الحد الأقصى للحسابات: 3';
+            break;
+        case 'diagnostics.reports':
+            foreach (q('SELECT issue_signature, device_model, created_at FROM diagnostic_reports ORDER BY id DESC LIMIT 20') as $r) {
+                $out[] = ago($r['created_at']) . ' | ' . $r['issue_signature'] . ' | ' . $r['device_model'];
+            }
+            if (!$out) $out[] = 'لا بلاغات تشخيص (استورد 004_devmode.sql أو لا بلاغات بعد).';
+            break;
+        case 'accounts.max':
+            $out[] = 'الحد الأقصى للحسابات المحفوظة: 3';
+            $out[] = 'حسابات هذه الجلسة: ' . count($_SESSION['accounts'] ?? []);
+            break;
     }
     return implode("\n", $out);
 }
@@ -327,6 +430,68 @@ function runCommand(string $cmd, string $arg): string {
 // ---------- actions ----------
 $flash = '';
 $commandOutput = '';
+$generatedAdminToken = '';
+$panelTestsPath = $panelDir . '/data/devmode_tests.json';
+$devActions = ['dev_grant', 'dev_revoke', 'test_toggle', 'admin_add', 'admin_drop'];
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && in_array((string) ($_POST['dev_action'] ?? ''), $devActions, true)) {
+    if (!hash_equals($csrf, (string) ($_POST['csrf'] ?? ''))) { http_response_code(403); exit('CSRF'); }
+    $devAction = (string) $_POST['dev_action'];
+    if ($readOnly) {
+        $flash = 'وضع القراءة فقط: اضبط config.php و admin_token واستورد 004_devmode.sql أولاً.';
+    } else {
+        if ($devAction === 'dev_grant') {
+            $uid = (int) ($_POST['user_id'] ?? 0);
+            $role = (string) ($_POST['role'] ?? 'developer');
+            if (!in_array($role, ['developer', 'admin'], true)) $role = 'developer';
+            if ($uid > 0) {
+                run('INSERT INTO developer_accounts (app_id, user_id, role, granted_by, granted_at, active)
+                     VALUES (?, ?, ?, ?, ?, 1)
+                     ON DUPLICATE KEY UPDATE role = VALUES(role), granted_by = VALUES(granted_by),
+                                             granted_at = VALUES(granted_at), active = 1',
+                    ['y-dimensions', $uid, $role, 'panel', time()]);
+                logit('developer.grant', 'user=' . $uid . ' role=' . $role);
+                $flash = 'تم تعيين المستخدم #' . $uid . ' ' . ($role === 'admin' ? 'مشرفاً' : 'مطوراً') . '.';
+            }
+        } elseif ($devAction === 'dev_revoke') {
+            $uid = (int) ($_POST['user_id'] ?? 0);
+            if ($uid > 0) {
+                run('UPDATE developer_accounts SET active = 0 WHERE app_id = ? AND user_id = ?', ['y-dimensions', $uid]);
+                logit('developer.revoke', 'user=' . $uid);
+                $flash = 'أُلغيت صلاحية المطور للمستخدم #' . $uid . '.';
+            }
+        } elseif ($devAction === 'test_toggle') {
+            $testsData = readJson($panelTestsPath);
+            $idx = (int) ($_POST['test_index'] ?? -1);
+            if (isset($testsData['tests'][$idx])) {
+                $testsData['tests'][$idx]['enabled'] = empty($testsData['tests'][$idx]['enabled']);
+                file_put_contents($panelTestsPath,
+                    json_encode($testsData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "\n", LOCK_EX);
+                logit('devmode.test_toggle', 'index=' . $idx);
+                $flash = 'تم تحديث حالة الاختبار.';
+            }
+        } elseif ($devAction === 'admin_add') {
+            $label = trim((string) ($_POST['admin_label'] ?? ''));
+            if ($label === '') $label = 'مشرف ' . date('Y/m/d H:i');
+            $count = (int) one('SELECT COUNT(*) FROM panel_admins WHERE active = 1');
+            if ($count >= 3) {
+                $flash = 'الحد الأقصى ثلاثة حسابات مشرفين. عطّل واحداً أولاً.';
+            } else {
+                $generatedAdminToken = bin2hex(random_bytes(24));
+                run('INSERT INTO panel_admins (label, token_hash, role, created_at, active) VALUES (?, ?, ?, ?, 1)',
+                    [mb_substr($label, 0, 80), hash('sha256', $generatedAdminToken), 'admin', time()]);
+                logit('panel.admin_add', 'label=' . $label);
+                $flash = 'أُنشئ حساب مشرف جديد. انسخ رمزه الآن (يُعرض مرة واحدة).';
+            }
+        } elseif ($devAction === 'admin_drop') {
+            $id = (int) ($_POST['admin_id'] ?? 0);
+            if ($id > 0) {
+                run('UPDATE panel_admins SET active = 0 WHERE id = ?', [$id]);
+                logit('panel.admin_drop', 'id=' . $id);
+                $flash = 'عُطّل حساب المشرف.';
+            }
+        }
+    }
+}
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['req_index'])) {
     if (!hash_equals($csrf, (string) ($_POST['csrf'] ?? ''))) {
         http_response_code(403);
@@ -369,6 +534,8 @@ $tabs = [
     'commands' => 'تنفيذ الأوامر', 'fields' => 'الحقول التلقائية', 'api' => 'الـ API',
     'requirements' => 'متطلبات التطبيقات', 'content' => 'التحديثات الفرعية',
     'devices' => 'الأجهزة المسجّلة', 'releases' => 'الإصدارات',
+    'developers' => 'المشرفون والمطورون', 'devtests' => 'اختبارات المطور',
+    'diagnostics' => 'بلاغات التشخيص',
 ];
 $page = (string) ($_GET['p'] ?? 'home');
 if (!isset($tabs[$page])) $page = 'home';
@@ -386,7 +553,10 @@ function table(array $headers, array $rows): string {
     $o .= '</tr>';
     foreach ($rows as $r) {
         $o .= '<tr>';
-        foreach ($r as $c) $o .= '<td>' . h($c) . '</td>';
+        foreach ($r as $c) {
+            $isRaw = is_string($c) && (str_starts_with($c, '<form') || str_starts_with($c, '<button'));
+            $o .= '<td>' . ($isRaw ? $c : h($c)) . '</td>';
+        }
         $o .= '</tr>';
     }
     return $o . '</table></div>';
@@ -593,6 +763,84 @@ GET ' . h($apiBase) . '/api/auth.php?action=login  →  {"error":"use POST"} (JS
         . 'تغيير الكود → إصدار جديد في <code>releases</code> مع زر تنزيل وتثبيت داخل التطبيق.</p>'
         . '<p class="m">سبب إعادة طلب الصلاحيات بعد التحديث سابقاً: اختلاف توقيع <code>ci/test-signing.p12</code> عن توقيع الإصدار الرسمي؛ '
         . 'الإصدار 0.17.0 يوحّد التوقيع في <code>build.gradle.kts</code>.</p>');
+} elseif ($page === 'developers') {
+    echo '<h2 class="sec">القسم 1 — حسابات لوحة التحكم (الحد الأقصى 3)</h2>';
+    echo card('إضافة مشرف', '<p>يُنشأ رمز عشوائي ويُعرض مرة واحدة؛ استخدمه في شاشة الدخول أو زر «حساب آخر».</p>'
+        . '<form method="post" class="cmd"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+        . '<input type="hidden" name="dev_action" value="admin_add"><label>اسم الحساب</label>'
+        . '<input name="admin_label" placeholder="مثال: مطور الواجهة"><button>إنشاء حساب مشرف</button></form>');
+    if ($generatedAdminToken !== '') {
+        echo card('رمز الحساب الجديد — انسخه الآن', '<pre>' . h($generatedAdminToken) . '</pre><p class="m">لن يُعرض مرة أخرى؛ يُحفظ فقطhash في قاعدة البيانات.</p>');
+    }
+    echo card('المشرفون', table(['#', 'الاسم', 'الدور', 'التاريخ', ''], array_map(function ($r) use ($csrf) {
+        return [$r['id'], $r['label'], $r['role'], ago($r['created_at']),
+            '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+            . '<input type="hidden" name="dev_action" value="admin_drop"><input type="hidden" name="admin_id" value="' . (int) $r['id'] . '">'
+            . '<button class="b">تعطيل</button></form>'];
+    }, q('SELECT id, label, role, created_at FROM panel_admins WHERE active = 1 ORDER BY id DESC'))));
+    echo card('حسابات هذه الجلسة', '<p>المحفوظة: ' . count($_SESSION['accounts'] ?? []) . ' / 3 · النشط: '
+        . h((string) ($_SESSION['active'] ?? '—')) . '</p><p><a href="?add=1">تسجيل الدخول بحساب آخر</a> · <a href="?logout=1">تسجيل الخروج من الحساب النشط</a></p>'
+        . '<p class="m">تبديل الحساب من القائمة في أعلى الصفحة، أو بالضغط على اسم الحساب.</p>');
+
+    echo '<h2 class="sec">القسم 2 — تعيين مستخدمي التطبيق كمشرفين/مطورين</h2>';
+    echo card('المستخدمون', table(['#', 'الاسم', 'البريد', 'الصلاحية', 'إجراء'], array_map(function ($r) use ($csrf) {
+        $role = (string) ($r['role'] ?? '');
+        $state = $role !== '' ? ($role === 'admin' ? 'مشرف' : 'مطور') : 'مستخدم عادي';
+        $forms = '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+            . '<input type="hidden" name="user_id" value="' . (int) $r['id'] . '">'
+            . '<input type="hidden" name="dev_action" value="dev_grant">'
+            . '<select name="role"><option value="developer">مطور</option><option value="admin">مشرف</option></select>'
+            . '<button class="b">تعيين</button></form>';
+        if ($role !== '') {
+            $forms .= '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+                . '<input type="hidden" name="user_id" value="' . (int) $r['id'] . '">'
+                . '<input type="hidden" name="dev_action" value="dev_revoke"><button class="b">إلغاء</button></form>';
+        }
+        return [$r['id'], $r['name'], $r['email'], $state, $forms];
+    }, q('SELECT u.id, u.name, u.email, d.role FROM users u
+          LEFT JOIN developer_accounts d ON d.app_id = ? AND d.user_id = u.id AND d.active = 1
+          ORDER BY u.id DESC LIMIT 100', ['y-dimensions']))));
+    echo card('أثر الصلاحية في التطبيق', '<p>المستخدم المعيّن فقط يرى «وضع المطور» بأقسامه الأربعة؛ '
+        . 'يستدعي التطبيق <code>devmode.php?action=status</code> بالتوكن قبل فتح الاختبارات.'
+        . ' التطبيق لا يمنح الصلاحية من نفسه.</p><p class="m">الجدول <code>developer_accounts</code> جديد غير مكرر من <code>004_devmode.sql</code>؛ '
+        . '<code>users</code> بقي موحّداً.</p>');
+} elseif ($page === 'devtests') {
+    $testsData = readJson($panelTestsPath);
+    $tests = $testsData['tests'] ?? [];
+    $bySection = [];
+    foreach ($tests as $i => $t) $bySection[(string) ($t['section'] ?? 'عام')][] = [$i, $t];
+    echo card('كتالوج اختبارات وضع المطور', '<p>' . count($tests) . ' اختباراً يدوياً، لكل ميزة على حدى، '
+        . 'مولّد من <code>Books.kt</code> و<code>Routes.kt</code>. التطبيق يعرض زر «اختبار» بجانب بيانات كل ميزة، '
+        . 'ويحفظ نسخة قبل كل اختبار للرجوع إليها.</p>'
+        . '<p class="m">التعطيل هنا يمنع ظهور الاختبار في التطبيق عبر <code>devmode.php?action=tests</code> وملف التحديثات الفرعية.</p>');
+    foreach ($bySection as $section => $items) {
+        echo '<h2 class="sec">' . h($section) . '</h2>';
+        $rows = [];
+        foreach ($items as [$i, $t]) {
+            $rows[] = [$t['id'] ?? '—', $t['title'] ?? '—', $t['data_key'] ?? '—', $t['action'] ?? '—',
+                !empty($t['enabled']) ? 'مفعّل' : 'معطّل',
+                '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+                . '<input type="hidden" name="dev_action" value="test_toggle"><input type="hidden" name="test_index" value="' . $i . '">'
+                . '<button class="b">تبديل</button></form>'];
+        }
+        echo card('الاختبارات', table(['المعرّف', 'الميزة', 'بيانات', 'الإجراء', 'الحالة', ''], $rows));
+    }
+    echo card('أقسام وضع المطور في التطبيق', '<pre>1) اختبارات المميزات كلها — كل ميزة على حدى (يدوي، ليس تلقائياً)
+2) الرجوع للوضع قبل الاختبار — نسخة قبل كل اختبار + نسخة بداية الجلسة
+3) بيانات التطبيق — الحالة الكاملة للقراءة والنسخ
+4) فوارق الإصدارات — بين الإصدار الحالي والسابق (releases.json)</pre>');
+} elseif ($page === 'diagnostics') {
+    echo card('مساعد تشخيص العتاد والنظام', '<p>التطبيق يجمع قراءات فعلية (البطارية/الشحن، التخزين الداخلي والخارجي، '
+        . 'الواي فاي، الشريحة والشبكة، RAM/CPU)، ويولّد تقريراً عربياً وأوامر إصلاح آمنة، '
+        . 'ثم يرسل حزمة <strong>مجهّلة بالكامل</strong> إلى <code>diagnostics.php?action=report</code>.</p>'
+        . '<p class="m">مطابقة «حل معروف» تتم أولاً عبر <code>action=match</code>؛ لا IMEI ولا رقم هاتف ولا SSID حقيقي ولا موقع.</p>'
+        . '<p><a href="../../docs/diagnostics/SYSTEM_PROMPT.md">System Prompt الكامل لمساعد التشخيص</a></p>');
+    echo card('آخر البلاغات', table(['#', 'توقيع المشكلة', 'الطراز', 'أندرويد', 'التاريخ'], array_map(function ($r) {
+        return [$r['id'], $r['issue_signature'], $r['device_model'], $r['android_version'], ago($r['created_at'])];
+    }, q('SELECT id, issue_signature, device_model, android_version, created_at FROM diagnostic_reports ORDER BY id DESC LIMIT 100'))));
+    echo card('حلول معروفة', table(['توقيع المشكلة', 'الحل'], array_map(function ($r) {
+        return [$r['issue_signature'], $r['solution_ar']];
+    }, q('SELECT issue_signature, solution_ar FROM diagnostic_solutions ORDER BY issue_signature'))));
 }
 $content = ob_get_clean();
 ?><!doctype html>
@@ -637,7 +885,12 @@ ul{margin:0;padding-inline-start:18px;line-height:1.9}
 <header>
   <img src="assets/icon.svg" alt="أيقونة Y- Dimensions">
   <div><h1>اللوحة الأساسية — <?= h($appInfo['name'] ?? 'Y- Dimensions') ?></h1><p>API · تنفيذ أوامر · تطبيقات · كتب · <?= h($appInfo['version'] ?? '—') ?></p></div>
-  <span class="sp"></span><a href="?logout=1">خروج</a>
+  <span class="sp"></span>
+  <span class="m" style="margin-inline-end:8px">الحسابات <?= count($_SESSION['accounts'] ?? []) ?>/3:</span>
+  <?php foreach (($_SESSION['accounts'] ?? []) as $a): ?>
+    <a href="?use=<?= h((string) ($a['id'] ?? '')) ?>" style="margin-inline-end:8px;<?= ((string) ($_SESSION['active'] ?? '') === (string) ($a['id'] ?? '')) ? 'font-weight:700;text-decoration:underline' : '' ?>"><?= h((string) ($a['label'] ?? '')) ?></a>
+  <?php endforeach; ?>
+  <a href="?add=1" style="margin-inline-end:8px">حساب آخر</a><a href="?logout=1">خروج</a>
 </header>
 <nav><?php foreach ($tabs as $k => $v) echo '<a href="?p=' . h($k) . '"' . ($k === $page ? ' class="on"' : '') . '>' . h($v) . '</a>'; ?></nav>
 <div class="home-fab"><a href="../">🏠 الموقع الأساسي</a><a href="./">⚙ لوحة التحكم الأساسية</a></div>

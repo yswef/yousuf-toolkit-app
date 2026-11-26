@@ -9,7 +9,7 @@
 3. ارفع `server/src/` و`server/config/` و`server/migrations/` إلى مجلد النطاق خارج `public_html`:
    `domains/yousef.romoozbasmah.com/src` و`config` و`migrations`.
 4. انسخ `config/config.example.php` إلى `config/config.php` واملأ `db` و`base_url` و`license_secret`.
-5. استورد `migrations/001_init.sql` ثم `002_admin.sql` ثم `003_devices.sql` من phpMyAdmin (جداول جديدة غير مكررة).
+5. استورد `migrations/001_init.sql` ثم `002_admin.sql` ثم `003_devices.sql` ثم `004_devmode.sql` من phpMyAdmin (جداول جديدة غير مكررة).
 6. فعّل SSL المجاني، ثم افتح `https://yousef.romoozbasmah.com/` وتحقق من `ok=true`، وافتح `https://yousef.romoozbasmah.com/panel/` للوحة الأساسية، و`.../admin/` للوحة التفصيلية (نفس `admin_token`).
 7. أضف عناصر `items` ومواسم `raid_seasons` من phpMyAdmin.
 8. لتوليد كود ترخيص: `php tools/code.php <user_id>` بعد وضع `license_secret` في `config.php`.
@@ -19,3 +19,9 @@
 لا ترفع `config.php` إلى git. التطبيق يقرأ العنوان من `config/environments.json` وهو مضبوط على هذا النطاق؛ ويمكن ضبطه من شاشة الحساب ← «عنوان API للخادم»، أو استعمال `https://النطاق/panel` لأن `panel/api/*.php` تحوّل الطلبات إلى `api/*.php`.
 
 قبل الرفع، بعد أي تعديل على `config/app.json` أو `Books.kt` أو الإصدار: `python3 server/tools/build_panel_data.py` يعيد توليد بيانات اللوحة الأساسية (24 كتاباً، بيانات التطبيق، الأيقونتان). شرح اللوحة: `public/panel/README.md`.
+
+
+## جديد 0.18.0
+- استيراد `004_devmode.sql` يضيف جداول غير مكررة: `developer_accounts`, `panel_admins`, `diagnostic_reports`, `diagnostic_solutions`.
+- من تبويب «المشرفون والمطورون» عيّن مستخدمي التطبيق كمطورين، وأنشئ حتى 3 حسابات مشرف للوحة مع تبديلها وتسجيل الخروج.
+- نقاط جديدة: `api/devmode.php`, `api/diagnostics.php` (ومحوّلاتها في `panel/api/`). التحديثات الفرعية تشمل الآن `devmode_tests.json` و`releases.json`.
