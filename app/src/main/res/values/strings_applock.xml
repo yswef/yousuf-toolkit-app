@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
+<resources>
+    <string name="applock_settings">قفل التطبيق</string>
+    <string name="applock_type">نوع الرمز</string>
+    <string name="applock_secret">الرمز</string>
+    <string name="applock_confirm">تأكيد الرمز</string>
+    <string name="applock_save">حفظ القفل</string>
+    <string name="applock_disable">إيقاف القفل</string>
+    <string name="applock_status_on">القفل مفعّل.</string>
+    <string name="applock_status_off">القفل غير مفعّل.</string>
+    <string name="applock_saved">تم حفظ القفل؛ سجّل الدخول بالرمز مرة واحدة.</string>
+    <string name="applock_invalid">الرمز قصير أو غير مطابق.</string>
+    <string name="applock_disabled">تم إيقاف القفل.</string>
+    <string name="applock_unlock_title">افتح التطبيق</string>
+    <string name="applock_unlock_button">دخول</string>
+    <string name="applock_unlock_failed">الرمز غير صحيح.</string>
+    <string name="applock_biometric_on">البصمة مفعّلة.</string>
+    <string name="applock_biometric_off">البصمة غير مفعّلة.</string>
+    <string name="applock_biometric_button">بصمة الإصبع أو الوجه</string>
+    <string name="applock_biometric_subtitle">استخدم البصمة المسجّلة على الجهاز إن وجدت.</string>
+    <string name="applock_biometric_negative">استخدم الرمز</string>
+    <string name="applock_biometric_ask">تفعيل البصمة؟</string>
+    <string name="applock_biometric_yes">تفعيل</string>
+    <string name="applock_biometric_no">لا</string>
+    <string name="applock_biometric_failed">تعذّرت البصمة.</string>
+    <string name="applock_biometric_unavailable">لا توجد بصمة مسجّلة على هذا الجهاز.</string>
+    <string-array name="applock_type_names">
+        <item>نمط</item><item>أرقام</item><item>كلمة مرور</item>
+    </string-array>
+</resources>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
