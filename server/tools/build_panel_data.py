@@ -12,7 +12,6 @@ ROOT = Path(__file__).resolve().parents[2]
 PANEL = ROOT / "server/public/panel"
 DATA = PANEL / "data"
 ASSETS = PANEL / "assets"
-ASSETS_APP = ROOT / "app/src/main/assets"
 SIGN_START = "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)"
 SIGN_END = "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
 
@@ -116,7 +115,6 @@ def main():
     shutil.copyfile(
         ROOT / "app/src/main/res/mipmap-xxxhdpi/ic_launcher.png", ASSETS / "icon.png"
     )
-    ASSETS_APP.mkdir(parents=True, exist_ok=True)
     for extra in ("releases.json", "devmode_tests.json"):
         src = ROOT / "config" / extra
         if src.is_file():
@@ -125,7 +123,6 @@ def main():
                 data = signed_json(collections.OrderedDict(data))
             text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
             (DATA / extra).write_text(text, encoding="utf-8")
-            (ASSETS_APP / extra).write_text(text, encoding="utf-8")
     print(f"panel data rebuilt: {catalog['count']} books, {len(catalog['sections'])} sections, version {name} ({code})")
 
 

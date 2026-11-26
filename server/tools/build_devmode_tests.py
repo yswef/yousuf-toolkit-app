@@ -14,7 +14,6 @@ ROUTES = ROOT / "app/src/main/kotlin/core/navigation/Routes.kt"
 VALUES = ROOT / "app/src/main/res/values"
 OUT_CONFIG = ROOT / "config/devmode_tests.json"
 OUT_PANEL = ROOT / "server/public/panel/data/devmode_tests.json"
-OUT_ASSETS = ROOT / "app/src/main/assets"
 SIGN_START = "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)"
 SIGN_END = "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
 
@@ -129,7 +128,5 @@ text = json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 OUT_CONFIG.write_text(text, encoding="utf-8")
 OUT_PANEL.parent.mkdir(parents=True, exist_ok=True)
 OUT_PANEL.write_text(text, encoding="utf-8")
-OUT_ASSETS.mkdir(parents=True, exist_ok=True)
-(OUT_ASSETS / "devmode_tests.json").write_text(text, encoding="utf-8")
-print(f"devmode tests rebuilt: {len(tests)} tests -> {OUT_CONFIG} + {OUT_PANEL} + {OUT_ASSETS}")
+print(f"devmode tests rebuilt: {len(tests)} tests -> {OUT_CONFIG} + {OUT_PANEL} (config/ is already an Android assets srcDir)")
 # Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
