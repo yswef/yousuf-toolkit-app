@@ -35,6 +35,7 @@ import feature.home.HomeScreen
 import feature.home.PathScreen
 import feature.home.StatsScreen
 import feature.intro.IntroScreen
+import feature.journal.JournalEditorScreen
 import feature.journal.JournalScreen
 import feature.learn.LearnScreen
 import feature.life.LifeScreen
@@ -166,7 +167,8 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.FIREWALL) { FirewallScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.FORUM) { ForumScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.GAME) { GameScreen(onBack = { nav.popBackStack() }) }
-        composable(Routes.JOURNAL) { JournalScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.JOURNAL) { JournalScreen(onBack = { nav.popBackStack() }, onAdd = { nav.navigate(Routes.JOURNAL_EDITOR) }) }
+        composable(Routes.JOURNAL_EDITOR) { JournalEditorScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LEARN) { LearnScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.LIBRARY) { LibraryScreen(onBack = { nav.popBackStack() }, onPdf = { nav.navigate(Routes.PDFREADER) }) }
         composable(Routes.LICENSE) { LicenseScreen(onBack = { nav.popBackStack() }) }
