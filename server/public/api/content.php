@@ -12,7 +12,12 @@ $allowed = ['app.json', 'books.json', 'environments.json', 'requirements.json', 
 $versionFile = dirname(__DIR__) . '/content/VERSION';
 
 if ($action === 'manifest') {
-    $version = is_file($versionFile) ? trim((string) file_get_contents($versionFile)) : '1';
+    $rawVersion = is_file($versionFile) ? trim((string) file_get_contents($versionFile)) : '1';
+    $version = '1';
+    foreach (preg_split('/\R/', $rawVersion) as $line) {
+        $line = trim($line);
+        if (preg_match('/^\d+$/', $line) === 1) { $version = $line; break; }
+    }
     $files = [];
     foreach ($allowed as $name) {
         $path = $dataDir . '/' . $name;
