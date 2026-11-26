@@ -215,6 +215,18 @@ fun SettingsScreen(
                 )
             }
 
+            V3SectionHeader(title = stringResource(R.string.journal_cloud_sync))
+            V3Group {
+                V3SwitchRow(
+                    title = stringResource(R.string.journal_auto_sync),
+                    subtitle = stringResource(if (store.premium) R.string.journal_auto_sync_hint else R.string.journal_auto_sync_paid),
+                    checked = store.journalAutoSync,
+                    enabled = store.premium,
+                    divider = true,
+                    onChange = { store.setJournalAutoSync(it) }
+                )
+            }
+
             PermissionsSection()
 
             DataManagement()
