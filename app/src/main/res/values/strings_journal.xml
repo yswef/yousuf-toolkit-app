@@ -43,6 +43,17 @@
     <string name="journal_sync_now">مزامنة الآن</string>
     <string name="journal_sync_done">تمت المزامنة: %1$d مذكرة.</string>
     <string name="journal_sync_failed">تعذّرت المزامنة.</string>
+    <string name="journal_voice_recording_title">تسجيل صوتي</string>
+    <string name="journal_voice_premium_needed">التسجيل الصوتي مدفوع ويعمل بعد تفعيل التطبيق.</string>
+    <string name="journal_voice_record">بدء التسجيل</string>
+    <string name="journal_voice_stop">إيقاف التسجيل</string>
+    <string name="journal_voice_play">تشغيل</string>
+    <string name="journal_voice_remove">إزالة</string>
+    <string name="journal_voice_recording">جارٍ التسجيل.</string>
+    <string name="journal_voice_saved">حُفظ التسجيل مع المذكرة.</string>
+    <string name="journal_voice_failed">تعذّر التسجيل الصوتي.</string>
+    <string name="journal_voice_mic_denied">صلاحية الميكروفون مطلوبة.</string>
+    <string name="journal_voice_attached">معها تسجيل صوتي.</string>
     <string-array name="journal_background_names">
         <item>كريمي</item><item>سماوي</item><item>وردي</item><item>نعناعي</item><item>بنفسجي</item>
         <item>رملي</item><item>ليلي</item><item>شبكة</item><item>نقاط</item><item>محيط</item>
