@@ -22,15 +22,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import android.text.Html
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
@@ -45,19 +48,34 @@ import domain.model.JournalEntry
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalScreen(onBack: () -> Unit, onAdd: () -> Unit) {
     val store = LocalStore.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
+    var syncStatus by remember { mutableStateOf("") }
     val entries = store.journal.sortedByDescending { it.at }
+
+    val sync = {
+        scope.launch {
+            val result = runCatching { JournalSync.push(store) }
+            syncStatus = result.fold(
+                onSuccess = { count -> context.getString(R.string.journal_sync_done, count) },
+                onFailure = { context.getString(R.string.journal_sync_failed) }
+            )
+        }
+    }
 
     ScreenScaffold(
         title = stringResource(R.string.feature_journal),
         onBack = onBack,
         actions = {
+            TextButton(onClick = sync) { Text(stringResource(R.string.journal_sync_now)) }
             IconButton(onClick = onAdd) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
             }
@@ -65,6 +83,7 @@ fun JournalScreen(onBack: () -> Unit, onAdd: () -> Unit) {
     ) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
             MoodInsight(entries)
+            if (syncStatus.isNotBlank()) Text(syncStatus, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 16.dp))
             if (entries.isEmpty()) {
                 EmptyIllustration(R.drawable.empty_journal, stringResource(R.string.journal_none), Modifier.padding(8.dp))
             } else {
