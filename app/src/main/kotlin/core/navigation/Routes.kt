@@ -31,6 +31,7 @@ object Routes {
     const val JOURNAL = "journal"
     const val JOURNAL_EDITOR = "journal_editor"
     const val APPLOCK = "applock"
+    const val RIGHTS = "rights"
     const val LEARN = "learn"
     const val LIBRARY = "library"
     const val LICENSE = "license"
