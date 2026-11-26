@@ -175,6 +175,10 @@ class Store(context: Context) {
         private set
     var ownedEmojiPacks by mutableStateOf(setOf("free-1", "free-2"))
         private set
+    var journalAutoSync by mutableStateOf(false)
+        private set
+    var journalLastSync by mutableStateOf(0L)
+        private set
     var campaigns by mutableStateOf<List<Campaign>>(emptyList())
         private set
     var accounts by mutableStateOf<List<AccountItem>>(emptyList())
@@ -643,6 +647,7 @@ class Store(context: Context) {
     fun saveLicense(code: String) {
         licenseCode = code.trim()
         premium = licenseCode.isNotBlank()
+        if (!premium) journalAutoSync = false
         save()
     }
 
@@ -958,6 +963,35 @@ class Store(context: Context) {
 
     fun updateJournalEntry(entry: JournalEntry) {
         journal = journal.map { if (it.id == entry.id) entry else it }
+        save()
+    }
+
+    fun setJournalAutoSync(enabled: Boolean) {
+        journalAutoSync = enabled && premium
+        save()
+    }
+
+    fun journalSyncPayload(): JSONObject {
+        val entries = JSONArray().apply { journal.forEach { put(it.toJournalJson()) } }
+        return JSONObject()
+            .put("points", points)
+            .put("xp", xp)
+            .put("level", (xp / 1000 + 1).coerceAtLeast(1))
+            .put("profile", JSONObject()
+                .put("name", profileName)
+                .put("age", profileAge)
+                .put("goal", profileGoal)
+                .put("team", profileTeam))
+            .put("journal", entries)
+            .put("ledger", JSONArray())
+            .put("books", JSONArray())
+            .put("wallets", JSONArray())
+    }
+
+    fun markJournalSynced() {
+        val now = System.currentTimeMillis()
+        journal = journal.map { it.copy(syncedAt = now) }
+        journalLastSync = now
         save()
     }
 
@@ -1367,6 +1401,8 @@ class Store(context: Context) {
         root.put("ownedBackgrounds", JSONArray(ownedBackgrounds))
         root.put("ownedStickerPacks", JSONArray(ownedStickerPacks))
         root.put("ownedEmojiPacks", JSONArray(ownedEmojiPacks))
+        root.put("journalAutoSync", journalAutoSync)
+        root.put("journalLastSync", journalLastSync)
         root.put("campaigns", JSONArray().apply {
             campaigns.forEach { c ->
                 put(JSONObject().apply {
@@ -1485,29 +1521,7 @@ class Store(context: Context) {
                 })
             }
         })
-        root.put("journal", JSONArray().apply {
-            journal.forEach { t ->
-                put(JSONObject().apply {
-                    put("id", t.id)
-                    put("title", t.title)
-                    put("body", t.body)
-                    put("at", t.at)
-                    put("mood", t.mood)
-                    put("background", t.background)
-                    put("richBody", t.richBody)
-                    put("font", t.font)
-                    put("colors", t.colors)
-                    put("drawings", t.drawings)
-                    put("stickers", t.stickers)
-                    put("images", t.images)
-                    put("emojiPack", t.emojiPack)
-                    put("stickerPack", t.stickerPack)
-                    put("voicePath", t.voicePath)
-                    put("hasTime", t.hasTime)
-                    put("syncedAt", t.syncedAt)
-                })
-            }
-        })
+        root.put("journal", JSONArray().apply { journal.forEach { put(it.toJournalJson()) } })
         root.put("water", JSONObject().apply {
             water.forEach { (day, cups) -> put(day, cups) }
         })
@@ -1703,6 +1717,8 @@ class Store(context: Context) {
             ownedBackgrounds = root.stringSet("ownedBackgrounds").ifEmpty { setOf("cream", "sky") }
             ownedStickerPacks = root.stringSet("ownedStickerPacks").ifEmpty { setOf("free-1", "free-2") }
             ownedEmojiPacks = root.stringSet("ownedEmojiPacks").ifEmpty { setOf("free-1", "free-2") }
+            journalAutoSync = root.optBoolean("journalAutoSync", false) && premium
+            journalLastSync = root.optLong("journalLastSync", 0L)
             campaigns = root.optJSONArray("campaigns").mapObjects {
                 Campaign(
                     id = it.optLong("id"),
@@ -1785,27 +1801,7 @@ class Store(context: Context) {
                     at = it.optLong("at")
                 )
             }
-            journal = root.optJSONArray("journal").mapObjects {
-                JournalEntry(
-                    id = it.optLong("id"),
-                    title = it.optString("title"),
-                    body = it.optString("body"),
-                    at = it.optLong("at"),
-                    mood = it.optString("mood", ""),
-                    background = it.optString("background", "cream"),
-                    richBody = it.optString("richBody", ""),
-                    font = it.optString("font", "Cairo"),
-                    colors = it.optString("colors", ""),
-                    drawings = it.optString("drawings", ""),
-                    stickers = it.optString("stickers", ""),
-                    images = it.optString("images", ""),
-                    emojiPack = it.optString("emojiPack", "free-1"),
-                    stickerPack = it.optString("stickerPack", "free-1"),
-                    voicePath = it.optString("voicePath", ""),
-                    hasTime = it.optBoolean("hasTime", false),
-                    syncedAt = it.optLong("syncedAt", 0L)
-                )
-            }
+            journal = root.optJSONArray("journal").mapObjects { it.toJournalEntry() }
             water = root.optJSONObject("water").toIntMap()
             prayers = root.optJSONObject("prayers").toSetMap()
             sleep = root.optJSONArray("sleep").mapObjects {
@@ -1856,6 +1852,46 @@ class Store(context: Context) {
         }
     }
 }
+
+private fun JournalEntry.toJournalJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("body", body)
+    put("at", at)
+    put("mood", mood)
+    put("background", background)
+    put("richBody", richBody)
+    put("font", font)
+    put("colors", colors)
+    put("drawings", drawings)
+    put("stickers", stickers)
+    put("images", images)
+    put("emojiPack", emojiPack)
+    put("stickerPack", stickerPack)
+    put("voicePath", voicePath)
+    put("hasTime", hasTime)
+    put("syncedAt", syncedAt)
+}
+
+private fun JSONObject.toJournalEntry(): JournalEntry = JournalEntry(
+    id = optLong("id"),
+    title = optString("title"),
+    body = optString("body"),
+    at = optLong("at"),
+    mood = optString("mood", ""),
+    background = optString("background", "cream"),
+    richBody = optString("richBody", ""),
+    font = optString("font", "Cairo"),
+    colors = optString("colors", ""),
+    drawings = optString("drawings", ""),
+    stickers = optString("stickers", ""),
+    images = optString("images", ""),
+    emojiPack = optString("emojiPack", "free-1"),
+    stickerPack = optString("stickerPack", "free-1"),
+    voicePath = optString("voicePath", ""),
+    hasTime = optBoolean("hasTime", false),
+    syncedAt = optLong("syncedAt", 0L)
+)
 
 private fun LearningLesson.toJson(): JSONObject = JSONObject().apply {
     put("id", id)
