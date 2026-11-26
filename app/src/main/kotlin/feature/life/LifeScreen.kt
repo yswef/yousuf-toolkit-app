@@ -55,6 +55,7 @@ import data.local.LocalStore
 import domain.model.ExtraRecord
 import feature.learn.LearningImportCard
 import feature.learn.LearningPlansCard
+import feature.learn.ReadyPlansCard
 import feature.learn.LearningPromptCard
 import java.io.File
 import java.time.LocalDate
@@ -216,6 +217,7 @@ private fun LearnTab(onAdd: (String) -> Unit) {
         item { LearningPromptCard() }
         item { LearningImportCard() }
         item { LearningPlansCard() }
+        item { ReadyPlansCard() }
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.life_note_add), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
