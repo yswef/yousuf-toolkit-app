@@ -1,3 +1,4 @@
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 @file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 
 package feature.life
@@ -52,6 +53,9 @@ import core.design.InfoCard
 import core.design.ScreenScaffold
 import data.local.LocalStore
 import domain.model.ExtraRecord
+import feature.learn.LearningImportCard
+import feature.learn.LearningPlansCard
+import feature.learn.LearningPromptCard
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
@@ -204,64 +208,14 @@ private fun MemoryCard(onAdd: () -> Unit) {
 @Composable
 private fun LearnTab(onAdd: (String) -> Unit) {
     val store = LocalStore.current
-    val clipboard = LocalClipboardManager.current
-    var subject by remember { mutableStateOf("") }
-    var level by remember { mutableStateOf("") }
-    var goal by remember { mutableStateOf("") }
-    var minutes by remember { mutableStateOf("30") }
-    var prompt by remember { mutableStateOf("") }
-    var plan by remember { mutableStateOf("") }
-    var planStatus by remember { mutableStateOf("") }
     var priorQuestion by remember { mutableStateOf(0 to 0) }
     var priorAnswer by remember { mutableStateOf("") }
     var priorResult by remember { mutableStateOf("") }
     val context = LocalContext.current
     LazyColumn(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        item {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(stringResource(R.string.life_prompt), style = MaterialTheme.typography.titleMedium)
-                    OutlinedTextField(value = subject, onValueChange = { subject = it }, label = { Text(stringResource(R.string.life_prompt_subject)) }, singleLine = true)
-                    OutlinedTextField(value = level, onValueChange = { level = it }, label = { Text(stringResource(R.string.life_prompt_level)) }, singleLine = true)
-                    OutlinedTextField(value = goal, onValueChange = { goal = it }, label = { Text(stringResource(R.string.life_prompt_goal)) }, singleLine = true)
-                    OutlinedTextField(value = minutes, onValueChange = { minutes = it }, label = { Text(stringResource(R.string.life_prompt_minutes)) }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number), singleLine = true)
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        OutlinedButton(onClick = {
-                            prompt = "أريد خطة تعلم لموضوع " + subject + " بمستوى " + level + " وهدف " + goal +
-                                ". خصص " + minutes + " دقيقة يومياً، وقسّم الخطة إلى أسابيع، وأضف تمريناً عملياً واختباراً قصيراً لكل أسبوع."
-                        }) { Text(stringResource(R.string.life_prompt_build)) }
-                        if (prompt.isNotBlank()) {
-                            TextButton(onClick = { clipboard.setText(AnnotatedString(prompt)) }) {
-                                Text(stringResource(R.string.life_prompt_copy))
-                            }
-                        }
-                    }
-                    if (prompt.isNotBlank()) Text(prompt, style = MaterialTheme.typography.bodySmall)
-                }
-            }
-        }
-        item {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(stringResource(R.string.life_plan_import), style = MaterialTheme.typography.titleMedium)
-                    OutlinedTextField(value = plan, onValueChange = { plan = it }, label = { Text(stringResource(R.string.life_plan_hint)) }, minLines = 3, maxLines = 8)
-                    OutlinedButton(onClick = {
-                        val rows = plan.lines().mapNotNull { line ->
-                            val parts = line.split("|").map { it.trim() }
-                            if (parts.size >= 2) {
-                                val target = parts.getOrNull(2)?.toIntOrNull() ?: parts[1].toIntOrNull() ?: 0
-                                val mins = parts[1].toIntOrNull() ?: 0
-                                if (parts[0].isNotBlank() && target > 0) Triple(parts[0], mins, target) else null
-                            } else null
-                        }
-                        rows.forEach { store.addLearn(it.first, it.third) }
-                        planStatus = context.getString(if (rows.isEmpty()) R.string.life_plan_empty else R.string.life_plan_done, rows.size)
-                        if (rows.isNotEmpty()) plan = ""
-                    }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.life_plan_import_btn)) }
-                    if (planStatus.isNotBlank()) Text(planStatus, style = MaterialTheme.typography.bodySmall)
-                }
-            }
-        }
+        item { LearningPromptCard() }
+        item { LearningImportCard() }
+        item { LearningPlansCard() }
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.life_note_add), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
@@ -653,3 +607,4 @@ private fun LifeAddDialog(mode: String, onDismiss: () -> Unit) {
 }
 
 private fun money(value: Double): String = String.format(Locale.US, "%.2f", value)
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
