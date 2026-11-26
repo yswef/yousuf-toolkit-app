@@ -36,6 +36,13 @@
     <string name="journal_background_value">الخلفية: %1$s</string>
     <string name="journal_mood_empty">أضف مذكرات بوقت محدد ليظهر تحليل المزاج.</string>
     <string name="journal_mood_insight">أكثر مزاج: %1$s · أفضل وقت للكتابة: %2$s</string>
+    <string name="journal_cloud_sync">مزامنة المذكرات</string>
+    <string name="journal_auto_sync">مزامنة تلقائية</string>
+    <string name="journal_auto_sync_hint">تُرسل المذكرات عند الحفظ وعند فتح التطبيق.</string>
+    <string name="journal_auto_sync_paid">ميزة مدفوعة: فعّل التطبيق أولاً.</string>
+    <string name="journal_sync_now">مزامنة الآن</string>
+    <string name="journal_sync_done">تمت المزامنة: %1$d مذكرة.</string>
+    <string name="journal_sync_failed">تعذّرت المزامنة.</string>
     <string-array name="journal_background_names">
         <item>كريمي</item><item>سماوي</item><item>وردي</item><item>نعناعي</item><item>بنفسجي</item>
         <item>رملي</item><item>ليلي</item><item>شبكة</item><item>نقاط</item><item>محيط</item>
