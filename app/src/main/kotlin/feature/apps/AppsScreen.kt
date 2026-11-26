@@ -59,7 +59,7 @@ fun AppsScreen(onBack: () -> Unit) {
             item {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     moodLabels.forEach { (key, label) ->
-                        V3Chip(label, store.mood == key, { store.setMood(key) }, Modifier.weight(1f))
+                        V3Chip(label, store.mood == key, { store.updateMood(key) }, Modifier.weight(1f))
                     }
                 }
             }
@@ -119,7 +119,7 @@ fun LauncherHome(onExit: () -> Unit = {}) {
         Text("Y- Dimensions", style = MaterialTheme.typography.headlineMedium)
         Row(Modifier.fillMaxWidth()) {
             moodLabels.forEach { (key, label) ->
-                V3Chip(label, store.mood == key, { store.setMood(key) }, Modifier.weight(1f))
+                V3Chip(label, store.mood == key, { store.updateMood(key) }, Modifier.weight(1f))
             }
         }
         LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {

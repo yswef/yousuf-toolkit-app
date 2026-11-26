@@ -34,7 +34,7 @@ fun VisibilityScreen(onBack: () -> Unit) {
     val all = bookSections.flatMap { it.books }.map { it.route }
     val ordered = (store.routeOrder.filter { it in all } + all.filter { it !in store.routeOrder }).distinct()
     LaunchedEffect(ordered) {
-        if (store.routeOrder != ordered) store.setRouteOrder(ordered)
+        if (store.routeOrder != ordered) store.applyRouteOrder(ordered)
     }
 
     ScreenScaffold(title = stringResource(R.string.visibility_title), onBack = onBack) { padding ->
@@ -46,13 +46,13 @@ fun VisibilityScreen(onBack: () -> Unit) {
             item {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     moodLabels.forEach { (key, label) ->
-                        V3Chip(label, store.mood == key, { store.setMood(key) }, Modifier.weight(1f))
+                        V3Chip(label, store.mood == key, { store.updateMood(key) }, Modifier.weight(1f))
                     }
                 }
             }
             item {
                 OutlinedButton(onClick = {
-                    store.setMood("all")
+                    store.updateMood("all")
                     store.hiddenRoutes.forEach { store.toggleHiddenRoute(it) }
                 }) { Text(stringResource(R.string.visibility_reset)) }
             }

@@ -443,12 +443,12 @@ class Store(context: Context) {
         save()
     }
 
-    fun setMood(value: String) {
+    fun updateMood(value: String) {
         mood = value
         save()
     }
 
-    fun setRouteOrder(value: List<String>) {
+    fun applyRouteOrder(value: List<String>) {
         routeOrder = value.distinct()
         save()
     }
@@ -471,7 +471,7 @@ class Store(context: Context) {
         save()
     }
 
-    fun setGitProjects(value: List<String>) {
+    fun saveGitProjects(value: List<String>) {
         gitProjects = value.distinct().take(50)
         save()
     }
