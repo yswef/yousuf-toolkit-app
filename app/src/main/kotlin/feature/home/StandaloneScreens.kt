@@ -1,3 +1,4 @@
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 package feature.home
 
 import androidx.compose.ui.Modifier
@@ -52,3 +53,4 @@ fun AccountScreen(
         )
     }
 }
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com

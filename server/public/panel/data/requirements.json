@@ -1,4 +1,5 @@
 {
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
   "schema": "y-dimensions.requirements/1.0",
   "app_id": "y-dimensions",
   "note": "الناقص أولاً، ثم الأولوية تصاعدياً. التأشير يتم من تبويب متطلبات التطبيقات ويُسجّل في audit_log عبر لوحة الأم.",
@@ -316,5 +317,6 @@
       "priority": 2,
       "note": "جاهز"
     }
-  ]
+  ],
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
 }

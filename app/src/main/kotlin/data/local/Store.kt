@@ -466,13 +466,15 @@ class Store(context: Context) {
 
     fun attachAccount(token: String, id: Long, name: String, email: String): Boolean {
         val key = accountKey(id, email)
+        val existing = savedAccounts
+        if (existing.size >= maxAccounts && existing.none { it.key == key }) return false
         authToken = token
         accountId = id
         accountName = name
         accountEmail = email
         val state = snapshot()
         val entry = SavedAccount(key, email, name, id, token, state, System.currentTimeMillis())
-        val list = savedAccounts.toMutableList()
+        val list = existing.toMutableList()
         val index = list.indexOfFirst { it.key == key }
         var ok = true
         if (index >= 0) list[index] = entry

@@ -1,4 +1,5 @@
 {
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
   "schema": "y-dimensions.releases/1.0",
   "app_id": "y-dimensions",
   "current": "0.18.0",
@@ -57,5 +58,6 @@
       ],
       "notes": "إصدار المطورين والاختبارات اليدوية."
     }
-  ]
+  ],
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
 }

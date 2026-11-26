@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
 # النشر على هوستنجر
@@ -25,3 +26,4 @@
 - استيراد `004_devmode.sql` يضيف جداول غير مكررة: `developer_accounts`, `panel_admins`, `diagnostic_reports`, `diagnostic_solutions`.
 - من تبويب «المشرفون والمطورون» عيّن مستخدمي التطبيق كمطورين، وأنشئ حتى 3 حسابات مشرف للوحة مع تبديلها وتسجيل الخروج.
 - نقاط جديدة: `api/devmode.php`, `api/diagnostics.php` (ومحوّلاتها في `panel/api/`). التحديثات الفرعية تشمل الآن `devmode_tests.json` و`releases.json`.
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

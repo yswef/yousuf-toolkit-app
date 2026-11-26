@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
 # handover_state
@@ -175,4 +176,4 @@
 - `config/devmode_tests.json` و`config/releases.json` يُحزمان كأصول ويُحدَّثان فرعياً عبر `content.php`.
 - مساعد التشخيص: حُفظ البرومت كاملاً في `docs/diagnostics/SYSTEM_PROMPT.md`؛ `DiagnosticsCollector` يجمع قراءات فعلية (بطارية/شحن، تخزين داخلي/SD، واي فاي، شريحة، RAM/CPU)، `DiagnosticEngine` يولّد التقرير الموحّد وأوامر الإصلاح المؤكدة والحزم المجهّلة، `DiagnosticsScreen` يعرضها ويرسلها.
 - ترحيل `004_devmode.sql` (جداول جديدة غير مكررة). الإصدار `0.18.0` (code 22).
-
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

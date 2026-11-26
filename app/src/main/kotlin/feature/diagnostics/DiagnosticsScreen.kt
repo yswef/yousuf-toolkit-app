@@ -1,6 +1,8 @@
 // Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package feature.diagnostics
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,6 +53,18 @@ private val symptomOptions = listOf(
     "امتلاء التخزين"
 )
 
+private val diagPermissions = arrayOf(
+    android.Manifest.permission.READ_PHONE_STATE,
+    android.Manifest.permission.ACCESS_FINE_LOCATION,
+    android.Manifest.permission.NEARBY_WIFI_DEVICES
+)
+
+private fun diagPermissionsGranted(context: android.content.Context): Boolean =
+    diagPermissions.all {
+        androidx.core.content.ContextCompat.checkSelfPermission(context, it) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+    }
+
 @Composable
 fun DiagnosticsScreen(onBack: () -> Unit) {
     val context = androidx.compose.ui.platform.LocalContext.current
@@ -71,6 +85,10 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
     val confirmOk = stringResource(R.string.diag_confirm_ok)
     val sentText = stringResource(R.string.diag_sent)
     val fixedText = stringResource(R.string.diag_fixed)
+    var permissionsGranted by remember { mutableStateOf(diagPermissionsGranted(context)) }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionsGranted = diagPermissionsGranted(context) }
 
     fun collect() {
         scope.launch {
@@ -148,6 +166,15 @@ fun DiagnosticsScreen(onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             InfoCard(text = stringResource(R.string.diagnostics_desc), tone = InfoTone.INFO)
+            InfoCard(
+                text = stringResource(if (permissionsGranted) R.string.diag_permissions_granted else R.string.diag_permissions_desc),
+                tone = if (permissionsGranted) InfoTone.INFO else InfoTone.WARN
+            )
+            if (!permissionsGranted) {
+                OutlinedButton(onClick = { permissionLauncher.launch(diagPermissions) }, modifier = Modifier.fillMaxWidth()) {
+                    Text(stringResource(R.string.diag_permissions_button))
+                }
+            }
             Text(stringResource(R.string.diag_symptoms), style = MaterialTheme.typography.titleSmall)
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 symptomOptions.forEach { symptom ->

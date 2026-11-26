@@ -139,7 +139,22 @@ object DevTests {
         "sound" -> "الصوتيات: ${if (core.design.SoundFx.enabled) "مفعّلة" else "مكتومة"}"
         "onboarded" -> "التهيئة: ${if (store.onboarded) "مكتملة" else "لم تتم"}"
         "routes" -> "مسارات: ${core.navigation.Routes::class.java.fields.size}"
-        else -> "—"
+        "prayers" -> "أيام صلاة: ${store.prayers.size}"
+        "extras" -> "سجلات إضافية: ${store.extras.size}"
+        "accountRelations" -> "علاقات الحساب: ${store.accountRelations.size}"
+        "developerRole" -> "صلاحية المطور: ${store.developerRole.ifBlank { "—" }}"
+        else -> runCatching {
+            val root = JSONObject(store.devSnapshot())
+            if (root.has(key)) {
+                when (val value = root.opt(key)) {
+                    is org.json.JSONArray -> "$key: ${value.length()} عنصراً"
+                    is JSONObject -> "$key: ${value.length()} حقلاً"
+                    else -> "$key: $value"
+                }
+            } else {
+                "بيانات التطبيق: نقاط ${store.points} · مهام ${store.tasks.size} · جلسة ${if (store.authToken.isBlank()) "غير مسجّل" else "نشطة"}"
+            }
+        }.getOrDefault("—")
     }
 
     private fun org.json.JSONArray?.stringList(): List<String> {

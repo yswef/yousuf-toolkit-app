@@ -738,7 +738,7 @@ GET ' . h($apiBase) . '/api/auth.php?action=login  →  {"error":"use POST"} (JS
         . 'ويُنزَّل فقط الملف الذي تغيّرت بصمته <code>sha256</code> إلى <code>filesDir/content/</code>. '
         . 'تغيير الكود أو الواجهة يحتاج إصداراً كاملاً (APK).</p>');
     $rows = [];
-    foreach (['app.json', 'books.json', 'environments.json', 'requirements.json'] as $n) {
+    foreach (['app.json', 'books.json', 'environments.json', 'requirements.json', 'devmode_tests.json', 'releases.json'] as $n) {
         $f = $panelDir . '/data/' . $n;
         $rows[] = [$n, is_file($f) ? num(filesize($f)) . ' بايت' : 'مفقود', is_file($f) ? substr(hash_file('sha256', $f), 0, 20) . '…' : '—', 'content.php?action=file&name=' . $n];
     }
@@ -770,7 +770,7 @@ GET ' . h($apiBase) . '/api/auth.php?action=login  →  {"error":"use POST"} (JS
         . '<input type="hidden" name="dev_action" value="admin_add"><label>اسم الحساب</label>'
         . '<input name="admin_label" placeholder="مثال: مطور الواجهة"><button>إنشاء حساب مشرف</button></form>');
     if ($generatedAdminToken !== '') {
-        echo card('رمز الحساب الجديد — انسخه الآن', '<pre>' . h($generatedAdminToken) . '</pre><p class="m">لن يُعرض مرة أخرى؛ يُحفظ فقطhash في قاعدة البيانات.</p>');
+        echo card('رمز الحساب الجديد — انسخه الآن', '<pre>' . h($generatedAdminToken) . '</pre><p class="m">لن يُعرض مرة أخرى؛ يُحفظ فقط الـ hash في قاعدة البيانات.</p>');
     }
     echo card('المشرفون', table(['#', 'الاسم', 'الدور', 'التاريخ', ''], array_map(function ($r) use ($csrf) {
         return [$r['id'], $r['label'], $r['role'], ago($r['created_at']),

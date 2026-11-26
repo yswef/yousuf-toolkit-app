@@ -161,5 +161,8 @@
     <string name="diag_confirm_title">تأكيد الإصلاح</string>
     <string name="diag_confirm_body">سيتم تنفيذ إجراء آمن على ملفات الكاش المؤقتة فقط، دون مساس ببياناتك الشخصية.</string>
     <string name="diag_confirm_ok">تنفيذ</string>
+    <string name="diag_permissions_desc">تُستخدم صلاحيات الشبكة والشريحة لقراءة قيم الجهاز فقط. لا يُرسل الموقع ولا اسم الشبكة ولا رقم الهاتف ولا معرّفات الجهاز.</string>
+    <string name="diag_permissions_button">منح صلاحيات القراءة</string>
+    <string name="diag_permissions_granted">صلاحيات قراءة العتاد ممنوحة؛ أي قراءة غير مدعومة سيُشار إليها بـ«غير متاح على هذا الجهاز».</string>
 </resources>
 <!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->

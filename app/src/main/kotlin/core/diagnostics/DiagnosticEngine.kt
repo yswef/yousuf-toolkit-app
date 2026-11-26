@@ -318,6 +318,7 @@ object DiagnosticEngine {
         if (issues.isEmpty()) report.appendLine("لا مشاكل حقيقية مكتشفة في القراءات المُرسلة.")
         else issues.forEach { issue ->
             report.appendLine("### ${issue.title} — `${issue.signature}`")
+            report.appendLine("التصنيف: ${classify(issue)}")
             issue.causes.forEachIndexed { i, c -> report.appendLine("${i + 1}. $c") }
         }
         report.appendLine()
@@ -331,7 +332,7 @@ object DiagnosticEngine {
         val maintenance = issues.mapNotNull { it.maintenance }.distinct()
         if (maintenance.isNotEmpty()) {
             report.appendLine()
-            report.appendLine("## توصية صيانة")
+            report.appendLine("## توصية صيانة (إن وُجدت)")
             maintenance.forEach { report.appendLine("- $it") }
         }
         if (unavailableNote.isNotBlank()) {
@@ -366,6 +367,12 @@ object DiagnosticEngine {
             .put("server_reports", serverReports)
             .put("issues", JSONArray().apply { issues.forEach { put(it.signature) } })
             .put("raw_input", input)
+    }
+
+    private fun classify(issue: DiagnosticIssue): String = when {
+        issue.maintenance != null -> "غير قابلة للإصلاح ذاتياً"
+        issue.signature == "low_internal_storage" -> "قابلة للإصلاح تلقائياً"
+        else -> "تحتاج خطوات من المستخدم"
     }
 
     private fun JSONArray?.stringList(): List<String> {

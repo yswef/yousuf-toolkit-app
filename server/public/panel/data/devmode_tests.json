@@ -1,4 +1,5 @@
 {
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
   "schema": "y-dimensions.devmode-tests/1.0",
   "app_id": "y-dimensions",
   "note": "كل ميزة على حدى مع زر اختبار يدوي بجانب بياناتها. القائمة مولّدة من Books.kt وRoutes.kt.",
@@ -71,7 +72,7 @@
       "route": "adhkar",
       "title": "حصن المسلم",
       "section": "الحياة اليومية",
-      "data_key": "adhkar",
+      "data_key": "prayers",
       "action": "open",
       "enabled": true
     },
@@ -80,7 +81,7 @@
       "route": "watch",
       "title": "الأنمي والمسلسلات",
       "section": "الحياة اليومية",
-      "data_key": "watch",
+      "data_key": "extras",
       "action": "open",
       "enabled": true
     },
@@ -107,7 +108,7 @@
       "route": "healthpro",
       "title": "مركز الحياة",
       "section": "الحياة اليومية",
-      "data_key": "routes",
+      "data_key": "water",
       "action": "open",
       "enabled": true
     },
@@ -188,7 +189,7 @@
       "route": "alarm",
       "title": "المنبه والإشعارات الذكية",
       "section": "المزيد",
-      "data_key": "alarms",
+      "data_key": "notifications",
       "action": "add_alarm",
       "enabled": true
     },
@@ -206,7 +207,7 @@
       "route": "devmode",
       "title": "وضع المطور",
       "section": "المزيد",
-      "data_key": "version",
+      "data_key": "developerRole",
       "action": "open",
       "enabled": true
     },
@@ -215,7 +216,7 @@
       "route": "tests",
       "title": "الاختبارات",
       "section": "المزيد",
-      "data_key": "version",
+      "data_key": "points",
       "action": "run_selftest",
       "enabled": true
     },
@@ -224,7 +225,7 @@
       "route": "learnpro",
       "title": "التعلّم المتقدّم",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "learn",
       "action": "open",
       "enabled": true
     },
@@ -233,7 +234,7 @@
       "route": "faithpro",
       "title": "الإيمان المتقدّم",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "faithDays",
       "action": "open",
       "enabled": true
     },
@@ -242,7 +243,7 @@
       "route": "librarypro",
       "title": "المكتبة المتقدّمة",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "books",
       "action": "open",
       "enabled": true
     },
@@ -251,7 +252,7 @@
       "route": "intro",
       "title": "المقدمة",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "onboarded",
       "action": "replay_intro",
       "enabled": true
     },
@@ -260,7 +261,7 @@
       "route": "register",
       "title": "التسجيل",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "authToken",
       "action": "open",
       "enabled": true
     },
@@ -269,7 +270,7 @@
       "route": "onboarding",
       "title": "التهيئة",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "onboarded",
       "action": "open",
       "enabled": true
     },
@@ -278,7 +279,7 @@
       "route": "home",
       "title": "الرئيسية",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "points",
       "action": "open",
       "enabled": true
     },
@@ -305,7 +306,7 @@
       "route": "account",
       "title": "الحساب",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "accountDevices",
       "action": "open",
       "enabled": true
     },
@@ -332,7 +333,7 @@
       "route": "cleaner",
       "title": "المنظّف",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "extras",
       "action": "open",
       "enabled": true
     },
@@ -341,7 +342,7 @@
       "route": "contacts",
       "title": "جهات الاتصال",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "accountRelations",
       "action": "open",
       "enabled": true
     },
@@ -350,7 +351,7 @@
       "route": "devicepro",
       "title": "الجهاز المتقدّم",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "accountDevices",
       "action": "open",
       "enabled": true
     },
@@ -359,7 +360,7 @@
       "route": "firewall",
       "title": "الجدار الناري",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "blockedApps",
       "action": "open",
       "enabled": true
     },
@@ -368,7 +369,7 @@
       "route": "moneypro",
       "title": "المالية المتقدّمة",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "wallets",
       "action": "open",
       "enabled": true
     },
@@ -386,7 +387,7 @@
       "route": "pdfreader",
       "title": "قارئ PDF",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "screenshots",
       "action": "open",
       "enabled": true
     },
@@ -395,7 +396,7 @@
       "route": "taskspro",
       "title": "المهام المتقدّمة",
       "section": "الميزات الإضافية",
-      "data_key": "routes",
+      "data_key": "tasks",
       "action": "open",
       "enabled": true
     },
@@ -476,7 +477,7 @@
       "route": "files",
       "title": "الملفات والمكتبة",
       "section": "الميزات الإضافية",
-      "data_key": "version",
+      "data_key": "screenshots",
       "action": "open",
       "enabled": true
     },
@@ -561,5 +562,6 @@
       "action": "check_backup",
       "enabled": true
     }
-  ]
+  ],
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
 }

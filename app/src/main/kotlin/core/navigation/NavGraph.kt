@@ -1,3 +1,4 @@
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 package core.navigation
 
 import androidx.compose.animation.fadeOut
@@ -212,3 +213,4 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.GIT) { GitScreen(onBack = { nav.popBackStack() }) }
     }
 }
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com

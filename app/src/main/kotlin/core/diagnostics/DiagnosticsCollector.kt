@@ -222,7 +222,7 @@ object DiagnosticsCollector {
             ((System.nanoTime() - t) / 1e6).toLong()
         }.getOrNull()
         if (dns != null) put("dns_latency_ms", dns) else { put("dns_latency_ms", JSONObject.NULL); unavailable.put("dns_latency_ms") }
-        put("note", "جودة القنوات وفقد الحزم وتكرار الانقطاع تحتاج صلاحيات مسح/سجلاتsystem؛ لم تُخمّن.")
+        put("note", "جودة القنوات وفقد الحزم وتكرار الانقطاع تحتاج صلاحيات مسح أو سجلات النظام؛ لم تُخمّن.")
         put("unavailable", unavailable)
     }
 
