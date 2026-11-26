@@ -1,3 +1,4 @@
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 package feature.journal
 
 import core.design.EmptyIllustration
@@ -27,8 +28,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import android.text.Html
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -39,10 +44,11 @@ import data.local.LocalStore
 import domain.model.JournalEntry
 import java.time.Instant
 import java.time.ZoneId
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JournalScreen(onBack: () -> Unit) {
+fun JournalScreen(onBack: () -> Unit, onAdd: () -> Unit) {
     val store = LocalStore.current
     val undo = rememberUndoHost()
     var adding by remember { mutableStateOf(false) }
@@ -52,98 +58,75 @@ fun JournalScreen(onBack: () -> Unit) {
         title = stringResource(R.string.feature_journal),
         onBack = onBack,
         actions = {
-            IconButton(onClick = { adding = true }) {
+            IconButton(onClick = onAdd) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
             }
         }
     ) { padding ->
-        if (entries.isEmpty()) {
-            EmptyIllustration(R.drawable.empty_journal, stringResource(R.string.journal_none), Modifier.padding(padding).padding(8.dp))
-        } else {
-            LazyColumn(
-                Modifier.fillMaxSize().padding(padding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(entries, key = { it.id }) { entry ->
-                    val remove = { store.deleteEntry(entry.id); undo.deleted { store.restoreEntry(entry) } }
-                    SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) { EntryRow(entry = entry, onDelete = remove) }
+        Column(Modifier.fillMaxSize().padding(padding)) {
+            MoodInsight(entries)
+            if (entries.isEmpty()) {
+                EmptyIllustration(R.drawable.empty_journal, stringResource(R.string.journal_none), Modifier.padding(8.dp))
+            } else {
+                LazyColumn(
+                    Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(entries, key = { it.id }) { entry ->
+                        val remove = { store.deleteEntry(entry.id); undo.deleted { store.restoreEntry(entry) } }
+                        SwipeActionRow(Modifier.animateItem(), onSwipeEnd = remove) { EntryRow(entry = entry, onDelete = remove) }
+                    }
                 }
             }
         }
     }
+}
 
-    if (adding) {
-        EntryDialog(
-            onDismiss = { adding = false },
-            onAdd = { title, body -> store.addEntry(title, body) }
-        )
+@Composable
+private fun MoodInsight(entries: List<JournalEntry>) {
+    val timed = entries.filter { it.hasTime && it.mood.isNotBlank() }
+    Card(Modifier.fillMaxWidth().padding(16.dp)) {
+        Column(Modifier.padding(14.dp)) {
+            if (timed.isEmpty()) {
+                Text(stringResource(R.string.journal_mood_empty), style = MaterialTheme.typography.bodySmall)
+            } else {
+                val mood = timed.groupingBy { it.mood }.eachCount().maxByOrNull { it.value }?.key.orEmpty()
+                val hour = timed.groupingBy { Instant.ofEpochMilli(it.at).atZone(ZoneId.systemDefault()).hour }.eachCount().maxByOrNull { it.value }?.key ?: 0
+                Text(stringResource(R.string.journal_mood_insight, mood, String.format(Locale.US, "%02d:00", hour)))
+            }
+        }
     }
 }
 
 @Composable
 private fun EntryRow(entry: JournalEntry, onDelete: () -> Unit) {
     val heading = if (entry.title.isBlank()) stringResource(R.string.journal_untitled) else entry.title
+    val names = stringArrayResource(R.array.journal_background_names)
+    val backgroundIndex = JournalAssets.backgrounds.indexOfFirst { it.id == entry.background }.coerceAtLeast(0)
+    val body = if (entry.richBody.isNotBlank()) Html.fromHtml(entry.richBody, Html.FROM_HTML_MODE_LEAN).toString() else entry.body
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(heading, style = MaterialTheme.typography.titleMedium)
-                    Text(
-                        dateText(entry.at),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Text(dateText(entry.at, entry.hasTime), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (entry.mood.isNotBlank()) Text(stringResource(R.string.journal_mood_value, entry.mood), style = MaterialTheme.typography.bodySmall)
+                    Text(stringResource(R.string.journal_background_value, names.getOrNull(backgroundIndex).orEmpty()), style = MaterialTheme.typography.bodySmall)
                 }
                 IconButton(onClick = onDelete) {
                     Icon(Icons.Filled.Delete, contentDescription = stringResource(R.string.delete))
                 }
             }
-            if (entry.body.isNotBlank()) {
-                Text(
-                    entry.body,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 6,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(start = 0.dp, end = 12.dp, top = 4.dp)
-                )
+            if (body.isNotBlank()) {
+                Text(body, style = MaterialTheme.typography.bodyMedium, maxLines = 6, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(end = 12.dp, top = 4.dp))
             }
         }
     }
 }
 
-@Composable
-private fun EntryDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
-    var title by remember { mutableStateOf("") }
-    var body by remember { mutableStateOf("") }
-
-    FormDialog(
-        title = stringResource(R.string.journal_new),
-        confirm = stringResource(R.string.save),
-        onDismiss = onDismiss,
-        onConfirm = {
-            onAdd(title, body)
-            onDismiss()
-        },
-        valid = title.isNotBlank() || body.isNotBlank()
-    ) {
-        OutlinedTextField(
-            value = title,
-            onValueChange = { title = it },
-            label = { Text(stringResource(R.string.journal_title)) },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = body,
-            onValueChange = { body = it },
-            label = { Text(stringResource(R.string.journal_body)) },
-            minLines = 4,
-            maxLines = 8,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
+private fun dateText(at: Long, hasTime: Boolean): String {
+    val value = Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).toLocalDateTime()
+    return if (hasTime) value.toString().replace('T', ' ') else value.toLocalDate().toString()
 }
-
-private fun dateText(at: Long): String =
-    Instant.ofEpochMilli(at).atZone(ZoneId.systemDefault()).toLocalDate().toString()
+// توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
