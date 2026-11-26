@@ -179,6 +179,20 @@ class Store(context: Context) {
         private set
     var journalLastSync by mutableStateOf(0L)
         private set
+    var lockEnabled by mutableStateOf(false)
+        private set
+    var lockType by mutableStateOf("pin")
+        private set
+    var lockSecretHash by mutableStateOf("")
+        private set
+    var lockSalt by mutableStateOf("")
+        private set
+    var biometricEnabled by mutableStateOf(false)
+        private set
+    var lockSetupPending by mutableStateOf(false)
+        private set
+    var lockEpoch by mutableStateOf(0)
+        private set
     var campaigns by mutableStateOf<List<Campaign>>(emptyList())
         private set
     var accounts by mutableStateOf<List<AccountItem>>(emptyList())
@@ -966,6 +980,49 @@ class Store(context: Context) {
         save()
     }
 
+    fun setAppLock(type: String, secret: String): Boolean {
+        if (type !in listOf("pattern", "pin", "password")) return false
+        val min = if (type == "password") 6 else 4
+        if (secret.length < min) return false
+        val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        lockSalt = Base64.encodeToString(salt, Base64.NO_WRAP)
+        lockSecretHash = hashPassword(secret, salt)
+        lockType = type
+        lockEnabled = true
+        biometricEnabled = false
+        lockSetupPending = true
+        lockEpoch += 1
+        save()
+        return true
+    }
+
+    fun verifyAppLock(secret: String): Boolean {
+        if (!lockEnabled || lockSecretHash.isBlank() || lockSalt.isBlank()) return false
+        val salt = runCatching { Base64.decode(lockSalt, Base64.NO_WRAP) }.getOrNull() ?: return false
+        return hashPassword(secret, salt) == lockSecretHash
+    }
+
+    fun disableAppLock() {
+        lockEnabled = false
+        lockSecretHash = ""
+        lockSalt = ""
+        biometricEnabled = false
+        lockSetupPending = false
+        lockEpoch += 1
+        save()
+    }
+
+    fun enableBiometric() {
+        biometricEnabled = true
+        lockSetupPending = false
+        save()
+    }
+
+    fun skipBiometric() {
+        lockSetupPending = false
+        save()
+    }
+
     fun setJournalAutoSync(enabled: Boolean) {
         journalAutoSync = enabled && premium
         save()
@@ -1403,6 +1460,11 @@ class Store(context: Context) {
         root.put("ownedEmojiPacks", JSONArray(ownedEmojiPacks))
         root.put("journalAutoSync", journalAutoSync)
         root.put("journalLastSync", journalLastSync)
+        root.put("lockEnabled", lockEnabled)
+        root.put("lockType", lockType)
+        root.put("lockSecretHash", lockSecretHash)
+        root.put("lockSalt", lockSalt)
+        root.put("biometricEnabled", biometricEnabled)
         root.put("campaigns", JSONArray().apply {
             campaigns.forEach { c ->
                 put(JSONObject().apply {
@@ -1719,6 +1781,11 @@ class Store(context: Context) {
             ownedEmojiPacks = root.stringSet("ownedEmojiPacks").ifEmpty { setOf("free-1", "free-2") }
             journalAutoSync = root.optBoolean("journalAutoSync", false) && premium
             journalLastSync = root.optLong("journalLastSync", 0L)
+            lockEnabled = root.optBoolean("lockEnabled", false)
+            lockType = root.optString("lockType", "pin")
+            lockSecretHash = root.optString("lockSecretHash", "")
+            lockSalt = root.optString("lockSalt", "")
+            biometricEnabled = root.optBoolean("biometricEnabled", false)
             campaigns = root.optJSONArray("campaigns").mapObjects {
                 Campaign(
                     id = it.optLong("id"),
