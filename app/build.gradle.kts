@@ -11,8 +11,8 @@ android {
         applicationId = "com.yousuf.toolkit"
         minSdk = 34
         targetSdk = 36
-        versionCode = 20
-        versionName = "0.16.2"
+        versionCode = 21
+        versionName = "0.17.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -27,18 +27,25 @@ android {
             }
         }
         create("test") {
-            storeFile = rootProject.file("ci/test-signing.p12")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-            storeType = "PKCS12"
+            val path = System.getenv("KEYSTORE_PATH")
+            if (!path.isNullOrBlank()) {
+                storeFile = file(path)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            } else {
+                storeFile = rootProject.file("ci/test-signing.p12")
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+                storeType = "PKCS12"
+            }
         }
     }
 
     buildTypes {
         release {
-            val hasKey = !System.getenv("KEYSTORE_PATH").isNullOrBlank()
-            signingConfig = if (hasKey) signingConfigs.getByName("release") else signingConfigs.getByName("test")
+            signingConfig = signingConfigs.getByName("test")
             isMinifyEnabled = false
         }
         create("qa") {

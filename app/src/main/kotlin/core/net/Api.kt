@@ -26,6 +26,10 @@ data class RaidInfo(val season: Long, val progress: Int, val goal: Int, val memb
 
 data class CheckinResult(val connected: Boolean, val nextInSeconds: Int, val day: Int)
 
+data class DeviceInfo(val id: Long, val label: String, val model: String, val lastSeen: Long, val createdAt: Long)
+data class ContentFile(val name: String, val sha256: String, val size: Long, val url: String)
+data class ContentManifest(val version: String, val files: List<ContentFile>)
+
 object Api {
     const val SERVER_HTML = "server_html"
     const val NETWORK_ERROR = "network_error"
@@ -39,20 +43,28 @@ object Api {
 
     fun normalizeBase(raw: String): String = raw.trim().trimEnd('/')
 
-    suspend fun register(base: String, name: String, email: String, password: String): AuthResult =
+    suspend fun register(
+        base: String, name: String, email: String, password: String,
+        deviceLabel: String = "", deviceModel: String = ""
+    ): AuthResult =
         withContext(Dispatchers.IO) {
             val response = call(
                 base, "/api/auth.php?action=register", "POST",
                 JSONObject().put("name", name).put("email", email).put("password", password)
+                    .put("device_label", deviceLabel).put("device_model", deviceModel)
             )
             AuthResult(response.getString("token"), user(response.getJSONObject("user")))
         }
 
-    suspend fun login(base: String, email: String, password: String): AuthResult =
+    suspend fun login(
+        base: String, email: String, password: String,
+        deviceLabel: String = "", deviceModel: String = ""
+    ): AuthResult =
         withContext(Dispatchers.IO) {
             val response = call(
                 base, "/api/auth.php?action=login", "POST",
                 JSONObject().put("email", email).put("password", password)
+                    .put("device_label", deviceLabel).put("device_model", deviceModel)
             )
             AuthResult(response.getString("token"), user(response.getJSONObject("user")))
         }
@@ -184,6 +196,56 @@ object Api {
     suspend fun vaultDelete(base: String, token: String, clientId: Long) {
         withContext(Dispatchers.IO) {
             call(base, "/api/vault.php?client_id=$clientId", "DELETE", null, token)
+        }
+    }
+
+    suspend fun devices(base: String, token: String): List<DeviceInfo> = withContext(Dispatchers.IO) {
+        val response = call(base, "/api/devices.php?action=list", "GET", null, token)
+        response.optJSONArray("devices").mapObjects {
+            DeviceInfo(
+                id = it.optLong("id"),
+                label = it.optString("label"),
+                model = it.optString("model"),
+                lastSeen = it.optLong("last_seen") * 1000L,
+                createdAt = it.optLong("created_at") * 1000L
+            )
+        }
+    }
+
+    suspend fun revokeDevice(base: String, token: String, deviceId: Long) {
+        withContext(Dispatchers.IO) {
+            call(
+                base, "/api/devices.php?action=revoke", "POST",
+                JSONObject().put("device_id", deviceId), token
+            )
+        }
+    }
+
+    suspend fun contentManifest(base: String): ContentManifest = withContext(Dispatchers.IO) {
+        val response = call(base, "/api/content.php?action=manifest", "GET", null)
+        val files = response.optJSONArray("files").mapObjects {
+            ContentFile(
+                name = it.optString("name"),
+                sha256 = it.optString("sha256"),
+                size = it.optLong("size"),
+                url = it.optString("url")
+            )
+        }
+        ContentManifest(version = response.optString("version", "1"), files = files)
+    }
+
+    suspend fun download(url: String): ByteArray = withContext(Dispatchers.IO) {
+        val connection = URL(url).openConnection() as HttpURLConnection
+        try {
+            connection.connectTimeout = 15000
+            connection.readTimeout = 60000
+            connection.setRequestProperty("Accept", "application/json")
+            if (connection.responseCode !in 200..299) throw ApiException(connection.responseCode, "download failed")
+            connection.inputStream.use { it.readBytes() }
+        } catch (t: java.io.IOException) {
+            throw ApiException(0, NETWORK_ERROR)
+        } finally {
+            connection.disconnect()
         }
     }
 

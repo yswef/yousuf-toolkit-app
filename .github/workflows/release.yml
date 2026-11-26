@@ -84,7 +84,35 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           TASK: ${{ steps.kind.outputs.task }}
-        run: ./gradlew --no-daemon --stacktrace "$TASK"
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace "$TASK" 2>&1 | tee build.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            tail -60 build.log | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+          fi
+          exit "$status"
+
+      - name: upload build log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: build.log
+          if-no-files-found: ignore
+
+      - name: report compiler errors
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+        run: |
+          if [ -f build.log ]; then
+            python3 -c "import json; print(json.dumps({'body': open('build.log', encoding='utf-8', errors='replace').read()[-45000:]}))" > /tmp/err.json
+            gh api "repos/${{ github.repository }}/commits/$SHA/comments" --input /tmp/err.json || true
+          fi
 
       - name: collect apk
         run: |

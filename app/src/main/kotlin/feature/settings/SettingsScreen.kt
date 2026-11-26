@@ -55,7 +55,8 @@ fun SettingsScreen(
     onProfile: () -> Unit,
     onSkin: () -> Unit = {},
     onLicense: () -> Unit = {},
-    onTests: () -> Unit = {}
+    onTests: () -> Unit = {},
+    onFeature: (String) -> Unit = {}
 ) {
     val store = LocalStore.current
     val context = LocalContext.current
@@ -166,6 +167,45 @@ fun SettingsScreen(
                     icon = Icons.Filled.PlayArrow,
                     divider = true,
                     onClick = onReplayIntro
+                )
+            }
+
+            V3SectionHeader(title = stringResource(R.string.git_title))
+            V3Group {
+                V3Row(
+                    title = stringResource(R.string.devices_title),
+                    icon = Icons.Filled.Person,
+                    onClick = { onFeature(core.navigation.Routes.DEVICES) }
+                )
+                V3Row(
+                    title = stringResource(R.string.apps_title),
+                    icon = Icons.Filled.Info,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.APPS) }
+                )
+                V3Row(
+                    title = stringResource(R.string.visibility_title),
+                    icon = Icons.Filled.List,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.VISIBILITY) }
+                )
+                V3Row(
+                    title = stringResource(R.string.media_title),
+                    icon = Icons.Filled.PlayArrow,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.MEDIA) }
+                )
+                V3Row(
+                    title = stringResource(R.string.files_title),
+                    icon = Icons.Filled.List,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.FILES) }
+                )
+                V3Row(
+                    title = stringResource(R.string.git_title),
+                    icon = Icons.Filled.Settings,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.GIT) }
                 )
             }
 

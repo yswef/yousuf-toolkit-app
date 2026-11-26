@@ -3,6 +3,7 @@ package core.config
 
 import android.content.Context
 import android.util.Log
+import java.io.File
 import org.json.JSONObject
 
 data class SisterApp(val name: String, val url: String, val icon: String = "")
@@ -33,8 +34,14 @@ data class AppConfig(
     val sisterApps: List<SisterApp> = emptyList()
 ) {
     companion object {
+        private fun assetText(context: Context, name: String): String {
+            val updated = File(context.filesDir, "content/$name")
+            if (updated.isFile && updated.length() > 0) return updated.bufferedReader().use { it.readText() }
+            return context.assets.open(name).bufferedReader().use { it.readText() }
+        }
+
         fun load(context: Context): AppConfig = try {
-            val text = context.assets.open("app.json").bufferedReader().use { it.readText() }
+            val text = assetText(context, "app.json")
             val root = JSONObject(text)
             val energy = root.getJSONObject("energy")
             val points = root.getJSONObject("points")
@@ -62,7 +69,7 @@ data class AppConfig(
                 }
             }
             val env = runCatching {
-                JSONObject(context.assets.open("environments.json").bufferedReader().use { it.readText() })
+                JSONObject(assetText(context, "environments.json"))
             }.getOrNull() ?: JSONObject()
             AppConfig(
                 energyMax = energy.getInt("max"),

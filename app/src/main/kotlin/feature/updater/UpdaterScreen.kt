@@ -3,6 +3,7 @@ package feature.updater
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import java.io.File
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -29,6 +31,7 @@ import core.design.InfoCard
 import core.design.InfoTone
 import core.design.ScreenScaffold
 import core.net.Platform
+import core.update.ApkInstaller
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,6 +42,8 @@ fun UpdaterScreen(onBack: () -> Unit) {
     var checking by remember { mutableStateOf(false) }
     var release by remember { mutableStateOf<Platform.Release?>(null) }
     var error by remember { mutableStateOf(false) }
+    var apk by remember { mutableStateOf<File?>(null) }
+    var updateStatus by remember { mutableStateOf("") }
     val current = remember {
         runCatching {
             context.packageManager.getPackageInfo(context.packageName, 0).versionName
@@ -108,6 +113,49 @@ fun UpdaterScreen(onBack: () -> Unit) {
                             modifier = Modifier.padding(horizontal = 16.dp)
                         ) { Text(stringResource(R.string.updater_open)) }
                     }
+                    if (info.apk.isNotBlank()) {
+                        Button(
+                            onClick = {
+                                scope.launch {
+                                    updateStatus = runCatching {
+                                        apk = ApkInstaller.download(context, info.apk)
+                                        context.getString(R.string.update_ready)
+                                    }.getOrElse { it.message ?: "" }
+                                }
+                            },
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                        ) { Text(stringResource(R.string.update_download)) }
+                    }
+                    apk?.let { file ->
+                        Button(
+                            onClick = {
+                                if (!ApkInstaller.canInstall(context)) {
+                                    runCatching {
+                                        context.startActivity(
+                                            Intent(
+                                                Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                                                Uri.parse("package:" + context.packageName)
+                                            )
+                                        )
+                                    }
+                                    updateStatus = context.getString(R.string.update_permission)
+                                } else {
+                                    runCatching { ApkInstaller.install(context, file) }
+                                        .onFailure { updateStatus = it.message ?: "" }
+                                }
+                            },
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                        ) { Text(stringResource(R.string.update_install)) }
+                    }
+                    if (updateStatus.isNotBlank()) {
+                        Text(updateStatus, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(16.dp))
+                    }
+                    Text(
+                        stringResource(R.string.update_signature),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
         }

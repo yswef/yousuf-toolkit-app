@@ -52,6 +52,7 @@ import core.design.V3QuickAction
 import core.design.V3Row
 import core.design.V3SectionHeader
 import core.navigation.Routes
+import core.apps.moodHiddenRoutes
 import data.local.LocalStore
 
 private data class ToolLink(val title: Int, val subtitle: Int, val route: String, val icon: ImageVector)
@@ -62,14 +63,19 @@ fun ToolsTab(onFeature: (String) -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     var opening by remember { mutableStateOf<MagicBook?>(null) }
     var query by remember { mutableStateOf("") }
+    val hidden = store.hiddenRoutes + moodHiddenRoutes(store.mood)
+    val allRoutes = bookSections.flatMap { it.books }.map { it.route }
+    val order = (store.routeOrder.filter { it in allRoutes } + allRoutes.filter { it !in store.routeOrder }).distinct()
     val visibleSections = bookSections.mapNotNull { section ->
         val sectionTitle = stringResource(section.title)
         val books = section.books.filter { book ->
-            query.isBlank() ||
-                stringResource(book.title).contains(query, ignoreCase = true) ||
-                sectionTitle.contains(query, ignoreCase = true) ||
-                book.route.contains(query, ignoreCase = true)
-        }
+            book.route !in hidden && (
+                query.isBlank() ||
+                    stringResource(book.title).contains(query, ignoreCase = true) ||
+                    sectionTitle.contains(query, ignoreCase = true) ||
+                    book.route.contains(query, ignoreCase = true)
+            )
+        }.sortedBy { order.indexOf(it.route) }
         if (books.isEmpty()) null else section.copy(books = books)
     }
 

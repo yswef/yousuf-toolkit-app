@@ -28,7 +28,7 @@ function auth_register(array $in): never
     );
     $insert->execute([$name, $email, $hash, time()]);
     $id = (int) $db->lastInsertId();
-    $token = issue_token($db, $id);
+    $token = issue_token($db, $id, $in);
     respond([
         'token' => $token,
         'user' => ['id' => $id, 'name' => $name, 'email' => $email],
@@ -77,13 +77,29 @@ function auth_forgot(array $in): never
     respond(['ok' => true]);
 }
 
-function issue_token(PDO $db, int $userId): string
+function issue_token(PDO $db, int $userId, array $in = []): string
 {
     $token = bin2hex(random_bytes(32));
+    $hash = hash('sha256', $token);
+    $now = time();
     $insert = $db->prepare(
         'INSERT INTO tokens (token_hash, user_id, created_at, last_used) VALUES (?, ?, ?, ?)'
     );
-    $insert->execute([hash('sha256', $token), $userId, time(), time()]);
+    $insert->execute([$hash, $userId, $now, $now]);
+    try {
+        $device = $db->prepare(
+            'INSERT INTO devices (app_id, user_id, token_hash, label, model, last_seen, created_at, revoked)
+             VALUES (?, ?, ?, ?, ?, ?, ?, 0)'
+        );
+        $device->execute([
+            'y-dimensions', $userId, $hash,
+            mb_substr(trim((string) ($in['device_label'] ?? '')), 0, 120),
+            mb_substr(trim((string) ($in['device_model'] ?? '')), 0, 120),
+            $now, $now,
+        ]);
+    } catch (Throwable $e) {
+        // جدول devices غير مستورد بعد: يبقى التسجيل يعمل.
+    }
     return $token;
 }
 
@@ -107,6 +123,10 @@ function current_user(): array
     }
     $touch = $db->prepare('UPDATE tokens SET last_used = ? WHERE token_hash = ?');
     $touch->execute([time(), $hash]);
+    try {
+        $seen = $db->prepare('UPDATE devices SET last_seen = ? WHERE app_id = ? AND token_hash = ?');
+        $seen->execute([time(), 'y-dimensions', $hash]);
+    } catch (Throwable $e) {}
     return [
         'id' => (int) $user['id'],
         'name' => (string) $user['name'],

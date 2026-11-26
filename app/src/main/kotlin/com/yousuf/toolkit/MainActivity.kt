@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -13,6 +14,7 @@ import core.design.AppTheme
 import core.design.SoundFx
 import core.design.UiState
 import core.navigation.AppNav
+import core.update.ContentUpdate
 import data.local.LocalStore
 import data.local.Store
 
@@ -29,6 +31,9 @@ class MainActivity : ComponentActivity() {
             SideEffect { ui.systemDark = systemDark }
             CompositionLocalProvider(LocalStore provides store) {
                 AppTheme(mode = ui.mode, dark = ui.dark, accent = store.accent, fontScale = ui.fontScale, motion = ui.effectiveMotion) {
+                    LaunchedEffect(Unit) {
+                        ContentUpdate.sync(applicationContext, store.serverUrl)
+                    }
                     AppNav(ui = ui)
                 }
             }
