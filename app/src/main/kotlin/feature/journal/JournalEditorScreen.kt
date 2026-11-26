@@ -1,8 +1,10 @@
 // توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 package feature.journal
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.pm.PackageManager
 import android.text.Html
 import android.text.TextUtils
 import android.util.Base64
@@ -35,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.yousuf.toolkit.R
 import core.design.ScreenScaffold
+import core.media.VoiceRecorder
 import data.local.LocalStore
 import domain.model.JournalEntry
 import org.json.JSONObject
@@ -77,6 +81,9 @@ fun JournalEditorScreen(onBack: () -> Unit) {
     var customText by remember { mutableStateOf("") }
     var customEmoji by remember { mutableStateOf("⭐") }
     var drawMode by remember { mutableStateOf(false) }
+    var voicePath by remember { mutableStateOf("") }
+    var recording by remember { mutableStateOf(false) }
+    var voiceStatus by remember { mutableStateOf("") }
     var status by remember { mutableStateOf("") }
     var web by remember { mutableStateOf<WebView?>(null) }
     val background = JournalAssets.backgrounds.first { it.id == backgroundId }
@@ -86,6 +93,44 @@ fun JournalEditorScreen(onBack: () -> Unit) {
     val backgroundNames = stringArrayResource(R.array.journal_background_names)
     val fontNames = stringArrayResource(R.array.journal_font_names)
     val colorNames = stringArrayResource(R.array.journal_color_names)
+    var requestMic by remember { mutableStateOf<() -> Unit>({}) }
+
+    fun startRecording() {
+        if (!store.premium) {
+            voiceStatus = context.getString(R.string.journal_voice_premium_needed)
+            return
+        }
+        if (context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            requestMic()
+            return
+        }
+        val path = VoiceRecorder.start(context, "journal-")
+        if (path == null) {
+            voiceStatus = context.getString(R.string.journal_voice_failed)
+        } else {
+            recording = true
+            voiceStatus = context.getString(R.string.journal_voice_recording)
+        }
+    }
+
+    fun stopRecording() {
+        val path = VoiceRecorder.stop()
+        recording = false
+        if (path == null) {
+            voiceStatus = context.getString(R.string.journal_voice_failed)
+        } else {
+            voicePath = path
+            voiceStatus = context.getString(R.string.journal_voice_saved)
+        }
+    }
+
+    val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) startRecording()
+        else voiceStatus = context.getString(R.string.journal_voice_mic_denied)
+    }
+    requestMic = { micPermission.launch(Manifest.permission.RECORD_AUDIO) }
+    DisposableEffect(Unit) { onDispose { VoiceRecorder.release() } }
+
     val imagePicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
         val mime = context.contentResolver.getType(uri).orEmpty().ifBlank { "image/png" }
@@ -129,7 +174,7 @@ fun JournalEditorScreen(onBack: () -> Unit) {
                     images = "",
                     emojiPack = emojiPackId,
                     stickerPack = stickerPackId,
-                    voicePath = "",
+                    voicePath = voicePath,
                     hasTime = time != null,
                     syncedAt = 0L
                 )
@@ -289,6 +334,20 @@ fun JournalEditorScreen(onBack: () -> Unit) {
                         OutlinedButton(onClick = { push("window.insertSticker(" + JSONObject.quote(sticker) + ")") }) { Text(sticker) }
                     }
                 }
+                Text(stringResource(R.string.journal_voice_recording_title), style = MaterialTheme.typography.titleMedium)
+                if (!store.premium) Text(stringResource(R.string.journal_voice_premium_needed))
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    item {
+                        OutlinedButton(onClick = { if (recording) stopRecording() else startRecording() }, enabled = recording || store.premium) {
+                            Text(stringResource(if (recording) R.string.journal_voice_stop else R.string.journal_voice_record))
+                        }
+                    }
+                    if (voicePath.isNotBlank()) {
+                        item { OutlinedButton(onClick = { VoiceRecorder.play(voicePath) }) { Text(stringResource(R.string.journal_voice_play)) } }
+                        item { OutlinedButton(onClick = { voicePath = ""; voiceStatus = "" }) { Text(stringResource(R.string.journal_voice_remove)) } }
+                    }
+                }
+                if (voiceStatus.isNotBlank()) Text(voiceStatus, style = MaterialTheme.typography.bodySmall)
                 Text(stringResource(R.string.journal_custom_sticker), style = MaterialTheme.typography.titleMedium)
                 if (!store.premium) {
                     Text(stringResource(R.string.journal_premium_needed))
