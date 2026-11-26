@@ -1,0 +1,203 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.book-catalog/1.0",
+  "source": "app/src/main/kotlin/feature/home/Books.kt (استخراج تلقائي)",
+  "app_id": "y-dimensions",
+  "count": 24,
+  "sections": [
+    {
+      "title": "الأساسيات",
+      "books": [
+        {
+          "route": "TASKS",
+          "key": "feature_tasks",
+          "title": "المهام",
+          "from": "#7B2FF7",
+          "to": "#3B0F86"
+        },
+        {
+          "route": "MONEY",
+          "key": "feature_money",
+          "title": "المال",
+          "from": "#F7B733",
+          "to": "#9C5C00"
+        },
+        {
+          "route": "WORKOUTS",
+          "key": "feature_workouts",
+          "title": "التمارين",
+          "from": "#FF5F6D",
+          "to": "#8E0F28"
+        },
+        {
+          "route": "JOURNAL",
+          "key": "feature_journal",
+          "title": "المذكرات",
+          "from": "#00C6FF",
+          "to": "#005E9E"
+        }
+      ]
+    },
+    {
+      "title": "الحياة اليومية",
+      "books": [
+        {
+          "route": "WATER",
+          "key": "feature_water",
+          "title": "الماء",
+          "from": "#22D3EE",
+          "to": "#0B5C86"
+        },
+        {
+          "route": "SLEEP",
+          "key": "feature_sleep",
+          "title": "النوم",
+          "from": "#6A5CFF",
+          "to": "#2A1B7A"
+        },
+        {
+          "route": "FAITH",
+          "key": "feature_faith",
+          "title": "الإيمان",
+          "from": "#10B981",
+          "to": "#046B4A"
+        },
+        {
+          "route": "ADHKAR",
+          "key": "feature_adhkar",
+          "title": "حصن المسلم",
+          "from": "#047857",
+          "to": "#022C22"
+        },
+        {
+          "route": "WATCH",
+          "key": "feature_watch",
+          "title": "feature_watch",
+          "from": "#EC4899",
+          "to": "#831843"
+        },
+        {
+          "route": "LEARN",
+          "key": "feature_learn",
+          "title": "التعلم",
+          "from": "#84CC16",
+          "to": "#3F6212"
+        },
+        {
+          "route": "LIBRARY",
+          "key": "feature_library",
+          "title": "المكتبة",
+          "from": "#D97706",
+          "to": "#7C2D12"
+        },
+        {
+          "route": "HEALTHPRO",
+          "key": "feature_life",
+          "title": "مركز الحياة",
+          "from": "#0F766E",
+          "to": "#042F2E"
+        }
+      ]
+    },
+    {
+      "title": "اللعبة",
+      "books": [
+        {
+          "route": "GAME",
+          "key": "feature_game",
+          "title": "اللعبة",
+          "from": "#EC4899",
+          "to": "#7A1040"
+        },
+        {
+          "route": "SHOP",
+          "key": "feature_shop",
+          "title": "المتجر",
+          "from": "#F59E0B",
+          "to": "#8A3D05"
+        },
+        {
+          "route": "RAIDS",
+          "key": "feature_raids",
+          "title": "الغارات",
+          "from": "#EF4444",
+          "to": "#6E1414"
+        },
+        {
+          "route": "PROFILE",
+          "key": "feature_profile",
+          "title": "الملف الشخصي",
+          "from": "#8B5CF6",
+          "to": "#43188C"
+        },
+        {
+          "route": "SKIN",
+          "key": "feature_skin",
+          "title": "المظهر",
+          "from": "#F472B6",
+          "to": "#8C1145"
+        }
+      ]
+    },
+    {
+      "title": "أدوات الجهاز",
+      "books": [
+        {
+          "route": "DEVICE",
+          "key": "feature_device",
+          "title": "الجهاز",
+          "from": "#475569",
+          "to": "#0F172A"
+        },
+        {
+          "route": "ACCOUNTS",
+          "key": "feature_accounts",
+          "title": "الحسابات والأمان",
+          "from": "#1D4ED8",
+          "to": "#0B1F52"
+        }
+      ]
+    },
+    {
+      "title": "المزيد",
+      "books": [
+        {
+          "route": "FORUM",
+          "key": "feature_forum",
+          "title": "المنتدى",
+          "from": "#6366F1",
+          "to": "#312E81"
+        },
+        {
+          "route": "ALARM",
+          "key": "feature_alarm",
+          "title": "المنبه والإشعارات الذكية",
+          "from": "#F59E0B",
+          "to": "#7C2D12"
+        },
+        {
+          "route": "LICENSE",
+          "key": "feature_license",
+          "title": "الترخيص",
+          "from": "#A8A29E",
+          "to": "#44403C"
+        },
+        {
+          "route": "DEVMODE",
+          "key": "feature_devmode",
+          "title": "وضع المطور",
+          "from": "#334155",
+          "to": "#020617"
+        },
+        {
+          "route": "TESTS",
+          "key": "feature_tests",
+          "title": "الاختبارات",
+          "from": "#A855F7",
+          "to": "#581C87"
+        }
+      ]
+    }
+  ],
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

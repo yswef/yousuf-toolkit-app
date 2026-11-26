@@ -49,6 +49,7 @@
     <string name="auth_local_exists">حساب محلي: %1$s</string>
     <string name="auth_local_remove">حذف</string>
     <string name="auth_local_removed">حُذف الحساب المحلي.</string>
+    <string name="auth_server_config">ملفات API موجودة لكن config.php أو قاعدة البيانات غير مضبوطة: %1$s</string>
     <string name="auth_email_invalid">أدخل اسماً وبريداً صحيحاً وكلمة مرور من 8 أحرف على الأقل.</string>
 </resources>
 <!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->

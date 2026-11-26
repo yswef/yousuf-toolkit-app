@@ -22,7 +22,11 @@ fun healthStatus(context: Context, result: String): String = when (result) {
     Api.NETWORK_ERROR -> context.getString(R.string.auth_network_error)
     Api.BAD_JSON -> context.getString(R.string.auth_server_bad_json)
     Api.INVALID_BASE -> context.getString(R.string.sync_no_server)
-    else -> context.getString(R.string.auth_server_fail, result.take(120))
+    else -> if (result.contains("config.php") || result.contains("database") || result.contains("invalid config")) {
+        context.getString(R.string.auth_server_config, result.take(120))
+    } else {
+        context.getString(R.string.auth_server_fail, result.take(120))
+    }
 }
 
 // Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
