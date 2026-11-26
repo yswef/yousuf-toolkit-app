@@ -1,3 +1,5 @@
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
+
 # النشر على هوستنجر
 
 النطاق: `https://yousef.romoozbasmah.com`
@@ -7,10 +9,12 @@
 3. ارفع `server/src/` و`server/config/` و`server/migrations/` إلى مجلد النطاق خارج `public_html`:
    `domains/yousef.romoozbasmah.com/src` و`config` و`migrations`.
 4. انسخ `config/config.example.php` إلى `config/config.php` واملأ `db` و`base_url` و`license_secret`.
-5. استورد `migrations/001_init.sql` من phpMyAdmin.
+5. استورد `migrations/001_init.sql` ثم `002_admin.sql` ثم `003_devices.sql` من phpMyAdmin (جداول جديدة غير مكررة).
 6. فعّل SSL المجاني، ثم افتح `https://yousef.romoozbasmah.com/` وتحقق من `ok=true`، وافتح `https://yousef.romoozbasmah.com/panel/` للوحة الأساسية، و`.../admin/` للوحة التفصيلية (نفس `admin_token`).
 7. أضف عناصر `items` ومواسم `raid_seasons` من phpMyAdmin.
 8. لتوليد كود ترخيص: `php tools/code.php <user_id>` بعد وضع `license_secret` في `config.php`.
+
+نقاط جديدة بعد الرفع: `api/devices.php` (الأجهزة)، `api/content.php` (التحديثات الفرعية)، `api/requirements.php` (متطلبات التطبيقات)، و`panel/` فيه تبويب «متطلبات التطبيقات» + زر عائم للعودة. التحديثات الفرعية تُسحب تلقائياً عند تشغيل التطبيق، والإصدار الكامل يُنزّل ويُثبّت من داخل التطبيق.
 
 لا ترفع `config.php` إلى git. التطبيق يقرأ العنوان من `config/environments.json` وهو مضبوط على هذا النطاق؛ ويمكن ضبطه من شاشة الحساب ← «عنوان API للخادم»، أو استعمال `https://النطاق/panel` لأن `panel/api/*.php` تحوّل الطلبات إلى `api/*.php`.
 

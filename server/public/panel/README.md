@@ -1,8 +1,18 @@
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
+
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف) -->
 # اللوحة الأساسية — Y- Dimensions (موبايل)
 
 هذه هي **اللوحة الأساسية للتطبيق**: تحتوي الكود التنفيذي، نقاط الـ API، تنفيذ الأوامر،
 التطبيقات، الكتب السحرية، بقية الأقسام، وصورة التطبيق. ليست لوحة إعلانية تابعة.
+
+## الجديد في 0.17.0
+- تبويب **«متطلبات التطبيقات»** بقسمين: «مصادر الأشياء» (قسم مستقل لكل نوع أصل) و«متطلبات التطبيقات» مع الفرز (الناقص أولاً) والتأشير على البند عند توفيره.
+- تبويبات: **التحديثات الفرعية**، **الأجهزة المسجّلة**، **الإصدارات**.
+- **زر عائم** في كل تبويب: «الموقع الأساسي» و«لوحة التحكم الأساسية»؛ الصفحات المقفلة تعيد للوحة التحكم الأساسية.
+- نقاط API جديدة: `devices.php`, `content.php`, `requirements.php` (ومحوّلاتها داخل `panel/api/`).
+- التصحيح: الموقع **PHP** وليس WordPress. الجداول الجديدة غير المكررة مسموحة (`003_devices.sql`).
+- ملفات `docs/mother-panel/`: `PROMPT.md` (برومت لوحة الأم)، `APP_PANEL_PROMPT.md` (برومت موديل لوحة التطبيق)، `MOTHER_PANEL_HANDOFF.md` (التسليم الإلزامي).
 
 ## ماذا ترفع؟
 

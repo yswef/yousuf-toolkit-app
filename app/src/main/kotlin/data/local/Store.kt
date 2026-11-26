@@ -133,6 +133,22 @@ class Store(context: Context) {
     var localAccountSalt by mutableStateOf("")
         private set
     val hasLocalAccount: Boolean get() = localAccountEmail.isNotBlank()
+    var hiddenApps by mutableStateOf<Set<String>>(emptySet())
+        private set
+    var hiddenRoutes by mutableStateOf<Set<String>>(emptySet())
+        private set
+    var routeOrder by mutableStateOf<List<String>>(emptyList())
+        private set
+    var mood by mutableStateOf("all")
+        private set
+    var gitToken by mutableStateOf("")
+        private set
+    var gitOwner by mutableStateOf("yswef")
+        private set
+    var gitRepo by mutableStateOf("yousuf-toolkit-app")
+        private set
+    var gitProjects by mutableStateOf<List<String>>(emptyList())
+        private set
     var accent by mutableStateOf("violet")
         private set
     var avatar by mutableStateOf(0)
@@ -414,6 +430,49 @@ class Store(context: Context) {
         localAccountEmail = ""
         localAccountHash = ""
         localAccountSalt = ""
+        save()
+    }
+
+    fun toggleHiddenApp(pkg: String) {
+        hiddenApps = if (pkg in hiddenApps) hiddenApps - pkg else hiddenApps + pkg
+        save()
+    }
+
+    fun toggleHiddenRoute(route: String) {
+        hiddenRoutes = if (route in hiddenRoutes) hiddenRoutes - route else hiddenRoutes + route
+        save()
+    }
+
+    fun setMood(value: String) {
+        mood = value
+        save()
+    }
+
+    fun setRouteOrder(value: List<String>) {
+        routeOrder = value.distinct()
+        save()
+    }
+
+    fun moveRoute(route: String, up: Boolean) {
+        val all = routeOrder.toMutableList()
+        val i = all.indexOf(route)
+        if (i < 0) return
+        val j = i + if (up) -1 else 1
+        if (j < 0 || j >= all.size) return
+        java.util.Collections.swap(all, i, j)
+        routeOrder = all
+        save()
+    }
+
+    fun saveGit(token: String, owner: String, repo: String) {
+        gitToken = token.trim()
+        gitOwner = owner.trim()
+        gitRepo = repo.trim()
+        save()
+    }
+
+    fun setGitProjects(value: List<String>) {
+        gitProjects = value.distinct().take(50)
         save()
     }
 
@@ -1085,6 +1144,14 @@ class Store(context: Context) {
         root.put("localAccountEmail", localAccountEmail)
         root.put("localAccountHash", localAccountHash)
         root.put("localAccountSalt", localAccountSalt)
+        root.put("hiddenApps", JSONArray(hiddenApps))
+        root.put("hiddenRoutes", JSONArray(hiddenRoutes))
+        root.put("routeOrder", JSONArray(routeOrder))
+        root.put("mood", mood)
+        root.put("gitToken", gitToken)
+        root.put("gitOwner", gitOwner)
+        root.put("gitRepo", gitRepo)
+        root.put("gitProjects", JSONArray(gitProjects))
         root.put("accent", accent)
         root.put("avatar", avatar)
         root.put("premium", premium)
@@ -1324,6 +1391,14 @@ class Store(context: Context) {
             localAccountEmail = root.optString("localAccountEmail", "")
             localAccountHash = root.optString("localAccountHash", "")
             localAccountSalt = root.optString("localAccountSalt", "")
+            hiddenApps = root.optJSONArray("hiddenApps").strings().toSet()
+            hiddenRoutes = root.optJSONArray("hiddenRoutes").strings().toSet()
+            routeOrder = root.optJSONArray("routeOrder").strings()
+            mood = root.optString("mood", "all")
+            gitToken = root.optString("gitToken", "")
+            gitOwner = root.optString("gitOwner", "yswef")
+            gitRepo = root.optString("gitRepo", "yousuf-toolkit-app")
+            gitProjects = root.optJSONArray("gitProjects").strings()
             accent = root.optString("accent", "violet")
             avatar = root.optInt("avatar", 0).coerceIn(0, 7)
             premium = root.optBoolean("premium", false)

@@ -1,0 +1,68 @@
+{
+  "schema": "y-dimensions.requirements/1.0",
+  "app_id": "y-dimensions",
+  "note": "الناقص أولاً، ثم الأولوية تصاعدياً. التأشير يتم من تبويب متطلبات التطبيقات ويُسجّل في audit_log عبر لوحة الأم.",
+  "asset_sources": [
+    {
+      "kind": "الصوتيات",
+      "items": [
+        {"name": "nour_intro.mp3", "path": "app/src/main/res/raw/nour_intro.mp3", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "nour_rank.mp3", "path": "app/src/main/res/raw/nour_rank.mp3", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "مؤثرات SUCCESS/ERROR", "path": "core/design/SoundFx.kt", "license": "مولّدة داخل التطبيق", "status": "متوفر"}
+      ]
+    },
+    {
+      "kind": "الصور",
+      "items": [
+        {"name": "أيقونة التطبيق SVG", "path": "server/public/panel/assets/icon.svg", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "أيقونة launcher PNG", "path": "server/public/panel/assets/icon.png", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "mentor.webp", "path": "app/src/main/res/drawable-nodpi/mentor.webp", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "nour.webp (معاينة فقط)", "path": "docs/design/mockups/assets/nour.webp", "license": "غير محدد", "status": "ناقص في res"}
+      ]
+    },
+    {
+      "kind": "الأيقونات",
+      "items": [
+        {"name": "Material Icons", "path": "androidx.compose.material.icons", "license": "Apache-2.0", "status": "متوفر"},
+        {"name": "BookSymbol", "path": "core/design/MagicSymbol.kt", "license": "خاص بالمشروع", "status": "متوفر"}
+      ]
+    },
+    {
+      "kind": "الخطوط",
+      "items": [
+        {"name": "Cairo", "path": "app/src/main/res/font", "license": "SIL OFL 1.1", "status": "متوفر"}
+      ]
+    },
+    {
+      "kind": "الفيديو",
+      "items": [
+        {"name": "لا يوجد محتوى فيديو مضمّن", "path": "docs/mother-panel/MOTHER_PANEL_HANDOFF.md", "license": "—", "status": "ناقص"}
+      ]
+    },
+    {
+      "kind": "الملفات والبيانات",
+      "items": [
+        {"name": "app.json", "path": "server/public/panel/data/app.json", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "books.json (24 كتاباً)", "path": "server/public/panel/data/books.json", "license": "مستخرج من الكود", "status": "متوفر"},
+        {"name": "environments.json", "path": "server/public/panel/data/environments.json", "license": "خاص بالمشروع", "status": "متوفر"},
+        {"name": "config.php", "path": "server/config/config.php", "license": "—", "status": "ناقص — يطلب من المطوّر"},
+        {"name": "001_init.sql + 002_admin.sql + 003_devices.sql", "path": "server/migrations/", "license": "خاص بالمشروع", "status": "ناقص الاستيراد"}
+      ]
+    }
+  ],
+  "requirements": [
+    {"app": "Y- Dimensions", "category": "خادم", "item": "config.php بقيم MySQL الحقيقية", "source": "Hostinger", "provided": false, "priority": 0, "note": "لا تخترع القيم؛ المطوّر يدخلها"},
+    {"app": "Y- Dimensions", "category": "خادم", "item": "admin_token (12+ حرفاً)", "source": "Hostinger", "provided": false, "priority": 0, "note": "دخول اللوحة الأساسية والتفصيلية"},
+    {"app": "Y- Dimensions", "category": "خادم", "item": "license_secret", "source": "Hostinger", "provided": false, "priority": 0, "note": "توليد رموز الترخيص"},
+    {"app": "Y- Dimensions", "category": "خادم", "item": "استيراد الترحيلات الثلاثة", "source": "server/migrations", "provided": false, "priority": 0, "note": "001_init + 002_admin + 003_devices"},
+    {"app": "Y- Dimensions", "category": "توقيع", "item": "توقيع APK موحّد لكل القنوات", "source": "ci/test-signing.p12 / KEYSTORE_B64", "provided": false, "priority": 1, "note": "اختلاف التوقيع يسبّب إعادة طلب الصلاحيات بعد التحديث"},
+    {"app": "Y- Dimensions", "category": "صور", "item": "نسخ nour.webp إلى موارد التطبيق", "source": "docs/design/mockups/assets/nour.webp", "provided": false, "priority": 1, "note": "موجود في المعاينات فقط"},
+    {"app": "Y- Dimensions", "category": "فيديو", "item": "محتوى فيديو تعريفي", "source": "غير محدد", "provided": false, "priority": 2, "note": "يُطلب في برومت لوحة الأم"},
+    {"app": "Y- Dimensions", "category": "نشر", "item": "رفع محتويات server/public كاملة", "source": "server/public", "provided": false, "priority": 0, "note": "api/ + admin/ + panel/ + content/ + boards/"},
+    {"app": "Y- Dimensions", "category": "أيقونة", "item": "أيقونة التطبيق", "source": "panel/assets/icon.svg + icon.png", "provided": true, "priority": 1, "note": "جاهزة"},
+    {"app": "Y- Dimensions", "category": "بيانات", "item": "بيانات التطبيق", "source": "panel/data/app.json", "provided": true, "priority": 1, "note": "جاهزة"},
+    {"app": "Y- Dimensions", "category": "بيانات", "item": "كتالوج الكتب", "source": "panel/data/books.json", "provided": true, "priority": 1, "note": "24 كتاباً"},
+    {"app": "Y- Dimensions", "category": "صوتيات", "item": "مقدمة نور + الرتبة", "source": "res/raw/*.mp3", "provided": true, "priority": 2, "note": "جاهزة"},
+    {"app": "Y- Dimensions", "category": "خطوط", "item": "خط Cairo", "source": "res/font", "provided": true, "priority": 2, "note": "جاهز"}
+  ]
+}

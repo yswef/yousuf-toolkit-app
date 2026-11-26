@@ -48,4 +48,11 @@ object Routes {
     const val WALLETS = "wallets"
     const val WATER = "water"
     const val WORKOUTS = "workouts"
+    const val AUTH = "auth"
+    const val DEVICES = "devices"
+    const val APPS = "apps"
+    const val VISIBILITY = "visibility"
+    const val MEDIA = "media"
+    const val FILES = "files"
+    const val GIT = "git"
 }

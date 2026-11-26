@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->
+<resources>
+    <string name="auth_gate_title">تسجيل الدخول مطلوب</string>
+    <string name="auth_gate_sub">البيانات الآن أونلاين على استضافتك؛ سجّل الدخول أو أنشئ حساباً للمزامنة بين أجهزتك.</string>
+    <string name="auth_gate_login">دخول</string>
+    <string name="auth_gate_register">إنشاء حساب</string>
+    <string name="auth_gate_name">الاسم</string>
+    <string name="auth_gate_email">البريد</string>
+    <string name="auth_gate_password">كلمة المرور (8 أحرف على الأقل)</string>
+    <string name="auth_gate_server">عنوان الخادم</string>
+    <string name="auth_gate_check">فحص الخادم</string>
+    <string name="auth_gate_device">اسم هذا الجهاز</string>
+    <string name="auth_gate_error">تعذّر تسجيل الدخول، تأكد من العنوان والبيانات ورفع ملفات API.</string>
+
+    <string name="devices_title">الأجهزة المسجّلة</string>
+    <string name="devices_empty">لا توجد أجهزة أخرى مسجّلة.</string>
+    <string name="devices_revoke">تسجيل الخروج من هذا الجهاز</string>
+    <string name="devices_last_seen">آخر ظهور: %1$s</string>
+    <string name="devices_revoked">أُلغي الوصول من الجهاز.</string>
+
+    <string name="apps_title">إخفاء التطبيقات</string>
+    <string name="apps_sub">اخفِ التطبيقات الحقيقية من واجهة التطبيق، وفعّل وضع الواجهة الرئيسية لإخفائها من الشاشة.</string>
+    <string name="apps_hidden">مخفي: %1$d</string>
+    <string name="apps_show">إظهار</string>
+    <string name="apps_hide">إخفاء</string>
+    <string name="apps_launcher">تفعيل واجهة التطبيقات (Home)</string>
+    <string name="apps_launcher_hint">بعد التفعيل اختر التطبيق كواجهة رئيسية من إعدادات النظام.</string>
+    <string name="apps_open">فتح</string>
+    <string name="apps_none">لا توجد تطبيقات قابلة للعرض؛ اسمح بإذن «الوصول لكل التطبيقات».</string>
+
+    <string name="visibility_title">الإخفاء والترتيب حسب المزاج</string>
+    <string name="visibility_mood">المزاج</string>
+    <string name="visibility_books">الكتب والأدوات</string>
+    <string name="visibility_up">أعلى</string>
+    <string name="visibility_down">أسفل</string>
+    <string name="visibility_visible">ظاهر</string>
+    <string name="visibility_hidden">مخفي</string>
+    <string name="visibility_reset">إظهار الكل</string>
+
+    <string name="media_title">الصور والفيديو</string>
+    <string name="media_gallery">معرض الجهاز</string>
+    <string name="media_vault">المخفيّة</string>
+    <string name="media_hide">إخفاء من المعرض</string>
+    <string name="media_restore">إرجاع للمعرض</string>
+    <string name="media_open_image">عرض الصورة</string>
+    <string name="media_open_video">تشغيل الفيديو</string>
+    <string name="media_none">لا توجد وسائط.</string>
+    <string name="media_permission">اسمح بالوصول إلى الصور والفيديو أولاً.</string>
+    <string name="media_hidden_ok">أُخفي %1$d ملفاً من معرض الجهاز.</string>
+    <string name="media_restored">أُعيد الملف إلى المعرض.</string>
+    <string name="media_select_all">تحديد الكل</string>
+
+    <string name="files_title">الملفات والمكتبة</string>
+    <string name="files_browse">تصفّح</string>
+    <string name="files_library">المكتبة</string>
+    <string name="files_reader">القارئ</string>
+    <string name="files_pdf">PDF</string>
+    <string name="files_md">Markdown</string>
+    <string name="files_raw">نص عادي</string>
+    <string name="files_visual">عرض منسّق</string>
+    <string name="files_list">قائمة</string>
+    <string name="files_grid">شبكة</string>
+    <string name="files_sort_name">الاسم</string>
+    <string name="files_sort_date">التاريخ</string>
+    <string name="files_sort_size">الحجم</string>
+    <string name="files_sort_type">النوع</string>
+    <string name="files_copy">نسخ</string>
+    <string name="files_move">نقل</string>
+    <string name="files_paste">لصق هنا</string>
+    <string name="files_new_folder">مجلد جديد</string>
+    <string name="files_up">المجلد الأب</string>
+    <string name="files_permission">اسمح بالوصول لكل الملفات لتصفّح الجهاز.</string>
+    <string name="files_empty">لا ملفات هنا.</string>
+    <string name="files_pdf_page">صفحة %1$d من %2$d</string>
+    <string name="files_prev">السابق</string>
+    <string name="files_next">التالي</string>
+    <string name="files_open_fail">تعذّر فتح الملف.</string>
+    <string name="files_pasted">تم اللصق.</string>
+
+    <string name="git_title">إدارة مشاريع Git</string>
+    <string name="git_local">مشاريع الجهاز</string>
+    <string name="git_remote">جيت هاب</string>
+    <string name="git_commands">الأوامر</string>
+    <string name="git_releases">الإصدارات</string>
+    <string name="git_token">Personal Access Token</string>
+    <string name="git_owner">المالك</string>
+    <string name="git_repo">المستودع</string>
+    <string name="git_save">حفظ</string>
+    <string name="git_branches">الفروع</string>
+    <string name="git_base">الفرع الأساسي</string>
+    <string name="git_newest">أحدث فرع</string>
+    <string name="git_last_commit">آخر تحديث: %1$s</string>
+    <string name="git_description">الوصف: %1$s</string>
+    <string name="git_ahead">جهازك متقدّم %1$d</string>
+    <string name="git_behind">جيت هاب أحدث بـ %1$d</string>
+    <string name="git_sync">المزامنة</string>
+    <string name="git_pull">git pull</string>
+    <string name="git_push">git push</string>
+    <string name="git_merge">دمج الفروع</string>
+    <string name="git_from">من</string>
+    <string name="git_into">إلى</string>
+    <string name="git_cmd_hint">git status | git branch | git log | git diff base head | git pull | git push | git merge head base</string>
+    <string name="git_run">تنفيذ</string>
+    <string name="git_no_token">أدخل التوكن أولاً.</string>
+    <string name="git_apk">تنزيل APK</string>
+    <string name="git_repo_info">النجوم %1$d ·Forks %2$d · %3$s · حجم %4$d KB</string>
+
+    <string name="update_download">تنزيل الإصدار داخل التطبيق</string>
+    <string name="update_install">تثبيت الآن</string>
+    <string name="update_ready">جاهز للتثبيت.</string>
+    <string name="update_permission">اسمح بتثبيت التطبيقات من هذا المصدر.</string>
+    <string name="update_sub_ok">سُحبت التحديثات الفرعية: %1$d ملف.</string>
+    <string name="update_signature">تم توحيد توقيع كل القنوات كي لا تُطلب الصلاحيات مجدداً بعد التحديث.</string>
+</resources>
+<!-- Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension -->

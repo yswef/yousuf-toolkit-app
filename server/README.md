@@ -1,3 +1,5 @@
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
+
 # server
 
 خادم PHP 8.1+ لقاعدة MySQL 8، بواجهة JSON تحت `/api`.
@@ -22,7 +24,11 @@
 - `GET|POST /api/raids.php?action=info|checkin`.
 - `GET|POST|DELETE /api/vault.php`.
 - `GET|POST /api/license.php`.
-- `GET|POST /admin/` لوحة إدارة محمية بـ `admin_token`، وكلها في مجلد واحد `public/admin/` (انظر `public/admin/README.md`).
+- `GET|POST /admin/` لوحة إدارة محمية بـ `admin_token`، وكلها في مجلد واحد `public/admin/`.
+- `GET /panel/` اللوحة الأساسية التنفيذية: متطلبات التطبيقات، التحديثات الفرعية، الأجهزة، الإصدارات، الأوامر، تبويب الـ API، مع زر عائم.
+- `GET|POST /api/devices.php` الأجهزة المسجّلة وتسجيل الخروج عن بُعد.
+- `GET /api/content.php?action=manifest` بيان التحديثات الفرعية (بيانات فقط بلا APK) و`action=file` لتنزيل ملف متغيّر.
+- `GET|POST /api/requirements.php` متطلبات التطبيقات ومصادر الأصول مع الفرز والتأشير.
 
 نشر هوستنجر: `HOSTINGER.md`. شرح اللوحة الأساسية ولماذا تُملأ الحقول تلقائياً: `public/panel/README.md`. توليد بياناتها: `python3 tools/build_panel_data.py`.
 

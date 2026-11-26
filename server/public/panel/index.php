@@ -171,6 +171,13 @@ $endpoints = [
     ['vault.php', 'GET|POST|DELETE', 'الخزنة المشفّرة', ['Authorization']],
     ['license.php', 'POST', 'تفعيل رمز ترخيص', ['Authorization', 'code']],
     ['announcements.php', 'GET', 'الإعلانات النشطة', []],
+    ['devices.php?action=list', 'GET', 'الأجهزة المسجّلة', ['Authorization']],
+    ['devices.php?action=revoke', 'POST', 'تسجيل خروج جهاز عن بُعد', ['Authorization']],
+    ['devices.php?action=ping', 'POST', 'تحديث آخر ظهور', ['Authorization']],
+    ['content.php?action=manifest', 'GET', 'بيان التحديثات الفرعية (بيانات فقط)', []],
+    ['content.php?action=file', 'GET', 'تنزيل ملف بيانات متغيّر', ['name']],
+    ['requirements.php?action=list', 'GET', 'متطلبات التطبيقات ومصادر الأصول', []],
+    ['requirements.php?action=mark', 'POST', 'التأشير على بند تم توفيره', ['X-Admin-Token']],
 ];
 $tableNames = ['users', 'tokens', 'profiles', 'journal', 'ledger', 'books', 'wallets', 'threads', 'posts',
                'items', 'purchases', 'raid_seasons', 'raid_members', 'licenses', 'vault_items', 'announcements', 'admin_log'];
@@ -186,6 +193,10 @@ $commands = [
     'license.create' => 'إنشاء رمز ترخيص (المعامل: user_id)',
     'license.revoke' => 'إلغاء ترخيص مستخدم (المعامل: user_id)',
     'logs.tail' => 'آخر 20 إجراءً من سجل اللوحة',
+    'requirements.list' => 'عرض نواقص التطبيقات مرتّبة (الناقص أولاً)',
+    'content.manifest' => 'عرض حزم التحديثات الفرعية وبصماتها',
+    'devices.list' => 'عرض الأجهزة المسجّلة وآخر ظهور',
+    'releases.list' => 'عرض الإصدارات المسجّلة',
 ];
 
 function endpointFile(string $target): string {
@@ -214,7 +225,7 @@ function stats(): array {
     ];
 }
 function runCommand(string $cmd, string $arg): string {
-    global $commands, $pdo, $dbError, $endpoints, $apiDir, $appInfo, $catalog, $licenseSecret, $configFile, $serverRoot, $adminToken, $apiBase, $sisters;
+    global $commands, $pdo, $dbError, $endpoints, $apiDir, $appInfo, $catalog, $licenseSecret, $configFile, $serverRoot, $adminToken, $apiBase, $sisters, $panelDir;
     if (!isset($commands[$cmd])) return 'أمر غير مسموح. استخدم القائمة فقط؛ لا يُنفَّذ SQL أو أوامر shell حرة.';
     $out = [];
     switch ($cmd) {
@@ -277,6 +288,38 @@ function runCommand(string $cmd, string $arg): string {
             }
             if (!$out) $out[] = 'لا سجلات بعد (جدول admin_log غير موجود أو فارغ).';
             break;
+        case 'requirements.list':
+            $reqData = readJson($panelDir . '/data/requirements.json');
+            $reqRows = $reqData['requirements'] ?? [];
+            usort($reqRows, function ($a, $b) {
+                return [(int) ($a['provided'] ?? 0), (int) ($a['priority'] ?? 5)]
+                    <=> [(int) ($b['provided'] ?? 0), (int) ($b['priority'] ?? 5)];
+            });
+            foreach ($reqRows as $r) {
+                $out[] = (($r['provided'] ?? false) ? '[✓] ' : '[ ] ') . ($r['app'] ?? '') . ' / ' . ($r['item'] ?? '')
+                    . ' — المصدر: ' . ($r['source'] ?? '—') . ' — أولوية ' . ($r['priority'] ?? 5);
+            }
+            $out[] = 'الناقص: ' . count(array_filter($reqRows, function ($r) { return empty($r['provided']); }));
+            break;
+        case 'content.manifest':
+            foreach (['app.json', 'books.json', 'environments.json', 'requirements.json'] as $n) {
+                $f = $panelDir . '/data/' . $n;
+                $out[] = $n . ' => ' . (is_file($f) ? hash_file('sha256', $f) : 'مفقود');
+            }
+            $out[] = 'الإصدار: ' . (is_file(dirname(__DIR__) . '/content/VERSION') ? trim((string) file_get_contents(dirname(__DIR__) . '/content/VERSION')) : '1');
+            break;
+        case 'devices.list':
+            foreach (q('SELECT id, label, model, last_seen, revoked FROM devices ORDER BY last_seen DESC LIMIT 50') as $r) {
+                $out[] = '#' . $r['id'] . ' ' . $r['label'] . ' / ' . $r['model'] . ' — ' . ago($r['last_seen']) . ($r['revoked'] ? ' (ملغي)' : '');
+            }
+            if (!$out) $out[] = 'لا أجهزة مسجّلة (جدول devices غير مستورد أو فارغ).';
+            break;
+        case 'releases.list':
+            foreach (q('SELECT version, version_code, active, published_at FROM releases ORDER BY id DESC LIMIT 50') as $r) {
+                $out[] = $r['version'] . ' (code ' . $r['version_code'] . ') ' . ago($r['published_at']) . ($r['active'] ? '' : ' (موقف)');
+            }
+            if (!$out) $out[] = 'لا إصدارات مسجّلة (جدول releases غير مستورد أو فارغ).';
+            break;
     }
     return implode("\n", $out);
 }
@@ -284,6 +327,25 @@ function runCommand(string $cmd, string $arg): string {
 // ---------- actions ----------
 $flash = '';
 $commandOutput = '';
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['req_index'])) {
+    if (!hash_equals($csrf, (string) ($_POST['csrf'] ?? ''))) {
+        http_response_code(403);
+        exit('CSRF');
+    }
+    if ($readOnly) {
+        $flash = 'وضع القراءة فقط: لا يمكن التأشير على المتطلبات قبل ضبط config.php.';
+    } else {
+        $reqPath = $panelDir . '/data/requirements.json';
+        $reqData = readJson($reqPath);
+        $idx = (int) $_POST['req_index'];
+        if (isset($reqData['requirements'][$idx])) {
+            $reqData['requirements'][$idx]['provided'] = empty($reqData['requirements'][$idx]['provided']);
+            file_put_contents($reqPath, json_encode($reqData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . "\n", LOCK_EX);
+            logit('requirements.mark', 'index=' . $idx);
+            $flash = 'تم تحديث حالة المتطلب.';
+        }
+    }
+}
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['cmd'])) {
     if (!hash_equals($csrf, (string) ($_POST['csrf'] ?? ''))) {
         http_response_code(403);
@@ -305,6 +367,8 @@ $tabs = [
     'home' => 'الرئيسية', 'apps' => 'التطبيقات', 'books' => 'الكتب', 'tools' => 'الأدوات والجداول',
     'users' => 'المستخدمون', 'licenses' => 'التراخيص', 'opinions' => 'الآراء والمنتدى',
     'commands' => 'تنفيذ الأوامر', 'fields' => 'الحقول التلقائية', 'api' => 'الـ API',
+    'requirements' => 'متطلبات التطبيقات', 'content' => 'التحديثات الفرعية',
+    'devices' => 'الأجهزة المسجّلة', 'releases' => 'الإصدارات',
 ];
 $page = (string) ($_GET['p'] ?? 'home');
 if (!isset($tabs[$page])) $page = 'home';
@@ -459,10 +523,76 @@ Content-Type: application/json
 الرد المتوقع: {"token":"...","user":{"id":1,"name":"يوسف","email":"..."}}</pre>');
     echo card('فحص جاهزية الخادم', '<pre>GET ' . h($apiBase) . '/  →  {"ok":true,"name":"y-dimension"}
 GET ' . h($apiBase) . '/api/auth.php?action=login  →  {"error":"use POST"} (JSON وليس HTML)</pre>'
-        . '<p class="m">إن جاء الرد صفحة HTML، فملفات <code>server/public/api</code> غير مرفوعة أو العنوان يشير إلى موقع WordPress.</p>');
+        . '<p class="m">إن جاء الرد صفحة HTML، فملفات <code>server/public/api</code> غير مرفوعة أو العنوان يشير إلى موقع PHP.</p>');
     $eps = [];
     foreach ($endpoints as $e) $eps[] = [$e[0], $e[1], $e[2]];
     echo card('كل المسارات', table(['المسار', 'الطريقة', 'الوظيفة'], $eps));
+} elseif ($page === 'requirements') {
+    $reqData = readJson($panelDir . '/data/requirements.json');
+    $reqRows = $reqData['requirements'] ?? [];
+    usort($reqRows, function ($a, $b) {
+        return [(int) ($a['provided'] ?? 0), (int) ($a['priority'] ?? 5), (string) ($a['app'] ?? '')]
+            <=> [(int) ($b['provided'] ?? 0), (int) ($b['priority'] ?? 5), (string) ($b['app'] ?? '')];
+    });
+    $missing = count(array_filter($reqRows, function ($r) { return empty($r['provided']); }));
+    echo card('الحالة', '<p>النواقص: <b>' . $missing . '</b> من ' . count($reqRows) . ' بنداً. الفرز: الناقص أولاً ثم الأولوية.</p>'
+        . '<p class="m">هذا التبويب مطلوب في لوحة التحكم الأم؛ التأشير هنا يسجَّل محلياً وفي <code>admin_log</code>.</p>');
+    echo '<h2 class="sec">القسم 1 — مصادر الأشياء</h2>';
+    foreach (($reqData['asset_sources'] ?? []) as $group) {
+        $rows = [];
+        foreach (($group['items'] ?? []) as $it) {
+            $rows[] = [$it['name'] ?? '—', $it['path'] ?? '—', $it['license'] ?? '—', $it['status'] ?? '—'];
+        }
+        echo card($group['kind'] ?? 'قسم', table(['الأصل', 'المصدر/المسار', 'الترخيص', 'الحالة'], $rows));
+    }
+    echo '<h2 class="sec">القسم 2 — متطلبات التطبيقات</h2>';
+    $out = [];
+    foreach ($reqRows as $r) {
+        $original = -1;
+        foreach (($reqData['requirements'] ?? []) as $k => $orig) {
+            if (($orig['item'] ?? '') === ($r['item'] ?? '') && ($orig['app'] ?? '') === ($r['app'] ?? '')) { $original = $k; break; }
+        }
+        $state = !empty($r['provided']) ? 'تم توفيره ✓' : 'ناقص';
+        $toggle = '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+            . '<input type="hidden" name="req_index" value="' . $original . '"><button class="b">تبديل</button></form>';
+        $out[] = [$r['app'] ?? '—', $r['category'] ?? '—', $r['item'] ?? '—', $r['source'] ?? '—', $state, (string) ($r['priority'] ?? 5), $r['note'] ?? '', $toggle];
+    }
+    echo card('كل المتطلبات (مرتّبة)', '<div class="scroll"><table><tr><th>التطبيق</th><th>التصنيف</th><th>المتطلب</th><th>المصدر</th><th>الحالة</th><th>الأولوية</th><th>ملاحظة</th><th></th></tr>'
+        . implode('', array_map(function ($r) {
+            $o = '<tr>';
+            foreach ($r as $i => $c) $o .= '<td>' . ($i === 7 ? $c : h($c)) . '</td>';
+            return $o . '</tr>';
+        }, $out)) . '</table></div>');
+} elseif ($page === 'content') {
+    echo card('التحديثات الفرعية (بيانات فقط، بلا APK)', '<p>عند بدء تشغيل التطبيق يُسحب <code>content.php?action=manifest</code>، '
+        . 'ويُنزَّل فقط الملف الذي تغيّرت بصمته <code>sha256</code> إلى <code>filesDir/content/</code>. '
+        . 'تغيير الكود أو الواجهة يحتاج إصداراً كاملاً (APK).</p>');
+    $rows = [];
+    foreach (['app.json', 'books.json', 'environments.json', 'requirements.json'] as $n) {
+        $f = $panelDir . '/data/' . $n;
+        $rows[] = [$n, is_file($f) ? num(filesize($f)) . ' بايت' : 'مفقود', is_file($f) ? substr(hash_file('sha256', $f), 0, 20) . '…' : '—', 'content.php?action=file&name=' . $n];
+    }
+    echo card('الملفات وبصماتها', table(['الملف', 'الحجم', 'SHA256', 'المسار'], $rows));
+    echo card('كيف يستهلكها التطبيق', '<pre>GET /api/content.php?action=manifest
+ → {"version":"1","kind":"data-only","files":[{"name":"books.json","sha256":"...","url":"..."}]}
+
+التطبيق يقارن البصمة المحلية، ينزّل المتغيّر فقط، يتحقق منها، ثم يحدّث الواجهة.
+عند الحاجة إلى APK جديد: يظهر إشعار «إصدار جديد» مع زر تنزيل وتثبيت داخل التطبيق.</pre>');
+} elseif ($page === 'devices') {
+    echo card('الأجهزة المسجّلة', table(['#', 'الاسم', 'الطراز', 'آخر ظهور', 'التسجيل', 'الحالة'], array_map(function ($r) {
+        return [$r['id'], $r['label'], $r['model'], ago($r['last_seen']), ago($r['created_at']), $r['revoked'] ? 'ملغي' : 'نشط'];
+    }, q('SELECT id, label, model, last_seen, created_at, revoked FROM devices ORDER BY last_seen DESC LIMIT 100'))));
+    echo card('تسجيل الخروج عن بُعد', '<p>من الملف الشخصي في التطبيق: قائمة الأجهزة + زر «تسجيل الخروج من هذا الجهاز» '
+        . 'يستدعي <code>devices.php?action=revoke</code> فيحذف التوكن ويعلّم الجهاز <code>revoked=1</code>.</p>'
+        . '<p class="m">الجدول <code>devices</code> جديد غير مكرر من الترحيل <code>003_devices.sql</code>؛ <code>users</code> بقي موحّداً.</p>');
+} elseif ($page === 'releases') {
+    echo card('الإصدارات', table(['الإصدار', 'versionCode', 'الملف', 'الوصف', 'النشر', 'الحالة'], array_map(function ($r) {
+        return [$r['version'], $r['version_code'], $r['apk_path'], $r['notes'], ago($r['published_at']), $r['active'] ? 'مفعّل' : 'موقف'];
+    }, q('SELECT version, version_code, apk_path, notes, published_at, active FROM releases ORDER BY id DESC LIMIT 100'))));
+    echo card('قاعدة تحديث واحدة', '<p>حزم البيانات → <code>content.php</code> بلا تنزيل APK. '
+        . 'تغيير الكود → إصدار جديد في <code>releases</code> مع زر تنزيل وتثبيت داخل التطبيق.</p>'
+        . '<p class="m">سبب إعادة طلب الصلاحيات بعد التحديث سابقاً: اختلاف توقيع <code>ci/test-signing.p12</code> عن توقيع الإصدار الرسمي؛ '
+        . 'الإصدار 0.17.0 يوحّد التوقيع في <code>build.gradle.kts</code>.</p>');
 }
 $content = ob_get_clean();
 ?><!doctype html>
@@ -493,6 +623,10 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:start;
 .books{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}.book{display:flex;align-items:center;gap:10px;background:var(--sv);border-radius:12px;padding:8px}
 .book i{width:34px;height:34px;border-radius:9px;flex:none}.book small{color:var(--m)}
 .ico{width:64px;height:64px;border-radius:16px;margin-inline-end:10px}
+.sec{font-size:16px;margin:22px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--bd)}
+.inl{display:inline}.inl .b{padding:5px 10px}
+.home-fab{position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px;flex-wrap:wrap;max-width:60vw}
+.home-fab a{background:var(--pri);color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font-size:12px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .cmd{display:grid;gap:8px;max-width:520px}.cmd label{font-size:12px;color:var(--m)}
 .cmd select,.cmd input{padding:10px;border-radius:10px;border:1px solid var(--bd);background:var(--sv);color:var(--fg);font:inherit}
 .cmd button{padding:11px;border:0;border-radius:10px;background:var(--pri);color:#fff;font-weight:700;cursor:pointer}
@@ -506,6 +640,7 @@ ul{margin:0;padding-inline-start:18px;line-height:1.9}
   <span class="sp"></span><a href="?logout=1">خروج</a>
 </header>
 <nav><?php foreach ($tabs as $k => $v) echo '<a href="?p=' . h($k) . '"' . ($k === $page ? ' class="on"' : '') . '>' . h($v) . '</a>'; ?></nav>
+<div class="home-fab"><a href="../">🏠 الموقع الأساسي</a><a href="./">⚙ لوحة التحكم الأساسية</a></div>
 <main>
 <?php if ($readOnly) echo '<div class="warn">وضع القراءة فقط: config.php أو admin_token غير مضبوط. البيانات المعروضة منسحبة من الملفات المحلية، وتنفيذ الأوامر معطّل حتى يُضبط الإعداد.</div>'; ?>
 <?php if ($flash !== '') echo '<div class="card" style="border-color:var(--ok);color:var(--ok)">' . h($flash) . '</div>'; ?>

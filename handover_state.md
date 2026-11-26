@@ -1,3 +1,5 @@
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
+
 # handover_state
 
 - آخر تحديث: 2026-11-20
@@ -133,7 +135,7 @@
 
 ## متابعة 2026-11-26: تشخيص تعذّر إنشاء الحساب + إصلاح (0.16.1)
 
-- السبب: اللوحة التابعة `server/public/boards/y-dimensions/` إعلانية بلا كود تنفيذي وبلا نقطة HTTP؛ رفعها إلى لوحة الأم لا ينشئ `/api/auth.php`. التطبيق يستدعي `POST {apiBaseUrl}/api/auth.php?action=register`، و`config/environments.json` يشير إلى `https://yousef.romoozbasmah.com` وهو موقع سيرة/WordPress؛ النطاق يرد بصفحة HTML «الصفحة غير موجودة» بدل JSON، فكان نص HTML يظهر داخل بطاقة الحساب.
+- السبب: اللوحة التابعة `server/public/boards/y-dimensions/` إعلانية بلا كود تنفيذي وبلا نقطة HTTP؛ رفعها إلى لوحة الأم لا ينشئ `/api/auth.php`. التطبيق يستدعي `POST {apiBaseUrl}/api/auth.php?action=register`، و`config/environments.json` يشير إلى `https://yousef.romoozbasmah.com` وهو موقع سيرة مبني بـ PHP؛ النطاق يرد بصفحة HTML «الصفحة غير موجودة» بدل JSON، فكان نص HTML يظهر داخل بطاقة الحساب.
 - النشر الصحيح للحساب السحابي: رفع `server/public/` إلى جذر النطاق (`public_html/api/auth.php`)، و`server/src` و`server/config` و`server/migrations` خارجه، وإنشاء `config.php` واستيراد `001_init.sql`؛ أو ضبط عنوان API الذي تعرضه لوحة الأم في حقل «عنوان API للخادم» داخل التطبيق.
 - `core/net/Api.kt`: تصنيف الأعطال (`server_html`, `network_error`, `invalid_json_response`, `invalid_base`) بدل عرض HTML، و`Api.health` يفحص `/` ثم `/api/auth.php` (أي رد JSON يعني أن الملفات مرفوعة).
 - `core/net/ApiMessages.kt`: ترجمة الأعطال إلى رسائل عربية قابلة للتنفيذ، مستخدمة في `AccountTab.kt` و`DeviceScreen.kt` (تبويب المزامنة).
@@ -152,4 +154,17 @@
 - تنفيذ الأوامر: 10 أوامر بقائمة مغلقة (health.check, stats.refresh, api.selftest, apps.reload, books.list, tokens.purge, user.logout, license.create, license.revoke, logs.tail)؛ بلا SQL حر ولا shell، مع تسجيل في admin_log.
 - `server/public/index.php` يعيد `panel/` و`version 0.16.2`؛ `HOSTINGER.md` و`server/README.md` و`panel/README.md` تشرح مجلد الرفع الواحد `server/public/`.
 - إصلاح `Api.health`: كان يعتبر أي رد JSON غير معروف «ok»، فأصبح يميّز أخطاء config.php/قاعدة البيانات ويعرضها بدل ادعاء النجاح؛ رسالة `auth_server_config` جديدة. الإصدار `0.16.2` (code 20).
+
+## متابعة 2026-11-26 (ج): 0.17.0 — إلغاء الأوفلاين + الميزات الجديدة + برومت لوحة الأم
+
+- تصحيح: موقع `yousef.romoozbasmah.com` **PHP** وليس WordPress؛ سبب رد HTML كان غياب `api/auth.php` على النطاق لا ووردبريس.
+- إلغاء مبدأ أوفلاين: بوابة دخول إلزامية `Routes.AUTH` قبل التشغيل، `Api.devices/revokeDevice`، جدول `devices` جديد غير مكرر (`003_devices.sql`)، وعرض الأجهزة وتسجيل الخروج عن بُعد في `DevicesScreen`.
+- برومتات: `docs/mother-panel/PROMPT.md` + `APP_PANEL_PROMPT.md` + `MOTHER_PANEL_HANDOFF.md`؛ الأخير يطلب من موديل لوحة الأم تحسين البرومت، معاملة لوحات التطبيقات كـ API فعلي، فتح لوحة التطبيق بالنقر، زر عائم في كل صفحة/وثيقة/لوحة مقفلة، وتبويب «متطلبات التطبيقات» بقسمين مع الفرز والتأشير.
+- لوحة `panel/`: أضيفت التبويبات «متطلبات التطبيقات»، «التحديثات الفرعية»، «الأجهزة المسجّلة»، «الإصدارات»، والزر العائم؛ وأضيف زر عائم لـ54 ملف توثيق. اللوحة التابعة `boards/` لم تُلمس.
+- التحديثات: `ContentUpdate.sync` عند التشغيل يقارن sha256 وينزّل الملفات المتغيّرة فقط إلى `filesDir/content`؛ `AppConfig` يقرأ التجاوزات. `ApkInstaller` ينزّل APK ويُثبّته داخل التطبيق (PackageInstaller + REQUEST_INSTALL_PACKAGES). توحيد توقيع كل القنوات في `build.gradle.kts` لمنع إعادة طلب الصلاحيات بعد التحديث.
+- إخفاء التطبيقات الحقيقية: `AppsScreen` + `LauncherActivity` (HOME، مُفعّل بالتبديل)، حالات مزاج (`MoodPresets`)، إخفاء/ترتيب الكتب والأدوات في `ToolsTab` و`VisibilityScreen`، محفوظة في `Store`.
+- الوسائط: `MediaVaultScreen` يعرض صور الجهاز والفيديو، مشغّل صور بتكبير ومشغّل فيديو (VideoView)، إخفاء من المعرض بـ `MediaStore.createDeleteRequest` + نسخة خاصة قابلة للإرجاع، أذونات READ_MEDIA_*.
+- الملفات: `FileManagerScreen` يتعرّف تلقائياً على كل PDF/MD على الجهاز، تصفّح مجلدات، نسخ/لصق/نقل، قائمة/شبكة، فرز حسب الاسم/التاريخ/الحجم/النوع، قارئ PDF بصفحات وقارئ Markdown «نص عادي / عرض منسّق»؛ MANAGE_EXTERNAL_STORAGE.
+- المطوّرون: `GitScreen` + `GitHub.kt` (REST: الفروع، الأحدث، الأساسي، المقارنة، الدمج، الإصدارات، pull/push، الأوامر) + `LocalGit.kt` يكتشف مستودعات `.git` على الجهاز ويعرض الوصف وآخر تحديث والحالة.
+- الإصدار `0.17.0` (code 21).
 

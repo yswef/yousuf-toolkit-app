@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,7 +24,10 @@ import feature.devmode.DevmodeScreen
 import feature.faith.FaithScreen
 import feature.firewall.FirewallScreen
 import feature.forum.ForumScreen
+import feature.apps.AppsScreen
+import feature.auth.AuthGateScreen
 import feature.game.GameScreen
+import feature.git.GitScreen
 import feature.home.AccountScreen
 import feature.home.HomeScreen
 import feature.home.PathScreen
@@ -34,15 +38,19 @@ import feature.learn.LearnScreen
 import feature.life.LifeScreen
 import feature.library.LibraryScreen
 import feature.license.LicenseScreen
+import feature.media.MediaVaultScreen
 import feature.money.MoneyScreen
 import feature.moneypro.MoneyProScreen
 import feature.notiflog.NotiflogScreen
 import feature.onboarding.OnboardingScreen
 import feature.onboarding.RegisterScreen
+import feature.profile.DevicesScreen
 import feature.profile.ProfileScreen
+import feature.reader.FileManagerScreen
 import feature.reader.PdfReaderScreen
 import feature.raids.RaidsScreen
 import feature.settings.SettingsScreen
+import feature.settings.VisibilityScreen
 import feature.shop.ShopScreen
 import feature.skin.SkinScreen
 import feature.sleep.SleepScreen
@@ -61,7 +69,7 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
     val spec = tween<Float>(300)
     NavHost(
         navController = nav,
-        startDestination = Routes.INTRO,
+        startDestination = if (store.authToken.isBlank() || !store.onboarded) Routes.AUTH else Routes.INTRO,
         enterTransition = {
             slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(320), initialOffset = { it / 3 }) + fadeIn(spec)
         },
@@ -129,7 +137,8 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
                 onProfile = { nav.navigate(Routes.PROFILE) },
                 onSkin = { nav.navigate(Routes.SKIN) },
                 onLicense = { nav.navigate(Routes.LICENSE) },
-                onTests = { nav.navigate(Routes.TESTS) }
+                onTests = { nav.navigate(Routes.TESTS) },
+                onFeature = { nav.navigate(it) }
             )
         }
         composable(Routes.ACCOUNTS) { AccountsScreen(onBack = { nav.popBackStack() }) }
@@ -171,5 +180,28 @@ fun AppNav(ui: UiState, nav: NavHostController = rememberNavController()) {
         composable(Routes.WATER) { WaterScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.WATCH) { feature.watch.WatchScreen(onBack = { nav.popBackStack() }) }
         composable(Routes.WORKOUTS) { WorkoutsScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.AUTH) {
+            AuthGateScreen()
+            LaunchedEffect(store.authToken) {
+                if (store.authToken.isNotBlank()) {
+                    nav.navigate(if (store.onboarded) Routes.HOME else Routes.INTRO) {
+                        popUpTo(Routes.AUTH) { inclusive = true }
+                    }
+                }
+            }
+        }
+        composable(Routes.DEVICES) {
+            DevicesScreen(
+                onBack = { nav.popBackStack() },
+                onLoggedOut = {
+                    nav.navigate(Routes.AUTH) { popUpTo(Routes.HOME) { inclusive = true } }
+                }
+            )
+        }
+        composable(Routes.APPS) { AppsScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.VISIBILITY) { VisibilityScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.MEDIA) { MediaVaultScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.FILES) { FileManagerScreen(onBack = { nav.popBackStack() }) }
+        composable(Routes.GIT) { GitScreen(onBack = { nav.popBackStack() }) }
     }
 }
