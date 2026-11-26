@@ -105,4 +105,5 @@ python3 server/tools/build_panel_data.py
 - تبويبات: **المشرفون والمطورون** (تعيين مستخدمين + حتى 3 حسابات مشرف مع تبديل/خروج/دخول بحساب آخر)، **اختبارات المطور** (62 اختباراً يدوياً)، **بلاغات التشخيص**.
 - صلاحية وضع المطور في التطبيق تأتي من `devmode.php?action=status` فقط.
 - التحديثات الفرعية تضيف `devmode_tests.json` و`releases.json`.
+- `panel/?p=learning` يراجع `learning_plans` بعد استيراد `006_learning.sql` وينشر `site.html`.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
