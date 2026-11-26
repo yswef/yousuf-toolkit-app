@@ -23,6 +23,9 @@ import domain.model.Habit
 import domain.model.JournalEntry
 import domain.model.LinkedNote
 import domain.model.LearnItem
+import domain.model.LearningLesson
+import domain.model.LearningPlan
+import domain.model.LearningPlanDraft
 import domain.model.Ledger
 import domain.model.NotifEntry
 import domain.model.Priority
@@ -86,6 +89,8 @@ class Store(context: Context) {
     var sleep by mutableStateOf<List<SleepLog>>(emptyList())
         private set
     var learn by mutableStateOf<List<LearnItem>>(emptyList())
+        private set
+    var learningPlans by mutableStateOf<List<LearningPlan>>(emptyList())
         private set
     var books by mutableStateOf<List<Book>>(emptyList())
         private set
@@ -974,6 +979,76 @@ class Store(context: Context) {
         save()
     }
 
+    fun importLearningPlan(draft: LearningPlanDraft): LearningPlan {
+        val now = System.currentTimeMillis()
+        val lessons = draft.lessons.map {
+            LearningLesson(nextId(), it.title.trim(), it.minutes.coerceAtLeast(1), it.test, it.motivation)
+        }
+        val plan = LearningPlan(
+            id = nextId(),
+            title = draft.title.trim(),
+            subject = draft.subject.trim(),
+            category = draft.category.trim(),
+            level = draft.level.trim(),
+            goals = draft.goals.map { it.trim() }.filter { it.isNotBlank() },
+            mode = draft.mode,
+            minutes = draft.minutes.coerceAtLeast(1),
+            lessons = lessons,
+            motivations = draft.motivations,
+            tasks = draft.tasks,
+            habits = draft.habits,
+            tests = draft.tests,
+            courseMd = draft.courseMd,
+            roadmapXml = draft.roadmapXml,
+            siteHtml = draft.siteHtml,
+            planJson = draft.planJson,
+            status = "local",
+            serverId = 0L,
+            siteUrl = "",
+            createdAt = now
+        )
+        val due = if (draft.mode == "time") {
+            now + draft.minutes.coerceAtLeast(1) * 60_000L
+        } else {
+            LocalDate.now().plusDays(1).atTime(20, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        }
+        learningPlans = listOf(plan) + learningPlans
+        lessons.forEach { learn = learn + LearnItem(nextId(), it.title, 0, it.minutes, false) }
+        draft.tasks.forEach {
+            tasks = tasks + Task(nextId(), it.trim(), plan.motivations.firstOrNull().orEmpty(), Priority.NORMAL, false, now, due, "daily", "learning")
+        }
+        draft.habits.forEach { habits = habits + Habit(nextId(), it.trim(), 0, 0, "") }
+        save()
+        return plan
+    }
+
+    fun toggleLearningLesson(planId: Long, lessonId: Long) {
+        learningPlans = learningPlans.map { plan ->
+            if (plan.id != planId) plan
+            else plan.copy(lessons = plan.lessons.map { lesson ->
+                if (lesson.id == lessonId) lesson.copy(done = !lesson.done) else lesson
+            })
+        }
+        save()
+    }
+
+    fun markLearningPlanUploaded(id: Long, serverId: Long) {
+        learningPlans = learningPlans.map { if (it.id == id) it.copy(status = "pending", serverId = serverId) else it }
+        save()
+    }
+
+    fun upsertReadyPlan(plan: LearningPlan) {
+        val index = learningPlans.indexOfFirst { it.serverId > 0L && it.serverId == plan.serverId }
+        if (index >= 0) {
+            val next = learningPlans.toMutableList()
+            next[index] = plan.copy(id = next[index].id, status = "ready")
+            learningPlans = next
+        } else {
+            learningPlans = listOf(plan.copy(id = nextId(), status = "ready")) + learningPlans
+        }
+        save()
+    }
+
     fun addWater(delta: Int) {
         ensureDay()
         if (delta == 0) return
@@ -1450,6 +1525,9 @@ class Store(context: Context) {
                 })
             }
         })
+        root.put("learningPlans", JSONArray().apply {
+            learningPlans.forEach { put(it.toJson()) }
+        })
         root.put("learn", JSONArray().apply {
             learn.forEach { t ->
                 put(JSONObject().apply {
@@ -1737,6 +1815,7 @@ class Store(context: Context) {
                     at = it.optLong("at")
                 )
             }
+            learningPlans = root.optJSONArray("learningPlans").mapObjects { it.toLearningPlan() }
             learn = root.optJSONArray("learn").mapObjects {
                 LearnItem(
                     id = it.optLong("id"),
@@ -1777,6 +1856,72 @@ class Store(context: Context) {
         }
     }
 }
+
+private fun LearningLesson.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("minutes", minutes)
+    put("test", test)
+    put("motivation", motivation)
+    put("done", done)
+}
+
+private fun JSONObject.toLearningLesson(): LearningLesson = LearningLesson(
+    id = optLong("id"),
+    title = optString("title"),
+    minutes = optInt("minutes", 0),
+    test = optString("test", ""),
+    motivation = optString("motivation", ""),
+    done = optBoolean("done", false)
+)
+
+private fun LearningPlan.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("subject", subject)
+    put("category", category)
+    put("level", level)
+    put("goals", JSONArray().apply { goals.forEach { put(it) } })
+    put("mode", mode)
+    put("minutes", minutes)
+    put("lessons", JSONArray().apply { lessons.forEach { put(it.toJson()) } })
+    put("motivations", JSONArray().apply { motivations.forEach { put(it) } })
+    put("tasks", JSONArray().apply { tasks.forEach { put(it) } })
+    put("habits", JSONArray().apply { habits.forEach { put(it) } })
+    put("tests", JSONArray().apply { tests.forEach { put(it) } })
+    put("courseMd", courseMd)
+    put("roadmapXml", roadmapXml)
+    put("siteHtml", siteHtml)
+    put("planJson", planJson)
+    put("status", status)
+    put("serverId", serverId)
+    put("siteUrl", siteUrl)
+    put("createdAt", createdAt)
+}
+
+private fun JSONObject.toLearningPlan(): LearningPlan = LearningPlan(
+    id = optLong("id"),
+    title = optString("title"),
+    subject = optString("subject"),
+    category = optString("category"),
+    level = optString("level"),
+    goals = optJSONArray("goals").strings(),
+    mode = optString("mode", "daily"),
+    minutes = optInt("minutes", 0),
+    lessons = optJSONArray("lessons").mapObjects { it.toLearningLesson() },
+    motivations = optJSONArray("motivations").strings(),
+    tasks = optJSONArray("tasks").strings(),
+    habits = optJSONArray("habits").strings(),
+    tests = optJSONArray("tests").strings(),
+    courseMd = optString("courseMd", ""),
+    roadmapXml = optString("roadmapXml", ""),
+    siteHtml = optString("siteHtml", ""),
+    planJson = optString("planJson", ""),
+    status = optString("status", "local"),
+    serverId = optLong("serverId", 0L),
+    siteUrl = optString("siteUrl", ""),
+    createdAt = optLong("createdAt", 0L)
+)
 
 private fun priorityOf(value: String): Priority =
     runCatching { Priority.valueOf(value) }.getOrDefault(Priority.NORMAL)
