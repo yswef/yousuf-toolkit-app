@@ -19,6 +19,7 @@
 - وضع المطور: 4 أقسام، 62 اختباراً يدوياً، رجوع قبل الاختبار، بيانات التطبيق، وفروق الإصدارات. لا اختبارات تلقائية.
 - مساعد تشخيص العتاد: قراءات فعلية، تقرير عربي، `fix_actions` بعد موافقة، حلول معروفة، و`server_report` مجهّل بلا IMEI/هاتف/SSID/موقع.
 - اللوحة الأساسية: `server/public/panel/` فيها 18 تبويباً، مع `learning.php` و`panel/?p=learning`.
+- أُضيف شرح رفع/ربط اللوحة الأساسية وتثبيت اللوحة التابعة داخل لوحة الأم في `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
 - لوحة الأم التابعة: `server/public/boards/y-dimensions/` بقيت دون مساس، مع `MAP.json` وVerify.
 - `sister_apps` فارغة؛ البريد النهائي `yswefalhmzy@gmail.com`.
 
@@ -32,6 +33,7 @@
 - `docs/plan/index.html`: ملخص الخطة البسيط.
 - `docs/plan/feedback.html`: صفحة الاقتراحات والملاحظات الموحّدة مع الصور وZIP والمحرر.
 - `docs/plan/feedback-zip.js`: كاتب ZIP مستقل بلا مكتبات خارجية.
+- `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`: خطوات رفع اللوحة التنفيذية وربطها بلوحة الأم وتثبيت اللوحة التابعة.
 
 ## قيود ثابتة
 
