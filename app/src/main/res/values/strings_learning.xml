@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
+<resources>
+    <string name="learn_prompt">برومت خطة التعلم</string>
+    <string name="learn_prompt_subject">الموضوع</string>
+    <string name="learn_prompt_level">المستوى</string>
+    <string name="learn_prompt_minutes">الدقائق المتاحة</string>
+    <string name="learn_prompt_build">تجهيز البرومت</string>
+    <string name="learn_prompt_copy">نسخ البرومت</string>
+    <string name="learn_goal">الهدف %1$d</string>
+    <string name="learn_goal_add">إضافة هدف</string>
+    <string name="learn_goal_remove">حذف</string>
+    <string name="learn_mode_daily">درس واحد يومياً</string>
+    <string name="learn_mode_time">وقت أحدده بنفسي</string>
+    <string name="learn_zip_hint">المخرجات: ملف مضغوط فيه course.md وroadmap.xml وsite.html وplan.json.</string>
+    <string name="learn_import_title">استيراد خطة جاهزة</string>
+    <string name="learn_import_pick">اختر ملف ZIP</string>
+    <string name="learn_import_done">استُوردت الخطة: %1$s</string>
+    <string name="learn_import_failed">تعذّر قراءة الملف المضغوط.</string>
+    <string name="learn_plans_title">الخطط التعليمية</string>
+    <string name="learn_plans_empty">لا توجد خطط مستوردة بعد.</string>
+    <string name="learn_unknown">غير محدد</string>
+    <string name="learn_plan_category">النوع: %1$s</string>
+    <string name="learn_plan_lessons">الدروس: %1$d</string>
+    <string name="learn_status">الحالة: %1$s</string>
+    <string name="learn_status_local">محلية</string>
+    <string name="learn_status_pending">بانتظار المراجعة</string>
+    <string name="learn_status_approved">معتمدة</string>
+    <string name="learn_status_rejected">مرفوضة</string>
+    <string name="learn_status_ready">جاهزة</string>
+    <string name="learn_plan_view_site">عرض الموقع</string>
+    <string name="learn_lesson_done">إتمام</string>
+    <string name="learn_lesson_undo">إلغاء الإتمام</string>
+    <string name="learn_voice_premium_needed">تسجيل الملاحظات الصوتية مدفوع ويعمل بعد تفعيل التطبيق.</string>
+    <string name="learn_upload_button">رفع للمراجعة</string>
+    <string name="learn_upload_done">رُفعت الخطة للوحة التحكم.</string>
+    <string name="learn_upload_failed">تعذّر رفع الخطة.</string>
+    <string name="learn_ready_title">الخطط التعليمية الجاهزة</string>
+    <string name="learn_ready_empty">لا توجد خطط منشورة بعد.</string>
+    <string name="learn_ready_download">تنزيل الخطة</string>
+    <string name="learn_ready_done">أُضيفت الخطة الجاهزة.</string>
+    <string name="learn_ready_failed">تعذّر تنزيل الخطة.</string>
+    <string name="learn_plan_course_type">نوع الكورس: %1$s</string>
+    <string name="learn_prompt_template">أنشئ حزمة تعليمية كاملة لموضوع %1$s بمستوى %2$s.
+الأهداف (أكثر من هدف، استخدمها لاحقاً في التحفيز):
+%3$s
+نظام الدراسة: %4$s. المدة المتاحة: %5$s دقيقة.
+
+المخرجات المطلوبة داخل ملف ZIP واحد فقط، بأسماء ثابتة:
+1) course.md: ملف Markdown منظم بعناوين ثابتة: بيانات الكورس، الأهداف، خطة الدروس، عبارات تحفيزية كثيرة، مهام مجدولة، عادات مراجعة، اختبارات لكل درس، وخطوات الاستيراد. يجب أن يفهم التطبيق هذه الأقسام عند المراجعة والاستيراد.
+2) roadmap.xml: خريطة XML فيها مسارات ومراحل وروابط بين الدروس والأهداف والاختبارات. استخدم عناصر مثل &lt;roadmap&gt; و&lt;track&gt; و&lt;lesson&gt; و&lt;test&gt;.
+3) site.html: صفحة واحدة مستقلة، تفاعلية على كل الأجهزة، بقائمة جانبية مثل docs/learn/course-template.html تماماً من حيث البنية. فيها بيانات الكورس والخطة والدروس، زر إتمام لكل درس يشطب الدرس عند النقر، تبويب الأدوات مع الحجم وطريقة التثبيت خطوة بخطوة وروابط المواقع الأصلية، تبويب كورسات يوتيوب بالعربية والإنجليزية مع معلومات عنها، تبويب مواقع شهادات مجانية، وشرح بسيط جداً كأنه لطفل عمره خمس سنوات. لا تذكر أسماء أشخاص، ولا تضف حقوقاً أو ترخيصاً أو ادعاء ملكية من إنشائك، ولا تضف توقيعاً شخصياً أو قسم حقوق؛ حقوق الموقع والتطبيق وخصوصية الاستخدام تُعرض داخل التطبيق عند موافقة المستخدم فقط.
+4) plan.json: JSON صالح بالمفتاح الثابت schema بقيمة y-dimensions.learning-plan/1.0، ثم title وsubject وcategory وlevel وgoals وmode وminutes وlessons وmotivations وtasks وhabits وtests. كل عنصر في lessons له title وminutes وtest وmotivation. mode هو daily أو time. الصق نفس البيانات داخل site.html في متغير PLAN حتى يعرضها الموقع.
+
+اجعل الدروس مقسمة حسب نظام الدراسة، وأضف لكل درس اختباراً قصيراً يؤكد أن المتعلم فهمه. كرر عبارات التحفيز واربطها بالأهداف، وحوّلها إلى مهام مجدولة وعادات مذاكرة ومراجعة. اجمع الملفات الأربعة في ملف مضغوط واحد فقط حتى يرفعه المستخدم إلى التطبيق.</string>
+</resources>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

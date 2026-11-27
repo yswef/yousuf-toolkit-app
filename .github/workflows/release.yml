@@ -1,3 +1,4 @@
+# توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com
 name: release
 
 on:
@@ -22,6 +23,10 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-test\.[0-9]+$ ]]; then
+            echo "task=assembleTester" >> "$GITHUB_OUTPUT"
+            echo "pre=true" >> "$GITHUB_OUTPUT"
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+          elif [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-note\.[0-9]+$ ]]; then
             echo "task=assembleTester" >> "$GITHUB_OUTPUT"
             echo "pre=true" >> "$GITHUB_OUTPUT"
             echo "signed=false" >> "$GITHUB_OUTPUT"
@@ -132,3 +137,4 @@ jobs:
           flag=""
           if [ "$PRE" = "true" ]; then flag="--prerelease"; fi
           gh release create "$TAG" out/*.apk --title "$TAG" --generate-notes $flag
+# توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com

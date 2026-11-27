@@ -157,6 +157,18 @@ fun SettingsScreen(
                     onClick = onLicense
                 )
                 V3Row(
+                    title = stringResource(R.string.rights_title),
+                    icon = Icons.Filled.Info,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.RIGHTS) }
+                )
+                V3Row(
+                    title = stringResource(R.string.applock_settings),
+                    icon = Icons.Filled.Settings,
+                    divider = true,
+                    onClick = { onFeature(core.navigation.Routes.APPLOCK) }
+                )
+                V3Row(
                     title = stringResource(R.string.settings_tests),
                     icon = Icons.Filled.List,
                     divider = true,
@@ -212,6 +224,18 @@ fun SettingsScreen(
                     icon = Icons.Filled.Info,
                     divider = true,
                     onClick = { onFeature(core.navigation.Routes.DIAGNOSTICS) }
+                )
+            }
+
+            V3SectionHeader(title = stringResource(R.string.journal_cloud_sync))
+            V3Group {
+                V3SwitchRow(
+                    title = stringResource(R.string.journal_auto_sync),
+                    subtitle = stringResource(if (store.premium) R.string.journal_auto_sync_hint else R.string.journal_auto_sync_paid),
+                    checked = store.journalAutoSync,
+                    enabled = store.premium,
+                    divider = true,
+                    onChange = { store.setJournalAutoSyncEnabled(it) }
                 )
             }
 

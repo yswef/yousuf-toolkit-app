@@ -1,0 +1,95 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>اقتراحات وملاحظات — خطة Y- Dimensions</title>
+<meta name="description" content="صفحة واحدة للاقتراحات والملاحظات مع صور وملف ZIP.">
+<link rel="stylesheet" href="plan.css">
+</head>
+<body>
+<div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
+<main class="wrap">
+  <header class="hero feedback-hero">
+    <span class="tag">صفحة واحدة</span>
+    <h1>اقتراحات وملاحظات</h1>
+    <p>اكتب فكرة، أضف صوراً للملاحظة، ثم نزّل ملفاً واحداً.</p>
+  </header>
+
+  <section class="card prompt-card">
+    <h2>البرومت المرفق مع الملف</h2>
+    <pre class="code" id="zipPrompt"><code>اقرأ all-notes.md أولاً. كل اقتراح أو ملاحظة له مجلد notes/entry-N/ وفيه note.md. المدخلات التي معها صور يظهر في الجذر اسم الميزة ومسار المجلد فقط. أسماء الصور «الأولى»، «الثانية»، «الثالثة» وهكذا؛ اربط كل صورة بملاحظتها ولا تغيّر الأسماء. لا تضف أسماء أشخاص ولا حقوقاً ولا توقيع ملكية.</code></pre>
+    <div class="actions"><button class="btn ghost" id="copyPrompt" type="button">نسخ البرومت</button><span id="promptStatus" class="status" aria-live="polite"></span></div>
+  </section>
+
+  <section class="card entry-card">
+    <div class="section-head">
+      <h2>إضافة مدخل</h2>
+      <button class="btn" id="newEntry" type="button">إضافة اقتراح أو ملاحظة</button>
+    </div>
+
+    <dialog id="entryDialog" class="dialog">
+      <form id="entryMeta" method="dialog">
+        <h2>بدء مدخل جديد</h2>
+        <label for="entryKind">النوع</label>
+        <select id="entryKind" class="field">
+          <option value="suggestion">اقتراح</option>
+          <option value="note">ملاحظة</option>
+        </select>
+        <div id="nameGroup">
+          <label for="entryName">الاسم</label>
+          <input id="entryName" class="field" placeholder="اسم الاقتراح" autocomplete="off">
+        </div>
+        <div id="placeGroup" hidden>
+          <label for="entryPlace">الخيار الثاني: مكان المشكلة</label>
+          <select id="entryPlace" class="field"></select>
+        </div>
+        <div class="actions">
+          <button class="btn" id="startRecording" type="button">بدء التسجيل</button>
+          <button class="btn ghost" id="cancelDialog" type="button">إلغاء</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="editorShell" hidden>
+      <div id="editorToolbar" class="editor-toolbar" role="toolbar" aria-label="أدوات النص">
+        <button type="button" data-command="bold">عريض</button>
+        <button type="button" data-command="italic">مائل</button>
+        <button type="button" data-command="insertUnorderedList">• نقاط</button>
+        <button type="button" data-command="insertOrderedList">1 أرقام</button>
+        <button type="button" id="alphaList">A B C</button>
+        <button type="button" data-command="indent">مستوى داخل</button>
+        <button type="button" data-command="outdent">مستوى خارج</button>
+      </div>
+      <div id="editor" class="field editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="اكتب الوصف أو الملاحظة هنا"></div>
+      <div id="imageGroup">
+        <label for="imageInput">صور الملاحظة</label>
+        <input id="imageInput" class="field" type="file" accept="image/*" multiple>
+        <div id="imagePreview" class="thumbs"></div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="saveEntry" type="button">حفظ</button>
+        <button class="btn ghost" id="cancelEditor" type="button">إلغاء</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="downloadZip" type="button">تنزيل ZIP</button>
+      <button class="btn ghost" id="deleteAll" type="button">حذف الكل</button>
+      <span id="status" class="status" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>كل المدخلات <span id="count" class="muted"></span></h2>
+    <div id="list"></div>
+  </section>
+
+  <nav class="links"><a href="index.html">العودة للملخص</a></nav>
+</main>
+<script src="feedback-zip.js"></script>
+<script src="plan.js"></script>
+</body>
+</html>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

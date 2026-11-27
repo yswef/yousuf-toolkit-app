@@ -17,6 +17,8 @@ import core.navigation.AppNav
 import core.update.ContentUpdate
 import data.local.LocalStore
 import data.local.Store
+import feature.auth.AppLockGate
+import feature.journal.JournalSync
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +35,9 @@ class MainActivity : ComponentActivity() {
                 AppTheme(mode = ui.mode, dark = ui.dark, accent = store.accent, fontScale = ui.fontScale, motion = ui.effectiveMotion) {
                     LaunchedEffect(Unit) {
                         ContentUpdate.sync(applicationContext, store.serverUrl)
+                        if (store.journalAutoSync && store.premium) runCatching { JournalSync.push(store) }
                     }
-                    AppNav(ui = ui)
+                    AppLockGate { AppNav(ui = ui) }
                 }
             }
         }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
+<resources>
+    <string name="journal_mood_title">اختر المزاج</string>
+    <string name="journal_mood_choose">اختر حزمة إيموجيهات ثم اختر مزاجك.</string>
+    <string name="journal_editor_title">محرر المذكرة</string>
+    <string name="journal_editor_start">ابدأ المحرر</string>
+    <string name="journal_date_time">التاريخ والوقت</string>
+    <string name="journal_time_optional">وقت اختياري</string>
+    <string name="journal_backgrounds">خلفيات الورقة</string>
+    <string name="journal_editor_tools">أدوات المحرر</string>
+    <string name="journal_bold">عريض</string>
+    <string name="journal_italic">مائل</string>
+    <string name="journal_underline">تحته خط</string>
+    <string name="journal_bullet_list">قائمة منقطة</string>
+    <string name="journal_number_list">قائمة مرقمة</string>
+    <string name="journal_alpha_list">قائمة أبجدية</string>
+    <string name="journal_nested_list">قائمة متداخلة</string>
+    <string name="journal_outdent">إلغاء التداخل</string>
+    <string name="journal_draw">رسم</string>
+    <string name="journal_draw_stop">إنهاء الرسم</string>
+    <string name="journal_add_image">إضافة صورة</string>
+    <string name="journal_fonts">الخطوط</string>
+    <string name="journal_text_colors">ألوان النص</string>
+    <string name="journal_sticker_packs">حزم الملصقات</string>
+    <string name="journal_custom_sticker">تصميم ملصق خاص</string>
+    <string name="journal_custom_emoji">رمز</string>
+    <string name="journal_custom_text">نص الملصق</string>
+    <string name="journal_custom_insert">أضف الملصق</string>
+    <string name="journal_premium_needed">هذه الميزة مدفوعة وتعمل بعد تفعيل التطبيق.</string>
+    <string name="journal_points_cost">%1$d نقطة</string>
+    <string name="journal_points_missing">النقاط غير كافية.</string>
+    <string name="journal_image_too_large">الصورة كبيرة جداً أو تعذّر قراءتها.</string>
+    <string name="journal_editor_empty">اكتب عنواناً أو نصاً للمذكرة.</string>
+    <string name="journal_mood_value">المزاج: %1$s</string>
+    <string name="journal_background_value">الخلفية: %1$s</string>
+    <string name="journal_mood_empty">أضف مذكرات بوقت محدد ليظهر تحليل المزاج.</string>
+    <string name="journal_mood_insight">أكثر مزاج: %1$s · أفضل وقت للكتابة: %2$s</string>
+    <string name="journal_cloud_sync">مزامنة المذكرات</string>
+    <string name="journal_auto_sync">مزامنة تلقائية</string>
+    <string name="journal_auto_sync_hint">تُرسل المذكرات عند الحفظ وعند فتح التطبيق.</string>
+    <string name="journal_auto_sync_paid">ميزة مدفوعة: فعّل التطبيق أولاً.</string>
+    <string name="journal_sync_now">مزامنة الآن</string>
+    <string name="journal_sync_done">تمت المزامنة: %1$d مذكرة.</string>
+    <string name="journal_sync_failed">تعذّرت المزامنة.</string>
+    <string name="journal_voice_recording_title">تسجيل صوتي</string>
+    <string name="journal_voice_premium_needed">التسجيل الصوتي مدفوع ويعمل بعد تفعيل التطبيق.</string>
+    <string name="journal_voice_record">بدء التسجيل</string>
+    <string name="journal_voice_stop">إيقاف التسجيل</string>
+    <string name="journal_voice_play">تشغيل</string>
+    <string name="journal_voice_remove">إزالة</string>
+    <string name="journal_voice_recording">جارٍ التسجيل.</string>
+    <string name="journal_voice_saved">حُفظ التسجيل مع المذكرة.</string>
+    <string name="journal_voice_failed">تعذّر التسجيل الصوتي.</string>
+    <string name="journal_voice_mic_denied">صلاحية الميكروفون مطلوبة.</string>
+    <string name="journal_voice_attached">معها تسجيل صوتي.</string>
+    <string-array name="journal_background_names">
+        <item>كريمي</item><item>سماوي</item><item>وردي</item><item>نعناعي</item><item>بنفسجي</item>
+        <item>رملي</item><item>ليلي</item><item>شبكة</item><item>نقاط</item><item>محيط</item>
+    </string-array>
+    <string-array name="journal_emoji_pack_names">
+        <item>مشاعر مجانية</item><item>طبيعة مجانية</item><item>حيوانات</item><item>هوايات</item><item>طاقة</item>
+    </string-array>
+    <string-array name="journal_sticker_pack_names">
+        <item>نجوم مجانية</item><item>مدرسة مجانية</item><item>حيوانات</item><item>احتفال</item><item>مناسبات</item><item>علوم</item>
+    </string-array>
+    <string-array name="journal_font_names">
+        <item>القاهرة</item><item>كتابي</item><item>ثابت</item><item>بسيط</item>
+    </string-array>
+    <string-array name="journal_color_names">
+        <item>أسود</item><item>بنفسجي</item><item>أحمر</item><item>أخضر</item><item>برتقالي</item><item>أزرق</item>
+    </string-array>
+</resources>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

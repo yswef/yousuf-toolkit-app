@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import domain.model.LearningPlan
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -30,6 +31,7 @@ data class DeviceInfo(val id: Long, val label: String, val model: String, val la
 data class ContentFile(val name: String, val sha256: String, val size: Long, val url: String)
 data class ContentManifest(val version: String, val files: List<ContentFile>)
 data class DeveloperStatus(val developer: Boolean, val role: String, val maxAccounts: Int, val tests: List<String>)
+data class LearningPlanSummary(val serverId: Long, val title: String, val category: String, val courseType: String, val level: String, val minutes: Int, val siteUrl: String)
 
 object Api {
     const val SERVER_HTML = "server_html"
@@ -294,6 +296,50 @@ object Api {
             if (response.optBoolean("known", false)) response.optString("solution_ar").takeIf { it.isNotBlank() }
             else null
         }
+
+    suspend fun uploadLearningPlan(base: String, token: String, plan: LearningPlan): Long =
+        withContext(Dispatchers.IO) {
+            val payload = JSONObject()
+                .put("title", plan.title)
+                .put("subject", plan.subject)
+                .put("category", plan.category)
+                .put("course_type", plan.category)
+                .put("level", plan.level)
+                .put("mode", plan.mode)
+                .put("minutes", plan.minutes)
+                .put("goals", JSONArray(plan.goals))
+                .put("plan_json", plan.planJson)
+                .put("course_md", plan.courseMd)
+                .put("roadmap_xml", plan.roadmapXml)
+                .put("site_html", plan.siteHtml)
+            call(base, "/api/learning.php?action=upload", "POST", payload, token).optLong("id", 0L)
+        }
+
+    suspend fun readyLearningPlans(base: String): List<LearningPlanSummary> = withContext(Dispatchers.IO) {
+        call(base, "/api/learning.php?action=ready", "GET", null).optJSONArray("plans").mapObjects {
+            LearningPlanSummary(
+                serverId = it.optLong("id", 0L),
+                title = it.optString("title", ""),
+                category = it.optString("category", ""),
+                courseType = it.optString("course_type", ""),
+                level = it.optString("level", ""),
+                minutes = it.optInt("minutes", 0),
+                siteUrl = it.optString("site_url", "")
+            )
+        }
+    }
+
+    suspend fun learningPlan(base: String, serverId: Long): LearningPlan? = withContext(Dispatchers.IO) {
+        val response = call(base, "/api/learning.php?action=plan&id=$serverId", "GET", null)
+        LearningPlanJson.parse(
+            planJson = response.optString("plan_json", ""),
+            siteHtml = response.optString("site_html", ""),
+            courseMd = response.optString("course_md", ""),
+            roadmapXml = response.optString("roadmap_xml", ""),
+            serverId = serverId,
+            siteUrl = response.optString("site_url", "")
+        )
+    }
 
     suspend fun diagnosticsReport(base: String, token: String, report: JSONObject) =
         withContext(Dispatchers.IO) {

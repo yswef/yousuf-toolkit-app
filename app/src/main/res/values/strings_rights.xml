@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
+<resources>
+    <string name="rights_title">الحقوق وخصوصية الاستخدام</string>
+    <string name="rights_intro">قبل الدخول، هذه حقوقك وحدود استخدام التطبيق والمواقع التعليمية.</string>
+    <string name="rights_item_1">بياناتك محفوظة لحسابك، ولا تُرسل للخادم إلا عند المزامنة أو رفع خطة تعليمية.</string>
+    <string name="rights_item_2">الخطط التعليمية المستوردة تُراجع في لوحة التحكم قبل نشر الموقع التعليمي.</string>
+    <string name="rights_item_3">المواقع التعليمية المنشورة لا تحمل أسماء أشخاص ولا ادعاءات حقوق أو توقيع ملكية من الموديل.</string>
+    <string name="rights_item_4">حقوق الموقع والتطبيق وخصوصية الاستخدام تُعرض هنا، وتوافقك محفوظ على الجهاز.</string>
+    <string name="rights_item_5">تقدر تحذف مذكراتك وملاحظاتك وخططك من التطبيق، وتوقف المزامنة التلقائية متى شئت.</string>
+    <string name="rights_item_6">لا يُطلب اسم شبكة حقيقي ولا رقم هاتف ولا معرّف جهاز في تقارير التشخيص.</string>
+    <string name="rights_accept">أوافق على الحقوق وخصوصية الاستخدام.</string>
+    <string name="rights_button">متابعة</string>
+</resources>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

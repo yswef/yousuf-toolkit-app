@@ -23,6 +23,9 @@ import domain.model.Habit
 import domain.model.JournalEntry
 import domain.model.LinkedNote
 import domain.model.LearnItem
+import domain.model.LearningLesson
+import domain.model.LearningPlan
+import domain.model.LearningPlanDraft
 import domain.model.Ledger
 import domain.model.NotifEntry
 import domain.model.Priority
@@ -86,6 +89,8 @@ class Store(context: Context) {
     var sleep by mutableStateOf<List<SleepLog>>(emptyList())
         private set
     var learn by mutableStateOf<List<LearnItem>>(emptyList())
+        private set
+    var learningPlans by mutableStateOf<List<LearningPlan>>(emptyList())
         private set
     var books by mutableStateOf<List<Book>>(emptyList())
         private set
@@ -163,6 +168,32 @@ class Store(context: Context) {
     var premium by mutableStateOf(false)
         private set
     var licenseCode by mutableStateOf("")
+        private set
+    var ownedBackgrounds by mutableStateOf(setOf("cream", "sky"))
+        private set
+    var ownedStickerPacks by mutableStateOf(setOf("free-1", "free-2"))
+        private set
+    var ownedEmojiPacks by mutableStateOf(setOf("free-1", "free-2"))
+        private set
+    var journalAutoSync by mutableStateOf(false)
+        private set
+    var journalLastSync by mutableStateOf(0L)
+        private set
+    var lockEnabled by mutableStateOf(false)
+        private set
+    var lockType by mutableStateOf("pin")
+        private set
+    var lockSecretHash by mutableStateOf("")
+        private set
+    var lockSalt by mutableStateOf("")
+        private set
+    var biometricEnabled by mutableStateOf(false)
+        private set
+    var lockSetupPending by mutableStateOf(false)
+        private set
+    var lockEpoch by mutableStateOf(0)
+        private set
+    var rightsAccepted by mutableStateOf(false)
         private set
     var campaigns by mutableStateOf<List<Campaign>>(emptyList())
         private set
@@ -632,6 +663,7 @@ class Store(context: Context) {
     fun saveLicense(code: String) {
         licenseCode = code.trim()
         premium = licenseCode.isNotBlank()
+        if (!premium) journalAutoSync = false
         save()
     }
 
@@ -938,8 +970,180 @@ class Store(context: Context) {
         save()
     }
 
+    fun addRichEntry(entry: JournalEntry): JournalEntry {
+        val item = entry.copy(id = nextId(), syncedAt = 0L)
+        journal = journal + item
+        save()
+        return item
+    }
+
+    fun updateJournalEntry(entry: JournalEntry) {
+        journal = journal.map { if (it.id == entry.id) entry else it }
+        save()
+    }
+
+    fun acceptRights() {
+        rightsAccepted = true
+        save()
+    }
+
+    fun setAppLock(type: String, secret: String): Boolean {
+        if (type !in listOf("pattern", "pin", "password")) return false
+        val min = if (type == "password") 6 else 4
+        if (secret.length < min) return false
+        val salt = ByteArray(16).also { SecureRandom().nextBytes(it) }
+        lockSalt = Base64.encodeToString(salt, Base64.NO_WRAP)
+        lockSecretHash = hashPassword(secret, salt)
+        lockType = type
+        lockEnabled = true
+        biometricEnabled = false
+        lockSetupPending = true
+        lockEpoch += 1
+        save()
+        return true
+    }
+
+    fun verifyAppLock(secret: String): Boolean {
+        if (!lockEnabled || lockSecretHash.isBlank() || lockSalt.isBlank()) return false
+        val salt = runCatching { Base64.decode(lockSalt, Base64.NO_WRAP) }.getOrNull() ?: return false
+        return hashPassword(secret, salt) == lockSecretHash
+    }
+
+    fun disableAppLock() {
+        lockEnabled = false
+        lockSecretHash = ""
+        lockSalt = ""
+        biometricEnabled = false
+        lockSetupPending = false
+        lockEpoch += 1
+        save()
+    }
+
+    fun enableBiometric() {
+        biometricEnabled = true
+        lockSetupPending = false
+        save()
+    }
+
+    fun skipBiometric() {
+        lockSetupPending = false
+        save()
+    }
+
+    fun setJournalAutoSyncEnabled(enabled: Boolean) {
+        journalAutoSync = enabled && premium
+        save()
+    }
+
+    fun journalSyncPayload(): JSONObject {
+        val entries = JSONArray().apply { journal.forEach { put(it.toJournalJson()) } }
+        return JSONObject()
+            .put("points", points)
+            .put("xp", xp)
+            .put("level", (xp / 1000 + 1).coerceAtLeast(1))
+            .put("profile", JSONObject()
+                .put("name", profileName)
+                .put("age", profileAge)
+                .put("goal", profileGoal)
+                .put("team", profileTeam))
+            .put("journal", entries)
+            .put("ledger", JSONArray())
+            .put("books", JSONArray())
+            .put("wallets", JSONArray())
+    }
+
+    fun markJournalSynced() {
+        val now = System.currentTimeMillis()
+        journal = journal.map { it.copy(syncedAt = now) }
+        journalLastSync = now
+        save()
+    }
+
+    fun buyJournalAsset(kind: String, id: String, cost: Int): Boolean {
+        if (cost > 0 && points < cost) return false
+        if (cost > 0) takePoints(cost)
+        when (kind) {
+            "background" -> ownedBackgrounds = ownedBackgrounds + id
+            "sticker" -> ownedStickerPacks = ownedStickerPacks + id
+            "emoji" -> ownedEmojiPacks = ownedEmojiPacks + id
+            else -> return false
+        }
+        save()
+        return true
+    }
+
     fun deleteEntry(id: Long) {
         journal = journal.filterNot { it.id == id }
+        save()
+    }
+
+    fun importLearningPlan(draft: LearningPlanDraft): LearningPlan {
+        val now = System.currentTimeMillis()
+        val lessons = draft.lessons.map {
+            LearningLesson(nextId(), it.title.trim(), it.minutes.coerceAtLeast(1), it.test, it.motivation)
+        }
+        val plan = LearningPlan(
+            id = nextId(),
+            title = draft.title.trim(),
+            subject = draft.subject.trim(),
+            category = draft.category.trim(),
+            level = draft.level.trim(),
+            goals = draft.goals.map { it.trim() }.filter { it.isNotBlank() },
+            mode = draft.mode,
+            minutes = draft.minutes.coerceAtLeast(1),
+            lessons = lessons,
+            motivations = draft.motivations,
+            tasks = draft.tasks,
+            habits = draft.habits,
+            tests = draft.tests,
+            courseMd = draft.courseMd,
+            roadmapXml = draft.roadmapXml,
+            siteHtml = draft.siteHtml,
+            planJson = draft.planJson,
+            status = "local",
+            serverId = 0L,
+            siteUrl = "",
+            createdAt = now
+        )
+        val due = if (draft.mode == "time") {
+            now + draft.minutes.coerceAtLeast(1) * 60_000L
+        } else {
+            LocalDate.now().plusDays(1).atTime(20, 0).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        }
+        learningPlans = listOf(plan) + learningPlans
+        lessons.forEach { learn = learn + LearnItem(nextId(), it.title, 0, it.minutes, false) }
+        draft.tasks.forEach {
+            tasks = tasks + Task(nextId(), it.trim(), plan.motivations.firstOrNull().orEmpty(), Priority.NORMAL, false, now, due, "daily", "learning")
+        }
+        draft.habits.forEach { habits = habits + Habit(nextId(), it.trim(), 0, 0, "") }
+        save()
+        return plan
+    }
+
+    fun toggleLearningLesson(planId: Long, lessonId: Long) {
+        learningPlans = learningPlans.map { plan ->
+            if (plan.id != planId) plan
+            else plan.copy(lessons = plan.lessons.map { lesson ->
+                if (lesson.id == lessonId) lesson.copy(done = !lesson.done) else lesson
+            })
+        }
+        save()
+    }
+
+    fun markLearningPlanUploaded(id: Long, serverId: Long) {
+        learningPlans = learningPlans.map { if (it.id == id) it.copy(status = "pending", serverId = serverId) else it }
+        save()
+    }
+
+    fun upsertReadyPlan(plan: LearningPlan) {
+        val index = learningPlans.indexOfFirst { it.serverId > 0L && it.serverId == plan.serverId }
+        if (index >= 0) {
+            val next = learningPlans.toMutableList()
+            next[index] = plan.copy(id = next[index].id, status = "ready")
+            learningPlans = next
+        } else {
+            learningPlans = listOf(plan.copy(id = nextId(), status = "ready")) + learningPlans
+        }
         save()
     }
 
@@ -1258,6 +1462,17 @@ class Store(context: Context) {
         root.put("avatar", avatar)
         root.put("premium", premium)
         root.put("licenseCode", licenseCode)
+        root.put("ownedBackgrounds", JSONArray(ownedBackgrounds))
+        root.put("ownedStickerPacks", JSONArray(ownedStickerPacks))
+        root.put("ownedEmojiPacks", JSONArray(ownedEmojiPacks))
+        root.put("journalAutoSync", journalAutoSync)
+        root.put("journalLastSync", journalLastSync)
+        root.put("lockEnabled", lockEnabled)
+        root.put("lockType", lockType)
+        root.put("lockSecretHash", lockSecretHash)
+        root.put("lockSalt", lockSalt)
+        root.put("biometricEnabled", biometricEnabled)
+        root.put("rightsAccepted", rightsAccepted)
         root.put("campaigns", JSONArray().apply {
             campaigns.forEach { c ->
                 put(JSONObject().apply {
@@ -1376,16 +1591,7 @@ class Store(context: Context) {
                 })
             }
         })
-        root.put("journal", JSONArray().apply {
-            journal.forEach { t ->
-                put(JSONObject().apply {
-                    put("id", t.id)
-                    put("title", t.title)
-                    put("body", t.body)
-                    put("at", t.at)
-                })
-            }
-        })
+        root.put("journal", JSONArray().apply { journal.forEach { put(it.toJournalJson()) } })
         root.put("water", JSONObject().apply {
             water.forEach { (day, cups) -> put(day, cups) }
         })
@@ -1402,6 +1608,9 @@ class Store(context: Context) {
                     put("at", t.at)
                 })
             }
+        })
+        root.put("learningPlans", JSONArray().apply {
+            learningPlans.forEach { put(it.toJson()) }
         })
         root.put("learn", JSONArray().apply {
             learn.forEach { t ->
@@ -1575,6 +1784,17 @@ class Store(context: Context) {
             avatar = root.optInt("avatar", 0).coerceIn(0, 7)
             premium = root.optBoolean("premium", false)
             licenseCode = root.optString("licenseCode", "")
+            ownedBackgrounds = root.stringSet("ownedBackgrounds").ifEmpty { setOf("cream", "sky") }
+            ownedStickerPacks = root.stringSet("ownedStickerPacks").ifEmpty { setOf("free-1", "free-2") }
+            ownedEmojiPacks = root.stringSet("ownedEmojiPacks").ifEmpty { setOf("free-1", "free-2") }
+            journalAutoSync = root.optBoolean("journalAutoSync", false) && premium
+            journalLastSync = root.optLong("journalLastSync", 0L)
+            lockEnabled = root.optBoolean("lockEnabled", false)
+            lockType = root.optString("lockType", "pin")
+            lockSecretHash = root.optString("lockSecretHash", "")
+            lockSalt = root.optString("lockSalt", "")
+            biometricEnabled = root.optBoolean("biometricEnabled", false)
+            rightsAccepted = root.optBoolean("rightsAccepted", false)
             campaigns = root.optJSONArray("campaigns").mapObjects {
                 Campaign(
                     id = it.optLong("id"),
@@ -1657,14 +1877,7 @@ class Store(context: Context) {
                     at = it.optLong("at")
                 )
             }
-            journal = root.optJSONArray("journal").mapObjects {
-                JournalEntry(
-                    id = it.optLong("id"),
-                    title = it.optString("title"),
-                    body = it.optString("body"),
-                    at = it.optLong("at")
-                )
-            }
+            journal = root.optJSONArray("journal").mapObjects { it.toJournalEntry() }
             water = root.optJSONObject("water").toIntMap()
             prayers = root.optJSONObject("prayers").toSetMap()
             sleep = root.optJSONArray("sleep").mapObjects {
@@ -1674,6 +1887,7 @@ class Store(context: Context) {
                     at = it.optLong("at")
                 )
             }
+            learningPlans = root.optJSONArray("learningPlans").mapObjects { it.toLearningPlan() }
             learn = root.optJSONArray("learn").mapObjects {
                 LearnItem(
                     id = it.optLong("id"),
@@ -1714,6 +1928,112 @@ class Store(context: Context) {
         }
     }
 }
+
+private fun JournalEntry.toJournalJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("body", body)
+    put("at", at)
+    put("mood", mood)
+    put("background", background)
+    put("richBody", richBody)
+    put("font", font)
+    put("colors", colors)
+    put("drawings", drawings)
+    put("stickers", stickers)
+    put("images", images)
+    put("emojiPack", emojiPack)
+    put("stickerPack", stickerPack)
+    put("voicePath", voicePath)
+    put("hasTime", hasTime)
+    put("syncedAt", syncedAt)
+}
+
+private fun JSONObject.toJournalEntry(): JournalEntry = JournalEntry(
+    id = optLong("id"),
+    title = optString("title"),
+    body = optString("body"),
+    at = optLong("at"),
+    mood = optString("mood", ""),
+    background = optString("background", "cream"),
+    richBody = optString("richBody", ""),
+    font = optString("font", "Cairo"),
+    colors = optString("colors", ""),
+    drawings = optString("drawings", ""),
+    stickers = optString("stickers", ""),
+    images = optString("images", ""),
+    emojiPack = optString("emojiPack", "free-1"),
+    stickerPack = optString("stickerPack", "free-1"),
+    voicePath = optString("voicePath", ""),
+    hasTime = optBoolean("hasTime", false),
+    syncedAt = optLong("syncedAt", 0L)
+)
+
+private fun LearningLesson.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("minutes", minutes)
+    put("test", test)
+    put("motivation", motivation)
+    put("done", done)
+}
+
+private fun JSONObject.toLearningLesson(): LearningLesson = LearningLesson(
+    id = optLong("id"),
+    title = optString("title"),
+    minutes = optInt("minutes", 0),
+    test = optString("test", ""),
+    motivation = optString("motivation", ""),
+    done = optBoolean("done", false)
+)
+
+private fun LearningPlan.toJson(): JSONObject = JSONObject().apply {
+    put("id", id)
+    put("title", title)
+    put("subject", subject)
+    put("category", category)
+    put("level", level)
+    put("goals", JSONArray().apply { goals.forEach { put(it) } })
+    put("mode", mode)
+    put("minutes", minutes)
+    put("lessons", JSONArray().apply { lessons.forEach { put(it.toJson()) } })
+    put("motivations", JSONArray().apply { motivations.forEach { put(it) } })
+    put("tasks", JSONArray().apply { tasks.forEach { put(it) } })
+    put("habits", JSONArray().apply { habits.forEach { put(it) } })
+    put("tests", JSONArray().apply { tests.forEach { put(it) } })
+    put("courseMd", courseMd)
+    put("roadmapXml", roadmapXml)
+    put("siteHtml", siteHtml)
+    put("planJson", planJson)
+    put("status", status)
+    put("serverId", serverId)
+    put("siteUrl", siteUrl)
+    put("createdAt", createdAt)
+}
+
+private fun JSONObject.toLearningPlan(): LearningPlan = LearningPlan(
+    id = optLong("id"),
+    title = optString("title"),
+    subject = optString("subject"),
+    category = optString("category"),
+    level = optString("level"),
+    goals = optJSONArray("goals").strings(),
+    mode = optString("mode", "daily"),
+    minutes = optInt("minutes", 0),
+    lessons = optJSONArray("lessons").mapObjects { it.toLearningLesson() },
+    motivations = optJSONArray("motivations").strings(),
+    tasks = optJSONArray("tasks").strings(),
+    habits = optJSONArray("habits").strings(),
+    tests = optJSONArray("tests").strings(),
+    courseMd = optString("courseMd", ""),
+    roadmapXml = optString("roadmapXml", ""),
+    siteHtml = optString("siteHtml", ""),
+    planJson = optString("planJson", ""),
+    status = optString("status", "local"),
+    serverId = optLong("serverId", 0L),
+    siteUrl = optString("siteUrl", ""),
+    createdAt = optLong("createdAt", 0L)
+)
 
 private fun priorityOf(value: String): Priority =
     runCatching { Priority.valueOf(value) }.getOrDefault(Priority.NORMAL)

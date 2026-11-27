@@ -262,9 +262,13 @@ $endpoints = [
     ['diagnostics.php?action=match', 'GET|POST', 'حل معروف لتوقيع مشكلة', ['Authorization']],
     ['diagnostics.php?action=report', 'POST', 'بلاغ تشخيص مجهّل الهوية', ['Authorization']],
     ['diagnostics.php?action=list', 'GET', 'بلاغات التشخيص للوحة', ['X-Admin-Token']],
+    ['learning.php?action=upload', 'POST', 'رفع خطة تعليمية للمراجعة', ['Authorization']],
+    ['learning.php?action=ready', 'GET', 'الخطط التعليمية المنشورة', []],
+    ['learning.php?action=plan', 'GET', 'تنزيل خطة منشورة', ['id']],
 ];
 $tableNames = ['users', 'tokens', 'profiles', 'journal', 'ledger', 'books', 'wallets', 'threads', 'posts',
-               'items', 'purchases', 'raid_seasons', 'raid_members', 'licenses', 'vault_items', 'announcements', 'admin_log'];
+               'items', 'purchases', 'raid_seasons', 'raid_members', 'licenses', 'vault_items', 'announcements', 'admin_log',
+               'learning_plans'];
 
 $commands = [
     'health.check' => 'فحص config.php وقاعدة البيانات وكل ملفات API',
@@ -527,6 +531,45 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['cmd'])) {
     }
 }
 
+
+$learningStoreFile = $serverRoot . '/src/learning_store.php';
+if (is_file($learningStoreFile)) require_once $learningStoreFile;
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['learning_action']) && function_exists('learning_publish_plan')) {
+    if (!hash_equals($csrf, (string) ($_POST['csrf'] ?? ''))) { http_response_code(403); exit('CSRF'); }
+    if ($readOnly || !($pdo instanceof PDO)) {
+        $flash = 'وضع القراءة فقط: اضبط config.php واستورد 006_learning.sql أولاً.';
+    } else {
+        $learningId = (int) ($_POST['learning_id'] ?? 0);
+        $learningAction = (string) $_POST['learning_action'];
+        if ($learningId > 0 && $learningAction === 'publish') {
+            try {
+                $siteRow = q('SELECT site_html FROM learning_plans WHERE id = ? LIMIT 1', [$learningId]);
+                $siteHtml = (string) ($siteRow[0]['site_html'] ?? '');
+                $issues = learning_site_issues($siteHtml);
+                if ($issues !== []) {
+                    $flash = 'راجع الموقع قبل النشر: ' . implode('، ', $issues);
+                } else {
+                    learning_publish_plan($pdo, $learningId, $publicRoot);
+                    logit('learning.publish', 'id=' . $learningId);
+                    $flash = 'نُشر الموقع التعليمي للخطة #' . $learningId . '.';
+                }
+            } catch (Throwable $error) {
+                $flash = 'تعذّر نشر الخطة التعليمية.';
+                logit('learning.publish_failed', 'id=' . $learningId);
+            }
+        } elseif ($learningId > 0 && $learningAction === 'reject') {
+            try {
+                learning_reject_plan($pdo, $learningId, $publicRoot);
+                logit('learning.reject', 'id=' . $learningId);
+                $flash = 'رُفضت الخطة التعليمية #' . $learningId . '.';
+            } catch (Throwable $error) {
+                $flash = 'تعذّر رفض الخطة التعليمية.';
+                logit('learning.reject_failed', 'id=' . $learningId);
+            }
+        }
+    }
+}
+
 // ---------- views ----------
 $tabs = [
     'home' => 'الرئيسية', 'apps' => 'التطبيقات', 'books' => 'الكتب', 'tools' => 'الأدوات والجداول',
@@ -535,7 +578,7 @@ $tabs = [
     'requirements' => 'متطلبات التطبيقات', 'content' => 'التحديثات الفرعية',
     'devices' => 'الأجهزة المسجّلة', 'releases' => 'الإصدارات',
     'developers' => 'المشرفون والمطورون', 'devtests' => 'اختبارات المطور',
-    'diagnostics' => 'بلاغات التشخيص',
+    'diagnostics' => 'بلاغات التشخيص', 'learning' => 'خطط التعلم',
 ];
 $page = (string) ($_GET['p'] ?? 'home');
 if (!isset($tabs[$page])) $page = 'home';
@@ -829,6 +872,35 @@ GET ' . h($apiBase) . '/api/auth.php?action=login  →  {"error":"use POST"} (JS
 2) الرجوع للوضع قبل الاختبار — نسخة قبل كل اختبار + نسخة بداية الجلسة
 3) بيانات التطبيق — الحالة الكاملة للقراءة والنسخ
 4) فوارق الإصدارات — بين الإصدار الحالي والسابق (releases.json)</pre>');
+} elseif ($page === 'learning') {
+    echo card('مراجعة الخطط التعليمية', '<p>التطبيق يرفع حزمة ZIP المستوردة إلى <code>api/learning.php?action=upload</code>. هنا يظهر نوع الكورس ونص الخطة والموقع قبل النشر.</p>'
+        . '<p class="m">بعد الموافقة يُكتب <code>index.html</code> في <code>/learn/{id}/</code> ويتحدّث <code>learn/plans.json</code>، ثم تسحبه التطبيقات كخطة جاهزة.</p>');
+    $learningRows = q('SELECT id, user_id, title, subject, category, course_type, level, mode, minutes, status, site_url, course_md, plan_json, site_html, created_at, updated_at FROM learning_plans ORDER BY id DESC LIMIT 100');
+    $learningTable = array_map(function ($r) use ($csrf) {
+        $issues = function_exists('learning_site_issues') ? learning_site_issues((string) $r['site_html']) : [];
+        $actions = '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+            . '<input type="hidden" name="learning_action" value="publish"><input type="hidden" name="learning_id" value="' . (int) $r['id'] . '">'
+            . '<button class="b">نشر الموقع</button></form>'
+            . '<form method="post" class="inl"><input type="hidden" name="csrf" value="' . h($csrf) . '">'
+            . '<input type="hidden" name="learning_action" value="reject"><input type="hidden" name="learning_id" value="' . (int) $r['id'] . '">'
+            . '<button class="b">رفض</button></form>';
+        return [
+            (int) $r['id'], (int) $r['user_id'], (string) $r['title'], (string) $r['course_type'],
+            (string) $r['category'], (string) $r['level'], (string) $r['mode'], (int) $r['minutes'],
+            (string) $r['status'], implode('، ', $issues), $actions,
+        ];
+    }, $learningRows);
+    echo card('الخطط المرفوعة', table(['#', 'المستخدم', 'العنوان', 'نوع الكورس', 'التصنيف', 'المستوى', 'النمط', 'الدقائق', 'الحالة', 'فحص الحقوق', 'المراجعة'], $learningTable));
+    foreach ($learningRows as $r) {
+        $sitePreview = mb_substr((string) $r['site_html'], 0, 4000);
+        echo card('مراجعة #' . (int) $r['id'],
+            '<p><b>' . h((string) $r['title']) . '</b> · ' . h((string) $r['course_type']) . ' · ' . h((string) $r['level']) . '</p>'
+            . '<h3>course.md</h3><pre>' . h(mb_substr((string) $r['course_md'], 0, 6000)) . '</pre>'
+            . '<h3>site.html</h3><pre>' . h($sitePreview) . '</pre>');
+    }
+    echo card('الخطط المنشورة', table(['#', 'العنوان', 'نوع الكورس', 'الرابط'], array_map(function ($r) {
+        return [(int) $r['id'], (string) $r['title'], (string) $r['course_type'], (string) $r['site_url']];
+    }, q("SELECT id, title, course_type, site_url FROM learning_plans WHERE status = 'published' ORDER BY updated_at DESC"))));
 } elseif ($page === 'diagnostics') {
     echo card('مساعد تشخيص العتاد والنظام', '<p>التطبيق يجمع قراءات فعلية (البطارية/الشحن، التخزين الداخلي والخارجي، '
         . 'الواي فاي، الشريحة والشبكة، RAM/CPU)، ويولّد تقريراً عربياً وأوامر إصلاح آمنة، '

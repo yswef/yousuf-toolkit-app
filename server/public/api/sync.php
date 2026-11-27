@@ -1,5 +1,7 @@
 <?php
 
+/* Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension */
+
 declare(strict_types=1);
 
 require dirname(__DIR__, 2) . '/src/bootstrap.php';
@@ -38,9 +40,13 @@ try {
 
     $journalCount = sync_rows(
         $db,
-        'INSERT INTO journal (user_id, client_id, title, body, occurred_at)
-         VALUES (?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), occurred_at = VALUES(occurred_at)',
+        'INSERT INTO journal (user_id, client_id, title, body, occurred_at, mood, background, rich_body, font_name, colors, drawings, stickers, images, emoji_pack, sticker_pack, voice_path, has_time, synced_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE title = VALUES(title), body = VALUES(body), occurred_at = VALUES(occurred_at),
+         mood = VALUES(mood), background = VALUES(background), rich_body = VALUES(rich_body), font_name = VALUES(font_name),
+         colors = VALUES(colors), drawings = VALUES(drawings), stickers = VALUES(stickers), images = VALUES(images),
+         emoji_pack = VALUES(emoji_pack), sticker_pack = VALUES(sticker_pack), voice_path = VALUES(voice_path),
+         has_time = VALUES(has_time), synced_at = VALUES(synced_at)',
         $user['id'],
         is_array($in['journal'] ?? null) ? $in['journal'] : [],
         static function (array $row): array {
@@ -49,6 +55,19 @@ try {
                 substr((string) ($row['title'] ?? ''), 0, 160),
                 substr((string) ($row['body'] ?? ''), 0, 5000),
                 (int) ($row['at'] ?? 0),
+                substr((string) ($row['mood'] ?? ''), 0, 16),
+                substr((string) ($row['background'] ?? 'cream'), 0, 40),
+                substr((string) ($row['richBody'] ?? ''), 0, 200000),
+                substr((string) ($row['font'] ?? 'Cairo'), 0, 40),
+                substr((string) ($row['colors'] ?? ''), 0, 160),
+                substr((string) ($row['drawings'] ?? ''), 0, 200000),
+                substr((string) ($row['stickers'] ?? ''), 0, 200000),
+                substr((string) ($row['images'] ?? ''), 0, 200000),
+                substr((string) ($row['emojiPack'] ?? 'free-1'), 0, 40),
+                substr((string) ($row['stickerPack'] ?? 'free-1'), 0, 40),
+                substr((string) ($row['voicePath'] ?? ''), 0, 255),
+                !empty($row['hasTime']) ? 1 : 0,
+                (int) ($row['syncedAt'] ?? 0),
             ];
         }
     );
@@ -123,3 +142,4 @@ try {
     }
     fail('sync failed', 500);
 }
+/* Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension */

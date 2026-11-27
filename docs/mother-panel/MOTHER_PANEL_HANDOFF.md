@@ -83,6 +83,6 @@
 - أضف تبويب **«بلاغات التشخيص»**؛ استقبل البلاغات المجهّلة في `diagnostic_reports` وطابق `diagnostic_solutions` قبل إعادة التشخيص.
 - التطبيق: `devmode.php?action=status` يغلق وضع المطور لغير المصرّح له؛ `diagnostics.php` لل_match/report/list.
 - التطبيق: تبديل حتى 3 حسابات مع نسخة حالة لكل حساب؛ وضع المطور بأربعة أقسام (اختبارات يدوية، رجوع، بيانات، فوارق الإصدارات).
-- الترحيل `004_devmode.sql` مطلوب قبل إعلان الاكتمال؛ `users` بقي موحّداً ولم يتكرر.
+- الترحيلات `004_devmode.sql` و`005_journal.sql` و`006_learning.sql` مطلوبة قبل إعلان الاكتمال؛ `users` بقي موحّداً ولم يتكرر.
 - برومت مساعد التشخيص الكامل محفوظ في `docs/diagnostics/SYSTEM_PROMPT.md` ومنفّذ في `core/diagnostics/`.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
