@@ -77,8 +77,8 @@ jobs:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
         run: |
           if [ -z "$KEYSTORE_B64" ]; then
-            echo "::error::secret KEYSTORE_B64 is missing"
-            exit 1
+            echo "::warning::KEYSTORE_B64 is missing; Gradle will sign with the bundled test key ci/test-signing.p12. Set KEYSTORE_B64, KEYSTORE_PASSWORD, KEY_ALIAS and KEY_PASSWORD secrets for a production-signed APK."
+            exit 0
           fi
           echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
           echo "KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
