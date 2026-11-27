@@ -1030,7 +1030,7 @@ class Store(context: Context) {
         save()
     }
 
-    fun setJournalAutoSync(enabled: Boolean) {
+    fun setJournalAutoSyncEnabled(enabled: Boolean) {
         journalAutoSync = enabled && premium
         save()
     }
