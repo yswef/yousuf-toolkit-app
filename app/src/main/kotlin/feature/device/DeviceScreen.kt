@@ -420,6 +420,12 @@ private fun NotificationsTab(store: Store) {
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        Text(
+            stringResource(R.string.notif_money_hint),
+            modifier = Modifier.padding(16.dp),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -744,6 +750,7 @@ private fun payload(store: Store): JSONObject {
                 put("income", entry.income)
                 put("category", entry.category)
                 put("at", entry.at)
+                put("note", entry.note)
             })
         }
     })
