@@ -235,7 +235,7 @@ fun SettingsScreen(
                     checked = store.journalAutoSync,
                     enabled = store.premium,
                     divider = true,
-                    onChange = { store.setJournalAutoSync(it) }
+                    onChange = { store.setJournalAutoSyncEnabled(it) }
                 )
             }
 
