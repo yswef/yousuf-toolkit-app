@@ -15,35 +15,37 @@
 - التصحيح: الموقع **PHP** وليس WordPress. الجداول الجديدة غير المكررة مسموحة (`003_devices.sql`).
 - ملفات `docs/mother-panel/`: `PROMPT.md` (برومت لوحة الأم)، `APP_PANEL_PROMPT.md` (برومت موديل لوحة التطبيق)، `MOTHER_PANEL_HANDOFF.md` (التسليم الإلزامي).
 
-## ماذا ترفع؟
+## ماذا ترفع؟ — عند وجود لوحة أم/موقع آخر في `public_html/`
 
-ارفع **محتويات `server/public/` كاملة** إلى `public_html/` (مجلد واحد فيه كل شيء):
+**لا ترفع محتويات `server/public/` كاملة إلى جذر `public_html/`.** جذر الدومين فيه
+`config.php`, `index.php`, `admin/`, `core/`… تخص الموقع/لوحة الأم وتبقى كما هي.
+اللوحة التنفيذية تُرفع كملف ZIP واحد داخل المجلد الذي تخصصه لوحة الأم:
 
-```
-public_html/
-├── index.php            → فحص صحة + رابط panel/
-├── api/                 → نقاط API الحقيقية (auth, sync, forum, shop, raids, vault, license, announcements)
-├── admin/               → لوحة الإدارة التفصيلية (نفس الجلسة والرمز)
-├── panel/               → هذه اللوحة الأساسية
-│   ├── index.php        → الواجهة + تنفيذ الأوامر + التعبئة التلقائية
-│   ├── api/*.php        → محوّلات: تسمح باستعمال /panel كعنوان API أيضاً
-│   ├── assets/icon.svg  → أيقونة التطبيق
-│   ├── assets/icon.png  → أيقونة launcher الحقيقية
-│   └── data/*.json      → مصادر التعبئة التلقائية
-└── boards/y-dimensions/ → اللوحة التابعة الإعلانية للوحة الأم (MAP.json + 13 فحصاً)
+```bash
+python3 server/tools/build_mother_panel_zip.py
 ```
 
-وارفع خارج `public_html` (في `domains/<site>/`):
-
 ```
-src/          ← server/src
-config/       ← server/config  + أنشئ config.php من config.example.php
-migrations/   ← server/migrations  + استورد 001_init.sql ثم 002_admin.sql
+<allocated-folder>/            ← المجلد الذي تُرجعه لوحة الأم، وليس public_html/
+├── .htaccess + INSTALL.md + mother-panel.json
+├── config/                    ← config.example.php، وأنشئ config.php هنا فقط
+├── src/ migrations/           ← محميان بـ .htaccess
+└── public/
+    ├── index.php              ← فحص صحة JSON
+    ├── api/                   ← نقاط API الحقيقية
+    ├── content/VERSION, learn/
+    └── panel/                 ← هذه اللوحة: index.php + api/ + assets/ + data/
 ```
 
-الدخول: `https://النطاق/panel/` برمز `admin_token` من `config.php`.
-إن لم يكن `config.php` مضبوطاً تفتح اللوحة في **وضع القراءة فقط** بالبيانات المحلية،
-ويُعطَّل تنفيذ الأوامر حتى يُضبط الإعداد.
+`public/admin/` و`public/boards/` مستبعدان من الحزمة عمداً: الأول حتى لا تصير لوحة إدارة ثانية،
+والثاني لأنه يُثبّت وحده داخل `{mother_panel.boards_dir}` عبر `MAP.json`.
+
+الدخول: `panel_url` الذي تُرجعه لوحة الأم، مثالاً
+`https://<domain>/<allocated-path>/public/panel/`، برمز `admin_token` من
+`config/config.php` داخل المجلد المخصص. إن لم يكن مضبوطاً تفتح اللوحة في
+**وضع القراءة فقط** بالبيانات المحلية، ويُعطَّل تنفيذ الأوامر حتى يُضبط الإعداد.
+
+> للدومين الفارغ فقط: `server/HOSTINGER.md` يشرح نشر `server/public/` في `public_html/`.
 
 ## ليش الحقول ما انسحبت تلقائي في اللوحة التابعة؟
 
@@ -65,13 +67,14 @@ migrations/   ← server/migrations  + استورد 001_init.sql ثم 002_admin.
 
 ## الـ API والتطبيق
 
-العنوان الافتراضي في التطبيق: `config/environments.json` → `https://yousef.romoozbasmah.com`.
-التطبيق ينادي `POST {base}/api/auth.php?action=register`. إن أردت استعمال مجلد اللوحة كعنوان:
-اضبط `https://النطاق/panel` في شاشة الحساب ← «عنوان API للخادم»؛ ملفات `panel/api/*.php`
-تحوّل الطلب إلى `api/*.php` الحقيقية.
+الافتراضي في APK يأتي من `config/environments.json`؛ وبعد أن تُرجع لوحة الأم
+`api_base` ضعه في شاشة الحساب ← «عنوان API للخادم»، مثالاً
+`https://<domain>/<allocated-path>/public` (أو `.../public/panel` لأن `panel/api/*.php`
+تحوّل الطلبات إلى `api/*.php`). التطبيق ينادي `POST {api_base}/api/auth.php?action=register`.
 
-**شرط التسجيل السحابي:** أن تكون `api/auth.php` موجودة فعلاً على النطاق، و`config.php`
-مضبوطاً، وجداول `001_init.sql` مستوردة. إن جاء الرد صفحة HTML، فملفات الـ API غير مرفوعة.
+**شرط التسجيل السحابي:** أن تكون `api/auth.php` موجودة فعلاً تحت `public/`، و`config/config.php`
+مضبوطاً داخل المجلد المخصص، وقاعدة البيانات موحّدة بلا `users` مكرر. إن جاء الرد صفحة HTML،
+فملفات الـ API غير مرفوعة أو المسار خاطئ. لا تستورد `001_init.sql` كما هو على قاعدة لوحة الأم.
 
 ## تنفيذ الأوامر
 
@@ -95,7 +98,7 @@ python3 server/tools/build_panel_data.py
 
 ## ملاحظات
 
-- لا جداول جديدة: اللوحة تقرأ جداول `001_init.sql` و`002_admin.sql` فقط.
+- القاعدة واحدة و`users` موحّد؛ لا جداول مكررة. `001_init.sql` ينشئ `users` فلا يُستورد كما هو على قاعدة لوحة الأم.
 - `sister_apps` فارغ حالياً؛ أضف البطاقات في `data/app.json` لتظهر في تبويب «التطبيقات» تلقائياً.
 - اللوحة التابعة `boards/y-dimensions/` لم تُلمس: بصماتها و`VERIFY 13/13` سليمة.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف) -->
@@ -109,7 +112,12 @@ python3 server/tools/build_panel_data.py
 
 ## الرفع إلى لوحة التحكم الأم
 
-هذه **اللوحة التنفيذية** لا تُنسخ داخل مجلد لوحات الأم. انشرها على الاستضافة كما في قسم «ماذا ترفع؟»، ثم اربطها من لوحة الأم عبر `mother_panel.apps.open_panel`. أما التي تُثبّت داخل لوحة الأم فهي الحزمة التابعة `server/public/boards/y-dimensions/` باستخدام `MAP.json` و`mother_panel.install.map` فقط.
+هذه **اللوحة التنفيذية** تُرفع كحزمة `build/y-dimensions-mother-panel.zip` داخل مجلد تخصصه
+لوحة الأم، لا داخل `public_html/` ولا داخل `{mother_panel.boards_dir}`. لوحة الأم تُرجع
+`app_public_url`, `panel_url`, `api_base`، و`mother_panel.apps.open_panel` يفتح `panel_url`
+من بطاقة `y-dimensions` في تبويب جديد. أما التي تُثبّت داخل لوحة الأم فهي الحزمة التابعة
+`server/public/boards/y-dimensions/` باستخدام `MAP.json` و`mother_panel.install.map`
+ثم `mother_panel.verify.run` فقط.
 
 الشرح الكامل: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

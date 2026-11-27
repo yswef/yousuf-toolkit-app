@@ -5,30 +5,66 @@
 
 النطاق: `https://yousef.romoozbasmah.com`
 
-1. من hPanel فعّل PHP 8.1 أو أحدث، وأنشئ قاعدة MySQL ومستخدماً لها.
-2. ارفع محتويات `server/public/` **كاملة** إلى `public_html/` حتى تصبح `public_html/api/auth.php` و`public_html/admin/index.php` و`public_html/panel/index.php`. المجلد الواحد يحتوي الـ API واللوحة الأساسية واللوحة التابعة؛ **اللوحة الأساسية هي `panel/`** (واجهة + أوامر + تطبيقات + كتب + صورة التطبيق). لا ترفع `boards/y-dimensions/` وحدها وتنتظر أن تعمل الحقول: تلك قوالب إعلانية تحلّها لوحة الأم فقط.
-3. ارفع `server/src/` و`server/config/` و`server/migrations/` إلى مجلد النطاق خارج `public_html`:
-   `domains/yousef.romoozbasmah.com/src` و`config` و`migrations`.
-4. انسخ `config/config.example.php` إلى `config/config.php` واملأ `db` و`base_url` و`license_secret`.
-5. استورد `migrations/001_init.sql` ثم `002_admin.sql` ثم `003_devices.sql` ثم `004_devmode.sql` ثم `005_journal.sql` ثم `006_learning.sql` من phpMyAdmin (جداول جديدة غير مكررة).
-6. فعّل SSL المجاني، ثم افتح `https://yousef.romoozbasmah.com/` وتحقق من `ok=true`، وافتح `https://yousef.romoozbasmah.com/panel/` للوحة الأساسية، و`.../admin/` للوحة التفصيلية (نفس `admin_token`).
-7. أضف عناصر `items` ومواسم `raid_seasons` من phpMyAdmin.
-8. لتوليد كود ترخيص: `php tools/code.php <user_id>` بعد وضع `license_secret` في `config.php`.
+> **حالتك الحالية — مهم:** `public_html/` ليس فارغاً؛ فيه `config.php`، `config-sample.php`،
+> `index.php`، `admin/`، `app/`، `assets/`، `core/`، `data/`، `docs/`، `lang/`،
+> `cron_backup.php`، `cron_sync.php`، `cron_update.php`، `manifest.webmanifest`،
+> `status.php`، `update_start.php`، `update_step.php`، و`.htaccess`. هذه ملفات لوحة الأم/الموقع
+> الآخر وتبقى كما هي. **لا ترفع `server/public/` فوقها ولا تستبدلها.** انتقل مباشرة إلى القسم التالي.
 
-نقاط جديدة بعد الرفع: `api/devices.php` (الأجهزة)، `api/content.php` (التحديثات الفرعية)، `api/requirements.php` (متطلبات التطبيقات)، و`panel/` فيه تبويب «متطلبات التطبيقات» + زر عائم للعودة. التحديثات الفرعية تُسحب تلقائياً عند تشغيل التطبيق، والإصدار الكامل يُنزّل ويُثبّت من داخل التطبيق.
+## الرفع داخل لوحة أم موجودة — المسار الصحيح الآن
 
-لا ترفع `config.php` إلى git. التطبيق يقرأ العنوان من `config/environments.json` وهو مضبوط على هذا النطاق؛ ويمكن ضبطه من شاشة الحساب ← «عنوان API للخادم»، أو استعمال `https://النطاق/panel` لأن `panel/api/*.php` تحوّل الطلبات إلى `api/*.php`.
+1. من جذر المستودع: `python3 server/tools/build_mother_panel_zip.py` →
+   `build/y-dimensions-mother-panel.zip` (مجلد `build/` مستثنى من Git).
+2. إن كان في لوحة الأم زر «رفع حزمة تطبيق / Install from ZIP»، ارفع الملف هناك واتركها تخصص
+   المجلد وتُرجع الرابط. وإلا: من File Manager أنشئ مجلداً جديداً مثل
+   `public_html/apps/y-dimensions/`، ارفع الـ ZIP **داخله** ثم `Extract` داخله فقط.
+   **لا تختر `public_html/` كوجهة ولا تترك مجلداً إضافياً فوق الحزمة.**
+3. داخل المجلد المخصص يصبح:
+   `INSTALL.md`, `mother-panel.json`, `.htaccess`, `config/`, `src/`, `migrations/`,
+   و`public/` وفيه `index.php`, `api/`, `content/`, `learn/`, `panel/`.
+   `public/admin/` و`public/boards/` مستبعدان عمداً: لا لوحة إدارة ثانية، ولا خلط باللوحة التابعة.
+4. انسخ `.../config/config.example.php` إلى `config.php` **في نفس المجلد المخصص**، واملأ
+   `db`, `base_url`, `license_secret`, `admin_token`, `allowed_origins` من مالك لوحة الأم/الاستضافة.
+   `base_url = https://<domain>/<allocated-path>/public`. لا تلمس `public_html/config.php`
+   ولا `config-sample.php`، ولا ترفع `config.php` إلى Git.
+5. **قاعدة واحدة و`users` موحّد** كما في `docs/dev/RULES.md` و`MOTHER_PANEL_HANDOFF.md`.
+   ملف `001_init.sql` ينشئ `users`؛ لا تستورده كما هو على قاعدة لوحة الأم. نفّذ عقد التسليم
+   (توحيد الجداول) ثم استورد الترحيلات غير المكررة `002_admin.sql`…`006_learning.sql`.
+   إلى أن يتم ذلك تعمل اللوحة في **وضع القراءة فقط**.
+6. لوحة الأم تُرجع `app_public_url`، `panel_url`، `api_base`، وتسجّل
+   `mother_panel.apps.open_panel` → `panel_url` في **تبويب/صفحة جديدة**. اللوحة ترسل
+   `X-Frame-Options: DENY`؛ الإطار يحتاج ضبط `YD_PANEL_PREVIEW=1` من لوحة الأم فقط.
+7. التطبيق: شاشة الحساب ← «عنوان API للخادم» ← ضع `api_base`
+   (`https://<domain>/<allocated-path>/public` أو `.../public/panel`). لتغيير الافتراضي في
+   كل بناء: `config/environments.json` → `apiBaseUrl`، ثم `python3 server/tools/build_panel_data.py`.
+8. اللوحة التابعة `server/public/boards/y-dimensions/` تُثبّت وحدها داخل
+   `{mother_panel.boards_dir}/y-dimensions/` عبر `MAP.json` و`mother_panel.install.map`
+   (25 خطوة) ثم `mother_panel.verify.run` (13 فحصاً و`VERIFY.md`)، لا داخل حزمة ZIP هذه.
 
-قبل الرفع، بعد أي تعديل على `config/app.json` أو `Books.kt` أو الإصدار: `python3 server/tools/build_panel_data.py` يعيد توليد بيانات اللوحة الأساسية (24 كتاباً، بيانات التطبيق، الأيقونتان). شرح اللوحة: `public/panel/README.md`.
+التحقق: `GET app_public_url/` يرجع JSON `ok=true`، و`api/content.php?action=manifest` يرجع
+JSON لا HTML، و`panel_url?p=learning` يفتح التبويبات، وبطاقة `y-dimensions` تفتح `panel_url`.
+الشرح الكامل: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`، وداخل الحزمة `INSTALL.md`.
 
+## دومين فارغ فقط — النشر القديم
 
-## جديد 0.18.0
-- استيراد `006_learning.sql` يضيف `learning_plans`، و`api/learning.php` يرفع الخطة وينشرها بعد مراجعة اللوحة.
-- استيراد `004_devmode.sql` يضيف جداول غير مكررة: `developer_accounts`, `panel_admins`, `diagnostic_reports`, `diagnostic_solutions`.
-- من تبويب «المشرفون والمطورون» عيّن مستخدمي التطبيق كمطورين، وأنشئ حتى 3 حسابات مشرف للوحة مع تبديلها وتسجيل الخروج.
-- نقاط جديدة: `api/devmode.php`, `api/diagnostics.php` (ومحوّلاتها في `panel/api/`). التحديثات الفرعية تشمل الآن `devmode_tests.json` و`releases.json`.
+هذا القسم **لا يُستخدم على دومينك الحالي**؛ يصلح فقط لو كان `public_html/` جديداً بلا أي موقع:
 
-## الربط بلوحة التحكم الأم
+1. من hPanel فعّل PHP 8.1+ وأنشئ قاعدة MySQL ومستخدماً لها.
+2. ارفع محتويات `server/public/` كاملة إلى `public_html/`، و`server/src/` و`server/config/`
+   و`server/migrations/` خارجه في `domains/<site>/`.
+3. انسخ `config/config.example.php` إلى `config.php` واملأ القيم، ثم استورد
+   `001_init.sql`…`006_learning.sql` بالترتيب، وفعّل SSL.
+4. افتح `https://<domain>/` لفحص الصحة، و`https://<domain>/panel/` للوحة، و`.../admin/`
+   للوحة التفصيلية، ثم أضف `items` و`raid_seasons` من phpMyAdmin.
+5. لتوليد كود ترخيص: `php tools/code.php <user_id>` بعد ضبط `license_secret`.
 
-بعد نشر `panel/` على الاستضافة، اربطها من لوحة الأم عبر `mother_panel.apps.open_panel`؛ ولا ترفع `panel/` داخل مجلد لوحات الأم. لتثبيت بطاقة/قوالب التطبيق داخل لوحة الأم استخدم `server/public/boards/y-dimensions/MAP.json` و`mother_panel.install.map` فقط. الشرح الكامل: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
+قبل أي رفع، وبعد تعديل `config/app.json` أو `Books.kt` أو الإصدار:
+`python3 server/tools/build_panel_data.py` يعيد توليد بيانات اللوحة (24 كتاباً، بيانات التطبيق،
+الأيقونتان). شرح اللوحة: `server/public/panel/README.md`.
+
+نقاط API بعد الرفع: `api/devices.php`، `api/content.php`، `api/requirements.php`،
+`api/devmode.php`، `api/diagnostics.php`، `api/learning.php`، مع محوّلاتها في `panel/api/`.
+`004_devmode.sql` يضيف `developer_accounts`, `panel_admins`, `diagnostic_reports`,
+`diagnostic_solutions`؛ `006_learning.sql` يضيف `learning_plans` وينشر `site.html` من
+`panel/?p=learning`. لا ترفع `config.php` إلى Git.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->

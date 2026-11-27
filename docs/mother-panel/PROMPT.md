@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <div id="yd-home-fab" style="position:fixed;bottom:18px;left:18px;z-index:9999;display:flex;gap:6px"><a href="https://yousef.romoozbasmah.com/" style="background:#6c4cf1;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">🏠 الموقع الأساسي</a><a href="https://yousef.romoozbasmah.com/panel/" style="background:#1d1b29;color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font:700 13px system-ui">⚙ لوحة التحكم الأساسية</a></div>
 
 # برومت موجّه إلى موديل لوحة التحكم الأم (Mother Panel)
@@ -39,7 +40,12 @@ Y- Dimensions (تطبيق موبايل فقط، المطوّر يوسف الحم
 - أضف نفس الزر العائم في كل موقع وصفحة ولوحة تحكم ووثيقة: يرجع إلى «الموقع الأساسي».
   إن كانت الصفحة أو لوحة التحكم مقفلة/محمية بكلمة مرور، فالزر يرجع إلى «لوحة التحكم الأساسية»
   (وليس إلى صفحة عامة)، ولا يكشف أي بيانات قبل المصادقة.
-- لا تُنهَفذ هذه الأزرار بروابط ثابتة مفصّلة؛ استخدم مساراً مركزياً واحداً يُعرّف في إعدادات الموقع.
+- لا تُنفَّذ هذه الأزرار بروابط ثابتة مفصّلة؛ استخدم مساراً مركزياً واحداً يُعرّف في إعدادات الموقع.
+- عند تثبيت لوحة تنفيذية من ملف ZIP على دومين فيه موقع/لوحة أم شغّالة في `public_html/`،
+  خصّص لها مجلداً فريداً داخل `{mother_panel.apps_dir}` عبر `mother_panel.apps.allocate_dir`
+  و`mother_panel.apps.install_zip`، ولا تفرّغ الحزمة في جذر `public_html/` ولا تلمس
+  `config.php`, `index.php`, `admin/`, `core/` الأصلية. أرجع `app_public_url`, `panel_url`,
+  `api_base` وسجّلها في بطاقة التطبيق؛ `open_panel` يفتح `panel_url` في تبويب جديد.
 
 رابعاً: برومت الموديل الذي يجهّز لوحة تحكم تطبيق
 - عدّل البرومت الأساسي الذي يُعطى للموديل الذي يبني لوحة تحكم أي تطبيق، وألزمه بأن يكتب
@@ -70,3 +76,4 @@ Y- Dimensions (تطبيق موبايل فقط، المطوّر يوسف الحم
 لا تخترع قيماً حسّاسة (كلمات مرور، توكنات، عناوين قواعد بيانات)؛ اطلبها من المطوّر عند اللزوم.
 لا تغيّر اسم التطبيق Y- Dimensions ولا نوعه (موبايل) ولا بيانات المطوّر.
 ```
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
