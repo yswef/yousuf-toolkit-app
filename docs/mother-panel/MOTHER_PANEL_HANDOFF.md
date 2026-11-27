@@ -94,7 +94,7 @@
 `public_html/` فارغاً؛ هذا غير صحيح على دومين فيه لوحة الأم/موقع آخر.** لا ترفع محتويات
 `server/public/` إلى جذر `public_html/`، ولا تستبدل `config.php` أو `index.php` أو `admin/` الأصلية.
 
-- **اللوحة التنفيذية** تُرفع كملف ZIP واحد: `build/y-dimensions-mother-panel.zip`،
+- **اللوحة التنفيذية** تُرفع كملف ZIP واحد: `docs/mother-panel/y-dimensions-mother-panel.zip`،
   يُنشأ بـ `python3 server/tools/build_mother_panel_zip.py`. لوحة الأم تخصص لها مجلداً داخل
   `{mother_panel.apps_dir}` وتستخرج الحزمة داخله؛ النتيجة `.../public/panel/`، لا `public_html/panel/`.
 - `mother_panel.apps.open_panel` يفتح `panel_url` من بطاقة `y-dimensions` في تبويب/صفحة جديدة؛
