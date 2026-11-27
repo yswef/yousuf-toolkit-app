@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "build" / "y-dimensions-mother-panel.zip"
+OUT = ROOT / "docs/mother-panel" / "y-dimensions-mother-panel.zip"
 SIGN = "يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com"
 SIGN_START = "توقيع المطوّر: " + SIGN + " (بداية الملف)"
 SIGN_END = "توقيع المطوّر: " + SIGN + " (نهاية الملف)"
@@ -46,6 +46,9 @@ INSTALL_MD = """<!-- توقيع المطوّر: يوسف الحمزي — Y- Dim
 `config-sample.php`، `index.php`، `admin/`، `app/`، `assets/`، `core/`، `data/`،
 `docs/`، `lang/`، `cron_*.php`، `status.php`، `update_start.php`، `update_step.php`،
 و`manifest.webmanifest`. كلها تبقى كما هي ولا تُستبدل.
+
+هذه الحزمة منشورة داخل المستودع في `docs/mother-panel/y-dimensions-mother-panel.zip`
+ومرفقة كأصل في إصدار `v0.19.0-note.10` على GitHub؛ لا تُؤخذ من مجلد `build/` المستثنى من Git.
 
 ## 1. أين تُستخرج؟
 
@@ -173,6 +176,8 @@ def manifest():
         "returned_values": ["app_public_url", "panel_url", "api_base"],
         "child_board_installer": "mother_panel.install.map + mother_panel.verify.run",
         "child_board_target": "{mother_panel.boards_dir}/y-dimensions/",
+        "repository_path": "docs/mother-panel/y-dimensions-mother-panel.zip",
+        "release_asset_tag": "v0.19.0-note.10",
         "__developer_signature_end__": SIGN_END,
     }, ensure_ascii=False, indent=2) + "\n"
 
