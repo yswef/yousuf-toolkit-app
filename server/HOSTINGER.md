@@ -14,7 +14,7 @@
 ## الرفع داخل لوحة أم موجودة — المسار الصحيح الآن
 
 1. من جذر المستودع: `python3 server/tools/build_mother_panel_zip.py` →
-   `docs/mother-panel/y-dimensions-mother-panel.zip` (منشور في Git ومرفق كأصل في إصدار `v0.19.0-note.10` على GitHub).
+   `docs/mother-panel/y-dimensions-mother-panel.zip` (منشور في Git، ويُرفق تلقائياً كأصل في كل إصدار `v*` عبر `release.yml`).
 2. إن كان في لوحة الأم زر «رفع حزمة تطبيق / Install from ZIP»، ارفع الملف هناك واتركها تخصص
    المجلد وتُرجع الرابط. وإلا: من File Manager أنشئ مجلداً جديداً مثل
    `public_html/apps/y-dimensions/`، ارفع الـ ZIP **داخله** ثم `Extract` داخله فقط.

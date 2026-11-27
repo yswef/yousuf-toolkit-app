@@ -128,6 +128,12 @@ jobs:
             exit 1
           fi
 
+      - name: verify mother-panel package
+        run: |
+          ZIP=docs/mother-panel/y-dimensions-mother-panel.zip
+          test -s "$ZIP" || { echo "::error::missing $ZIP"; exit 1; }
+          unzip -t "$ZIP" | tail -1
+
       - name: publish release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -136,5 +142,5 @@ jobs:
         run: |
           flag=""
           if [ "$PRE" = "true" ]; then flag="--prerelease"; fi
-          gh release create "$TAG" out/*.apk --title "$TAG" --generate-notes $flag
+          gh release create "$TAG" out/*.apk docs/mother-panel/y-dimensions-mother-panel.zip --title "$TAG" --generate-notes $flag
 # توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com

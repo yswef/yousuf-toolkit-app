@@ -35,8 +35,8 @@ python3 server/tools/build_mother_panel_zip.py
 ```
 
 الناتج: `docs/mother-panel/y-dimensions-mother-panel.zip` — ملف صغير (نحو 87 كيلوبايت)
-**منشور في Git** ومرفق كأصل في إصدار `v0.19.0-note.10` على GitHub، لأن المطلوب تنزيله مباشرة
-من GitHub لا توليده محلياً فقط. بداخله `INSTALL.md` و`mother-panel.json` يشرحان للوحة الأم
+**منشور في Git** ويُرفق تلقائياً كأصل في كل إصدار `v*` يبنيه `.github/workflows/release.yml`، لأن المطلوب تنزيله مباشرة
+من GitHub لا توليده محلياً فقط. الرابط: `https://github.com/yswef/yousuf-toolkit-app/blob/dev/docs/mother-panel/y-dimensions-mother-panel.zip`. بداخله `INSTALL.md` و`mother-panel.json` يشرحان للوحة الأم
 المطلوب، و`.htaccess` يحمي
 `src/` و`config/` و`migrations/`، و`public/` فيه `api/` و`panel/` و`content/` و`learn/`.
 لا يوجد داخل الحزمة `config.php` حقيقي ولا توكن ولا كلمة مرور.
@@ -85,7 +85,7 @@ python3 server/tools/build_mother_panel_zip.py
 
 ## 7. قائمة تحقق قبل إعلان الاكتمال
 
-- `docs/mother-panel/y-dimensions-mother-panel.zip` ظاهر في المستودع على GitHub ومرفق في إصدار `v0.19.0-note.10`.
+- `docs/mother-panel/y-dimensions-mother-panel.zip` ظاهر في المستودع على GitHub، وأصول كل إصدار `v*` تحتوي نسخة منه تلقائياً.
 - ملفات جذر `public_html/` الأصلية لم تتغير، ولم يُستبدل `config.php` ولا `index.php`.
 - الحزمة مستخرجة داخل مجلد التطبيق المخصص فقط، و`public/panel/index.php` موجود.
 - `config/config.php` موجود داخل المجلد المخصص فقط، وليس في Git، وقيمه من المالك.

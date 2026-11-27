@@ -23,7 +23,7 @@
 - أُعيد توليد `docs/mother-panel/y-dimensions-mother-panel.zip` بعد تحديث `api/sync.php` لحفظ ملاحظة العملية مع العنوان عند المزامنة.
 - **تصحيح الرفع:** `public_html/` فيه لوحة أم/موقع آخر؛ لا يُرفع `server/public/` إلى الجذر. اللوحة التنفيذية تُرفع كحزمة `docs/mother-panel/y-dimensions-mother-panel.zip` داخل مجلد تخصصه لوحة الأم، وتُفتح من `mother_panel.apps.open_panel`.
 - أُضيف مولّد الحزمة `server/tools/build_mother_panel_zip.py` وشرح `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md` المحدَّث، مع `INSTALL.md` و`mother-panel.json` داخل الحزمة.
-- الحزمة نفسها منشورة في `docs/mother-panel/y-dimensions-mother-panel.zip` ومرفقة كأصل في إصدار `v0.19.0-note.10`؛ مجلد `build/` مستثنى من Git ولا يظهر على GitHub.
+- الحزمة نفسها منشورة في `docs/mother-panel/y-dimensions-mother-panel.zip` وتُرفق تلقائياً كأصل في كل إصدار `v*` عبر `.github/workflows/release.yml`؛ مجلد `build/` مستثنى من Git ولا يظهر على GitHub.
 - لوحة الأم التابعة: `server/public/boards/y-dimensions/` بقيت دون مساس، مع `MAP.json` وVerify.
 - `sister_apps` فارغة؛ البريد النهائي `yswefalhmzy@gmail.com`.
 
