@@ -1,0 +1,16 @@
+{
+  "__developer_signature__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (بداية الملف)",
+  "schema": "y-dimensions.wallet-notifications/1.0",
+  "app_id": "y-dimensions",
+  "sources": ["جيب", "Jaib", "jaib"],
+  "income_words": ["أضيف", "اضيف", "أُضيف", "إيداع", "ايداع", "دخل", "استلمت", "وارد"],
+  "expense_words": ["خصم", "سحب", "دفع", "شراء"],
+  "transfer_words": ["تحويل مشترك", "حوالة"],
+  "purchase_words": ["دفع مشتريات", "مشتريات", "شراء"],
+  "balance_words": ["رصيد", "الرصيد", "رص"],
+  "from_word": "من",
+  "to_word": "إلى",
+  "note_separator": " · ",
+  "max_note_chars": 220,
+  "__developer_signature_end__": "توقيع المطوّر: يوسف الحمزي — Y- Dimensions (نهاية الملف)"
+}

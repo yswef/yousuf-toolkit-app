@@ -728,11 +728,12 @@ class Store(context: Context) {
             ledger = listOf(
                 Ledger(
                     id = nextId(),
-                    title = item.sender.ifBlank { item.body.take(60) },
+                    title = item.title.ifBlank { item.sender.ifBlank { item.body.take(60) } }.take(160),
                     amount = item.amount,
                     income = item.income,
-                    category = "other",
-                    at = if (item.at > 0L) item.at else System.currentTimeMillis()
+                    category = item.category.ifBlank { "other" },
+                    at = if (item.at > 0L) item.at else System.currentTimeMillis(),
+                    note = item.note.ifBlank { item.body.take(200) }.take(240)
                 )
             ) + ledger
             adjustDefaultWallet(if (item.income) item.amount else -item.amount)
@@ -846,9 +847,9 @@ class Store(context: Context) {
         save()
     }
 
-    fun addLedger(title: String, amount: Double, income: Boolean, category: String, at: Long = System.currentTimeMillis()) {
+    fun addLedger(title: String, amount: Double, income: Boolean, category: String, at: Long = System.currentTimeMillis(), note: String = "") {
         if (title.isBlank() || !amount.isFinite() || amount <= 0.0) return
-        ledger = ledger + Ledger(nextId(), title.trim(), amount, income, category, at)
+        ledger = ledger + Ledger(nextId(), title.trim(), amount, income, category, at, note.trim())
         adjustDefaultWallet(if (income) amount else -amount)
         save()
     }
@@ -1578,6 +1579,7 @@ class Store(context: Context) {
                     put("income", t.income)
                     put("category", t.category)
                     put("at", t.at)
+                    put("note", t.note)
                 })
             }
         })
@@ -1866,7 +1868,8 @@ class Store(context: Context) {
                     amount = it.optDouble("amount", 0.0),
                     income = it.optBoolean("income"),
                     category = it.optString("category", "other"),
-                    at = it.optLong("at")
+                    at = it.optLong("at"),
+                    note = it.optString("note")
                 )
             }
             workouts = root.optJSONArray("workouts").mapObjects {
