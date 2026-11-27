@@ -48,7 +48,9 @@ INSTALL_MD = """<!-- توقيع المطوّر: يوسف الحمزي — Y- Dim
 و`manifest.webmanifest`. كلها تبقى كما هي ولا تُستبدل.
 
 هذه الحزمة منشورة داخل المستودع في `docs/mother-panel/y-dimensions-mother-panel.zip`
-ومرفقة كأصل في إصدار `v0.19.0-note.10` على GitHub؛ لا تُؤخذ من مجلد `build/` المستثنى من Git.
+وتُرفق تلقائياً كأصل في كل إصدار `v*` يبنيه `.github/workflows/release.yml`؛
+رابط المستودع: https://github.com/yswef/yousuf-toolkit-app/blob/dev/docs/mother-panel/y-dimensions-mother-panel.zip
+لا تُؤخذ من مجلد `build/` المستثنى من Git، ولا تُنسَب إلى إصدار قديم لم يحتوِ هذا الأصل.
 
 ## 1. أين تُستخرج؟
 
@@ -177,7 +179,8 @@ def manifest():
         "child_board_installer": "mother_panel.install.map + mother_panel.verify.run",
         "child_board_target": "{mother_panel.boards_dir}/y-dimensions/",
         "repository_path": "docs/mother-panel/y-dimensions-mother-panel.zip",
-        "release_asset_tag": "v0.19.0-note.10",
+        "release_asset_policy": "attached automatically to every v* release by .github/workflows/release.yml",
+        "release_asset_name": "y-dimensions-mother-panel.zip",
         "__developer_signature_end__": SIGN_END,
     }, ensure_ascii=False, indent=2) + "\n"
 
