@@ -2,6 +2,11 @@
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <resources>
     <string name="learn_prompt">برومت خطة التعلم</string>
+    <string name="learn_prompt_subject">الموضوع</string>
+    <string name="learn_prompt_level">المستوى</string>
+    <string name="learn_prompt_minutes">الدقائق المتاحة</string>
+    <string name="learn_prompt_build">تجهيز البرومت</string>
+    <string name="learn_prompt_copy">نسخ البرومت</string>
     <string name="learn_goal">الهدف %1$d</string>
     <string name="learn_goal_add">إضافة هدف</string>
     <string name="learn_goal_remove">حذف</string>
