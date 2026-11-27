@@ -17,7 +17,7 @@
 
 | العنصر | أين يذهب؟ | ملاحظة |
 |---|---|---|
-| `build/y-dimensions-mother-panel.zip` | المجلد الذي تخصصه لوحة الأم: `{mother_panel.apps_dir}/<allocated-folder>/` | الحزمة الوحيدة التي ترفعها؛ جذرها هو محتويات المجلد المخصص، بلا مجلد إضافي فوقها |
+| `docs/mother-panel/y-dimensions-mother-panel.zip` | المجلد الذي تخصصه لوحة الأم: `{mother_panel.apps_dir}/<allocated-folder>/` | الحزمة الوحيدة التي ترفعها؛ جذرها هو محتويات المجلد المخصص، بلا مجلد إضافي فوقها |
 | `public/panel/` داخل الحزمة | `.../<allocated-folder>/public/panel/` | **اللوحة التنفيذية**، 18 تبويباً، ومنها `?p=learning` |
 | `config/config.php` داخل الحزمة | `.../<allocated-folder>/config/config.php` | يُنشأ من `config.example.php` بقيم المالك؛ ليس `public_html/config.php` |
 | `server/public/boards/y-dimensions/` | `{mother_panel.boards_dir}/y-dimensions/` | لوحة تابعة إعلانية منفصلة، عبر `MAP.json` و`mother_panel.install.map` فقط |
@@ -34,8 +34,10 @@
 python3 server/tools/build_mother_panel_zip.py
 ```
 
-الناتج: `build/y-dimensions-mother-panel.zip` (مجلد `build/` مستثنى من Git). بداخله
-`INSTALL.md` و`mother-panel.json` يشرحان للوحة الأم المطلوب، و`.htaccess` يحمي
+الناتج: `docs/mother-panel/y-dimensions-mother-panel.zip` — ملف صغير (نحو 87 كيلوبايت)
+**منشور في Git** ومرفق كأصل في إصدار `v0.19.0-note.10` على GitHub، لأن المطلوب تنزيله مباشرة
+من GitHub لا توليده محلياً فقط. بداخله `INSTALL.md` و`mother-panel.json` يشرحان للوحة الأم
+المطلوب، و`.htaccess` يحمي
 `src/` و`config/` و`migrations/`، و`public/` فيه `api/` و`panel/` و`content/` و`learn/`.
 لا يوجد داخل الحزمة `config.php` حقيقي ولا توكن ولا كلمة مرور.
 
@@ -83,6 +85,7 @@ python3 server/tools/build_mother_panel_zip.py
 
 ## 7. قائمة تحقق قبل إعلان الاكتمال
 
+- `docs/mother-panel/y-dimensions-mother-panel.zip` ظاهر في المستودع على GitHub ومرفق في إصدار `v0.19.0-note.10`.
 - ملفات جذر `public_html/` الأصلية لم تتغير، ولم يُستبدل `config.php` ولا `index.php`.
 - الحزمة مستخرجة داخل مجلد التطبيق المخصص فقط، و`public/panel/index.php` موجود.
 - `config/config.php` موجود داخل المجلد المخصص فقط، وليس في Git، وقيمه من المالك.

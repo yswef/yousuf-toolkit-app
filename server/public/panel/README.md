@@ -112,7 +112,7 @@ python3 server/tools/build_panel_data.py
 
 ## الرفع إلى لوحة التحكم الأم
 
-هذه **اللوحة التنفيذية** تُرفع كحزمة `build/y-dimensions-mother-panel.zip` داخل مجلد تخصصه
+هذه **اللوحة التنفيذية** تُرفع كحزمة `docs/mother-panel/y-dimensions-mother-panel.zip` داخل مجلد تخصصه
 لوحة الأم، لا داخل `public_html/` ولا داخل `{mother_panel.boards_dir}`. لوحة الأم تُرجع
 `app_public_url`, `panel_url`, `api_base`، و`mother_panel.apps.open_panel` يفتح `panel_url`
 من بطاقة `y-dimensions` في تبويب جديد. أما التي تُثبّت داخل لوحة الأم فهي الحزمة التابعة

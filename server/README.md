@@ -10,7 +10,7 @@
 1. انسخ `config/config.example.php` إلى `config/config.php` واملأ `db` و`base_url`.
 2. `allowed_origins` لقائمة أصول الويب المسموح لها، واتركها فارغة لتطبيق أندرويد.
 3. استورد الترحيلات في قاعدة واحدة موحّدة: لا تُنفِّذ `001_init.sql` كما هو على قاعدة فيها `users`؛ طبّق `MOTHER_PANEL_HANDOFF.md` ثم استورد `002_admin.sql`…`006_learning.sql` غير المكررة. `001_init.sql` يصلح لقاعدة فارغة جديدة فقط.
-4. للدومين الفارغ فقط اجعل جذر النطاق `server/public`، لا `server/`؛ مجلدات الإعداد والمصدر محمية بـ `.htaccess`. **أما إذا كان `public_html/` فيه لوحة أم/موقع آخر فلا ترفع `server/public/` إلى الجذر**: شغّل `python3 server/tools/build_mother_panel_zip.py` واستخرج `build/y-dimensions-mother-panel.zip` داخل المجلد الذي تخصصه لوحة الأم. **اللوحة الأساسية التنفيذية هي `public/panel/` داخل الحزمة**؛ `public/admin/` و`public/boards/` مستبعدان منها. الشرح: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
+4. للدومين الفارغ فقط اجعل جذر النطاق `server/public`، لا `server/`؛ مجلدات الإعداد والمصدر محمية بـ `.htaccess`. **أما إذا كان `public_html/` فيه لوحة أم/موقع آخر فلا ترفع `server/public/` إلى الجذر**: شغّل `python3 server/tools/build_mother_panel_zip.py` واستخرج `docs/mother-panel/y-dimensions-mother-panel.zip` داخل المجلد الذي تخصصه لوحة الأم. **اللوحة الأساسية التنفيذية هي `public/panel/` داخل الحزمة**؛ `public/admin/` و`public/boards/` مستبعدان منها. الشرح: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
 5. أضف عناصر المتجر ومواسم الغارات من SQL؛ لا توجد بيانات تجريبية مبطّنة.
 
 ## نقاط النهاية

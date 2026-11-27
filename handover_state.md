@@ -19,8 +19,9 @@
 - وضع المطور: 4 أقسام، 62 اختباراً يدوياً، رجوع قبل الاختبار، بيانات التطبيق، وفروق الإصدارات. لا اختبارات تلقائية.
 - مساعد تشخيص العتاد: قراءات فعلية، تقرير عربي، `fix_actions` بعد موافقة، حلول معروفة، و`server_report` مجهّل بلا IMEI/هاتف/SSID/موقع.
 - اللوحة الأساسية: `server/public/panel/` فيها 18 تبويباً، مع `learning.php` و`panel/?p=learning`.
-- **تصحيح الرفع:** `public_html/` فيه لوحة أم/موقع آخر؛ لا يُرفع `server/public/` إلى الجذر. اللوحة التنفيذية تُرفع كحزمة `build/y-dimensions-mother-panel.zip` داخل مجلد تخصصه لوحة الأم، وتُفتح من `mother_panel.apps.open_panel`.
+- **تصحيح الرفع:** `public_html/` فيه لوحة أم/موقع آخر؛ لا يُرفع `server/public/` إلى الجذر. اللوحة التنفيذية تُرفع كحزمة `docs/mother-panel/y-dimensions-mother-panel.zip` داخل مجلد تخصصه لوحة الأم، وتُفتح من `mother_panel.apps.open_panel`.
 - أُضيف مولّد الحزمة `server/tools/build_mother_panel_zip.py` وشرح `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md` المحدَّث، مع `INSTALL.md` و`mother-panel.json` داخل الحزمة.
+- الحزمة نفسها منشورة في `docs/mother-panel/y-dimensions-mother-panel.zip` ومرفقة كأصل في إصدار `v0.19.0-note.10`؛ مجلد `build/` مستثنى من Git ولا يظهر على GitHub.
 - لوحة الأم التابعة: `server/public/boards/y-dimensions/` بقيت دون مساس، مع `MAP.json` وVerify.
 - `sister_apps` فارغة؛ البريد النهائي `yswefalhmzy@gmail.com`.
 
@@ -35,7 +36,7 @@
 - `docs/plan/feedback.html`: صفحة الاقتراحات والملاحظات الموحّدة مع الصور وZIP والمحرر.
 - `docs/plan/feedback-zip.js`: كاتب ZIP مستقل بلا مكتبات خارجية.
 - `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`: رفع حزمة ZIP داخل مجلد تخصصه لوحة الأم، وربطها، وتثبيت اللوحة التابعة منفصلة.
-- `server/tools/build_mother_panel_zip.py`: يولّد `build/y-dimensions-mother-panel.zip` بلا `admin/` ولا `boards/` ولا أسرار.
+- `server/tools/build_mother_panel_zip.py`: يولّد `docs/mother-panel/y-dimensions-mother-panel.zip` بلا `admin/` ولا `boards/` ولا أسرار.
 
 ## قيود ثابتة
 
