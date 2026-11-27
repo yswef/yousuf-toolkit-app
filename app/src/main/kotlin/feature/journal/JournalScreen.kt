@@ -61,7 +61,7 @@ fun JournalScreen(onBack: () -> Unit, onAdd: () -> Unit) {
     var syncStatus by remember { mutableStateOf("") }
     val entries = store.journal.sortedByDescending { it.at }
 
-    val sync = {
+    fun sync() {
         scope.launch {
             val result = runCatching { JournalSync.push(store) }
             syncStatus = result.fold(
@@ -75,7 +75,7 @@ fun JournalScreen(onBack: () -> Unit, onAdd: () -> Unit) {
         title = stringResource(R.string.feature_journal),
         onBack = onBack,
         actions = {
-            TextButton(onClick = sync) { Text(stringResource(R.string.journal_sync_now)) }
+            TextButton(onClick = { sync() }) { Text(stringResource(R.string.journal_sync_now)) }
             IconButton(onClick = onAdd) {
                 Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.add))
             }
@@ -123,7 +123,7 @@ private fun EntryRow(entry: JournalEntry, onDelete: () -> Unit) {
     val heading = if (entry.title.isBlank()) stringResource(R.string.journal_untitled) else entry.title
     val names = stringArrayResource(R.array.journal_background_names)
     val backgroundIndex = JournalAssets.backgrounds.indexOfFirst { it.id == entry.background }.coerceAtLeast(0)
-    val body = if (entry.richBody.isNotBlank()) Html.fromHtml(entry.richBody, Html.FROM_HTML_MODE_LEAN).toString() else entry.body
+    val body = if (entry.richBody.isNotBlank()) Html.fromHtml(entry.richBody, Html.FROM_HTML_MODE_COMPACT).toString() else entry.body
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(start = 16.dp, end = 4.dp, top = 12.dp, bottom = 12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
