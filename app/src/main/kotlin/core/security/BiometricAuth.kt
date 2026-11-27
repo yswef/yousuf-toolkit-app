@@ -7,10 +7,11 @@ import android.hardware.biometrics.BiometricManager
 import android.hardware.biometrics.BiometricPrompt
 import android.os.CancellationSignal
 import android.os.Handler
+import android.os.Looper
 import java.util.concurrent.Executor
 
 class MainExecutor(context: Context) : Executor {
-    private val handler = Handler(context.mainLooper)
+    private val handler = Handler(Looper.getMainLooper())
     override fun execute(command: Runnable) {
         handler.post(command)
     }
@@ -20,8 +21,10 @@ object BiometricAuth {
     private val authenticators =
         BiometricManager.Authenticators.BIOMETRIC_STRONG or BiometricManager.Authenticators.BIOMETRIC_WEAK
 
-    fun available(context: Context): Boolean =
-        BiometricManager.from(context).canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
+    fun available(context: Context): Boolean {
+        val manager = context.getSystemService(BiometricManager::class.java)
+        return manager != null && manager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS
+    }
 
     fun prompt(
         context: Context,
