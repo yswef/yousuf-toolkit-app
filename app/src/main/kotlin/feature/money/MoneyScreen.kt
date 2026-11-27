@@ -70,7 +70,10 @@ import data.local.LocalStore
 import domain.model.Ledger
 import domain.model.Debt
 import domain.model.categoryKeys
+import core.device.Access
 import core.device.SmsReader
+import core.device.WalletRules
+import core.device.WalletTxParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,6 +82,8 @@ import java.time.ZoneId
 import java.util.Locale
 import android.Manifest
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.provider.Settings
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -103,6 +108,26 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
                 context.getString(R.string.money_sms_added, added)
             } else {
                 context.getString(R.string.money_sms_none)
+            }
+        }
+    }
+
+    fun importNotifications() {
+        if (!Access.notificationListener(context)) {
+            status = context.getString(R.string.money_notif_permission)
+            context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+            return
+        }
+        scope.launch {
+            val rules = withContext(Dispatchers.IO) { WalletRules.load(context) }
+            val items = store.notifications.flatMap { entry ->
+                WalletTxParser.parseAll(rules, "notification", entry.pkg, entry.title, entry.text, entry.at)
+            }
+            val added = store.importSms(items)
+            status = if (added > 0) {
+                context.getString(R.string.money_notif_added, added)
+            } else {
+                context.getString(R.string.money_notif_none)
             }
         }
     }
@@ -167,13 +192,21 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
                     }
                 }
                 item {
-                    TextButton(
-                        onClick = {
-                            if (SmsReader.hasPermission(context)) importMessages() else smsPermission.launch(Manifest.permission.READ_SMS)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.money_sms_import))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        TextButton(
+                            onClick = { importNotifications() },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(stringResource(R.string.money_notif_import))
+                        }
+                        TextButton(
+                            onClick = {
+                                if (SmsReader.hasPermission(context)) importMessages() else smsPermission.launch(Manifest.permission.READ_SMS)
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(stringResource(R.string.money_sms_import))
+                        }
                     }
                 }
             }
@@ -278,6 +311,9 @@ fun MoneyScreen(onBack: () -> Unit = {}, onWallets: () -> Unit, onMore: () -> Un
             actions = {
                 TextButton(onClick = onMore) {
                     Text(stringResource(R.string.moneypro_budget))
+                }
+                TextButton(onClick = { importNotifications() }) {
+                    Text(stringResource(R.string.money_notif_import))
                 }
                 TextButton(onClick = {
                     if (SmsReader.hasPermission(context)) {
@@ -398,6 +434,14 @@ private fun LedgerRow(entry: Ledger, onDelete: () -> Unit) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                if (entry.note.isNotBlank()) {
+                    Text(
+                        entry.note,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2
+                    )
+                }
             }
             Text(
                 (if (entry.income) "+" else "-") + amountText(entry.amount),
