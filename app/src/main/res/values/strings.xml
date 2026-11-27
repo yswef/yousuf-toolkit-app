@@ -1,3 +1,4 @@
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
 <resources>
     <string name="app_name">Y-Dimension</string>
     <string name="back">رجوع</string>
@@ -267,14 +268,15 @@
     <string name="domain_empty">لا توجد نطاقات محجوبة.</string>
     <string name="domains_limited">قائمة النطاقات محفوظة محلياً، وتُطبّق عبر تكامل الجهاز عند توفره.</string>
 
-    <string name="notif_permission_desc">نحتاج صلاحية الوصول إلى الإشعارات لتسجيلها في السجل المحلي.</string>
+    <string name="notif_permission_desc">نحتاج صلاحية الوصول إلى الإشعارات لتسجيلها في السجل المحلي ولتسجيل عمليات المحفظة في المال.</string>
     <string name="notif_permission_open">فتح إعدادات الإشعارات</string>
     <string name="notif_listener">تسجيل الإشعارات</string>
-    <string name="notif_listener_desc">حفظ الإشعارات الواردة في سجل محلي.</string>
+    <string name="notif_listener_desc">حفظ الإشعارات الواردة وتسجيل عمليات المحفظة محلياً.</string>
     <string name="notif_list">الإشعارات المسجلة</string>
     <string name="notif_empty">لا توجد إشعارات مسجلة بعد.</string>
     <string name="notif_clear">مسح السجل</string>
     <string name="notif_hint">تُحفظ آخر 200 إشعار محلياً فقط.</string>
+    <string name="notif_money_hint">إشعارات محفظة جيب تُسجَّل تلقائياً في المال مع طرف التحويل والرصيد بعد العملية.</string>
 
     <string name="vault_desc">ملاحظات مشفّرة بمفتاح الجهاز، ولا تُقرأ خارج التطبيق.</string>
     <string name="vault_add">ملاحظة جديدة</string>
@@ -423,11 +425,15 @@
     <string name="devmode_copy">نسخ التشخيص</string>
     <string name="devmode_hint">لا تُرسل هذه البيانات تلقائياً.</string>
 
+    <string name="money_notif_import">من الإشعارات</string>
+    <string name="money_notif_added">أُضيفت %1$d حركة من الإشعارات.</string>
+    <string name="money_notif_none">لا توجد حركات جديدة في الإشعارات.</string>
+    <string name="money_notif_permission">فعّل «الوصول إلى الإشعارات» لتسجيل عمليات المحفظة تلقائياً، ثم أعد المحاولة.</string>
     <string name="money_sms_import">من الرسائل</string>
     <string name="money_sms_added">أُضيفت %1$d حركة من الرسائل.</string>
     <string name="money_sms_none">لا توجد حركات جديدة في الرسائل.</string>
     <string name="money_sms_denied">لم تُمنح صلاحية قراءة الرسائل.</string>
-    <string name="money_sms_hint">قراءة الرسائل اختيارية، وتُحفظ الحركات محلياً فقط.</string>
+    <string name="money_sms_hint">الإشعارات هي المصدر الأساسي؛ قراءة الرسائل اختيارية مع منع التكرار، والحركات محلية.</string>
 
     <string name="test_config">قراءة الإعدادات</string>
     <string name="test_storage">التخزين قابل للكتابة</string>
@@ -978,3 +984,4 @@
     <string name="today_ratio">نسبة الإنجاز</string>
     <string name="tools_search">ابحث عن كتاب أو أداة</string>
 </resources>
+<!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
