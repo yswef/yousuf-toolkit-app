@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package core.device
 
 import android.app.Notification
@@ -13,9 +14,26 @@ class NotificationCollectorService : NotificationListenerService() {
         val extras = notification.extras
         val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString().orEmpty()
         val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString().orEmpty()
-        if (title.isBlank() && text.isBlank()) return
-        Store.of(this).addNotification(sbn.packageName, title, text)
+        val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString().orEmpty()
+        val lines = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
+            ?.map { it?.toString().orEmpty() }
+            .orEmpty()
+        val bodies = listOf(text, bigText).plus(lines).filter { it.isNotBlank() }.distinct()
+        if (title.isBlank() && bodies.isEmpty()) return
+        val combined = bodies.joinToString("\n")
+        val store = Store.of(this)
+        store.addNotification(sbn.packageName, title, combined)
+        val parsed = WalletTxParser.parseAll(
+            context = this,
+            source = "notification",
+            sender = sbn.packageName,
+            title = title,
+            text = combined,
+            at = sbn.postTime
+        )
+        if (parsed.isNotEmpty()) store.importSms(parsed)
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) = Unit
 }
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
