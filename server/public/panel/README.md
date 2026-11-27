@@ -106,4 +106,10 @@ python3 server/tools/build_panel_data.py
 - صلاحية وضع المطور في التطبيق تأتي من `devmode.php?action=status` فقط.
 - التحديثات الفرعية تضيف `devmode_tests.json` و`releases.json`.
 - `panel/?p=learning` يراجع `learning_plans` بعد استيراد `006_learning.sql` وينشر `site.html`.
+
+## الرفع إلى لوحة التحكم الأم
+
+هذه **اللوحة التنفيذية** لا تُنسخ داخل مجلد لوحات الأم. انشرها على الاستضافة كما في قسم «ماذا ترفع؟»، ثم اربطها من لوحة الأم عبر `mother_panel.apps.open_panel`. أما التي تُثبّت داخل لوحة الأم فهي الحزمة التابعة `server/public/boards/y-dimensions/` باستخدام `MAP.json` و`mother_panel.install.map` فقط.
+
+الشرح الكامل: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
