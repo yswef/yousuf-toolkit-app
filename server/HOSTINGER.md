@@ -27,4 +27,8 @@
 - استيراد `004_devmode.sql` يضيف جداول غير مكررة: `developer_accounts`, `panel_admins`, `diagnostic_reports`, `diagnostic_solutions`.
 - من تبويب «المشرفون والمطورون» عيّن مستخدمي التطبيق كمطورين، وأنشئ حتى 3 حسابات مشرف للوحة مع تبديلها وتسجيل الخروج.
 - نقاط جديدة: `api/devmode.php`, `api/diagnostics.php` (ومحوّلاتها في `panel/api/`). التحديثات الفرعية تشمل الآن `devmode_tests.json` و`releases.json`.
+
+## الربط بلوحة التحكم الأم
+
+بعد نشر `panel/` على الاستضافة، اربطها من لوحة الأم عبر `mother_panel.apps.open_panel`؛ ولا ترفع `panel/` داخل مجلد لوحات الأم. لتثبيت بطاقة/قوالب التطبيق داخل لوحة الأم استخدم `server/public/boards/y-dimensions/MAP.json` و`mother_panel.install.map` فقط. الشرح الكامل: `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md`.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
