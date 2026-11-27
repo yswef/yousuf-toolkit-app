@@ -81,9 +81,14 @@ try {
         $user['id'],
         is_array($in['ledger'] ?? null) ? $in['ledger'] : [],
         static function (array $row): array {
+            $title = substr((string) ($row['title'] ?? ''), 0, 120);
+            $note = substr((string) ($row['note'] ?? ''), 0, 200);
+            if ($note !== '') {
+                $title = substr($title . ' — ' . $note, 0, 160);
+            }
             return [
                 (int) ($row['id'] ?? 0),
-                substr((string) ($row['title'] ?? ''), 0, 160),
+                $title,
                 (float) ($row['amount'] ?? 0),
                 !empty($row['income']) ? 1 : 0,
                 substr((string) ($row['category'] ?? 'other'), 0, 40),
