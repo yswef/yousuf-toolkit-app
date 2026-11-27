@@ -4,7 +4,7 @@
 # MOTHER_PANEL_HANDOFF.md — من لوحة تحكم Y- Dimensions إلى موديل لوحة التحكم الأم
 
 > هذا هو الملف الإلزامي الذي يقرأه موديل لوحة الأم قبل إعلان اكتمال تثبيت التطبيق.
-> التطبيق: `Y- Dimensions` · موبايل · يوسف الحمزي · `yswefalhmzy@gmail.com` · الإصدار `0.17.0`.
+> التطبيق: `Y- Dimensions` · موبايل · يوسف الحمزي · `yswefalhmzy@gmail.com` · الإصدار `0.19.0`.
 > الموقع: PHP على Hostinger (ليس WordPress). مبدأ أوفلاين ملغى.
 
 ## 1. تصحيحات على البرومت التأسيسي
@@ -85,4 +85,15 @@
 - التطبيق: تبديل حتى 3 حسابات مع نسخة حالة لكل حساب؛ وضع المطور بأربعة أقسام (اختبارات يدوية، رجوع، بيانات، فوارق الإصدارات).
 - الترحيلات `004_devmode.sql` و`005_journal.sql` و`006_learning.sql` مطلوبة قبل إعلان الاكتمال؛ `users` بقي موحّداً ولم يتكرر.
 - برومت مساعد التشخيص الكامل محفوظ في `docs/diagnostics/SYSTEM_PROMPT.md` ومنفّذ في `core/diagnostics/`.
+
+## 10. رفع لوحة التحكم إلى لوحة الأم — 0.19.0
+
+اقرأ `docs/mother-panel/UPLOAD_TO_MOTHER_PANEL.md` قبل التثبيت؛ فيه الفرق بين اللوحة التنفيذية واللوحة التابعة وخطوات الرفع كاملة.
+
+- **اللوحة التنفيذية** `server/public/panel/` تُنشر على Hostinger داخل `public_html/panel/`، ثم تُربط ببطاقة التطبيق عبر `mother_panel.apps.open_panel`. لا تُنسخ داخل `{mother_panel.boards_dir}`.
+- **اللوحة التابعة** `server/public/boards/y-dimensions/` هي الوحيدة التي تُثبّت داخل لوحة الأم، عبر `MAP.json` و`mother_panel.install.map` إلى `{mother_panel.boards_dir}/y-dimensions/` بالترتيب 1…25.
+- بعد التثبيت نفّذ `mother_panel.verify.run` قبل إعلان الاكتمال: 25 ملفاً، 13 فحصاً، بصمات مطابقة، وتقرير `VERIFY.md`.
+- اللوحة الآن 18 تبويباً، منها `panel/?p=learning` لمراجعة خطط التعلم ونشر `site.html`؛ وتحتاج الترحيلات `004_devmode.sql`, `005_journal.sql`, `006_learning.sql`.
+- لا تخترع `{mother_panel.boards_dir}` ولا `admin_token` ولا `config.php`؛ اطلبها من المالك، ولا تضعها في الحزمة التابعة.
+- لا تعدّل ملفات `boards/y-dimensions/` يدوياً؛ بصمات `MAP.json` سليمة ويجب أن تبقى كذلك.
 <!-- توقيع المطوّر: يوسف الحمزي — Y- Dimensions — yswefalhmzy@gmail.com -->
