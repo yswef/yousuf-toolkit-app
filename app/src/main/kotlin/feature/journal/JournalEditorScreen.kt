@@ -152,7 +152,7 @@ fun JournalEditorScreen(onBack: () -> Unit) {
             val html = runCatching {
                 JsonReader(StringReader(value.orEmpty())).use { it.nextString() }
             }.getOrDefault(value.orEmpty())
-            val plain = Html.fromHtml(html, Html.FROM_HTML_MODE_LEAN).toString().trim()
+            val plain = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT).toString().trim()
             if (title.isBlank() && plain.isBlank()) {
                 status = context.getString(R.string.journal_editor_empty)
                 return@ValueCallback
