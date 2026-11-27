@@ -1,3 +1,4 @@
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
 package core.device
 
 import android.Manifest
@@ -6,23 +7,15 @@ import android.content.pm.PackageManager
 import android.provider.Telephony
 import androidx.core.content.ContextCompat
 import domain.model.SmsMoney
-import java.util.Locale
 
 object SmsReader {
-    private val amountPattern = Regex(
-        """(?:مبلغ|أضيف|اضيف|أُضيف|خصم|سحب|دفع|شراء|إيداع|ايداع|حوالة)[^\d]{0,30}([\d,]+(?:\.\d+)?)"""
-    )
-    private val balancePattern = Regex(
-        """(?:رصيد|الرصيد|رص)\s*:?\s*([\d,]+(?:\.\d+)?)"""
-    )
-    private val incomeWords = listOf("أضيف", "اضيف", "إيداع", "ايداع", "دخل", "استلمت", "وارد")
-
     fun hasPermission(context: Context): Boolean =
         ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS) ==
             PackageManager.PERMISSION_GRANTED
 
     fun read(context: Context, limit: Int = 300): List<SmsMoney> {
         if (!hasPermission(context)) return emptyList()
+        val rules = WalletRules.load(context)
         val projection = arrayOf(
             Telephony.Sms.ADDRESS,
             Telephony.Sms.BODY,
@@ -40,34 +33,13 @@ object SmsReader {
             val bodyIndex = cursor.getColumnIndexOrThrow(Telephony.Sms.BODY)
             val dateIndex = cursor.getColumnIndexOrThrow(Telephony.Sms.DATE)
             while (cursor.moveToNext() && out.size < limit) {
+                val sender = cursor.getString(addressIndex).orEmpty()
                 val body = cursor.getString(bodyIndex).orEmpty()
-                val parsed = parse(
-                    sender = cursor.getString(addressIndex).orEmpty(),
-                    body = body,
-                    at = cursor.getLong(dateIndex)
-                ) ?: continue
-                out.add(parsed)
+                val at = cursor.getLong(dateIndex)
+                out.addAll(WalletTxParser.parseAll(rules, "sms", sender, "", body, at))
             }
         }
-        return out
-    }
-
-    fun parse(sender: String, body: String, at: Long): SmsMoney? {
-        val amount = amountPattern.find(body)?.groupValues?.getOrNull(1)
-            ?.replace(",", "")?.toDoubleOrNull() ?: return null
-        if (amount <= 0.0) return null
-        val balance = balancePattern.find(body)?.groupValues?.getOrNull(1)
-            ?.replace(",", "")?.toDoubleOrNull()
-        val income = incomeWords.any { body.contains(it) }
-        val key = String.format(Locale.US, "%d:%.2f:%d", at, amount, body.hashCode())
-        return SmsMoney(
-            key = key,
-            sender = sender,
-            body = body,
-            amount = amount,
-            balance = balance,
-            income = income,
-            at = at
-        )
+        return out.take(limit)
     }
 }
+// Developer signature: Yousuf Alhamzi — yswefalhmzy@gmail.com — Y-Dimension
