@@ -41,6 +41,8 @@
     <string name="auth_server_ok">الخادم يستجيب بصيغة JSON صحيحة.</string>
     <string name="auth_server_html">الخادم يرد بصفحة HTML بدل JSON: ملفات API غير مرفوعة على هذا النطاق، أو العنوان يشير إلى صفحة الموقع. ارفع مجلد server/public/api وserver/src وconfig.php، أو صحّح العنوان.</string>
     <string name="auth_server_bad_json">الخادم يرد بصيغة غير متوقعة؛ تأكد من ملفات API وقاعدة البيانات.</string>
+    <string name="auth_missing_app_token">الخادم يطلب مفتاح ربط التطبيق (X-App-Token أو Bearer). اللوحة الأم وحدها تصدر هذا المفتاح؛ استخدم عنوان api_base الذي تعطيك اللوحة الأم بعد رفع حزمة التطبيق في مجلدها المخصص، أو زوّد التطبيق بالمفتاح من مالكها.</string>
+    <string name="auth_invalid_app_token">مفتاح ربط التطبيق مرفوض أو منتهٍ، أو الجلسة غير مصرّح بها. جدّد المفتاح من لوحة الأم ثم أعد المحاولة.</string>
     <string name="auth_network_error">لا يمكن الوصول إلى الخادم؛ تحقق من الإنترنت وعنوان الخادم.</string>
     <string name="auth_server_fail">تعذر الاتصال بالخادم: %1$s</string>
     <string name="auth_local_create">إنشاء حساب محلي (يعمل بلا إنترنت)</string>

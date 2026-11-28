@@ -9,7 +9,7 @@ import domain.model.LearningPlan
 import java.net.HttpURLConnection
 import java.net.URL
 
-class ApiException(val code: Int, message: String) : Exception(message)
+class ApiException(val code: Int, message: String, val serverCode: String = "") : Exception(message)
 
 data class RemoteUser(val id: Long, val name: String, val email: String)
 
@@ -383,10 +383,20 @@ object Api {
             }
             val parsed = runCatching { JSONObject(text) }.getOrElse {
                 if (code in 200..299) throw ApiException(code, BAD_JSON)
-                JSONObject().put("error", if (text.isBlank()) "HTTP $code" else text.take(200))
+                val fallback = parseServerError(text, code)
+                throw ApiException(code, fallback.message, fallback.code)
             }
+            val serverCode = parsed.optString("code", "").takeIf { it in KNOWN_ERROR_CODES }.orEmpty()
+            val serverMessage = parsed.optString("error", "").ifBlank { parsed.optString("message", "") }
             if (code !in 200..299) {
-                throw ApiException(code, parsed.optString("error", "HTTP $code"))
+                throw ApiException(
+                    code,
+                    serverMessage.ifBlank { serverCode.ifBlank { "HTTP $code" } },
+                    serverCode
+                )
+            }
+            if (serverCode.isNotBlank()) {
+                throw ApiException(code, serverMessage.ifBlank { serverCode }, serverCode)
             }
             return parsed
         } catch (t: java.io.IOException) {
